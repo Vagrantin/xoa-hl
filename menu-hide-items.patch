@@ -1,0 +1,99 @@
+--- a/packages/xo-web/src/xo-app/menu/index.js
++++ b/packages/xo-web/src/xo-app/menu/index.js
+@@ -36,6 +36,15 @@
+ 
+ import styles from './index.css'
+ 
++// Customisation — set to true to hide the corresponding menu section
++const HIDDEN_MENU_ITEMS = {
++  hub: true,
++  xoa: true,
++  proxies: true,
++  xostor: true,
++  noSupport: true,
++}
++
+ const LINK_STYLE = {
+   display: 'flex',
+ }
+@@ -348,7 +357,7 @@
+           },
+         ],
+       },
+-      {
++      !HIDDEN_MENU_ITEMS.xoa && {
+         to: isAdmin ? 'xoa/update' : 'xoa/notifications',
+         icon: 'menu-xoa',
+         label: 'xoa',
+@@ -457,7 +466,7 @@
+           },
+         ],
+       },
+-      isAdmin && {
++      isAdmin && !HIDDEN_MENU_ITEMS.hub && {
+         to: '/hub/templates',
+         icon: 'menu-hub',
+         label: 'hubPage',
+@@ -474,7 +483,7 @@
+           },
+         ],
+       },
+-      isAdmin && {
++      isAdmin && !HIDDEN_MENU_ITEMS.proxies && {
+         to: '/proxies',
+         icon: 'proxy',
+         label: 'proxies',
+@@ -502,7 +511,7 @@
+         label: 'taskMenu',
+         pill: nResolvedTasks,
+       },
+-      isAdmin && {
++      isAdmin && !HIDDEN_MENU_ITEMS.xostor && {
+         to: '/xostor',
+         label: 'xostor',
+         icon: 'menu-xostor',
+@@ -609,7 +618,7 @@
+               </Link>
+             </li>
+           )}
+-          {(isAdmin || +process.env.XOA_PLAN === 5) && (
++          {!HIDDEN_MENU_ITEMS.noSupport && (isAdmin || +process.env.XOA_PLAN === 5) && (
+             <li className='nav-item xo-menu-item'>
+               <Link className='nav-link' style={{ display: 'flex' }} to='/about'>
+                 {+process.env.XOA_PLAN === 5 ? (
+diff --git a/packages/xo-web/src/common/intl/messages.js b/packages/xo-web/src/common/intl/messages.js
+index 5fad0ce97..54b31f92a 100644
+--- a/packages/xo-web/src/common/intl/messages.js
++++ b/packages/xo-web/src/common/intl/messages.js
+@@ -2422,8 +2422,8 @@ const messages = {
+   disclaimerTitle: 'Xen Orchestra from the sources',
+   disclaimerText1: "You are using XO from the sources! That's great for a personal/non-profit usage.",
+   disclaimerText2: "If you are a company, it's better to use it with our appliance + pro support included:",
+-  disclaimerText3: 'This version is not bundled with any support nor updates. Use it with caution.',
+-  disclaimerText4: 'Why do I see this message?',
++  disclaimerText3: 'This version is XOA-HL',
++  disclaimerText4: 'Documentation of available here',
+   notRegisteredDisclaimerInfo: 'You are not registered. Your XOA may not be up to date.',
+   notRegisteredDisclaimerCreateAccount: 'Click here to create an account.',
+   notRegisteredDisclaimerRegister: 'Click here to register and update your XOA.',
+diff --git a/packages/xo-web/src/xo-app/index.js b/packages/xo-web/src/xo-app/index.js
+index a441b9ecd..b151554cb 100644
+--- a/packages/xo-web/src/xo-app/index.js
++++ b/packages/xo-web/src/xo-app/index.js
+@@ -476,14 +476,14 @@ export default class XoApp extends Component {
+               {plan === 'Community' && !this.state.dismissedSourceBanner && (
+                 <div className='alert alert-danger mb-0'>
+                   <a
+-                    href='https://vates.tech/deploy/?pk_campaign=xo_source_banner'
++                    href='https://vagrantin.github.io/xcp-ce/'
+                     rel='noopener noreferrer'
+                     target='_blank'
+                   >
+                     {_('disclaimerText3')}
+                   </a>{' '}
+                   <a
+-                    href='https://docs.xen-orchestra.com/installation#banner-and-warnings'
++                    href='https://vagrantin.github.io/xcp-ce/'
+                     rel='noopener noreferrer'
+                     target='_blank'
+                   >
