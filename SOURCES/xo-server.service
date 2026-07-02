@@ -6,7 +6,7 @@ Wants=network-online.target
 
 [Service]
 Type=simple
-ExecStart=/opt/xo/packages/xo-server/dist/cli.mjs
+ExecStart=/usr/bin/node /opt/xo/packages/xo-server/dist/cli.mjs
 WorkingDirectory=/opt/xo/packages/xo-server
 Restart=always
 RestartSec=5
