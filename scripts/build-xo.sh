@@ -13,7 +13,7 @@ git clone --depth 1 "$XO_REPO" "$XO_SRC"
 cd "$XO_SRC"
 
 XO_SHORT_SHA=$(git rev-parse --short HEAD)
-VERSION="$(date +%Y%m%d)-${XO_SHORT_SHA}"
+VERSION="$(date +%Y%m%d)_${XO_SHORT_SHA}"
 echo "$VERSION" > "$OUT_DIR/VERSION"
 
 echo "==> Applying patches"

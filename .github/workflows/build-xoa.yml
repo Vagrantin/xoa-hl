@@ -21,23 +21,9 @@ jobs:
             -v ${{ github.workspace }}/scripts:/build/scripts \
             xoa-hl-builder bash /build/scripts/build-xo.sh
 
-      - name: Read version
-        id: tarvers
-        run: echo "tarversion=$(cat out/VERSION)" >> "$GITHUB_OUTPUT"
-
-      - name: Rename the xoa-hl tar ball
-        id: xoname
-        run: |
-          filename="out/xoa-hl-${{ steps.tarvers.outputs.tarversion }}.tar.gz"
-          newmane=$(echo $filename | rev | sed 's/-/_/' | rev)
-          mv "$filename" "$newname"
-          echo "newname=$newname" >> "$GITHUB_OUTPUT"
-
-      - name: Update version for RPM compatibility
+      - name: Get version
         id: ver
-        run: |
-          version=$(cat out/VERSION)
-          echo "version=${version//-/_}" >> "$GITHUB_OUTPUT"
+        run: echo "version=$(cat out/VERSION)" >> "$GITHUB_OUTPUT"
 
       - name: Build RPM
         run: |
@@ -55,5 +41,5 @@ jobs:
         with:
           tag_name: v${{ steps.ver.outputs.version }}
           files: |
-            out/${{ steps.xoaname.outputs.newmane }}
+            out/xoa-hl-${{ steps.ver.outputs.version }}.tar.gz
             out/noarch/xoa-hl-${{ steps.ver.outputs.version }}-1.*.noarch.rpm
