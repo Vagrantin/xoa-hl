@@ -1,4 +1,4 @@
-Name:           xolite-hl
+Name:           xoa-hl
 Version:        %{_version}
 Release:        1%{?dist}
 Summary:        Xen Orchestra HomeLab Edition

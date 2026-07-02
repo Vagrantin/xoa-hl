@@ -22,10 +22,25 @@ jobs:
             xoa-hl-builder bash /build/scripts/build-xo.sh
 
       - name: Read version
+        id: vers
+        run: |
+          version=$(cat out/VERSION)
+          echo "version=${version//-/_}" >> "$GITHUB_OUTPUT"
+
+      - name: Rename the xoa-hl tar ball
+        id: xoname
+        run: |
+          filename="out/xoa-hl-${{ steps.vers.outputs.version }}.tar.gz"
+          newmane=$(echo $filename | rev | sed 's/-/_/' | rev)
+          mv "$filename" "$newname"
+          echo "newname=$newname" >> "$GITHUB_OUTPUT"
+
+      - name: Update version for RPM compatibility
         id: ver
         run: |
           version=$(cat out/VERSION)
           echo "version=${version//-/_}" >> "$GITHUB_OUTPUT"
+
 
       - name: Build RPM
         run: |
@@ -43,5 +58,5 @@ jobs:
         with:
           tag_name: v${{ steps.ver.outputs.version }}
           files: |
-            out/xoa-hl-${{ steps.ver.outputs.version }}.tar.gz
+            out/${{ steps.xoaname.outputs.newmane }}
             out/noarch/xoa-hl-${{ steps.ver.outputs.version }}-1.*.noarch.rpm
