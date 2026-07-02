@@ -23,9 +23,6 @@ jobs:
         id: ver
         run: echo "version=$(cat out/VERSION)" >> "$GITHUB_OUTPUT"
 
-      - name: Stage RPM sources
-        run: cp SPECS/xo-server.service SOURCES/
-
       - name: Build RPM
         run: |
           docker run --rm -v ${{ github.workspace }}:/build/repo xoa-hl-builder bash -c "
