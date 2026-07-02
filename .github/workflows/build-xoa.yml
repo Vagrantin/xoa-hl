@@ -16,7 +16,7 @@ jobs:
             -v ${{ github.workspace }}/patches:/build/patches \
             -v ${{ github.workspace }}/out:/build/out \
             -v ${{ github.workspace }}/scripts:/build/scripts \
-            xoa-hl-builder /build/scripts/build-xo.sh
+            xoa-hl-builder bash /build/scripts/build-xo.sh
 
       - name: Read version
         id: ver
