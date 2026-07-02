@@ -5,7 +5,7 @@ Summary:        Xen Orchestra HomeLab Edition
 License:        AGPLv3
 URL:            https://github.com/Vagrantin/xoa-hl
 BuildArch:      noarch
-Requires:       nodejs >= 24, valkey, ntfs-3g, nfs-utils, cifs-utils, lvm2, curl
+Requires:       nodejs >= 24, redis, ntfs-3g, nfs-utils, cifs-utils, lvm2, curl
 
 %description
 Thin package that downloads and installs the pre-built Xen Orchestra
