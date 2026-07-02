@@ -35,6 +35,8 @@ jobs:
                       --define '_rpmdir /build/repo/out' \
                       -bb /build/repo/SPECS/xoa-hl.spec
           "
+      - name: List build outputs
+        run: find /build/repo/out out -type f 2>/dev/null || echo "no files found"
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
