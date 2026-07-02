@@ -1,6 +1,7 @@
 name: Build xoa-hl
 
 on:
+  push:
   workflow_dispatch:
 
 jobs:
