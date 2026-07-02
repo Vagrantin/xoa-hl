@@ -1,0 +1,16 @@
+# specs/xo-server.service
+[Unit]
+Description=Xen Orchestra HomeLab Edition server
+After=network-online.target redis.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/opt/xo/packages/xo-server/dist/cli.mjs
+WorkingDirectory=/opt/xo/packages/xo-server
+Restart=always
+RestartSec=5
+SyslogIdentifier=xo-server
+
+[Install]
+WantedBy=multi-user.target

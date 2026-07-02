@@ -1,0 +1,43 @@
+name: Build xoa-hl
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build in AlmaLinux 9 container
+        run: |
+          docker build -t xoa-hl-builder -f container/Containerfile container/
+          docker run --rm \
+            -v ${{ github.workspace }}/patches:/build/patches \
+            -v ${{ github.workspace }}/out:/build/out \
+            -v ${{ github.workspace }}/scripts:/build/scripts \
+            xoa-hl-builder /build/scripts/build-xo.sh
+
+      - name: Read version
+        id: ver
+        run: echo "version=$(cat out/VERSION)" >> "$GITHUB_OUTPUT"
+
+      - name: Stage RPM sources
+        run: cp SPECS/xo-server.service SOURCES/
+
+      - name: Build RPM
+        run: |
+          docker run --rm -v ${{ github.workspace }}:/build/repo xoa-hl-builder bash -c "
+            rpmbuild --define '_version ${{ steps.ver.outputs.version }}' \
+                      --define '_sourcedir /build/repo/SOURCES' \
+                      --define '_rpmdir /build/repo/out' \
+                      -bb /build/repo/SPECS/xoa-hl.spec
+          "
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.ver.outputs.version }}
+          files: |
+            out/xoa-hl-${{ steps.ver.outputs.version }}.tar.gz
+            out/noarch/xoa-hl-${{ steps.ver.outputs.version }}-1.*.noarch.rpm
