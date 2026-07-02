@@ -26,6 +26,7 @@ tar xzf /tmp/xoa-hl.tar.gz -C /opt/xo --strip-components=1
 rm -f /tmp/xoa-hl.tar.gz
 
 systemctl daemon-reload
+systemctl enable redis --now
 systemctl enable xo-server
 
 %preun
