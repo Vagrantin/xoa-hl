@@ -22,8 +22,8 @@ jobs:
       - name: Read version
         id: ver
         run: |
-          sed -i s/-/_/g out/VERSION
-          echo "version=$(cat out/VERSION)" >> "$GITHUB_OUTPUT"
+          version=$(cat out/VERSION)
+          echo "${version//-/_}" >> "$GITHUB_OUTPUT"
 
       - name: Build RPM
         run: |
