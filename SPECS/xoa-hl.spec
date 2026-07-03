@@ -28,6 +28,7 @@ rm -f /tmp/xoa-hl.tar.gz
 systemctl daemon-reload
 systemctl enable redis --now
 systemctl enable xo-server
+systemctl start xo-server
 
 %preun
 systemctl stop xo-server 2>/dev/null || true
