@@ -30,6 +30,7 @@ echo "==> Configuring sample.config.toml (XO5 UI + Redis)"
 # any install that has a user config present.
 sed -i "s|^# '/' = '../xo-web/dist/'|'/' = '../xo-web/dist/'|" \
     packages/xo-server/sample.config.toml
+cat packages/xo-server/sample.config.toml
 
 # Hard verification — sed exits 0 even on no-match, so confirm the lines
 # actually changed. CI must fail loudly rather than ship a broken tarball.
