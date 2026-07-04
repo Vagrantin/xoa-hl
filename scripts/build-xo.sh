@@ -40,7 +40,9 @@ cat > packages/xo-server/xoahl.config.toml << 'EOF'
   key = '/opt/xo/xoahl.key'
 
 [http.mounts]
+'/' = '../xo-web/dist/'
 '/v5' = '../xo-web/dist/'
+'/v6' = '../../@xen-orchestra/web/dist/'
 
 [redis]
 uri = 'redis://127.0.0.1:6379/0'
