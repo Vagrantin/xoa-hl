@@ -23,6 +23,19 @@ for p in "$PATCH_DIR"/*.patch; do
     git apply --verbose "$p"
 done
 
+echo "==> Configuring sample.config.toml (XO5 UI + Redis)"
+# Target sample.config.toml — this is what %post copies to the user config
+# location (~/.config/xo-server/config.toml), which is the file xo-server
+# actually reads at runtime. Modifying config.toml instead is a no-op for
+# any install that has a user config present.
+sed -i "s|^# '/' = '../xo-web/dist/'|'/' = '../xo-web/dist/'|" \
+    packages/xo-server/sample.config.toml
+
+# Hard verification — sed exits 0 even on no-match, so confirm the lines
+# actually changed. CI must fail loudly rather than ship a broken tarball.
+grep -q "^'/' = '../xo-web/dist/'" packages/xo-server/sample.config.toml || \
+    { echo "ERROR: XO5 UI sed did not apply — check line format in sample.config.toml"; exit 1; }
+
 echo "==> Install + build (all workspaces)"
 yarn --network-timeout 300000
 yarn --network-timeout 300000 build
