@@ -28,7 +28,7 @@ echo "==> Configuring sample.config.toml (XO5 UI + Redis)"
 # location (~/.config/xo-server/config.toml), which is the file xo-server
 # actually reads at runtime. Modifying config.toml instead is a no-op for
 # any install that has a user config present.
-sed -i "s|^# '/' = '../xo-web/dist/'|'/' = '../xo-web/dist/'|" \
+sed -i '/^\[http\.mounts\]$/a '\''/'\'' = '\''../xo-web/dist/'\''' \
     packages/xo-server/sample.config.toml
 cat packages/xo-server/sample.config.toml
 
