@@ -24,6 +24,8 @@ mkdir -p /opt/xo
 curl -fsSL "$TARBALL_URL" -o /tmp/xoa-hl.tar.gz
 tar xzf /tmp/xoa-hl.tar.gz -C /opt/xo --strip-components=1
 rm -f /tmp/xoa-hl.tar.gz
+mv /opt/xo/packages/xo-server/xoahl.key /opt/xo/
+mv /opt/xo/packages/xo-server/xoahl.crt /opt/xo/
 
 # Bootstrap xo-server user config on first install.
 # xo-server reads ~/.config/xo-server/config.toml (via app-conf XDG lookup),
@@ -32,7 +34,7 @@ rm -f /tmp/xoa-hl.tar.gz
 # On update the file is left untouched to preserve operator customisations.
 if [ ! -f /root/.config/xo-server/config.toml ]; then
     mkdir -p /root/.config/xo-server
-    cp /opt/xo/packages/xo-server/sample.config.toml \
+    cp /opt/xo/packages/xo-server/xoahl.config.toml \
        /root/.config/xo-server/config.toml
 fi
 

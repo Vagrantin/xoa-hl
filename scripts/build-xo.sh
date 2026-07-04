@@ -28,14 +28,37 @@ echo "==> Configuring sample.config.toml (XO5 UI + Redis)"
 # location (~/.config/xo-server/config.toml), which is the file xo-server
 # actually reads at runtime. Modifying config.toml instead is a no-op for
 # any install that has a user config present.
-sed -i '/^\[http\.mounts\]$/a '\''/'\'' = '\''../xo-web/dist/'\''' \
-    packages/xo-server/sample.config.toml
-cat packages/xo-server/sample.config.toml
+#sed -i '/^\[http\.mounts\]$/a '\''/'\'' = '\''../xo-web/dist/'\''' \
+#    packages/xo-server/sample.config.toml
+#cat packages/xo-server/sample.config.toml
+cat > packages/xo-server/xoahl.config.toml << 'EOF'
+#Sample config is available at /opt/xo/packages/xo-server/sample.config.toml
+[http]
+  [[http.listen]]
+  port = 443
+  cert = '/opt/xo/xoahl.crt'
+  key = '/opt/xo/xoahl.key'
+
+[http.mounts]
+'/' = '../xo-web/dist/'
+
+[redis]
+uri = 'redis://127.0.0.1:6379/0'
+EOF
+
+echo "==> Generating self-signed TLS certificate"
+openssl req -x509 -newkey rsa:4096 \
+  -keyout packages/xo-server/xoahl.key \
+  -out packages/xo-server/xoahl.crt \
+  -days 3650 -nodes \
+  -subj '/CN=xoa.local'
+chmod 600 packages/xo-server/xoahl.key
+chmod 644 packages/xo-server/xoahl.crt
 
 # Hard verification — sed exits 0 even on no-match, so confirm the lines
 # actually changed. CI must fail loudly rather than ship a broken tarball.
-grep -q "^'/' = '../xo-web/dist/'" packages/xo-server/sample.config.toml || \
-    { echo "ERROR: XO5 UI sed did not apply — check line format in sample.config.toml"; exit 1; }
+#grep -q "^'/' = '../xo-web/dist/'" packages/xo-server/sample.config.toml || \
+#    { echo "ERROR: XO5 UI sed did not apply — check line format in sample.config.toml"; exit 1; }
 
 echo "==> Install + build (all workspaces)"
 yarn --network-timeout 300000
@@ -44,7 +67,7 @@ yarn --network-timeout 300000 build
 echo "==> Pruning: drop test/dev/cloud packages, keep everything else"
 rm -rf .git .github .changesets docs
 rm -rf packages/xo-server-test*
-rm -rf packages/xo-server-cloud   # licensing/phone-home plugin — excluded like ronivay's "all"
+rm -rf packages/xo-server-cloud
 
 echo "==> Stripping devDependencies (workspace symlinks preserved)"
 yarn workspaces focus --production 2>/dev/null || \
