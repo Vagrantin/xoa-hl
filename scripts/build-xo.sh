@@ -2,18 +2,26 @@
 set -euo pipefail
 
 XO_REPO="https://github.com/vatesfr/xen-orchestra.git"
+XO_COMMIT="e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c" # 5.113.2 — last XO 5.x release (2025-12-09)
+XO_VERSION="5.113.2"
 XO_SRC="/build/xen-orchestra"
 PATCH_DIR="/build/patches"
 OUT_DIR="/build/out"
 
 mkdir -p "$OUT_DIR"
 
-echo "==> Cloning xen-orchestra master (shallow)"
-git clone --depth 1 "$XO_REPO" "$XO_SRC"
+echo "==> Fetching xen-orchestra at ${XO_VERSION} (${XO_COMMIT:0:8})"
+# --depth 1 against a bare SHA requires init+fetch; GitHub supports this.
+# Avoids pulling the full history (~1 GB) while still pinning reproducibly.
+mkdir -p "$XO_SRC"
+git -C "$XO_SRC" init -q
+git -C "$XO_SRC" remote add origin "$XO_REPO"
+git -C "$XO_SRC" fetch --depth 1 origin "$XO_COMMIT"
+git -C "$XO_SRC" checkout FETCH_HEAD
 cd "$XO_SRC"
 
-XO_SHORT_SHA=$(git rev-parse --short HEAD)
-VERSION="$(date +%Y%m%d)_${XO_SHORT_SHA}"
+XO_SHORT_SHA="${XO_COMMIT:0:8}"
+VERSION="${XO_VERSION}_${XO_SHORT_SHA}"
 echo "$VERSION" > "$OUT_DIR/VERSION"
 
 echo "==> Applying patches"
@@ -38,11 +46,6 @@ cat > packages/xo-server/xoahl.config.toml << 'EOF'
   port = 443
   cert = '/opt/xo/xoahl.crt'
   key = '/opt/xo/xoahl.key'
-
-[http.mounts]
-'/' = '../xo-web/dist/'
-'/v5' = '../xo-web/dist/'
-'/v6' = '../../@xen-orchestra/web/dist/'
 
 [redis]
 uri = 'redis://127.0.0.1:6379/0'
