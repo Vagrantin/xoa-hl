@@ -1,8 +1,5 @@
 Name:           xoa-hl
 Version:        %{_version}
-# CI passes this via --define; a monotonic build counter (GitHub Actions
-# run number) so every rebuild has a distinct, upgradeable NEVRA even when
-# XO_VERSION/XO_COMMIT (and therefore Version) don't change.
 Release:        %{_release}.xcpng8.3%{?dist}
 Summary:        Xen Orchestra HomeLab Edition
 License:        AGPLv3
@@ -40,8 +37,6 @@ if [ ! -f /root/.config/xo-server/config.toml ]; then
     cp /opt/xo/packages/xo-server/xoahl.config.toml \
        /root/.config/xo-server/config.toml
 fi
-
-# Expose xo-cli on PATH (mirrors ronivay convention)
 
 ln -sfn /opt/xo/packages/xo-cli /opt/xo/xo-cli
 ln -sfn /opt/xo/packages/xo-cli/index.mjs /usr/local/bin/xo-cli
