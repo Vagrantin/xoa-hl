@@ -29,6 +29,7 @@ jobs:
         run: |
           docker run --rm -v ${{ github.workspace }}:/build/repo xoa-hl-builder bash -c "
             rpmbuild --define '_version ${{ steps.ver.outputs.version }}' \
+                      --define '_release ${{ github.run_number }}' \
                       --define '_sourcedir /build/repo/SOURCES' \
                       --define '_rpmdir /build/repo/out' \
                       -bb /build/repo/SPECS/xoa-hl.spec
@@ -42,4 +43,4 @@ jobs:
           tag_name: v${{ steps.ver.outputs.version }}
           files: |
             out/xoa-hl-${{ steps.ver.outputs.version }}.tar.gz
-            out/noarch/xoa-hl-${{ steps.ver.outputs.version }}-1.*.noarch.rpm
+            out/noarch/xoa-hl-${{ steps.ver.outputs.version }}-*.noarch.rpm

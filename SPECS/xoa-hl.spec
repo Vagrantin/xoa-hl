@@ -1,6 +1,9 @@
 Name:           xoa-hl
 Version:        %{_version}
-Release:        1%{?dist}
+# CI passes this via --define; a monotonic build counter (GitHub Actions
+# run number) so every rebuild has a distinct, upgradeable NEVRA even when
+# XO_VERSION/XO_COMMIT (and therefore Version) don't change.
+Release:        %{_release}.xcpng8.3%{?dist}
 Summary:        Xen Orchestra HomeLab Edition
 License:        AGPLv3
 URL:            https://github.com/Vagrantin/xoa-hl
