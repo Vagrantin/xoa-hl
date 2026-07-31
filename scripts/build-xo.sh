@@ -2,7 +2,7 @@
 set -euo pipefail
 
 XO_REPO="https://github.com/vatesfr/xen-orchestra.git"
-XO_COMMIT="e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c" # 5.113.2 — last XO 5.x release (2025-12-09)
+XO_COMMIT="e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c" # 5.113.2, last XO 5.x release (2025-12-09)
 XO_VERSION="5.113.2"
 XO_SRC="/build/xen-orchestra"
 PATCH_DIR="/build/patches"
@@ -32,7 +32,7 @@ for p in "$PATCH_DIR"/*.patch; do
 done
 
 echo "==> Configuring sample.config.toml (XO5 UI + Redis)"
-# Target sample.config.toml — this is what %post copies to the user config
+# Target sample.config.toml, this is what %post copies to the user config
 # location (~/.config/xo-server/config.toml), which is the file xo-server
 # actually reads at runtime. Modifying config.toml instead is a no-op for
 # any install that has a user config present.
@@ -60,10 +60,10 @@ openssl req -x509 -newkey rsa:4096 \
 chmod 600 packages/xo-server/xoahl.key
 chmod 644 packages/xo-server/xoahl.crt
 
-# Hard verification — sed exits 0 even on no-match, so confirm the lines
+# Hard verification, sed exits 0 even on no-match, so confirm the lines
 # actually changed. CI must fail loudly rather than ship a broken tarball.
 #grep -q "^'/' = '../xo-web/dist/'" packages/xo-server/sample.config.toml || \
-#    { echo "ERROR: XO5 UI sed did not apply — check line format in sample.config.toml"; exit 1; }
+#    { echo "ERROR: XO5 UI sed did not apply, check line format in sample.config.toml"; exit 1; }
 
 echo "==> Install + build (all workspaces)"
 yarn --network-timeout 300000
