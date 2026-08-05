@@ -1,6 +1,6 @@
 --- a/packages/xo-server/src/xapi/mixins/patching.mjs
 +++ b/packages/xo-server/src/xapi/mixins/patching.mjs
-@@ -55,6 +55,25 @@
+@@ -55,6 +55,22 @@
  
  const LISTING_DEBOUNCE_TIME_MS = 60000
  
@@ -16,14 +16,14 @@
 +// so a repository has to be both enabled on the host and named here.
 +//
 +// These IDs correspond to the repository name in the xcp-hl-release package, which owns
-+// /etc/yum.repos.d/xcp-hl.repo. The updater plugin don't validates, so a name that does 
++// /etc/yum.repos.d/xcp-hl.repo. The updater plugin don't validates, so a name that does
 +// not match anything on the host will not be processed. Keep the two in sync.
 +const XCP_HL_REPOS = 'xcp-hl-base,xcp-hl-xolite,xcp-hl-xoa-proxy'
 +
  async function _listMissingPatches(hostId) {
    const host = this.getObject(hostId)
    return _isXcp(host)
-@@ -163,7 +182,9 @@
+@@ -163,7 +179,9 @@
    // list all yum updates available for a XCP-ng host
    // (hostObject) → { uuid: patchObject }
    async _listXcpUpdates(host) {
@@ -34,7 +34,7 @@
  
      if (result.error != null) {
        throw new Error(result.error)
-@@ -416,7 +437,13 @@
+@@ -416,7 +434,11 @@
      hosts = hosts.sort(({ $ref }) => ($ref === this.pool.master ? -1 : 1))
      for (const host of hosts) {
        // With throw in case of error with XCP-ng>=8.2.1
