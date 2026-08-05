@@ -13,14 +13,11 @@
 +//     repos = list(DEFAULT_REPOS) + (additional_repos or '').split(',')
 +//     return [x.id for x in enabled_repos if x.id in repos]
 +//
-+// so a repository has to be both enabled on the host and named here. Upstream XO
-+// passes {}, which is why XCP-HL packages never showed up in the Patches tab even
-+// on hosts that had the repositories configured.
++// so a repository has to be both enabled on the host and named here.
 +//
-+// These IDs are a contract with the xcp-hl-release package, which owns
-+// /etc/yum.repos.d/xcp-hl.repo. Because the plugin intersects rather than
-+// validates, a name that does not match anything on the host is not an error, it
-+// just silently contributes nothing. Keep the two in sync.
++// These IDs correspond to the repository name in the xcp-hl-release package, which owns
++// /etc/yum.repos.d/xcp-hl.repo. The updater plugin don't validates, so a name that does 
++// not match anything on the host will not be processed. Keep the two in sync.
 +const XCP_HL_REPOS = 'xcp-hl-base,xcp-hl-xolite,xcp-hl-xoa-proxy'
 +
  async function _listMissingPatches(hostId) {
@@ -46,9 +43,7 @@
 +      // offer XCP-HL updates in the UI and then refuse to install them, because
 +      // install_helper applies the identical allowlist when it builds
 +      // `yum update --disablerepo=* --enablerepo=<list> -y`.
-+      const result = await this.callAsync('host.call_plugin', host.$ref, 'updater.py', 'update', {
-+        repos: XCP_HL_REPOS,
-+      })
++      const result = await this.callAsync('host.call_plugin', host.$ref, 'updater.py', 'update', { repos: XCP_HL_REPOS })
  
        // Defined and different than 0 in case of error with XCP-ng<8.2.1
        const { exit } = result
