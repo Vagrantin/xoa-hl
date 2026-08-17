@@ -1,0 +1,240 @@
+diff --git a/packages/xo-server/src/api/xoaHl.mjs b/packages/xo-server/src/api/xoaHl.mjs
+new file mode 100644
+index 000000000..94ee35848
+--- /dev/null
++++ b/packages/xo-server/src/api/xoaHl.mjs
+@@ -0,0 +1,92 @@
++import { execa } from 'execa'
++import { readFile } from 'fs/promises'
++
++const STATUS_FILE = '/run/xoa-hl/status'
++
++// -------------------------------------------------------------------
++
++export async function getVersion() {
++  try {
++    const { stdout } = await execa('rpm', ['-q', '--qf', '%{VERSION}-%{RELEASE}\\n', 'xoa-hl'])
++    return stdout.trim()
++  } catch (error) {
++    // not running on the appliance, or package not found
++    return { error: 'unknown' }
++  }
++}
++getVersion.permission = 'admin'
++getVersion.description = 'get the installed version of xoa-hl'
++
++// -------------------------------------------------------------------
++
++export async function checkForUpdate() {
++  await execa('sudo', ['systemctl', 'start', 'xoa-hl-check-update.service'])
++  return { started: true }
++}
++checkForUpdate.permission = 'admin'
++checkForUpdate.description = 'queue a check for xoa-hl updates'
++
++// -------------------------------------------------------------------
++
++export async function getUpdateStatus() {
++  let content
++  try {
++    content = await readFile(STATUS_FILE, 'utf8')
++  } catch (error) {
++    // never checked yet
++    return { checking: false, updateAvailable: false }
++  }
++
++  const status = content.trim()
++  if (status === 'UP_TO_DATE') {
++    return { checking: false, updateAvailable: false }
++  }
++
++  const match = status.match(/^AVAILABLE (.+)$/)
++  if (match !== null) {
++    return { checking: false, updateAvailable: true, latestVersion: match[1] }
++  }
++
++  return { checking: false, updateAvailable: false }
++}
++getUpdateStatus.permission = 'admin'
++getUpdateStatus.description = 'get the latest xoa-hl update check result'
++
++// -------------------------------------------------------------------
++
++export async function startUpdate() {
++  await execa('sudo', ['systemctl', 'start', 'xoa-hl-update.service'])
++  return { started: true }
++}
++startUpdate.permission = 'admin'
++startUpdate.description = 'run the xoa-hl update, resolves once it has finished'
++
++// -------------------------------------------------------------------
++
++export async function getUpdateProgress() {
++  const [{ stdout: showOut }, { stdout: logOut }] = await Promise.all([
++    execa('systemctl', [
++      'show',
++      'xoa-hl-update.service',
++      '--property=ActiveState,SubState,ExecMainStatus,ExecMainCode',
++    ]),
++    execa('journalctl', ['-u', 'xoa-hl-update.service', '-n', '50', '--no-pager', '-o', 'cat']),
++  ])
++
++  const properties = {}
++  for (const line of showOut.split('\n')) {
++    const i = line.indexOf('=')
++    if (i !== -1) {
++      properties[line.slice(0, i)] = line.slice(i + 1)
++    }
++  }
++
++  return {
++    activeState: properties.ActiveState,
++    subState: properties.SubState,
++    exitStatus: properties.ExecMainStatus,
++    log: logOut.split('\n'),
++  }
++}
++getUpdateProgress.permission = 'admin'
++getUpdateProgress.description = 'get the state and log tail of the xoa-hl update service'
+diff --git a/packages/xo-web/src/common/intl/messages.js b/packages/xo-web/src/common/intl/messages.js
+index 2aea8e7d3..b67e0f90a 100644
+--- a/packages/xo-web/src/common/intl/messages.js
++++ b/packages/xo-web/src/common/intl/messages.js
+@@ -244,6 +244,12 @@ const messages = {
+   settingsLogsPage: 'Logs',
+   settingsCloudConfigsPage: 'Cloud configs',
+   settingsIpsPage: 'IPs',
++  settingsXoaHlUpdatesPage: 'XOA-HL Updates',
++  xoaHlInstalledVersion: 'Installed version:',
++  xoaHlCheckForUpdate: 'Check for update',
++  xoaHlStartUpdate: 'Update now',
++  xoaHlUpdateAvailable: 'Update available:',
++  xoaHlUpToDate: 'Up to date',
+   aboutPage: 'About',
+   aboutXoaPlan: 'About XO {xoaPlan}',
+   newMenu: 'New',
+diff --git a/packages/xo-web/src/common/xo/index.js b/packages/xo-web/src/common/xo/index.js
+index b8110b2c7..c0cff2280 100644
+--- a/packages/xo-web/src/common/xo/index.js
++++ b/packages/xo-web/src/common/xo/index.js
+@@ -884,6 +884,14 @@ export const exportConfig = () =>
+     noop
+   )
+ 
++// XOA-HL --------------------------------------------------------------------
++
++export const getXoaHlVersion = () => _call('xoaHl.getVersion')
++export const checkXoaHlUpdate = () => _call('xoaHl.checkForUpdate')
++export const getXoaHlUpdateStatus = () => _call('xoaHl.getUpdateStatus')
++export const startXoaHlUpdate = () => _call('xoaHl.startUpdate')
++export const getXoaHlUpdateProgress = () => _call('xoaHl.getUpdateProgress')
++
+ // Server ------------------------------------------------------------
+ 
+ export const addServer = (host, username, password, label, allowUnauthorized, httpProxy) =>
+diff --git a/packages/xo-web/src/xo-app/settings/index.js b/packages/xo-web/src/xo-app/settings/index.js
+index 6936473dd..004bff4cd 100644
+--- a/packages/xo-web/src/xo-app/settings/index.js
++++ b/packages/xo-web/src/xo-app/settings/index.js
+@@ -17,6 +17,7 @@ import Plugins from './plugins'
+ import Remotes from './remotes'
+ import Servers from './servers'
+ import Users from './users'
++import XoaHlUpdates from './xoa-hl-updates'
+ 
+ const HEADER = (
+   <Container>
+@@ -61,6 +62,9 @@ const HEADER = (
+           <NavLink to='/settings/config'>
+             <Icon icon='menu-settings-config' /> {_('xoConfig')}
+           </NavLink>
++          <NavLink to='/settings/xoa-hl-updates'>
++            <Icon icon='upgrade' /> {_('settingsXoaHlUpdatesPage')}
++          </NavLink>
+         </NavTabs>
+       </Col>
+     </Row>
+@@ -79,6 +83,7 @@ const Settings = routes('servers', {
+   remotes: Remotes,
+   servers: Servers,
+   users: Users,
++  'xoa-hl-updates': XoaHlUpdates,
+ })(
+   adminOnly(({ children }) => (
+     <Page header={HEADER} title='settingsPage' formatTitle>
+diff --git a/packages/xo-web/src/xo-app/settings/xoa-hl-updates/index.js b/packages/xo-web/src/xo-app/settings/xoa-hl-updates/index.js
+new file mode 100644
+index 000000000..a0a09a2b1
+--- /dev/null
++++ b/packages/xo-web/src/xo-app/settings/xoa-hl-updates/index.js
+@@ -0,0 +1,70 @@
++import _ from 'intl'
++import ActionButton from 'action-button'
++import Component from 'base-component'
++import Icon from 'icon'
++import React from 'react'
++import { checkXoaHlUpdate, getXoaHlUpdateProgress, getXoaHlUpdateStatus, getXoaHlVersion, startXoaHlUpdate } from 'xo'
++
++// ===================================================================
++
++export default class XoaHlUpdates extends Component {
++  componentWillMount() {
++    this.state = {
++      version: undefined,
++      checking: false,
++      updateAvailable: false,
++      latestVersion: undefined,
++      updating: false,
++      log: [],
++    }
++    getXoaHlVersion().then(version => this.setState({ version }))
++  }
++
++  _checkForUpdate = async () => {
++    this.setState({ checking: true })
++    await checkXoaHlUpdate()
++    const { updateAvailable, latestVersion } = await getXoaHlUpdateStatus()
++    this.setState({ checking: false, updateAvailable, latestVersion })
++  }
++
++  _startUpdate = async () => {
++    this.setState({ updating: true })
++    await startXoaHlUpdate()
++    const { log } = await getXoaHlUpdateProgress()
++    this.setState({ updating: false, log })
++  }
++
++  render() {
++    const { version, checking, updateAvailable, latestVersion, log } = this.state
++
++    return (
++      <div>
++        <p>
++          {_('xoaHlInstalledVersion')} {version === undefined ? '-' : String(version)}
++        </p>
++        <p>
++          {updateAvailable ? `${_('xoaHlUpdateAvailable')} ${latestVersion}` : _('xoaHlUpToDate')}
++        </p>
++        <ActionButton btnStyle='info' handler={this._checkForUpdate} icon='refresh' pending={checking}>
++          {_('xoaHlCheckForUpdate')}
++        </ActionButton>{' '}
++        <ActionButton
++          btnStyle='success'
++          disabled={!updateAvailable}
++          handler={this._startUpdate}
++          icon='upgrade'
++        >
++          {_('xoaHlStartUpdate')}
++        </ActionButton>
++        {log.length > 0 && (
++          <div>
++            <hr />
++            <pre className='overflow-auto' style={{ maxHeight: '20em' }}>
++              {log.join('\n')}
++            </pre>
++          </div>
++        )}
++      </div>
++    )
++  }
++}
