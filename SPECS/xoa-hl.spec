@@ -14,12 +14,24 @@ HomeLab Edition tarball from GitHub Releases.
 %install
 mkdir -p %{buildroot}/usr/lib/systemd/system
 install -m 644 %{_sourcedir}/xo-server.service %{buildroot}/usr/lib/systemd/system/
+install -m 644 %{_sourcedir}/xoa-hl-check-update.service %{buildroot}/usr/lib/systemd/system/
+install -m 644 %{_sourcedir}/xoa-hl-update.service %{buildroot}/usr/lib/systemd/system/
 mkdir -p %{buildroot}/etc/yum.repos.d
 install -m 644 %{_sourcedir}/xoa-hl.repo %{buildroot}/etc/yum.repos.d/
+mkdir -p %{buildroot}/usr/libexec/xoa-hl
+install -m 755 %{_sourcedir}/xoa-hl-check-update.sh %{buildroot}/usr/libexec/xoa-hl/check-update.sh
+install -m 755 %{_sourcedir}/xoa-hl-update.sh %{buildroot}/usr/libexec/xoa-hl/update.sh
+mkdir -p %{buildroot}/etc/sudoers.d
+install -m 440 %{_sourcedir}/xoa-hl.sudoers %{buildroot}/etc/sudoers.d/xoa-hl
+visudo -cf %{buildroot}/etc/sudoers.d/xoa-hl
 
 %files
 /usr/lib/systemd/system/xo-server.service
+/usr/lib/systemd/system/xoa-hl-check-update.service
+/usr/lib/systemd/system/xoa-hl-update.service
 /etc/yum.repos.d/xoa-hl.repo
+/usr/libexec/xoa-hl
+/etc/sudoers.d/xoa-hl
 
 %post
 # Stop any running instance before replacing /opt/xo (no-op on fresh install).
@@ -67,4 +79,6 @@ fi
 if [ "$1" -eq 0 ]; then
     rm -f /usr/local/bin/xo-cli
     rm -rf /opt/xo
+    rm -f /etc/sudoers.d/xoa-hl
+    rm -rf /usr/libexec/xoa-hl
 fi

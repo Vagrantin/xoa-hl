@@ -1,0 +1,11 @@
+[Unit]
+Description=Update xoa-hl
+
+[Service]
+Type=oneshot
+ExecStart=/usr/libexec/xoa-hl/update.sh
+# ProtectSystem=full, not strict: dnf itself needs broad root-fs write access, strict would break the update.
+ProtectSystem=full
+ProtectHome=yes
+PrivateTmp=yes
+ReadWritePaths=/opt/xo /var/cache/dnf /var/lib/rpm

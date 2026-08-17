@@ -1,0 +1,6 @@
+[Unit]
+Description=Check for xoa-hl updates
+
+[Service]
+Type=oneshot
+ExecStart=/usr/libexec/xoa-hl/check-update.sh
