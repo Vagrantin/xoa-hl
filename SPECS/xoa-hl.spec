@@ -14,12 +14,19 @@ HomeLab Edition tarball from GitHub Releases.
 %install
 mkdir -p %{buildroot}/usr/lib/systemd/system
 install -m 644 %{_sourcedir}/xo-server.service %{buildroot}/usr/lib/systemd/system/
+mkdir -p %{buildroot}/etc/yum.repos.d
+install -m 644 %{_sourcedir}/xoa-hl.repo %{buildroot}/etc/yum.repos.d/
 
 %files
 /usr/lib/systemd/system/xo-server.service
+/etc/yum.repos.d/xoa-hl.repo
 
 %post
+# Stop any running instance before replacing /opt/xo (no-op on fresh install).
+systemctl stop xo-server 2>/dev/null || true
+
 TARBALL_URL="https://github.com/Vagrantin/xoa-hl/releases/download/v%{version}/xoa-hl-%{version}.tar.gz"
+rm -rf /opt/xo
 mkdir -p /opt/xo
 curl -fsSL "$TARBALL_URL" -o /tmp/xoa-hl.tar.gz
 tar xzf /tmp/xoa-hl.tar.gz -C /opt/xo --strip-components=1
@@ -45,12 +52,19 @@ chmod +x /opt/xo/packages/xo-cli/index.mjs
 systemctl daemon-reload
 systemctl enable redis --now
 systemctl enable xo-server
-systemctl start xo-server
+systemctl restart xo-server
 
 %preun
-systemctl stop xo-server 2>/dev/null || true
-systemctl disable xo-server 2>/dev/null || true
+# $1 = instances remaining after this action: 0 = final removal, 1 = upgrade.
+# Skip on upgrade so we don't stop the service the new %post just started.
+if [ "$1" -eq 0 ]; then
+    systemctl stop xo-server 2>/dev/null || true
+    systemctl disable xo-server 2>/dev/null || true
+fi
 
 %postun
-rm -f /usr/local/bin/xo-cli
-rm -rf /opt/xo
+# Same upgrade guard as %preun: only wipe files on final removal.
+if [ "$1" -eq 0 ]; then
+    rm -f /usr/local/bin/xo-cli
+    rm -rf /opt/xo
+fi
