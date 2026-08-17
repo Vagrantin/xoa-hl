@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>XCP-HL yum repository: xoa-hl</title>
+<style>
+  body { max-width: 46rem; margin: 3rem auto; padding: 0 1.2rem;
+         font: 16px/1.6 system-ui, sans-serif; color: #1a1a1a; background: #fff; }
+  h1 { font-size: 1.6rem; margin-bottom: .2rem; }
+  .sub { color: #666; margin-top: 0; }
+  pre { background: #f4f4f4; padding: .8rem 1rem; border-radius: 6px;
+        overflow-x: auto; font-size: .9rem; }
+  code { font-family: ui-monospace, monospace; }
+  .note { border-left: 3px solid #d9a400; background: #fffbf0;
+          padding: .6rem 1rem; margin: 1.4rem 0; }
+  a { color: #0b62c4; }
+  footer { margin-top: 3rem; color: #777; font-size: .85rem; }
+  @media (prefers-color-scheme: dark) {
+    body { color: #e6e6e6; background: #16181c; }
+    .sub, footer { color: #9aa0a6; }
+    pre { background: #23262b; }
+    .note { background: #2a2419; border-left-color: #d9a400; }
+    a { color: #6fb3ff; }
+  }
+</style>
+</head>
+<body>
+
+<h1>XCP-HL yum repository: <code>xoa-hl</code></h1>
+<p class="sub">Signed RPM repository for XOA-HL, Xen Orchestra HomeLab Edition. Built for AlmaLinux 9.</p>
+
+<p>XOA-HL is a self-hosted Xen Orchestra appliance VM. This site serves a
+<code>yum</code>-resolvable repository containing recent released builds of the
+<code>xoa-hl</code> package, so an installed XOA-HL appliance can update itself
+in place instead of reinstalling from scratch.</p>
+
+<div class="note">
+  On a running appliance, <code>/etc/yum.repos.d/xoa-hl.repo</code> already
+  ships pre-installed: the <code>xoa-hl</code> RPM writes it directly in its
+  <code>%post</code> script. The copy published here exists for reference and
+  as a manual bootstrap if that file is ever missing.
+</div>
+
+<h2>Add the repository</h2>
+<p>On an XOA-HL appliance, as root:</p>
+<pre><code>curl -o /etc/yum.repos.d/xoa-hl.repo \
+  https://vagrantin.github.io/xoa-hl/xoa-hl.repo
+
+rpm --import https://vagrantin.github.io/xoa-hl/xcp-ng-ce-public.asc
+
+yum clean all
+yum check-update xoa-hl</code></pre>
+
+<h2>Update</h2>
+<pre><code>yum update xoa-hl</code></pre>
+
+<p>A handful of recent releases are kept, so you can list what is available
+and roll back within that window:</p>
+<pre><code>yum --showduplicates list xoa-hl
+yum downgrade xoa-hl-&lt;version&gt;</code></pre>
+
+<h2>Verification</h2>
+<p>The repository metadata (<code>repodata/repomd.xml</code>) carries a detached
+armored signature from the XCP-ng Community Edition signing subkey, and
+<code>repo_gpgcheck=1</code> in the <code>.repo</code> file above verifies it on
+every run. Because the signed <code>repomd.xml</code> records a SHA-256 of
+<code>primary.xml</code>, which in turn records a SHA-256 of every package, that
+one signature covers the integrity of everything you download.</p>
+
+<p>Per-package signature checking is <strong>off</strong>
+(<code>gpgcheck=0</code>), and that is deliberate. The RPMs are signed by a GPG
+<em>signing subkey</em>, and some environments only register the primary key on
+import, which then reports <code>NOKEY</code> for a subkey-made signature. This
+is the same trust model apt uses: the release file is signed, individual
+packages are not.</p>
+
+<p>Master key fingerprint:</p>
+<pre><code>2F59 1DB9 D2C1 28C4 C3D9  63F4 6DA0 0DCA 5BBA 215A</code></pre>
+
+<p>Also published at
+<a href="https://keys.openpgp.org/search?q=xcp-ng-ce.lid530%40passmail.com">keys.openpgp.org</a>.</p>
+
+<div class="note">
+  <strong>Signing subkeys expire 2027-05-10.</strong> After that date, signature
+  verification will fail until the subkeys are extended and
+  <code>xcp-ng-ce-public.asc</code> is refreshed here and re-imported on hosts.
+</div>
+
+<h2>Contents</h2>
+<ul>
+  <li><a href="8.3/x86_64/">8.3/x86_64/</a>: packages and <code>repodata/</code></li>
+  <li><a href="xoa-hl.repo">xoa-hl.repo</a>: ready-made client config</li>
+  <li><a href="xcp-ng-ce-public.asc">xcp-ng-ce-public.asc</a>: public signing key</li>
+</ul>
+
+<footer>
+  Community build, not supported by Vates.
+  Source: <a href="https://github.com/Vagrantin/xoa-hl">Vagrantin/xoa-hl</a> ·
+  Project docs: <a href="https://vagrantin.github.io/xcp-hl/">XCP-HL</a>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,8 @@
+[xoa-hl]
+name=XCP-HL - XOA-HL (appliance self-update)
+baseurl=https://vagrantin.github.io/xoa-hl/8.3/x86_64/
+enabled=1
+gpgcheck=0
+repo_gpgcheck=1
+gpgkey=https://vagrantin.github.io/xoa-hl/xcp-ng-ce-public.asc
+skip_if_unavailable=False
