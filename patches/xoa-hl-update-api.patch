@@ -196,10 +196,10 @@ index 6936473dd..b0bec9737 100644
      <Page header={HEADER} title='settingsPage' formatTitle>
 diff --git a/packages/xo-web/src/xo-app/settings/xoa-hl-updates/index.js b/packages/xo-web/src/xo-app/settings/xoa-hl-updates/index.js
 new file mode 100644
-index 000000000..a0a09a2b1
+index 000000000..b68afeea1
 --- /dev/null
 +++ b/packages/xo-web/src/xo-app/settings/xoa-hl-updates/index.js
-@@ -0,0 +1,70 @@
+@@ -0,0 +1,76 @@
 +import _ from 'intl'
 +import ActionButton from 'action-button'
 +import Component from 'base-component'
@@ -245,7 +245,13 @@ index 000000000..a0a09a2b1
 +          {_('xoaHlInstalledVersion')} {version === undefined ? '-' : String(version)}
 +        </p>
 +        <p>
-+          {updateAvailable ? `${_('xoaHlUpdateAvailable')} ${latestVersion}` : _('xoaHlUpToDate')}
++          {updateAvailable ? (
++            <span>
++              {_('xoaHlUpdateAvailable')} {latestVersion}
++            </span>
++          ) : (
++            _('xoaHlUpToDate')
++          )}
 +        </p>
 +        <ActionButton btnStyle='info' handler={this._checkForUpdate} icon='refresh' pending={checking}>
 +          {_('xoaHlCheckForUpdate')}
