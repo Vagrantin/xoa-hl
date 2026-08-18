@@ -1,9 +1,15 @@
 name: Build xoa-hl
+run-name: "Build xoa-hl (Tag: ${{ github.ref_name }})"
 
 on:
   push:
-    branches: [main]
+    tags:
+      - 'v*-ce[0-9]*'
   workflow_dispatch:
+    inputs:
+      release_tag:
+        description: 'Emergency release tag'
+        required: false
 
 jobs:
   build:
@@ -14,6 +20,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Generates a clean safety fallback tag if run via orchestrator dispatch
+      - name: Derive release tag
+        run: |
+          TAG="${{ github.ref_name }}"
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            if [ -n "${{ github.event.inputs.release_tag }}" ]; then
+              TAG="${{ github.event.inputs.release_tag }}"
+            else
+              TAG="v-ce-automated-$(date +'%Y%m%d%H%M')-run${{ github.run_number }}"
+            fi
+          fi
+          echo "RELEASE_TAG=${TAG}" >> $GITHUB_ENV
+          echo "Target release tag established as: ${TAG}"
+
       - name: Build in AlmaLinux 9 container
         run: |
           docker build -t xoa-hl-builder -f container/Containerfile container/
@@ -21,28 +41,54 @@ jobs:
             -v ${{ github.workspace }}/patches:/build/patches \
             -v ${{ github.workspace }}/out:/build/out \
             -v ${{ github.workspace }}/scripts:/build/scripts \
+            -v ${{ github.workspace }}/UPSTREAM_XO:/build/UPSTREAM_XO:ro \
             xoa-hl-builder bash /build/scripts/build-xo.sh
 
       - name: Get version
         id: ver
         run: echo "version=$(cat out/VERSION)" >> "$GITHUB_OUTPUT"
 
+      - name: Stage sources for rpmbuild
+        run: |
+          set -euo pipefail
+          VERSION="${{ steps.ver.outputs.version }}"
+          # The tarball is now a build input, it is not published any more.
+          cp "out/xoa-hl-${VERSION}.tar.gz" "SOURCES/xoa-hl-${VERSION}.tar.gz"
+
+          # The tag's ce counter becomes the RPM Release, so every build has
+          # a distinct, yum-upgradeable NEVRA.
+          case "${RELEASE_TAG}" in
+            *-ce[0-9]*) CE_COUNTER="${RELEASE_TAG##*-ce}" ;;
+            *)          CE_COUNTER="0.${{ github.run_number }}" ;;  # automated fallback tag, sorts below any real ce release
+          esac
+          SHORT_SHA=$(git rev-parse --short HEAD)
+          echo "CE_COUNTER=${CE_COUNTER}" >> $GITHUB_ENV
+          echo "SHORT_SHA=${SHORT_SHA}"   >> $GITHUB_ENV
+          echo "RPM Version/Release: ${VERSION} / ${CE_COUNTER}.g${SHORT_SHA}.xcpng8.3"
+
       - name: Build RPM
         run: |
           docker run --rm -v ${{ github.workspace }}:/build/repo xoa-hl-builder bash -c "
+            mkdir -p /root/rpmbuild/{BUILD,BUILDROOT,RPMS,SPECS,SRPMS}
             rpmbuild --define '_version ${{ steps.ver.outputs.version }}' \
-                      --define '_release ${{ github.run_number }}' \
+                      --define '_release ${CE_COUNTER}' \
+                      --define '_shortcommit ${SHORT_SHA}' \
                       --define '_sourcedir /build/repo/SOURCES' \
                       --define '_rpmdir /build/repo/out' \
                       -bb /build/repo/SPECS/xoa-hl.spec
           "
-      - name: List build outputs
-        run: find /build/repo/out out -type f 2>/dev/null || echo "no files found"
+
+      - name: Locate built RPM
+        run: |
+          set -euo pipefail
+          NEW_RPM=$(find out/noarch -name "xoa-hl-${{ steps.ver.outputs.version }}-*.noarch.rpm" | head -1)
+          [ -n "${NEW_RPM}" ] || { echo "no RPM produced"; exit 1; }
+          echo "new_rpm=${NEW_RPM}" >> $GITHUB_ENV
+          ls -lh "${NEW_RPM}"
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v${{ steps.ver.outputs.version }}
-          files: |
-            out/xoa-hl-${{ steps.ver.outputs.version }}.tar.gz
-            out/noarch/xoa-hl-${{ steps.ver.outputs.version }}-*.noarch.rpm
+          tag_name: ${{ env.RELEASE_TAG }}
+          draft: false
+          files: ${{ env.new_rpm }}

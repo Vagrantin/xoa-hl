@@ -1,17 +1,45 @@
+# Payload is a huge node_modules tree: skip brp strip and bytecompile,
+# they would take hours or fail outright.
+%global __os_install_post %{nil}
+%global debug_package %{nil}
+
 Name:           xoa-hl
 Version:        %{_version}
-Release:        %{_release}.xcpng8.3%{?dist}
+# CI passes _version, _release and _shortcommit via --define.
+# _release is the tag's ce counter, g<shortcommit> the xoa-hl commit.
+Release:        %{_release}.g%{_shortcommit}.xcpng8.3%{?dist}
 Summary:        Xen Orchestra HomeLab Edition
 License:        AGPLv3
 URL:            https://github.com/Vagrantin/xoa-hl
 BuildArch:      noarch
+# No dependency scan of the shipped node_modules tree, deps are declared below.
+AutoReqProv:    no
 Requires:       nodejs >= 24, redis, ntfs-3g, nfs-utils, cifs-utils, lvm2, curl
 
+Source0:        xoa-hl-%{version}.tar.gz
+
 %description
-Thin package that downloads and installs the pre-built Xen Orchestra
-HomeLab Edition tarball from GitHub Releases.
+Xen Orchestra HomeLab Edition: the pre-built Xen Orchestra server and XO 5
+web UI, shipped in the package and installed under /opt/xo.
+
+%prep
+%setup -q -n xen-orchestra
 
 %install
+mkdir -p %{buildroot}/opt/xo
+cp -a . %{buildroot}/opt/xo/
+
+# The config the appliance runs with references the TLS pair from /opt/xo.
+mv %{buildroot}/opt/xo/packages/xo-server/xoahl.key %{buildroot}/opt/xo/
+mv %{buildroot}/opt/xo/packages/xo-server/xoahl.crt %{buildroot}/opt/xo/
+chmod 600 %{buildroot}/opt/xo/xoahl.key
+chmod 644 %{buildroot}/opt/xo/xoahl.crt
+
+chmod +x %{buildroot}/opt/xo/packages/xo-cli/index.mjs
+ln -sfn /opt/xo/packages/xo-cli %{buildroot}/opt/xo/xo-cli
+mkdir -p %{buildroot}/usr/local/bin
+ln -sfn /opt/xo/packages/xo-cli/index.mjs %{buildroot}/usr/local/bin/xo-cli
+
 mkdir -p %{buildroot}/usr/lib/systemd/system
 install -m 644 %{_sourcedir}/xo-server.service %{buildroot}/usr/lib/systemd/system/
 install -m 644 %{_sourcedir}/xoa-hl-check-update.service %{buildroot}/usr/lib/systemd/system/
@@ -26,6 +54,12 @@ install -m 440 %{_sourcedir}/xoa-hl.sudoers %{buildroot}/etc/sudoers.d/xoa-hl
 visudo -cf %{buildroot}/etc/sudoers.d/xoa-hl
 
 %files
+# Also covered by /opt/xo below ("File listed twice"). The install section
+# sets the same modes, so either entry records them.
+%attr(0600,root,root) /opt/xo/xoahl.key
+%attr(0644,root,root) /opt/xo/xoahl.crt
+/opt/xo
+/usr/local/bin/xo-cli
 /usr/lib/systemd/system/xo-server.service
 /usr/lib/systemd/system/xoa-hl-check-update.service
 /usr/lib/systemd/system/xoa-hl-update.service
@@ -34,18 +68,6 @@ visudo -cf %{buildroot}/etc/sudoers.d/xoa-hl
 /etc/sudoers.d/xoa-hl
 
 %post
-# Stop any running instance before replacing /opt/xo (no-op on fresh install).
-systemctl stop xo-server 2>/dev/null || true
-
-TARBALL_URL="https://github.com/Vagrantin/xoa-hl/releases/download/v%{version}/xoa-hl-%{version}.tar.gz"
-rm -rf /opt/xo
-mkdir -p /opt/xo
-curl -fsSL "$TARBALL_URL" -o /tmp/xoa-hl.tar.gz
-tar xzf /tmp/xoa-hl.tar.gz -C /opt/xo --strip-components=1
-rm -f /tmp/xoa-hl.tar.gz
-mv /opt/xo/packages/xo-server/xoahl.key /opt/xo/
-mv /opt/xo/packages/xo-server/xoahl.crt /opt/xo/
-
 # Bootstrap xo-server user config on first install.
 # xo-server reads ~/.config/xo-server/config.toml (via app-conf XDG lookup),
 # which overrides any package-level config.toml. Without this file, the XO5
@@ -56,10 +78,6 @@ if [ ! -f /root/.config/xo-server/config.toml ]; then
     cp /opt/xo/packages/xo-server/xoahl.config.toml \
        /root/.config/xo-server/config.toml
 fi
-
-ln -sfn /opt/xo/packages/xo-cli /opt/xo/xo-cli
-ln -sfn /opt/xo/packages/xo-cli/index.mjs /usr/local/bin/xo-cli
-chmod +x /opt/xo/packages/xo-cli/index.mjs
 
 systemctl daemon-reload
 systemctl enable redis --now
@@ -75,10 +93,7 @@ if [ "$1" -eq 0 ]; then
 fi
 
 %postun
-# Same upgrade guard as %preun: only wipe files on final removal.
+# RPM now owns the files this used to delete, only the reload remains.
 if [ "$1" -eq 0 ]; then
-    rm -f /usr/local/bin/xo-cli
-    rm -rf /opt/xo
-    rm -f /etc/sudoers.d/xoa-hl
-    rm -rf /usr/libexec/xoa-hl
+    systemctl daemon-reload 2>/dev/null || true
 fi

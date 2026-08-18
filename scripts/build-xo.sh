@@ -2,8 +2,13 @@
 set -euo pipefail
 
 XO_REPO="https://github.com/vatesfr/xen-orchestra.git"
-XO_COMMIT="e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c" # 5.113.2, last XO 5.x release (2025-12-09)
-XO_VERSION="5.113.2"
+# Upstream pin lives in the repo root file UPSTREAM_XO, bind-mounted by CI.
+PIN_FILE="${PIN_FILE:-/build/UPSTREAM_XO}"
+[ -f "$PIN_FILE" ] || { echo "ERROR: pin file $PIN_FILE not found"; exit 1; }
+# shellcheck disable=SC1090
+. "$PIN_FILE"
+: "${XO_COMMIT:?XO_COMMIT missing from $PIN_FILE}"
+: "${XO_VERSION:?XO_VERSION missing from $PIN_FILE}"
 XO_SRC="/build/xen-orchestra"
 PATCH_DIR="/build/patches"
 OUT_DIR="/build/out"

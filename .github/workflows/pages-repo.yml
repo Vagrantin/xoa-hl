@@ -28,10 +28,9 @@ env:
   # Only the N most recent releases are republished. Keeping every release
   # resurrected pre-pin builds whose Version outranks the current pinned one,
   # so yum offered an abandoned build as an upgrade.
-  # Higher than the sibling repos' 5: xoa-hl's release history interleaves
-  # old xoa-image-* tags (pre-dating the build-xoa-hl image split) with the
-  # v<version> RPM releases, and those count toward this scan window too.
-  KEEP_RELEASES: "10"
+  # Lowered to 5, like the sibling repos: the RPM is now fat (~70 MiB, was
+  # 11 KB), so ten releases would approach the 1 GiB Pages limit.
+  KEEP_RELEASES: "5"
   # Also filters out legacy package names from before the rename.
   PKG_GLOB: "xoa-hl-*.rpm"
 
