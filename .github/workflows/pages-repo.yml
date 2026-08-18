@@ -42,6 +42,9 @@ jobs:
       github.event_name == 'workflow_dispatch' ||
       github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
+    # GitHub defaults to 360 minutes; a hung apt/network step would block
+    # the whole "pages" concurrency group for hours otherwise.
+    timeout-minutes: 15
     permissions:
       contents: read
     steps:
@@ -155,6 +158,7 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     permissions:
       pages: write
       id-token: write
