@@ -132,11 +132,27 @@ index b8110b2c7..c0cff2280 100644
  // Server ------------------------------------------------------------
  
  export const addServer = (host, username, password, label, allowUnauthorized, httpProxy) =>
+diff --git a/packages/xo-web/src/xo-app/menu/index.js b/packages/xo-web/src/xo-app/menu/index.js
+index a7703a4ef..dbe8698fa 100644
+--- a/packages/xo-web/src/xo-app/menu/index.js
++++ b/packages/xo-web/src/xo-app/menu/index.js
+@@ -446,6 +446,11 @@ export default class Menu extends Component {
+             icon: 'menu-settings-config',
+             label: 'xoConfig',
+           },
++          {
++            to: '/settings/xoa-hl-updates',
++            icon: 'upgrade',
++            label: 'settingsXoaHlUpdatesPage',
++          },
+         ],
+       },
+       isAdmin && {
 diff --git a/packages/xo-web/src/xo-app/settings/index.js b/packages/xo-web/src/xo-app/settings/index.js
-index 6936473dd..004bff4cd 100644
+index 6936473dd..b0bec9737 100644
 --- a/packages/xo-web/src/xo-app/settings/index.js
 +++ b/packages/xo-web/src/xo-app/settings/index.js
-@@ -17,6 +17,7 @@ import Plugins from './plugins'
+@@ -17,17 +17,20 @@ import Plugins from './plugins'
  import Remotes from './remotes'
  import Servers from './servers'
  import Users from './users'
@@ -144,7 +160,23 @@ index 6936473dd..004bff4cd 100644
  
  const HEADER = (
    <Container>
-@@ -61,6 +62,9 @@ const HEADER = (
+     <Row>
+-      <Col mediumSize={3}>
++      <Col>
+         <h2>
+           <Icon icon='menu-settings' /> {_('settingsPage')}
+         </h2>
+       </Col>
+-      <Col mediumSize={9}>
+-        <NavTabs className='pull-right'>
++    </Row>
++    <Row>
++      <Col>
++        <NavTabs>
+           <NavLink to='/settings/servers'>
+             <Icon icon='menu-settings-servers' /> {_('settingsServersPage')}
+           </NavLink>
+@@ -61,6 +64,9 @@ const HEADER = (
            <NavLink to='/settings/config'>
              <Icon icon='menu-settings-config' /> {_('xoConfig')}
            </NavLink>
@@ -154,7 +186,7 @@ index 6936473dd..004bff4cd 100644
          </NavTabs>
        </Col>
      </Row>
-@@ -79,6 +83,7 @@ const Settings = routes('servers', {
+@@ -79,6 +85,7 @@ const Settings = routes('servers', {
    remotes: Remotes,
    servers: Servers,
    users: Users,
