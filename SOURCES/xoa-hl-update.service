@@ -1,11 +1,10 @@
 [Unit]
-Description=Update xoa-hl
+Description=Update xoa-hl and every AlmaLinux package with a pending update
 
 [Service]
 Type=oneshot
 ExecStart=/usr/libexec/xoa-hl/update.sh
-# ProtectSystem=full, not strict: dnf itself needs broad root-fs write access, strict would break the update.
-ProtectSystem=full
-ProtectHome=yes
+# No filesystem sandboxing: a system-wide dnf update writes to /usr, /etc,
+# /boot and more, incompatible with ProtectSystem/ProtectHome. This unit
+# already runs as root with full package-management intent.
 PrivateTmp=yes
-ReadWritePaths=/opt/xo /var/cache/dnf /var/lib/rpm

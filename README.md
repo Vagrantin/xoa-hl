@@ -10,7 +10,7 @@ Builds **Xen Orchestra HomeLab Edition** (`xoa-hl`): the full open-source [xen-o
 - `patches/menu-hide-items.patch` — hides menu items that only make sense with a Vates subscription.
 - `SPECS/xoa-hl.spec`: fat `x86_64` RPM (the shipped tree contains native node addons, so it is not `noarch`), the whole built Xen Orchestra tree ships inside the package and is installed at `/opt/xo`, together with the TLS key/cert, the `xo-cli` symlinks, the systemd units, the sudoers drop-in and the yum repo config (`xoa-hl.repo`). `%post` only bootstraps `/root/.config/xo-server/config.toml` on first install (left untouched on upgrade to preserve operator changes) and enables/restarts the services. Every other file under `/opt/xo` is replaced outright on upgrade, this is an appliance, not a host package. Runtime deps: nodejs ≥ 24, redis, plus mount helpers (nfs-utils, cifs-utils, ntfs-3g, lvm2).
 - `SOURCES/xo-server.service` — systemd unit running xo-server from `/opt/xo`.
-- `SOURCES/xoa-hl.repo` — yum repo config installed at `/etc/yum.repos.d/xoa-hl.repo`, pointing at the repo below. This is what makes `dnf update xoa-hl` on the appliance work at all.
+- `SOURCES/xoa-hl.repo` — yum repo config installed at `/etc/yum.repos.d/xoa-hl.repo`, pointing at the repo below. This is what makes `dnf update` on the appliance pick up new xoa-hl releases.
 
 ## Build
 
@@ -42,8 +42,13 @@ after every successful build, so an appliance with `xoa-hl.repo` installed can
 just run:
 
 ```bash
-dnf update xoa-hl
+dnf update
 ```
+
+The XOA-HL Updates settings page in the web UI drives the same check and
+update system-wide, not just for xoa-hl: it reports every AlmaLinux package
+with a pending update and applies all of them via `dnf -y --refresh update`,
+not a package-scoped update.
 
 ## Related
 
