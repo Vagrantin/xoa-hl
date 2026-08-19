@@ -3,11 +3,15 @@ set -eu
 
 mkdir -p /run/xoa-hl
 
-out=$(dnf check-update xoa-hl 2>&1) && rc=0 || rc=$?
+# -y: otherwise the first run stops to ask approval for the repo GPG key.
+out=$(dnf -y check-update xoa-hl 2>&1) && rc=0 || rc=$?
 
 if [ "$rc" -eq 100 ]; then
     # dnf check-update: 100 means updates are available, not an error.
-    version=$(printf '%s\n' "$out" | awk '/^xoa-hl\./ {print $2; exit}')
+    # Strip the epoch prefix: the xo-server API reports the installed
+    # version without it, the two must stay comparable.
+    version=$(printf '%s\n' "$out" \
+        | awk '/^xoa-hl\./ {v=$2; sub(/^[0-9]+:/, "", v); print v; exit}')
     printf 'AVAILABLE %s\n' "$version" > /run/xoa-hl/status
     exit 0
 elif [ "$rc" -eq 0 ]; then

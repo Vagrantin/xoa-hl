@@ -136,6 +136,39 @@ jobs:
           cp pages/xoa-hl.repo     _site/
           cp xcp-ng-ce-public.asc  _site/
           touch _site/.nojekyll
+
+          # Pages serves no directory listing, so publish a plain index here.
+          # Runs after createrepo_c, the file is not in the repo metadata.
+          PKGDIR="_site/${XCPNG_SERIES}/${REPO_ARCH}"
+          BASEURL="https://vagrantin.github.io/xoa-hl/${XCPNG_SERIES}/${REPO_ARCH}/"
+          {
+            echo '<!doctype html>'
+            echo '<html lang="en">'
+            echo '<head>'
+            echo '<meta charset="utf-8">'
+            echo '<meta name="viewport" content="width=device-width, initial-scale=1">'
+            echo "<title>xoa-hl yum repository ${XCPNG_SERIES}/${REPO_ARCH}</title>"
+            echo '<style>body{max-width:46rem;margin:3rem auto;padding:0 1.2rem;'
+            echo 'font:16px/1.6 system-ui,sans-serif}code{font-family:ui-monospace,monospace}</style>'
+            echo '</head>'
+            echo '<body>'
+            echo "<h1>xoa-hl yum repository, ${XCPNG_SERIES}/${REPO_ARCH}</h1>"
+            echo "<p>Repository baseurl: <code>${BASEURL}</code></p>"
+            echo '<p>Metadata: <a href="repodata/repomd.xml">repodata/repomd.xml</a></p>'
+            echo '<h2>Packages</h2>'
+            echo '<ul>'
+            find "${PKGDIR}" -maxdepth 1 -name '*.rpm' -printf '%f\n' | sort \
+              | while read -r rpm; do
+                  echo "<li><a href=\"${rpm}\">${rpm}</a></li>"
+                done
+            echo '</ul>'
+            echo '<p><a href="../../">Back to the site root</a></p>'
+            echo '</body>'
+            echo '</html>'
+          } > "${PKGDIR}/index.html"
+
+          echo "package index:"
+          ls -la "${PKGDIR}/index.html"
           echo "▶ site root:"
           ls -la _site/
 
