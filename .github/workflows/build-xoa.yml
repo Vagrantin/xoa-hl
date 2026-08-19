@@ -81,7 +81,8 @@ jobs:
       - name: Locate built RPM
         run: |
           set -euo pipefail
-          NEW_RPM=$(find out/noarch -name "xoa-hl-${{ steps.ver.outputs.version }}-*.noarch.rpm" | head -1)
+          # Arch agnostic: rpmbuild writes out/<arch>/, x86_64 today.
+          NEW_RPM=$(find out -name "xoa-hl-${{ steps.ver.outputs.version }}-*.rpm" | head -1)
           [ -n "${NEW_RPM}" ] || { echo "no RPM produced"; exit 1; }
           echo "new_rpm=${NEW_RPM}" >> $GITHUB_ENV
           ls -lh "${NEW_RPM}"

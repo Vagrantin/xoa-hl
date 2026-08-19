@@ -11,7 +11,7 @@ Release:        %{_release}.g%{_shortcommit}.xcpng8.3%{?dist}
 Summary:        Xen Orchestra HomeLab Edition
 License:        AGPLv3
 URL:            https://github.com/Vagrantin/xoa-hl
-BuildArch:      noarch
+# Not noarch: the shipped node_modules tree carries native addons (.node).
 # No dependency scan of the shipped node_modules tree, deps are declared below.
 AutoReqProv:    no
 Requires:       nodejs >= 24, redis, ntfs-3g, nfs-utils, cifs-utils, lvm2, curl
@@ -54,10 +54,7 @@ install -m 440 %{_sourcedir}/xoa-hl.sudoers %{buildroot}/etc/sudoers.d/xoa-hl
 visudo -cf %{buildroot}/etc/sudoers.d/xoa-hl
 
 %files
-# Also covered by /opt/xo below ("File listed twice"). The install section
-# sets the same modes, so either entry records them.
-%attr(0600,root,root) /opt/xo/xoahl.key
-%attr(0644,root,root) /opt/xo/xoahl.crt
+# /opt/xo covers the TLS pair too, the install section already set their modes.
 /opt/xo
 /usr/local/bin/xo-cli
 /usr/lib/systemd/system/xo-server.service

@@ -8,7 +8,7 @@ Builds **Xen Orchestra HomeLab Edition** (`xoa-hl`): the full open-source [xen-o
 - `UPSTREAM_XO`: the upstream pin, shell-sourceable (`XO_COMMIT`, `XO_VERSION`). Builds only move when this file is deliberately bumped.
 - `scripts/build-xo.sh`: shallow-fetches xen-orchestra at the pinned commit (currently `e281c536` = **5.113.2**, the last XO 5.x release), applies the patches, builds with yarn, and produces a versioned tarball (`xoa-hl-<version>.tar.gz`) plus a `VERSION` file in `/build/out`. The tarball is a build input for `rpmbuild`, it is not published.
 - `patches/menu-hide-items.patch` — hides menu items that only make sense with a Vates subscription.
-- `SPECS/xoa-hl.spec`: fat noarch RPM, the whole built Xen Orchestra tree ships inside the package and is installed at `/opt/xo`, together with the TLS key/cert, the `xo-cli` symlinks, the systemd units, the sudoers drop-in and the yum repo config (`xoa-hl.repo`). `%post` only bootstraps `/root/.config/xo-server/config.toml` on first install (left untouched on upgrade to preserve operator changes) and enables/restarts the services. Every other file under `/opt/xo` is replaced outright on upgrade, this is an appliance, not a host package. Runtime deps: nodejs ≥ 24, redis, plus mount helpers (nfs-utils, cifs-utils, ntfs-3g, lvm2).
+- `SPECS/xoa-hl.spec`: fat `x86_64` RPM (the shipped tree contains native node addons, so it is not `noarch`), the whole built Xen Orchestra tree ships inside the package and is installed at `/opt/xo`, together with the TLS key/cert, the `xo-cli` symlinks, the systemd units, the sudoers drop-in and the yum repo config (`xoa-hl.repo`). `%post` only bootstraps `/root/.config/xo-server/config.toml` on first install (left untouched on upgrade to preserve operator changes) and enables/restarts the services. Every other file under `/opt/xo` is replaced outright on upgrade, this is an appliance, not a host package. Runtime deps: nodejs ≥ 24, redis, plus mount helpers (nfs-utils, cifs-utils, ntfs-3g, lvm2).
 - `SOURCES/xo-server.service` — systemd unit running xo-server from `/opt/xo`.
 - `SOURCES/xoa-hl.repo` — yum repo config installed at `/etc/yum.repos.d/xoa-hl.repo`, pointing at the repo below. This is what makes `dnf update xoa-hl` on the appliance work at all.
 
@@ -18,7 +18,7 @@ Builds run exclusively on GitHub Actions (`.github/workflows/build-xoa.yml`), th
 
 1. builds the AlmaLinux 9 image from `container/Containerfile` with Docker,
 2. runs `scripts/build-xo.sh` in it to produce the versioned tarball,
-3. stages that tarball as `Source0` and builds the fat noarch RPM with `rpmbuild` in the same image,
+3. stages that tarball as `Source0` and builds the fat `x86_64` RPM with `rpmbuild` in the same image,
 4. publishes the RPM, and only the RPM, as a GitHub Release on the pushed tag.
 
 ### Release tagging
