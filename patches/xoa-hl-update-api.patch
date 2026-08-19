@@ -1,9 +1,9 @@
 diff --git a/packages/xo-server/src/api/xoaHl.mjs b/packages/xo-server/src/api/xoaHl.mjs
 new file mode 100644
-index 000000000..94ee35848
+index 000000000..eed639421
 --- /dev/null
 +++ b/packages/xo-server/src/api/xoaHl.mjs
-@@ -0,0 +1,92 @@
+@@ -0,0 +1,94 @@
 +import { execa } from 'execa'
 +import { readFile } from 'fs/promises'
 +
@@ -40,20 +40,22 @@ index 000000000..94ee35848
 +    content = await readFile(STATUS_FILE, 'utf8')
 +  } catch (error) {
 +    // never checked yet
-+    return { checking: false, updateAvailable: false }
++    return { checking: false, updateAvailable: false, packages: [] }
 +  }
 +
-+  const status = content.trim()
-+  if (status === 'UP_TO_DATE') {
-+    return { checking: false, updateAvailable: false }
++  const [header, ...lines] = content.trim().split('\n')
++  if (header !== 'AVAILABLE') {
++    return { checking: false, updateAvailable: false, packages: [] }
 +  }
 +
-+  const match = status.match(/^AVAILABLE (.+)$/)
-+  if (match !== null) {
-+    return { checking: false, updateAvailable: true, latestVersion: match[1] }
-+  }
++  const packages = lines
++    .filter(line => line !== '')
++    .map(line => {
++      const [name, version] = line.split('\t')
++      return { name, version }
++    })
 +
-+  return { checking: false, updateAvailable: false }
++  return { checking: false, updateAvailable: packages.length > 0, packages }
 +}
 +getUpdateStatus.permission = 'admin'
 +getUpdateStatus.description = 'get the latest xoa-hl update check result'
@@ -97,18 +99,19 @@ index 000000000..94ee35848
 +getUpdateProgress.permission = 'admin'
 +getUpdateProgress.description = 'get the state and log tail of the xoa-hl update service'
 diff --git a/packages/xo-web/src/common/intl/messages.js b/packages/xo-web/src/common/intl/messages.js
-index 2aea8e7d3..b67e0f90a 100644
+index 2aea8e7d3..1e308ba07 100644
 --- a/packages/xo-web/src/common/intl/messages.js
 +++ b/packages/xo-web/src/common/intl/messages.js
-@@ -244,6 +244,12 @@ const messages = {
+@@ -244,6 +244,13 @@ const messages = {
    settingsLogsPage: 'Logs',
    settingsCloudConfigsPage: 'Cloud configs',
    settingsIpsPage: 'IPs',
 +  settingsXoaHlUpdatesPage: 'XOA-HL Updates',
-+  xoaHlInstalledVersion: 'Installed version:',
 +  xoaHlCheckForUpdate: 'Check for update',
 +  xoaHlStartUpdate: 'Update now',
-+  xoaHlUpdateAvailable: 'Update available:',
++  xoaHlPackagesAvailable: 'Packages with updates available:',
++  xoaHlPackageName: 'Package',
++  xoaHlPackageVersion: 'Version',
 +  xoaHlUpToDate: 'Up to date',
    aboutPage: 'About',
    aboutXoaPlan: 'About XO {xoaPlan}',
@@ -196,37 +199,35 @@ index 6936473dd..b0bec9737 100644
      <Page header={HEADER} title='settingsPage' formatTitle>
 diff --git a/packages/xo-web/src/xo-app/settings/xoa-hl-updates/index.js b/packages/xo-web/src/xo-app/settings/xoa-hl-updates/index.js
 new file mode 100644
-index 000000000..b68afeea1
+index 000000000..127d85389
 --- /dev/null
 +++ b/packages/xo-web/src/xo-app/settings/xoa-hl-updates/index.js
-@@ -0,0 +1,76 @@
+@@ -0,0 +1,80 @@
 +import _ from 'intl'
 +import ActionButton from 'action-button'
 +import Component from 'base-component'
-+import Icon from 'icon'
 +import React from 'react'
-+import { checkXoaHlUpdate, getXoaHlUpdateProgress, getXoaHlUpdateStatus, getXoaHlVersion, startXoaHlUpdate } from 'xo'
++import { checkXoaHlUpdate, getXoaHlUpdateProgress, getXoaHlUpdateStatus, startXoaHlUpdate } from 'xo'
 +
 +// ===================================================================
 +
 +export default class XoaHlUpdates extends Component {
-+  componentWillMount() {
++  constructor(props) {
++    super(props)
 +    this.state = {
-+      version: undefined,
 +      checking: false,
 +      updateAvailable: false,
-+      latestVersion: undefined,
++      packages: [],
 +      updating: false,
 +      log: [],
 +    }
-+    getXoaHlVersion().then(version => this.setState({ version }))
 +  }
 +
 +  _checkForUpdate = async () => {
 +    this.setState({ checking: true })
 +    await checkXoaHlUpdate()
-+    const { updateAvailable, latestVersion } = await getXoaHlUpdateStatus()
-+    this.setState({ checking: false, updateAvailable, latestVersion })
++    const { updateAvailable, packages } = await getXoaHlUpdateStatus()
++    this.setState({ checking: false, updateAvailable, packages })
 +  }
 +
 +  _startUpdate = async () => {
@@ -237,33 +238,39 @@ index 000000000..b68afeea1
 +  }
 +
 +  render() {
-+    const { version, checking, updateAvailable, latestVersion, log } = this.state
++    const { checking, updateAvailable, packages, log } = this.state
 +
 +    return (
 +      <div>
-+        <p>
-+          {_('xoaHlInstalledVersion')} {version === undefined ? '-' : String(version)}
-+        </p>
-+        <p>
-+          {updateAvailable ? (
-+            <span>
-+              {_('xoaHlUpdateAvailable')} {latestVersion}
-+            </span>
-+          ) : (
-+            _('xoaHlUpToDate')
-+          )}
-+        </p>
 +        <ActionButton btnStyle='info' handler={this._checkForUpdate} icon='refresh' pending={checking}>
 +          {_('xoaHlCheckForUpdate')}
 +        </ActionButton>{' '}
-+        <ActionButton
-+          btnStyle='success'
-+          disabled={!updateAvailable}
-+          handler={this._startUpdate}
-+          icon='upgrade'
-+        >
++        <ActionButton btnStyle='success' disabled={!updateAvailable} handler={this._startUpdate} icon='upgrade'>
 +          {_('xoaHlStartUpdate')}
 +        </ActionButton>
++        {updateAvailable && packages.length > 0 ? (
++          <div>
++            <p>{_('xoaHlPackagesAvailable')}</p>
++            <table className='table'>
++              <thead>
++                <tr>
++                  <th>{_('xoaHlPackageName')}</th>
++                  <th>{_('xoaHlPackageVersion')}</th>
++                </tr>
++              </thead>
++              <tbody>
++                {packages.map(({ name, version }) => (
++                  <tr key={name}>
++                    <td>{name}</td>
++                    <td>{version}</td>
++                  </tr>
++                ))}
++              </tbody>
++            </table>
++          </div>
++        ) : (
++          <p>{_('xoaHlUpToDate')}</p>
++        )}
 +        {log.length > 0 && (
 +          <div>
 +            <hr />
