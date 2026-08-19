@@ -4,6 +4,9 @@
 %global debug_package %{nil}
 
 Name:           xoa-hl
+# Outranks pre-ce RPMs whose Release used the old run number. Permanent:
+# an epoch can never be lowered again, which is intended here.
+Epoch:          1
 Version:        %{_version}
 # CI passes _version, _release and _shortcommit via --define.
 # _release is the tag's ce counter, g<shortcommit> the xoa-hl commit.
