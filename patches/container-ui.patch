@@ -1,0 +1,1007 @@
+diff --git a/packages/xo-web/src/common/intl/messages.js b/packages/xo-web/src/common/intl/messages.js
+index 5fad0ce97..8c9e5f1e2 100644
+--- a/packages/xo-web/src/common/intl/messages.js
++++ b/packages/xo-web/src/common/intl/messages.js
+@@ -2422,8 +2422,8 @@ const messages = {
+   disclaimerTitle: 'Xen Orchestra from the sources',
+   disclaimerText1: "You are using XO from the sources! That's great for a personal/non-profit usage.",
+   disclaimerText2: "If you are a company, it's better to use it with our appliance + pro support included:",
+-  disclaimerText3: 'This version is not bundled with any support nor updates. Use it with caution.',
+-  disclaimerText4: 'Why do I see this message?',
++  disclaimerText3: 'Thank you for using XOA-HL!',
++  disclaimerText4: ' Documentation is available here',
+   notRegisteredDisclaimerInfo: 'You are not registered. Your XOA may not be up to date.',
+   notRegisteredDisclaimerCreateAccount: 'Click here to create an account.',
+   notRegisteredDisclaimerRegister: 'Click here to register and update your XOA.',
+@@ -244,6 +244,40 @@ const messages = {
+   settingsLogsPage: 'Logs',
+   settingsCloudConfigsPage: 'Cloud configs',
+   settingsIpsPage: 'IPs',
++  settingsXoaHlUpdatesPage: 'XOA-HL Updates',
++  xoaHlCheckForUpdate: 'Check for update',
++  xoaHlStartUpdate: 'Update now',
++  xoaHlPackagesAvailable: 'Packages with updates available:',
++  xoaHlPackageName: 'Package',
++  xoaHlPackageVersion: 'Version',
++  xoaHlUpToDate: 'Up to date',
++  containersPage: 'Containers',
++  containersListPage: 'Container List',
++  containersCreatePage: 'Create Container',
++  containersCreateTitle: 'Create a new container',
++  containersName: 'Name',
++  containersImage: 'Image',
++  containersStatus: 'Status',
++  containersCpu: 'CPU',
++  containersMemory: 'Memory',
++  containersActions: 'Actions',
++  containersCreate: 'Create Container',
++  containersStart: 'Start',
++  containersStop: 'Stop',
++  containersRestart: 'Restart',
++  containersRemove: 'Remove',
++  containersLogs: 'Logs',
++  containersPullImage: 'Pull Image',
++  containersImageName: 'Image name (e.g., nginx:latest)',
++  containersCpuLimit: 'CPU Limit (cores)',
++  containersMemoryLimit: 'Memory Limit (MB)',
++  containersMemoryReservation: 'Memory Reservation (MB)',
++  containersPorts: 'Port Mappings',
++  containersPortsHost: 'Host Port',
++  containersPortsContainer: 'Container Port',
++  containersVolumes: 'Volume Mappings',
++  containersVolumesHost: 'Host Path',
++  containersVolumesContainer: 'Container Path',
++  containersEnvironment: 'Environment Variables',
++  containersEnvironmentKey: 'Key',
++  containersEnvironmentValue: 'Value',
++  containersPrivileged: 'Privileged Mode',
++  containersRestartPolicy: 'Restart Policy',
+   aboutPage: 'About',
+   aboutXoaPlan: 'About XO {xoaPlan}',
+   newMenu: 'New',
+diff --git a/packages/xo-web/src/common/xo/index.js b/packages/xo-web/src/common/xo/index.js
+index b8110b2c7..c0cff2280 100644
+--- a/packages/xo-web/src/common/xo/index.js
++++ b/packages/xo-web/src/common/xo/index.js
+@@ -884,6 +884,25 @@ export const exportConfig = () =>
+     noop
+   )
+ 
++// Containers ------------------------------------------------------------
++
++export const listContainers = () => _call('containers.listContainers')
+export const getContainer = id => _call('containers.getContainer', id)
+export const createContainer = config => _call('containers.createContainer', config)
+export const startContainer = id => _call('containers.startContainer', id)
+export const stopContainer = (id, force) => _call('containers.stopContainer', id, force)
+export const restartContainer = (id, force) => _call('containers.restartContainer', id, force)
+export const removeContainer = (id, force, removeVolumes) => _call('containers.removeContainer', id, force, removeVolumes)
+export const getContainerLogs = (id, options) => _call('containers.getContainerLogs', id, options)
+export const listImages = () => _call('containers.listImages')
+export const pullImage = image => _call('containers.pullImage', image)
+export const removeImage = (id, force) => _call('containers.removeImage', id, force)
+export const getDockerInfo = () => _call('containers.getDockerInfo')
+export const checkDockerAvailable = () => _call('containers.checkDockerAvailable')
++
+ // Server ------------------------------------------------------------
+ 
+ export const addServer = (host, username, password, label, allowUnauthorized, httpProxy) =>
+@@ -446,6 +465,11 @@ export default class Menu extends Component {
+             icon: 'menu-settings-config',
+             label: 'xoConfig',
+           },
++          {
++            to: '/containers',
++            icon: 'container',
++            label: 'containersPage',
++          },
+         ],
+       },
+       isAdmin && {
+diff --git a/packages/xo-web/src/xo-app/containers/index.js b/packages/xo-web/src/xo-app/containers/index.js
+new file mode 100644
+index 000000000..cae3800e5
+--- /dev/null
++++ b/packages/xo-web/src/xo-app/containers/index.js
+@@ -0,0 +1,117 @@
++import _ from 'intl'
++import ActionButton from 'action-button'
++import Component from 'base-component'
++import React from 'react'
++import { ContainerList } from './list'
++
++// ===================================================================
++
++export default class Containers extends Component {
++  render() {
++    return (
++      <div className='container-fluid'>
++        <div className='row'>
++          <div className='col-md-12'>
++            <h2>
++              <span className='fa fa-cube' /> {_('containersPage')}
++            </h2>
++          </div>
++        </div>
++        <div className='row'>
++          <div className='col-md-12'>
++            <ContainerList />
++          </div>
++        </div>
++      </div>
++    )
++  }
++}
++diff --git a/packages/xo-web/src/xo-app/containers/list/index.js b/packages/xo-web/src/xo-app/containers/list/index.js
+new file mode 100644
+index 000000000..8c9e5f1e2
+--- /dev/null
++++ b/packages/xo-web/src/xo-app/containers/list/index.js
+@@ -0,0 +1,283 @@
++import _ from 'intl'
++import ActionButton from 'action-button'
++import Component from 'base-component'
++import React from 'react'
++import { connect } from 'react-redux'
++import { createSelector } from 'reselect'
++import { ContainerCreateModal } from '../create-modal'
++import { ContainerLogsModal } from '../logs-modal'
++import { listContainers, startContainer, stopContainer, restartContainer, removeContainer, getContainerLogs } from 'xo'
++import { addSubscriptions, deleteSubscriptions, subscribeToResource } from 'xo-react-helpers'
++
++// ===================================================================
++
++const CONTAINER_STYLE = {
++  marginBottom: '10px',
++}
++
++const STATUS_STYLE = {
++  display: 'inline-block',
++  padding: '3px 8px',
++  borderRadius: '4px',
++  fontSize: '12px',
++  fontWeight: 'bold',
++}
++
++const STATUS_COLORS = {
++  running: '#28a745',
++  stopped: '#dc3545',
++  paused: '#ffc107',
++  created: '#17a2b8',
++  restarting: '#007bff',
++  removing: '#6c757d',
++}
++
++const getContainerStatusColor = status => {
++  const lowerStatus = (status || '').toLowerCase()
++  return STATUS_COLORS[lowerStatus] || '#6c757d'
++}
++
++@connect(
++  createSelector(
++    [state => state],
++    state => ({
++      containers: state.containers || [],
++    })
++  )
++)
++class ContainerList extends Component {
++  state = {
++    containers: [],
++    loading: true,
++    error: null,
++    showCreateModal: false,
++    showLogsModal: false,
++    selectedContainer: null,
++  }
++
++  componentDidMount() {
++    this._loadContainers()
++    this._setupSubscriptions()
++  }
++
++  componentWillUnmount() {
++    this._cleanupSubscriptions()
++  }
++
++  _setupSubscriptions = () => {
++    this._subscriptions = [
++      subscribeToResource('container', '>', this._loadContainers),
++    ]
++  }
++
++  _cleanupSubscriptions = () => {
++    if (this._subscriptions) {
++      this._subscriptions.forEach(sub => sub.unsubscribe())
++      this._subscriptions = null
++    }
++  }
++
++  _loadContainers = async () => {
++    try {
++      this.setState({ loading: true, error: null })
++      const containers = await listContainers()
++      this.setState({ containers, loading: false })
++    } catch (error) {
++      this.setState({ error: error.message, loading: false })
++    }
++  }
++
++  _handleStart = async container => {
++    try {
++      await startContainer(container.ID || container.Id)
++      this._loadContainers()
++    } catch (error) {
++      alert(`Failed to start container: ${error.message}`)
++    }
++  }
++
++  _handleStop = async (container, force = false) => {
++    try {
++      await stopContainer(container.ID || container.Id, force)
++      this._loadContainers()
++    } catch (error) {
++      alert(`Failed to stop container: ${error.message}`)
++    }
++  }
++
++  _handleRestart = async (container, force = false) => {
++    try {
++      await restartContainer(container.ID || container.Id, force)
++      this._loadContainers()
++    } catch (error) {
++      alert(`Failed to restart container: ${error.message}`)
++    }
++  }
++
++  _handleRemove = async (container, force = false) => {
++    if (!window.confirm(`Are you sure you want to remove container "${container.Name || container.Names}"?`)) {
++      return
++    }
++    try {
++      await removeContainer(container.ID || container.Id, force, true)
++      this._loadContainers()
++    } catch (error) {
++      alert(`Failed to remove container: ${error.message}`)
++    }
++  }
++
++  _handleLogs = container => {
++    this.setState({
++      showLogsModal: true,
++      selectedContainer: container,
++    })
++  }
++
++  _handleCreate = () => {
++    this.setState({ showCreateModal: true })
++  }
++
++  _handleCreateClose = () => {
++    this.setState({ showCreateModal: false })
++    this._loadContainers()
++  }
++
++  _handleLogsClose = () => {
++    this.setState({ showLogsModal: false, selectedContainer: null })
++  }
++
++  render() {
++    const { containers, loading, error, showCreateModal, showLogsModal, selectedContainer } = this.state
++
++    return (
++      <div>
++        <div style={{ marginBottom: '20px' }}>
++          <ActionButton btnStyle='success' handler={this._handleCreate} icon='fa-plus'>
++            {_('containersCreate')}
++          </ActionButton>
++        </div>
++
++        {loading && <p>{_('loading')}</p>}
++        {error && <p style={{ color: 'red' }}>{error}</p>}
++
++        {!loading && !error && (
++          <div className='table-responsive'>
++            <table className='table table-striped table-hover'>
++              <thead>
++                <tr>
++                  <th>{_('containersName')}</th>
++                  <th>{_('containersImage')}</th>
++                  <th>{_('containersStatus')}</th>
++                  <th>{_('containersCpu')}</th>
++                  <th>{_('containersMemory')}</th>
++                  <th>{_('containersActions')}</th>
++                </tr>
++              </thead>
++              <tbody>
++                {containers.length === 0 ? (
++                  <tr>
++                    <td colSpan='6' style={{ textAlign: 'center' }}>
++                      {_('noItemsAvailable')}
++                    </td>
++                  </tr>
++                ) : (
++                  containers.map(container => (
++                    <tr key={container.ID || container.Id}>
++                      <td>{container.Name || container.Names}</td>
++                      <td>{container.Image}</td>
++                      <td>
++                        <span
++                          style={{
++                            ...STATUS_STYLE,
++                            backgroundColor: getContainerStatusColor(container.State || container.Status),
++                            color: 'white',
++                          }}
++                        >
++                          {container.State || container.Status}
++                        </span>
++                      </td>
++                      <td>{container.CPU || '0%'}</td>
++                      <td>
++                        {container.Memory || '0B'} / {container.MemoryLimit || 'unlimited'}
++                      </td>
++                      <td>
++                        <div style={{ display: 'flex', gap: '5px' }}>
++                          {(container.State === 'running' || container.Status === 'running') && (
++                            <ActionButton
++                              btnStyle='warning'
++                              handler={() => this._handleStop(container)}
++                              icon='fa-stop'
++                              size='small'
++                              tooltip={_('containersStop')}
++                            />
++                          )}
++                          {(container.State === 'stopped' || container.Status === 'stopped' || container.State === 'created' || container.Status === 'created') && (
++                            <ActionButton
++                              btnStyle='success'
++                              handler={() => this._handleStart(container)}
++                              icon='fa-play'
++                              size='small'
++                              tooltip={_('containersStart')}
++                            />
++                          )}
++                          <ActionButton
++                            btnStyle='info'
++                            handler={() => this._handleRestart(container)}
++                            icon='fa-refresh'
++                            size='small'
++                            tooltip={_('containersRestart')}
++                          />
++                          <ActionButton
++                            btnStyle='primary'
++                            handler={() => this._handleLogs(container)}
++                            icon='fa-file-text'
++                            size='small'
++                            tooltip={_('containersLogs')}
++                          />
++                          <ActionButton
++                            btnStyle='danger'
++                            handler={() => this._handleRemove(container)}
++                            icon='fa-trash'
++                            size='small'
++                            tooltip={_('containersRemove')}
++                          />
++                        </div>
++                      </td>
++                    </tr>
++                  ))
++                )}
++              </tbody>
++            </table>
++          </div>
++        )}
++
++        {showCreateModal && (
++          <ContainerCreateModal onClose={this._handleCreateClose} onCreated={this._loadContainers} />
++        )}
++
++        {showLogsModal && selectedContainer && (
++          <ContainerLogsModal
++            container={selectedContainer}
++            onClose={this._handleLogsClose}
++          />
++        )}
++      </div>
++    )
++  }
++}
++
+export { ContainerList }
++diff --git a/packages/xo-web/src/xo-app/containers/create-modal/index.js b/packages/xo-web/src/xo-app/containers/create-modal/index.js
+new file mode 100644
+index 000000000..8c9e5f1e2
+--- /dev/null
++++ b/packages/xo-web/src/xo-app/containers/create-modal/index.js
+@@ -0,0 +1,283 @@
++import _ from 'intl'
++import ActionButton from 'action-button'
++import Component from 'base-component'
++import React from 'react'
++import { Modal } from 'react-bootstrap'
++import { createContainer, listImages, pullImage } from 'xo'
++
++// ===================================================================
++
++const MODAL_STYLE = {
++  maxHeight: '80vh',
++  overflowY: 'auto',
++}
++
++const FORM_GROUP_STYLE = {
++  marginBottom: '15px',
++}
++
++const INPUT_STYLE = {
++  width: '100%',
++  padding: '8px',
++  borderRadius: '4px',
++  border: '1px solid #ccc',
++}
++
++const LABEL_STYLE = {
++  display: 'block',
++  marginBottom: '5px',
++  fontWeight: 'bold',
++}
++
++export default class ContainerCreateModal extends Component {
++  state = {
++    name: '',
++    image: '',
++    availableImages: [],
++    loadingImages: false,
++    pullingImage: false,
++    cpuLimit: 1,
++    memoryLimit: 512,
++    memoryReservation: 256,
++    ports: [],
++    volumes: [],
++    environment: {},
++    privileged: false,
++    restartPolicy: 'no',
++    networkMode: '',
++    error: null,
++    creating: false,
++  }
++
++  componentDidMount() {
++    this._loadImages()
++  }
++
++  _loadImages = async () => {
++    try {
++      this.setState({ loadingImages: true })
++      const images = await listImages()
++      this.setState({ availableImages: images, loadingImages: false })
++    } catch (error) {
++      this.setState({ loadingImages: false })
++    }
++  }
++
++  _handlePullImage = async () => {
++    const { image } = this.state
++    if (!image) {
++      this.setState({ error: 'Please enter an image name' })
++      return
++    }
++
++    try {
++      this.setState({ pullingImage: true, error: null })
++      await pullImage(image)
++      await this._loadImages()
++      this.setState({ pullingImage: false })
++    } catch (error) {
++      this.setState({ pullingImage: false, error: error.message })
++    }
++  }
++
++  _handleCreate = async () => {
++    const {
++      name,
++      image,
++      cpuLimit,
++      memoryLimit,
++      memoryReservation,
++      ports,
++      volumes,
++      environment,
++      privileged,
++      restartPolicy,
++      networkMode,
++    } = this.state
++
++    if (!name || !image) {
++      this.setState({ error: 'Name and Image are required' })
++      return
++    }
++
++    try {
++      this.setState({ creating: true, error: null })
++      
++      await createContainer({
++        name,
++        image,
++        cpuLimit: parseFloat(cpuLimit),
++        memoryLimit: parseInt(memoryLimit) * 1024 * 1024,
++        memoryReservation: parseInt(memoryReservation) * 1024 * 1024,
++        ports,
++        volumes,
++        environment,
++        privileged,
++        restartPolicy,
++        networkMode,
++      })
++
++      this.setState({ creating: false })
++      this.props.onClose && this.props.onClose()
++      this.props.onCreated && this.props.onCreated()
++    } catch (error) {
++      this.setState({ creating: false, error: error.message })
++    }
++  }
++
++  _handleAddPort = () => {
++    this.setState({
++      ports: [...this.state.ports, { hostPort: '', containerPort: '' }],
++    })
++  }
++
++  _handleRemovePort = index => {
++    const ports = [...this.state.ports]
++    ports.splice(index, 1)
++    this.setState({ ports })
++  }
++
++  _handlePortChange = (index, field, value) => {
++    const ports = [...this.state.ports]
++    ports[index][field] = value
++    this.setState({ ports })
++  }
++
++  _handleAddVolume = () => {
++    this.setState({
++      volumes: [...this.state.volumes, { hostPath: '', containerPath: '' }],
++    })
++  }
++
++  _handleRemoveVolume = index => {
++    const volumes = [...this.state.volumes]
++    volumes.splice(index, 1)
++    this.setState({ volumes })
++  }
++
++  _handleVolumeChange = (index, field, value) => {
++    const volumes = [...this.state.volumes]
++    volumes[index][field] = value
++    this.setState({ volumes })
++  }
++
++  _handleAddEnv = () => {
++    this.setState({
++      environment: { ...this.state.environment, ['': ''] },
++    })
++  }
++
++  _handleRemoveEnv = key => {
++    const environment = { ...this.state.environment }
++    delete environment[key]
++    this.setState({ environment })
++  }
++
++  _handleEnvChange = (oldKey, key, value) => {
++    const environment = { ...this.state.environment }
++    if (oldKey && oldKey !== key) {
++      delete environment[oldKey]
++    }
++    environment[key] = value
++    this.setState({ environment })
++  }
++
++  render() {
++    const {
++      name,
++      image,
++      availableImages,
++      loadingImages,
++      pullingImage,
++      cpuLimit,
++      memoryLimit,
++      memoryReservation,
++      ports,
++      volumes,
++      environment,
++      privileged,
++      restartPolicy,
++      networkMode,
++      error,
++      creating,
++    } = this.state
++
++    return (
++      <Modal show onHide={this.props.onClose} style={MODAL_STYLE}>
++        <Modal.Header closeButton>
++          <Modal.Title>{_('containersCreateTitle')}</Modal.Title>
++        </Modal.Header>
++        <Modal.Body>
++          {error && <div style={{ color: 'red', marginBottom: '10px' }}>{error}</div>}
++
++          <div style={FORM_GROUP_STYLE}>
++            <label style={LABEL_STYLE}>{_('containersName')}</label>
++            <input
++              style={INPUT_STYLE}
++              type='text'
++              value={name}
++              onChange={e => this.setState({ name: e.target.value })}
++              placeholder='my-container'
++            />
++          </div>
++
++          <div style={FORM_GROUP_STYLE}>
++            <label style={LABEL_STYLE}>{_('containersImage')}</label>
++            <div style={{ display: 'flex', gap: '10px' }}>
++              <select
++                style={{ ...INPUT_STYLE, flex: 1 }}
++                value={image}
++                onChange={e => this.setState({ image: e.target.value })}
++                disabled={loadingImages}
++              >
++                <option value=''>{_('selectImage')}</option>
++                {availableImages.map(img => (
++                  <option key={img.ID || img.Id} value={img.Repository + ':' + img.Tag}>
++                    {img.Repository}:{img.Tag}
++                  </option>
++                ))}
++              </select>
++              <ActionButton
++                btnStyle='info'
++                handler={this._handlePullImage}
++                pending={pullingImage}
++                size='small'
++              >
++                {_('containersPullImage')}
++              </ActionButton>
++            </div>
++            <input
++              style={{ ...INPUT_STYLE, marginTop: '5px' }}
++              type='text'
++              value={image}
++              onChange={e => this.setState({ image: e.target.value })}
++              placeholder='nginx:latest'
++            />
++          </div>
++
++          <div style={FORM_GROUP_STYLE}>
++            <label style={LABEL_STYLE}>{_('containersCpuLimit')} ({_('optional')})</label>
++            <input
++              style={INPUT_STYLE}
++              type='number'
++              value={cpuLimit}
++              onChange={e => this.setState({ cpuLimit: parseFloat(e.target.value) || 1 })}
++              min='0.1'
++              step='0.1'
++            />
++          </div>
++
++          <div style={FORM_GROUP_STYLE}>
++            <label style={LABEL_STYLE}>{_('containersMemoryLimit')} (MB) ({_('optional')})</label>
++            <input
++              style={INPUT_STYLE}
++              type='number'
++              value={memoryLimit}
++              onChange={e => this.setState({ memoryLimit: parseInt(e.target.value) || 512 })}
++              min='0'
++            />
++          </div>
++
++          <div style={FORM_GROUP_STYLE}>
++            <label style={LABEL_STYLE}>{_('containersMemoryReservation')} (MB) ({_('optional')})</label>
++            <input
++              style={INPUT_STYLE}
++              type='number'
++              value={memoryReservation}
++              onChange={e => this.setState({ memoryReservation: parseInt(e.target.value) || 256 })}
++              min='0'
++            />
++          </div>
++
++          <div style={FORM_GROUP_STYLE}>
++            <label style={LABEL_STYLE}>{_('containersPorts')}</label>
++            {ports.map((port, index) => (
++              <div key={index} style={{ display: 'flex', gap: '5px', marginBottom: '5px' }}>
++                <input
++                  style={{ ...INPUT_STYLE, flex: 1 }}
++                  type='text'
++                  value={port.hostPort}
++                  onChange={e => this._handlePortChange(index, 'hostPort', e.target.value)}
++                  placeholder='Host Port'
++                />
++                <input
++                  style={{ ...INPUT_STYLE, flex: 1 }}
++                  type='text'
++                  value={port.containerPort}
++                  onChange={e => this._handlePortChange(index, 'containerPort', e.target.value)}
++                  placeholder='Container Port'
++                />
++                <button
++                  type='button'
++                  className='btn btn-danger btn-sm'
++                  onClick={() => this._handleRemovePort(index)}
++                >
++                  <i className='fa fa-trash' />
++                </button>
++              </div>
++            ))}
++            <button type='button' className='btn btn-secondary btn-sm' onClick={this._handleAddPort}>
++              <i className='fa fa-plus' /> {_('add')}
++            </button>
++          </div>
++
++          <div style={FORM_GROUP_STYLE}>
++            <label style={LABEL_STYLE}>{_('containersVolumes')}</label>
++            {volumes.map((volume, index) => (
++              <div key={index} style={{ display: 'flex', gap: '5px', marginBottom: '5px' }}>
++                <input
++                  style={{ ...INPUT_STYLE, flex: 1 }}
++                  type='text'
++                  value={volume.hostPath}
++                  onChange={e => this._handleVolumeChange(index, 'hostPath', e.target.value)}
++                  placeholder='Host Path'
++                />
++                <input
++                  style={{ ...INPUT_STYLE, flex: 1 }}
++                  type='text'
++                  value={volume.containerPath}
++                  onChange={e => this._handleVolumeChange(index, 'containerPath', e.target.value)}
++                  placeholder='Container Path'
++                />
++                <button
++                  type='button'
++                  className='btn btn-danger btn-sm'
++                  onClick={() => this._handleRemoveVolume(index)}
++                >
++                  <i className='fa fa-trash' />
++                </button>
++              </div>
++            ))}
++            <button type='button' className='btn btn-secondary btn-sm' onClick={this._handleAddVolume}>
++              <i className='fa fa-plus' /> {_('add')}
++            </button>
++          </div>
++
++          <div style={FORM_GROUP_STYLE}>
++            <label style={LABEL_STYLE}>{_('containersEnvironment')}</label>
++            {Object.entries(environment).map(([key, value], index) => (
++              <div key={key || index} style={{ display: 'flex', gap: '5px', marginBottom: '5px' }}>
++                <input
++                  style={{ ...INPUT_STYLE, flex: 1 }}
++                  type='text'
++                  value={key}
++                  onChange={e => this._handleEnvChange(key, e.target.value, value)}
++                  placeholder='Key'
++                />
++                <input
++                  style={{ ...INPUT_STYLE, flex: 1 }}
++                  type='text'
++                  value={value}
++                  onChange={e => this._handleEnvChange(key, key, e.target.value)}
++                  placeholder='Value'
++                />
++                <button
++                  type='button'
++                  className='btn btn-danger btn-sm'
++                  onClick={() => this._handleRemoveEnv(key)}
++                >
++                  <i className='fa fa-trash' />
++                </button>
++              </div>
++            ))}
++            <button type='button' className='btn btn-secondary btn-sm' onClick={this._handleAddEnv}>
++              <i className='fa fa-plus' /> {_('add')}
++            </button>
++          </div>
++
++          <div style={FORM_GROUP_STYLE}>
++            <label style={LABEL_STYLE}>
++              <input
++                type='checkbox'
++                checked={privileged}
++                onChange={e => this.setState({ privileged: e.target.checked })}
++              />
++              {_('containersPrivileged')}
++            </label>
++          </div>
++
++          <div style={FORM_GROUP_STYLE}>
++            <label style={LABEL_STYLE}>{_('containersRestartPolicy')}</label>
++            <select
++              style={INPUT_STYLE}
++              value={restartPolicy}
++              onChange={e => this.setState({ restartPolicy: e.target.value })}
++            >
++              <option value='no'>{_('no')}</option>
++              <option value='on-failure'>{_('onFailure')}</option>
++              <option value='always'>{_('always')}</option>
++              <option value='unless-stopped'>{_('unlessStopped')}</option>
++            </select>
++          </div>
++
++          <div style={FORM_GROUP_STYLE}>
++            <label style={LABEL_STYLE}>{_('containersNetworkMode')} ({_('optional')})</label>
++            <input
++              style={INPUT_STYLE}
++              type='text'
++              value={networkMode}
++              onChange={e => this.setState({ networkMode: e.target.value })}
++              placeholder='bridge'
++            />
++          </div>
++        </Modal.Body>
++        <Modal.Footer>
++          <ActionButton
++            btnStyle='danger'
++            handler={this.props.onClose}
++          >
++            {_('cancel')}
++          </ActionButton>
++          <ActionButton
++            btnStyle='success'
++            handler={this._handleCreate}
++            pending={creating}
++          >
++            {_('containersCreate')}
++          </ActionButton>
++        </Modal.Footer>
++      </Modal>
++    )
++  }
++}
++
+export { ContainerCreateModal }
++diff --git a/packages/xo-web/src/xo-app/containers/logs-modal/index.js b/packages/xo-web/src/xo-app/containers/logs-modal/index.js
+new file mode 100644
+index 000000000..8c9e5f1e2
+--- /dev/null
++++ b/packages/xo-web/src/xo-app/containers/logs-modal/index.js
+@@ -0,0 +1,117 @@
++import _ from 'intl'
++import ActionButton from 'action-button'
++import Component from 'base-component'
++import React from 'react'
++import { Modal } from 'react-bootstrap'
++import { getContainerLogs } from 'xo'
++
++// ===================================================================
++
++const MODAL_STYLE = {
++  maxHeight: '80vh',
++  overflowY: 'auto',
++}
++
++const LOG_STYLE = {
++  backgroundColor: '#f5f5f5',
++  padding: '10px',
++  borderRadius: '4px',
++  fontFamily: 'monospace',
++  fontSize: '12px',
++  whiteSpace: 'pre-wrap',
++  wordWrap: 'break-word',
++  maxHeight: '60vh',
++  overflowY: 'auto',
++}
++
++export default class ContainerLogsModal extends Component {
++  state = {
++    logs: '',
++    loading: true,
++    tail: 100,
++    follow: false,
++    timestamps: false,
++  }
++
++  componentDidMount() {
++    this._loadLogs()
++  }
++
++  _loadLogs = async () => {
++    const { container } = this.props
++    const { tail, follow, timestamps } = this.state
++
++    try {
++      this.setState({ loading: true })
++      const { logs } = await getContainerLogs(container.ID || container.Id, { tail, follow, timestamps })
++      this.setState({ logs, loading: false })
++    } catch (error) {
++      this.setState({ logs: `Error: ${error.message}`, loading: false })
++    }
++  }
++
++  _handleRefresh = () => {
++    this._loadLogs()
++  }
++
++  _handleTailChange = e => {
++    this.setState({ tail: parseInt(e.target.value) || 100 }, this._loadLogs)
++  }
++
++  _handleTimestampsToggle = () => {
++    this.setState(
++      state => ({ timestamps: !state.timestamps }),
++      this._loadLogs
++    )
++  }
++
++  render() {
++    const { container, onClose } = this.props
++    const { logs, loading, tail, timestamps } = this.state
++
++    return (
++      <Modal show onHide={onClose} style={MODAL_STYLE}>
++        <Modal.Header closeButton>
++          <Modal.Title>
++            {_('containersLogs')} - {container.Name || container.Names}
++          </Modal.Title>
++        </Modal.Header>
++        <Modal.Body>
++          <div style={{ marginBottom: '10px', display: 'flex', gap: '10px', alignItems: 'center' }}>
++            <div>
++              <label>{_('tailLines')}: </label>
++              <input
++                type='number'
++                value={tail}
++                onChange={this._handleTailChange}
++                min='1'
++                max='10000'
++                style={{ width: '80px' }}
++              />
++            </div>
++            <div>
++              <label>
++                <input
++                  type='checkbox'
++                  checked={timestamps}
++                  onChange={this._handleTimestampsToggle}
++                />
++                {_('timestamps')}
++              </label>
++            </div>
++            <ActionButton
++              btnStyle='info'
++              handler={this._handleRefresh}
++              pending={loading}
++              size='small'
++            >
++              <i className='fa fa-refresh' /> {_('refresh')}
++            </ActionButton>
++          </div>
++          {loading ? (
++            <p>{_('loading')}</p>
++          ) : (
++            <div style={LOG_STYLE}>{logs || _('noLogsAvailable')}</div>
++          )}
++        </Modal.Body>
++        <Modal.Footer>
++          <ActionButton
++            btnStyle='primary'
++            handler={onClose}
++          >
++            {_('close')}
++          </ActionButton>
++        </Modal.Footer>
++      </Modal>
++    )
++  }
++}
++
+export { ContainerLogsModal }
++diff --git a/packages/xo-web/src/xo-app/routes.js b/packages/xo-web/src/xo-app/routes.js
+index a2810b2c7..c0cff2280 100644
+--- a/packages/xo-web/src/xo-app/routes.js
++++ b/packages/xo-web/src/xo-app/routes.js
+@@ -1,4 +1,5 @@
+ import Containers from './containers'
++import Settings from './settings'
+ 
+ export default {
+   containers: Containers,
++  settings: Settings,
+ }
