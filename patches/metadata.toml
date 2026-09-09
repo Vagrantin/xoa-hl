@@ -1,0 +1,52 @@
+# XOA-HL Patch Metadata
+# =====================
+# This file describes all patches applied to the upstream xen-orchestra
+# source to create XOA-HL (HomeLab Edition).
+#
+# Structure:
+# - Each patch has a unique `id` (filename without .patch extension)
+# - `description` explains the purpose of the patch
+# - `target` is the upstream file/path being modified
+# - `upstream_commit` is the commit SHA this patch was created against
+# - `applies_to` is a list of upstream versions this patch is valid for
+# - `maintainer` is the contact for this patch
+# - `status` can be: active, deprecated, superseded
+# - `dependencies` lists other patch IDs this patch requires
+#
+# When adding a new patch:
+# 1. Add the .patch file to this directory
+# 2. Add its metadata entry below
+# 3. The build script will validate and apply it in dependency order
+
+[[patches]]
+id = "xcp-hl-updates"
+description = "Enable XCP-HL package repositories in XOA's Patches tab"
+target = "packages/xo-server/src/xapi/mixins/patching.mjs"
+upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
+applies_to = ["5.113.2"]
+maintainer = "vagrantin"
+status = "active"
+dependencies = []
+notes = "Adds XCP_HL_REPOS constant and passes it to updater.py plugin calls"
+
+[[patches]]
+id = "menu-hide-items"
+description = "Hide non-relevant menu items for XOA-HL"
+target = "packages/xo-web/src/xo-app/menu/index.js"
+upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
+applies_to = ["5.113.2"]
+maintainer = "vagrantin"
+status = "active"
+dependencies = []
+notes = "Hides hub, xoa, proxies, xostor, and noSupport menu items"
+
+[[patches]]
+id = "xoa-hl-update-api"
+description = "Add XOA-HL update management API and UI"
+target = "packages/xo-server/src/api/xoaHl.mjs"
+upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
+applies_to = ["5.113.2"]
+maintainer = "vagrantin"
+status = "active"
+dependencies = []
+notes = "Adds new API endpoints: getVersion, checkForUpdate, getUpdateStatus, startUpdate, getUpdateProgress. Also adds XOA-HL Updates settings tab to the UI."

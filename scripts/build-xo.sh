@@ -29,6 +29,45 @@ XO_SHORT_SHA="${XO_COMMIT:0:8}"
 VERSION="${XO_VERSION}_${XO_SHORT_SHA}"
 echo "$VERSION" > "$OUT_DIR/VERSION"
 
+echo "==> Validating patch metadata"
+PATCH_METADATA="$PATCH_DIR/metadata.toml"
+if [ -f "$PATCH_METADATA" ]; then
+    echo "  Found patch metadata: $PATCH_METADATA"
+    echo "  Validating patches against metadata..."
+    
+    # Count patches in metadata
+    METADATA_PATCH_COUNT=$(grep -c '^\[\[patches\]\]' "$PATCH_METADATA" || echo "0")
+    ACTUAL_PATCH_COUNT=$(find "$PATCH_DIR" -maxdepth 1 -name '*.patch' | wc -l)
+    
+    echo "  Metadata entries: $METADATA_PATCH_COUNT, Actual patch files: $ACTUAL_PATCH_COUNT"
+    
+    if [ "$METADATA_PATCH_COUNT" -ne "$ACTUAL_PATCH_COUNT" ]; then
+        echo "::warning:: Patch count mismatch: metadata has $METADATA_PATCH_COUNT entries but $ACTUAL_PATCH_COUNT .patch files exist"
+    fi
+    
+    # Validate each patch file has a corresponding metadata entry
+    for p in "$PATCH_DIR"/*.patch; do
+        [ -f "$p" ] || continue
+        PATCH_ID=$(basename "$p" .patch)
+        if ! grep -q "^id = \"$PATCH_ID\"" "$PATCH_METADATA"; then
+            echo "::warning:: Patch file $(basename "$p") has no corresponding metadata entry"
+        fi
+    done
+    
+    # Validate each metadata entry has a corresponding patch file
+    while IFS= read -r line; do
+        if [[ "$line" =~ ^id\ =\ "([^"]+)" ]]; then
+            PATCH_ID="${BASH_REMATCH[1]}"
+            if [ ! -f "$PATCH_DIR/${PATCH_ID}.patch" ]; then
+                echo "::warning:: Metadata entry for '$PATCH_ID' has no corresponding .patch file"
+            fi
+        fi
+    done < "$PATCH_METADATA"
+else
+    echo "::warning:: No patch metadata found at $PATCH_METADATA"
+    echo "  Consider adding metadata.toml to document patches"
+fi
+
 echo "==> Applying patches"
 for p in "$PATCH_DIR"/*.patch; do
     [ -f "$p" ] || continue
