@@ -1,0 +1,434 @@
+diff --git a/packages/xo-server/src/api/containers.mjs b/packages/xo-server/src/api/containers.mjs
+new file mode 100644
+index 000000000..8c9e5f1e2
+--- /dev/null
++++ b/packages/xo-server/src/api/containers.mjs
+@@ -0,0 +1,283 @@
++import { execa } from 'execa'
++import { readFile, writeFile, unlink } from 'fs/promises'
++import { join } from 'path'
++
++const DOCKER_SOCKET = '/var/run/docker.sock'
++const CONTAINER_CONFIG_DIR = '/etc/xoa-hl/containers'
++
++// -------------------------------------------------------------------
++
++export async function listContainers() {
++  try {
++    const { stdout } = await execa('docker', ['ps', '--all', '--format', '{{json .}}'])
++    const containers = stdout
++      .trim()
++      .split('\n')
++      .filter(line => line)
++      .map(line => {
++        try {
++          return JSON.parse(line)
++        } catch {
++          return null
++        }
++      })
++      .filter(Boolean)
++
++    // Get resource usage for running containers
++    const stats = await getContainerStats()
++
++    return containers.map(container => {
++      const stat = stats.find(s => s.Id === container.ID) || {}
++      return {
++        ...container,
++        Status: container.State,
++        CPU: stat.CPU || '0%',
++        Memory: stat.Memory || '0B',
++        MemoryUsage: stat.MemoryUsage || 0,
++        MemoryLimit: stat.MemoryLimit || 0,
++      }
++    })
++  } catch (error) {
++    // Docker not available
++    return []
++  }
++}
++listContainers.permission = 'admin'
++listContainers.description = 'List all containers on the system'
++
++// -------------------------------------------------------------------
++
++export async function getContainerStats() {
++  try {
++    const { stdout } = await execa('docker', ['stats', '--no-stream', '--format', '{{json .}}'])
++    return stdout
++      .trim()
++      .split('\n')
++      .filter(line => line)
++      .map(line => {
++        try {
++          const data = JSON.parse(line)
++          return {
++            Id: data.Container,
++            Name: data.Name,
++            CPU: data.CPUPerc,
++            Memory: data.MemUsage,
++            MemoryUsage: parseMemory(data.MemUsage),
++            MemoryLimit: parseMemory(data.MemLimit),
++          }
++        } catch {
++          return null
++        }
++      })
++      .filter(Boolean)
++  } catch {
++    return []
++  }
++}
++getContainerStats.permission = 'admin'
++getContainerStats.description = 'Get resource usage statistics for all containers'
++
++// -------------------------------------------------------------------
++
++export async function getContainer(id) {
++  try {
++    const { stdout } = await execa('docker', ['inspect', '--format', '{{json .}}', id])
++    const data = JSON.parse(stdout)
++    
++    // Get resource usage
++    const stats = await getContainerStats()
++    const stat = stats.find(s => s.Id === id || s.Id === data.Id) || {}
++
++    return {
++      ...data,
++      CPU: stat.CPU || '0%',
++      Memory: stat.Memory || '0B',
++      MemoryUsage: stat.MemoryUsage || 0,
++      MemoryLimit: stat.MemoryLimit || 0,
++    }
++  } catch (error) {
++    throw new Error(`Container not found: ${id}`)
++  }
++}
++getContainer.permission = 'admin'
++getContainer.description = 'Get detailed information about a specific container'
++
++// -------------------------------------------------------------------
++
++export async function createContainer(config) {
++  const {
++    name,
++    image,
++    cpuLimit,
++    memoryLimit,
++    memoryReservation,
++    ports,
++    volumes,
++    environment,
++    restartPolicy,
++    privileged,
++    networkMode,
++  } = config
++
++  const args = ['run', '-d', '--name', name]
++
++  // CPU limit (in shares, 1024 = 1 CPU)
++  if (cpuLimit) {
++    args.push('--cpu-shares', String(cpuLimit * 1024))
++  }
++
++  // Memory limits
++  if (memoryLimit) {
++    args.push('--memory', formatMemory(memoryLimit))
++  }
++  if (memoryReservation) {
++    args.push('--memory-reservation', formatMemory(memoryReservation))
++  }
++
++  // Port mappings
++  if (ports && ports.length > 0) {
++    for (const port of ports) {
++      if (port.hostPort && port.containerPort) {
++        args.push('-p', `${port.hostPort}:${port.containerPort}`)
++      }
++    }
++  }
++
++  // Volume mappings
++  if (volumes && volumes.length > 0) {
++    for (const volume of volumes) {
++      if (volume.hostPath && volume.containerPath) {
++        args.push('-v', `${volume.hostPath}:${volume.containerPath}`)
++      }
++    }
++  }
++
++  // Environment variables
++  if (environment && Object.keys(environment).length > 0) {
++    for (const [key, value] of Object.entries(environment)) {
++      args.push('-e', `${key}=${value}`)
++    }
++  }
++
++  // Restart policy
++  if (restartPolicy) {
++    args.push('--restart', restartPolicy)
++  }
++
++  // Privileged mode
++  if (privileged) {
++    args.push('--privileged')
++  }
++
++  // Network mode
++  if (networkMode) {
++    args.push('--network', networkMode)
++  }
++
++  args.push(image)
++
++  try {
++    const { stdout } = await execa('docker', args)
++    const containerId = stdout.trim()
++    
++    // Save configuration for persistence
++    await saveContainerConfig(name, config)
++    
++    return { id: containerId, name, status: 'created' }
++  } catch (error) {
++    throw new Error(`Failed to create container: ${error.stderr || error.message}`)
++  }
++}
++createContainer.permission = 'admin'
++createContainer.description = 'Create a new container'
++
++// -------------------------------------------------------------------
++
++export async function startContainer(id) {
++  try {
++    await execa('docker', ['start', id])
++    return { success: true }
++  } catch (error) {
++    throw new Error(`Failed to start container: ${id}`)
++  }
++}
++startContainer.permission = 'admin'
++startContainer.description = 'Start a container'
++
++// -------------------------------------------------------------------
++
++export async function stopContainer(id, force = false) {
++  try {
++    const args = ['stop']
++    if (force) {
++      args.push('--time', '0')
++    }
++    args.push(id)
++    await execa('docker', args)
++    return { success: true }
++  } catch (error) {
++    throw new Error(`Failed to stop container: ${id}`)
++  }
++}
++stopContainer.permission = 'admin'
++stopContainer.description = 'Stop a container'
++
++// -------------------------------------------------------------------
++
++export async function restartContainer(id, force = false) {
++  try {
++    const args = ['restart']
++    if (force) {
++      args.push('--time', '0')
++    }
++    args.push(id)
++    await execa('docker', args)
++    return { success: true }
++  } catch (error) {
++    throw new Error(`Failed to restart container: ${id}`)
++  }
++}
++restartContainer.permission = 'admin'
++restartContainer.description = 'Restart a container'
++
++// -------------------------------------------------------------------
++
++export async function removeContainer(id, force = false, removeVolumes = false) {
++  try {
++    const args = ['rm']
++    if (force) {
++      args.push('-f')
++    }
++    if (removeVolumes) {
++      args.push('-v')
++    }
++    args.push(id)
++    await execa('docker', args)
++    
++    // Remove saved configuration
++    const containers = await listContainers()
++    const container = containers.find(c => c.ID === id || c.Id === id)
++    if (container) {
++      await removeContainerConfig(container.Name || container.Names)
++    }
++    
++    return { success: true }
++  } catch (error) {
++    throw new Error(`Failed to remove container: ${id}`)
++  }
++}
++removeContainer.permission = 'admin'
++removeContainer.description = 'Remove a container'
++
++// -------------------------------------------------------------------
++
++export async function getContainerLogs(id, options = {}) {
++  const { tail = 100, follow = false, timestamps = false } = options
++
++  try {
++    const args = ['logs']
++    if (tail) {
++      args.push('--tail', String(tail))
++    }
++    if (timestamps) {
++      args.push('--timestamps')
++    }
++    if (follow) {
++      args.push('--follow')
++    }
++    args.push(id)
++
++    const { stdout } = await execa('docker', args)
++    return { logs: stdout }
++  } catch (error) {
++    throw new Error(`Failed to get logs for container: ${id}`)
++  }
++}
++getContainerLogs.permission = 'admin'
++getContainerLogs.description = 'Get logs for a container'
++
++// -------------------------------------------------------------------
++
++export async function listImages() {
++  try {
++    const { stdout } = await execa('docker', ['images', '--format', '{{json .}}'])
++    return stdout
++      .trim()
++      .split('\n')
++      .filter(line => line)
++      .map(line => {
++        try {
++          return JSON.parse(line)
++        } catch {
++          return null
++        }
++      })
++      .filter(Boolean)
++  } catch {
++    return []
++  }
++}
++listImages.permission = 'admin'
++listImages.description = 'List all Docker images'
++
++// -------------------------------------------------------------------
++
++export async function pullImage(image) {
++  try {
++    await execa('docker', ['pull', image])
++    return { success: true }
++  } catch (error) {
++    throw new Error(`Failed to pull image: ${image}`)
++  }
++}
++pullImage.permission = 'admin'
++pullImage.description = 'Pull a Docker image'
++
++// -------------------------------------------------------------------
++
++export async function removeImage(id, force = false) {
++  try {
++    const args = ['rmi']
++    if (force) {
++      args.push('-f')
++    }
++    args.push(id)
++    await execa('docker', args)
++    return { success: true }
++  } catch (error) {
++    throw new Error(`Failed to remove image: ${id}`)
++  }
++}
++removeImage.permission = 'admin'
++removeImage.description = 'Remove a Docker image'
++
++// -------------------------------------------------------------------
++
++export async function getDockerInfo() {
++  try {
++    const { stdout } = await execa('docker', ['info', '--format', '{{json .}}'])
++    return JSON.parse(stdout)
++  } catch {
++    return { error: 'Docker not available' }
++  }
++}
++getDockerInfo.permission = 'admin'
++getDockerInfo.description = 'Get Docker system information'
++
++// -------------------------------------------------------------------
++
++export async function checkDockerAvailable() {
++  try {
++    await execa('docker', ['--version'])
++    return { available: true }
++  } catch {
++    return { available: false }
++  }
++}
++checkDockerAvailable.permission = 'admin'
++checkDockerAvailable.description = 'Check if Docker is available on the system'
++
++// -------------------------------------------------------------------
++// Helper functions
++// -------------------------------------------------------------------
++
++function parseMemory(memString) {
++  if (!memString) return 0
++  const match = memString.match(/^([\d.]+)(B|KB|MB|GB|TB)/i)
++  if (!match) return 0
++  
++  const value = parseFloat(match[1])
++  const unit = match[2].toUpperCase()
++  
++  const units = { B: 1, KB: 1024, MB: 1024 * 1024, GB: 1024 * 1024 * 1024, TB: 1024 * 1024 * 1024 * 1024 }
++  return value * (units[unit] || 1)
++}
++
++function formatMemory(bytes) {
++  if (bytes === 0) return '0'
++  
++  const units = ['B', 'KB', 'MB', 'GB', 'TB']
++  let value = bytes
++  let unitIndex = 0
++  
++  while (value >= 1024 && unitIndex < units.length - 1) {
++    value /= 1024
++    unitIndex++
++  }
++  
++  return `${Math.round(value)}${units[unitIndex]}`
++}
++
++async function saveContainerConfig(name, config) {
++  try {
++    await execa('mkdir', ['-p', CONTAINER_CONFIG_DIR])
++    const configPath = join(CONTAINER_CONFIG_DIR, `${name}.json`)
++    await writeFile(configPath, JSON.stringify(config, null, 2))
++  } catch {
++    // Non-fatal
++  }
++}
++
++async function removeContainerConfig(name) {
++  try {
++    const configPath = join(CONTAINER_CONFIG_DIR, `${name}.json`)
++    await unlink(configPath)
++  } catch {
++    // Non-fatal
++  }
++}
