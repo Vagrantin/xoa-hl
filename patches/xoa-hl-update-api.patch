@@ -1,13 +1,23 @@
 diff --git a/packages/xo-server/src/api/xoaHl.mjs b/packages/xo-server/src/api/xoaHl.mjs
 new file mode 100644
-index 000000000..eed639421
+index 0000000..0918094
 --- /dev/null
 +++ b/packages/xo-server/src/api/xoaHl.mjs
-@@ -0,0 +1,94 @@
+@@ -0,0 +1,177 @@
 +import { execa } from 'execa'
-+import { readFile } from 'fs/promises'
++import { readFile, stat } from 'fs/promises'
 +
++// Written by /usr/libexec/xoa-hl/check-update.sh. On /run on purpose: a check
++// result describes the repositories as they were, and must not outlive a boot.
 +const STATUS_FILE = '/run/xoa-hl/status'
++
++// Written by /usr/libexec/xoa-hl/update.sh, line by line as dnf produces them.
++// On /var/lib rather than /run because an update can end with a pending reboot,
++// and a tmpfs log would be gone exactly when someone wants to read it.
++const LOG_FILE = '/var/lib/xoa-hl/update.log'
++
++const CHECK_UNIT = 'xoa-hl-check-update.service'
++const UPDATE_UNIT = 'xoa-hl-update.service'
 +
 +// -------------------------------------------------------------------
 +
@@ -25,99 +35,190 @@ index 000000000..eed639421
 +
 +// -------------------------------------------------------------------
 +
-+export async function checkForUpdate() {
-+  await execa('sudo', ['systemctl', 'start', 'xoa-hl-check-update.service'])
-+  return { started: true }
-+}
-+checkForUpdate.permission = 'admin'
-+checkForUpdate.description = 'queue a check for xoa-hl updates'
++// check-update.sh writes a verdict on the first line, then any number of
++// "key=value" metadata lines and "name<TAB>version" package lines:
++//
++//   AVAILABLE | UP_TO_DATE | ERROR
++//   checkedAt=2026-09-16T08:00:00Z
++//   message=Curl error (6): Couldn't resolve host name   (ERROR only)
++//   xoa-hl<TAB>5.113.2_e281c536-42                       (AVAILABLE only)
++function parseStatus(content) {
++  const [verdict, ...rest] = content.trim().split('\n')
 +
-+// -------------------------------------------------------------------
++  const packages = []
++  let checkedAt, message
++  for (const line of rest) {
++    if (line.startsWith('checkedAt=')) {
++      checkedAt = line.slice(10)
++    } else if (line.startsWith('message=')) {
++      message = line.slice(8)
++    } else if (line !== '') {
++      const [name, version] = line.split('\t')
++      packages.push({ name, version })
++    }
++  }
++
++  if (verdict === 'ERROR') {
++    return { checkedAt, error: message ?? 'the update check failed', packages: [], updateAvailable: false }
++  }
++  if (verdict === 'AVAILABLE') {
++    return { checkedAt, packages, updateAvailable: packages.length > 0 }
++  }
++  // UP_TO_DATE. Anything unrecognised lands here too: reporting "nothing
++  // pending" is the only honest reading of a verdict we cannot interpret, and
++  // it is what the caller would do with an unknown value anyway.
++  return { checkedAt, packages: [], updateAvailable: false }
++}
 +
 +export async function getUpdateStatus() {
 +  let content
 +  try {
 +    content = await readFile(STATUS_FILE, 'utf8')
 +  } catch (error) {
-+    // never checked yet
-+    return { checking: false, updateAvailable: false, packages: [] }
++    // never checked on this boot
++    return { packages: [], updateAvailable: false }
 +  }
 +
-+  const [header, ...lines] = content.trim().split('\n')
-+  if (header !== 'AVAILABLE') {
-+    return { checking: false, updateAvailable: false, packages: [] }
-+  }
-+
-+  const packages = lines
-+    .filter(line => line !== '')
-+    .map(line => {
-+      const [name, version] = line.split('\t')
-+      return { name, version }
-+    })
-+
-+  return { checking: false, updateAvailable: packages.length > 0, packages }
++  return parseStatus(content)
 +}
 +getUpdateStatus.permission = 'admin'
 +getUpdateStatus.description = 'get the latest xoa-hl update check result'
 +
 +// -------------------------------------------------------------------
 +
-+export async function startUpdate() {
-+  await execa('sudo', ['systemctl', 'start', 'xoa-hl-update.service'])
-+  return { started: true }
++export async function checkForUpdate() {
++  // Blocking, unlike startUpdate: a check is a request/response as far as the
++  // UI is concerned, and it reports its own failures through the status file
++  // rather than by failing the unit, so this only rejects when the unit itself
++  // could not be started.
++  await execa('sudo', ['systemctl', 'start', CHECK_UNIT])
++
++  // Returning the result saves the caller a second round trip, and removes the
++  // window in which the page would have a stale verdict on screen.
++  return getUpdateStatus()
 +}
-+startUpdate.permission = 'admin'
-+startUpdate.description = 'run the xoa-hl update, resolves once it has finished'
++checkForUpdate.permission = 'admin'
++checkForUpdate.description = 'run a check for xoa-hl updates and return its result'
 +
 +// -------------------------------------------------------------------
 +
-+export async function getUpdateProgress() {
-+  const [{ stdout: showOut }, { stdout: logOut }] = await Promise.all([
-+    execa('systemctl', [
-+      'show',
-+      'xoa-hl-update.service',
-+      '--property=ActiveState,SubState,ExecMainStatus,ExecMainCode',
-+    ]),
-+    execa('journalctl', ['-u', 'xoa-hl-update.service', '-n', '50', '--no-pager', '-o', 'cat']),
++export async function startUpdate() {
++  // --no-block is what makes the live log possible: the unit is Type=oneshot,
++  // so without it systemd would not report the job done -- and this call would
++  // not return -- until the whole transaction had finished.
++  await execa('sudo', ['systemctl', 'start', '--no-block', UPDATE_UNIT])
++
++  // The caller compares this against the log's mtime to tell this run's log
++  // from the previous run's, which is still on disk until update.sh truncates
++  // it. Same clock on both sides, so the comparison is meaningful.
++  return { requestedAt: Date.now(), started: true }
++}
++startUpdate.permission = 'admin'
++startUpdate.description = 'start the xoa-hl update, returns as soon as it is queued'
++
++// -------------------------------------------------------------------
++
++// systemd reports a oneshot as activating while ExecStart runs; deactivating is
++// the tail of a run that is on its way out but has not reported a result yet.
++const RUNNING_STATES = new Set(['activating', 'active', 'deactivating', 'reloading'])
++
++async function readLog() {
++  let content, mtime
++  try {
++    mtime = (await stat(LOG_FILE)).mtimeMs
++    content = await readFile(LOG_FILE, 'utf8')
++  } catch (error) {
++    if (error.code === 'ENOENT') {
++      // no update has ever run on this appliance
++      return { lines: [] }
++    }
++    throw error
++  }
++
++  // The trailing newline would otherwise read as a blank last line that keeps
++  // moving down as the file grows.
++  if (content.endsWith('\n')) {
++    content = content.slice(0, -1)
++  }
++
++  return { lines: content === '' ? [] : content.split('\n'), mtime }
++}
++
++export async function getUpdateProgress({ since = 0 } = {}) {
++  const [{ stdout }, { lines, mtime }] = await Promise.all([
++    execa('systemctl', ['show', UPDATE_UNIT, '--property=ActiveState,SubState,ExecMainStatus']),
++    readLog(),
 +  ])
 +
 +  const properties = {}
-+  for (const line of showOut.split('\n')) {
++  for (const line of stdout.split('\n')) {
 +    const i = line.indexOf('=')
 +    if (i !== -1) {
 +      properties[line.slice(0, i)] = line.slice(i + 1)
 +    }
 +  }
 +
++  // A run truncates the log, so a file shorter than what the caller has already
++  // read means it was looking at the previous run: tell it to replace rather
++  // than append, instead of silently handing it a spliced-together log.
++  const truncated = lines.length < since
++
++  const { ActiveState: activeState } = properties
 +  return {
-+    activeState: properties.ActiveState,
++    activeState,
++    exitStatus: Number(properties.ExecMainStatus),
++    failed: activeState === 'failed',
++    lines: lines.slice(truncated ? 0 : since),
++    logModifiedAt: mtime,
++    nextSince: lines.length,
++    running: RUNNING_STATES.has(activeState),
 +    subState: properties.SubState,
-+    exitStatus: properties.ExecMainStatus,
-+    log: logOut.split('\n'),
++    truncated,
 +  }
 +}
 +getUpdateProgress.permission = 'admin'
-+getUpdateProgress.description = 'get the state and log tail of the xoa-hl update service'
++getUpdateProgress.description = 'get the state of the xoa-hl update service and the log lines written since `since`'
++getUpdateProgress.params = {
++  since: { type: 'number', optional: true },
++}
 diff --git a/packages/xo-web/src/common/intl/messages.js b/packages/xo-web/src/common/intl/messages.js
-index 2aea8e7d3..1e308ba07 100644
+index 2aea8e7..2922bb0 100644
 --- a/packages/xo-web/src/common/intl/messages.js
 +++ b/packages/xo-web/src/common/intl/messages.js
-@@ -244,6 +244,13 @@ const messages = {
+@@ -244,6 +244,31 @@ const messages = {
    settingsLogsPage: 'Logs',
    settingsCloudConfigsPage: 'Cloud configs',
    settingsIpsPage: 'IPs',
 +  settingsXoaHlUpdatesPage: 'XOA-HL Updates',
++  xoaHlAppliance: 'Appliance',
++  xoaHlCheckFailed: 'The update check failed',
 +  xoaHlCheckForUpdate: 'Check for update',
-+  xoaHlStartUpdate: 'Update now',
-+  xoaHlPackagesAvailable: 'Packages with updates available:',
++  xoaHlChecking: 'Checking for updates…',
++  xoaHlInstalledVersion: 'Installed version',
++  xoaHlLastChecked: 'Last checked',
++  xoaHlNeverChecked: 'Update status unknown, check for updates to find out.',
 +  xoaHlPackageName: 'Package',
++  xoaHlPackagesAvailable: 'Packages with updates available:',
 +  xoaHlPackageVersion: 'Version',
++  xoaHlRecheckAfterUpdate: 'Check for updates again to confirm the new state.',
++  xoaHlStartUpdate: 'Update now',
++  xoaHlUnknownVersion: 'Unknown',
++  xoaHlUpdateAvailable: '{n, number} update{n, plural, one {} other {s}} available',
++  xoaHlUpdateDidNotStart: 'The update service did not start.',
++  xoaHlUpdateFailed: 'The update failed, see the log below.',
++  xoaHlUpdateLog: 'Update log',
++  xoaHlUpdateReconnecting: 'Reconnecting to xo-server, the update restarts it…',
++  xoaHlUpdateRunning: 'Update in progress…',
++  xoaHlUpdateScope: 'Updating installs every pending package on the appliance, including AlmaLinux and the kernel.',
++  xoaHlUpdateStarting: 'Starting the update…',
++  xoaHlUpdateSucceeded: 'Update finished successfully.',
 +  xoaHlUpToDate: 'Up to date',
++  xoaHlWaitingForOutput: 'Waiting for the first line of output…',
    aboutPage: 'About',
    aboutXoaPlan: 'About XO {xoaPlan}',
    newMenu: 'New',
 diff --git a/packages/xo-web/src/common/xo/index.js b/packages/xo-web/src/common/xo/index.js
-index b8110b2c7..c0cff2280 100644
+index b8110b2..2d7cda3 100644
 --- a/packages/xo-web/src/common/xo/index.js
 +++ b/packages/xo-web/src/common/xo/index.js
 @@ -884,6 +884,14 @@ export const exportConfig = () =>
@@ -130,13 +231,13 @@ index b8110b2c7..c0cff2280 100644
 +export const checkXoaHlUpdate = () => _call('xoaHl.checkForUpdate')
 +export const getXoaHlUpdateStatus = () => _call('xoaHl.getUpdateStatus')
 +export const startXoaHlUpdate = () => _call('xoaHl.startUpdate')
-+export const getXoaHlUpdateProgress = () => _call('xoaHl.getUpdateProgress')
++export const getXoaHlUpdateProgress = since => _call('xoaHl.getUpdateProgress', { since })
 +
  // Server ------------------------------------------------------------
  
  export const addServer = (host, username, password, label, allowUnauthorized, httpProxy) =>
 diff --git a/packages/xo-web/src/xo-app/menu/index.js b/packages/xo-web/src/xo-app/menu/index.js
-index a7703a4ef..dbe8698fa 100644
+index a7703a4..dbe8698 100644
 --- a/packages/xo-web/src/xo-app/menu/index.js
 +++ b/packages/xo-web/src/xo-app/menu/index.js
 @@ -446,6 +446,11 @@ export default class Menu extends Component {
@@ -152,7 +253,7 @@ index a7703a4ef..dbe8698fa 100644
        },
        isAdmin && {
 diff --git a/packages/xo-web/src/xo-app/settings/index.js b/packages/xo-web/src/xo-app/settings/index.js
-index 6936473dd..b0bec9737 100644
+index 6936473..b0bec97 100644
 --- a/packages/xo-web/src/xo-app/settings/index.js
 +++ b/packages/xo-web/src/xo-app/settings/index.js
 @@ -17,17 +17,20 @@ import Plugins from './plugins'
@@ -199,124 +300,458 @@ index 6936473dd..b0bec9737 100644
      <Page header={HEADER} title='settingsPage' formatTitle>
 diff --git a/packages/xo-web/src/xo-app/settings/xoa-hl-updates/index.js b/packages/xo-web/src/xo-app/settings/xoa-hl-updates/index.js
 new file mode 100644
-index 000000000..cae3800e5
+index 0000000..23b23be
 --- /dev/null
 +++ b/packages/xo-web/src/xo-app/settings/xoa-hl-updates/index.js
-@@ -0,0 +1,117 @@
+@@ -0,0 +1,451 @@
 +import _ from 'intl'
 +import ActionButton from 'action-button'
 +import Component from 'base-component'
++import Icon from 'icon'
 +import React from 'react'
-+import { checkXoaHlUpdate, getXoaHlUpdateProgress, getXoaHlUpdateStatus, startXoaHlUpdate } from 'xo'
++import { Card, CardBlock, CardHeader } from 'card'
++import { Col, Container, Row } from 'grid'
++import { FormattedRelative } from 'react-intl'
++import { checkXoaHlUpdate, getXoaHlUpdateProgress, getXoaHlVersion, startXoaHlUpdate } from 'xo'
 +
 +// ===================================================================
 +
-+// The page content is a flex column, so the log can claim the leftover height.
-+const CONTAINER_STYLE = {
-+  display: 'flex',
-+  flexDirection: 'column',
-+  height: '100%',
-+}
++// How often the page asks for the log lines written since its last poll.
++const POLL_INTERVAL = 2e3
 +
-+const NO_SHRINK_STYLE = {
-+  flexShrink: 0,
-+}
++// The first poll comes sooner, so the pane fills as soon as dnf says anything
++// rather than a whole interval later.
++const FIRST_POLL_INTERVAL = 5e2
 +
-+// Capped so a long package list still leaves room for the log.
-+const STATUS_STYLE = {
-+  flexShrink: 0,
-+  maxHeight: '40%',
-+  overflowY: 'auto',
-+}
++// How long a queued update may take to touch its log before the page calls it a
++// failure to start. Generous: this only covers systemd dispatching the job.
++const START_TIMEOUT = 3e4
 +
++// Tall enough to be worth reading, capped so the buttons stay on screen.
 +const LOG_STYLE = {
-+  display: 'flex',
-+  flexDirection: 'column',
-+  flex: 1,
-+  minHeight: 0,
++  marginBottom: 0,
++  maxHeight: '30em',
++  minHeight: '10em',
++  overflowY: 'auto',
++  whiteSpace: 'pre-wrap',
++  wordBreak: 'break-word',
 +}
 +
-+// minHeight lets the pre shrink below its content and scroll on its own.
-+const LOG_PRE_STYLE = {
-+  flex: 1,
-+  minHeight: 0,
-+  marginBottom: 0,
++// ===================================================================
++
++const Banner = ({ children, icon, level }) => (
++  <div className={`alert alert-${level} mb-1`} role='alert'>
++    <Icon fixedWidth icon={icon} /> {children}
++  </div>
++)
++
++const CheckedAt = ({ value }) => {
++  const date = new Date(value)
++  if (isNaN(date.getTime())) {
++    return null
++  }
++
++  return (
++    <span className='text-muted ml-1'>
++      ({_('xoaHlLastChecked')} <FormattedRelative value={date} />)
++    </span>
++  )
 +}
++
++const PackagesTable = ({ packages }) => (
++  <div>
++    <p className='mb-1'>{_('xoaHlPackagesAvailable')}</p>
++    <table className='table table-sm'>
++      <thead>
++        <tr>
++          <th>{_('xoaHlPackageName')}</th>
++          <th>{_('xoaHlPackageVersion')}</th>
++        </tr>
++      </thead>
++      <tbody>
++        {packages.map(({ name, version }) => (
++          <tr key={name}>
++            <td>{name}</td>
++            <td className='text-monospace'>{version}</td>
++          </tr>
++        ))}
++      </tbody>
++    </table>
++  </div>
++)
++
++// ===================================================================
 +
 +export default class XoaHlUpdates extends Component {
 +  constructor(props) {
 +    super(props)
 +    this.state = {
 +      checking: false,
-+      updateAvailable: false,
-+      packages: [],
-+      updating: false,
 +      log: [],
++      // undefined while an update is running, then 'succeeded', 'failed' or
++      // 'didNotStart'
++      outcome: undefined,
++      // set while polling is failing, which is expected rather than an error:
++      // the transaction restarts xo-server underneath this very page
++      reconnecting: false,
++      // server clock reading taken when this page queued the update. The log on
++      // disk belongs to the previous run until its mtime passes this.
++      requestedAt: 0,
++      // number of log lines already received; the server sends only what
++      // follows them
++      since: 0,
++      started: false,
++      // undefined until a check has run: the page says "unknown" rather than
++      // inventing "up to date"
++      status: undefined,
++      updating: false,
++      version: undefined,
++    }
++
++    // Browser clock, and compared only against other browser-clock readings --
++    // state.requestedAt is the appliance's clock and the two are not
++    // interchangeable.
++    this._updateStartedAt = Date.now()
++
++    // Whether the log pane is following its tail. Cleared as soon as the reader
++    // scrolls up to look at something.
++    this._followLog = true
++  }
++
++  componentDidMount() {
++    this._mounted = true
++
++    getXoaHlVersion().then(
++      version => this._mounted && this.setState({ version: typeof version === 'string' ? version : undefined }),
++      // an appliance that cannot report its version is no reason to fail the
++      // page, everything else on it still works
++      () => {}
++    )
++
++    // An update may already be running -- started from another browser tab, or
++    // from the shell -- so adopt it instead of showing an idle page.
++    this._tick()
++  }
++
++  componentWillUnmount() {
++    this._mounted = false
++    clearTimeout(this._timeout)
++  }
++
++  componentDidUpdate(prevProps, prevState) {
++    const node = this._logNode
++    if (node == null || this.state.log === prevState.log || !this._followLog) {
++      return
++    }
++
++    node.scrollTop = node.scrollHeight
++  }
++
++  _setLogNode = node => {
++    this._logNode = node
++  }
++
++  _onLogScroll = event => {
++    const { clientHeight, scrollHeight, scrollTop } = event.target
++    // A few pixels of slack: browsers report fractional scroll positions.
++    this._followLog = scrollHeight - scrollTop - clientHeight < 4
++  }
++
++  // -----------------------------------------------------------------
++
++  _checkForUpdate = async () => {
++    // Clearing the verdict is the point: "Up to date" describes the previous
++    // check and must not sit on screen next to the spinner for the new one.
++    this.setState({ checking: true, status: undefined })
++    try {
++      const status = await checkXoaHlUpdate()
++      if (this._mounted) {
++        this.setState({ checking: false, status })
++      }
++    } catch (error) {
++      if (this._mounted) {
++        this.setState({ checking: false })
++      }
++      // ActionButton turns this into a notification
++      throw error
 +    }
 +  }
 +
-+  _checkForUpdate = async () => {
-+    // Drop the previous run's log: it does not describe the result being fetched.
-+    this.setState({ checking: true, log: [] })
-+    await checkXoaHlUpdate()
-+    const { updateAvailable, packages } = await getXoaHlUpdateStatus()
-+    this.setState({ checking: false, updateAvailable, packages })
++  _startUpdate = async () => {
++    this._followLog = true
++    this._updateStartedAt = Date.now()
++    this.setState({
++      log: [],
++      outcome: undefined,
++      reconnecting: false,
++      since: 0,
++      started: false,
++      // The verdict describes the appliance as it was before the transaction;
++      // only a fresh check can say what it is afterwards.
++      status: undefined,
++      updating: true,
++    })
++
++    let requestedAt
++    try {
++      const result = await startXoaHlUpdate()
++      requestedAt = result.requestedAt
++    } catch (error) {
++      if (this._mounted) {
++        this.setState({ updating: false })
++      }
++      // ActionButton turns this into a notification
++      throw error
++    }
++
++    if (this._mounted) {
++      this.setState({ requestedAt })
++      this._schedule(FIRST_POLL_INTERVAL)
++    }
 +  }
 +
-+  _startUpdate = async () => {
-+    this.setState({ updating: true })
-+    await startXoaHlUpdate()
-+    const { log } = await getXoaHlUpdateProgress()
-+    this.setState({ updating: false, log })
++  // -----------------------------------------------------------------
++
++  _schedule(delay = POLL_INTERVAL) {
++    clearTimeout(this._timeout)
++    this._timeout = setTimeout(this._tick, delay)
++  }
++
++  _tick = async () => {
++    if (!this._mounted) {
++      return
++    }
++
++    let progress
++    try {
++      progress = await getXoaHlUpdateProgress(this.state.since)
++    } catch (error) {
++      // Expected in the middle of a successful update: installing xoa-hl
++      // restarts xo-server, so the connection this page polls over drops for a
++      // few seconds. Keep the log on screen and keep trying.
++      if (this._mounted && this.state.updating) {
++        this.setState({ reconnecting: true })
++        this._schedule()
++      }
++      return
++    }
++
++    if (!this._mounted) {
++      return
++    }
++
++    const { failed, lines, logModifiedAt, nextSince, running, truncated } = progress
++    const { requestedAt, updating } = this.state
++
++    if (!updating && !running) {
++      // Nothing to follow. This is the usual case on mount, and it is why the
++      // previous run's log stays off screen: with no outcome beside it, it
++      // would read as this session's.
++      return
++    }
++
++    // Until the log on disk is newer than this page's request it is still the
++    // previous run's, and showing it would put a finished update's output under
++    // a "starting" spinner.
++    if (logModifiedAt === undefined || logModifiedAt < requestedAt) {
++      if (Date.now() - this._updateStartedAt > START_TIMEOUT) {
++        this.setState({ outcome: 'didNotStart', reconnecting: false, updating: false })
++      } else {
++        this.setState({ reconnecting: false })
++        this._schedule()
++      }
++      return
++    }
++
++    this.setState(({ log }) => ({
++      log: truncated ? lines : log.concat(lines),
++      reconnecting: false,
++      since: nextSince,
++      started: true,
++    }))
++
++    if (running) {
++      if (!updating) {
++        // adopted a run this page did not start
++        this.setState({ outcome: undefined, updating: true })
++      }
++      this._schedule()
++      return
++    }
++
++    this.setState({ outcome: failed ? 'failed' : 'succeeded', updating: false })
++  }
++
++  // -----------------------------------------------------------------
++
++  // One banner, always, so the page never shows two verdicts at once.
++  _renderStatus() {
++    const { checking, outcome, status, updating } = this.state
++
++    if (checking) {
++      return (
++        <Banner icon='loading' level='info'>
++          {_('xoaHlChecking')}
++        </Banner>
++      )
++    }
++
++    if (updating) {
++      // The log card carries the running banner; a second one here would only
++      // repeat it.
++      return null
++    }
++
++    if (status === undefined && outcome !== undefined) {
++      // After a run the outcome is the current verdict: the check that ran
++      // before it described an appliance that no longer exists.
++      return this._renderOutcome()
++    }
++
++    if (status === undefined) {
++      return (
++        <Banner icon='info' level='info'>
++          {_('xoaHlNeverChecked')}
++        </Banner>
++      )
++    }
++
++    const { checkedAt, error, packages, updateAvailable } = status
++
++    if (error !== undefined) {
++      return (
++        <Banner icon='alarm' level='danger'>
++          <strong>{_('xoaHlCheckFailed')}</strong>: {error}
++          <CheckedAt value={checkedAt} />
++        </Banner>
++      )
++    }
++
++    if (!updateAvailable) {
++      return (
++        <Banner icon='check' level='success'>
++          <strong>{_('xoaHlUpToDate')}</strong>
++          <CheckedAt value={checkedAt} />
++        </Banner>
++      )
++    }
++
++    return (
++      <div>
++        <Banner icon='alarm' level='warning'>
++          <strong>{_('xoaHlUpdateAvailable', { n: packages.length })}</strong>
++          <CheckedAt value={checkedAt} />
++        </Banner>
++        <PackagesTable packages={packages} />
++      </div>
++    )
++  }
++
++  _renderOutcome() {
++    switch (this.state.outcome) {
++      case 'succeeded':
++        return (
++          <Banner icon='success' level='success'>
++            <strong>{_('xoaHlUpdateSucceeded')}</strong> {_('xoaHlRecheckAfterUpdate')}
++          </Banner>
++        )
++      case 'failed':
++        return (
++          <Banner icon='error' level='danger'>
++            <strong>{_('xoaHlUpdateFailed')}</strong>
++          </Banner>
++        )
++      case 'didNotStart':
++        return (
++          <Banner icon='error' level='danger'>
++            <strong>{_('xoaHlUpdateDidNotStart')}</strong>
++          </Banner>
++        )
++      default:
++        return null
++    }
++  }
++
++  _renderLog() {
++    const { log, reconnecting, started, updating } = this.state
++
++    if (log.length === 0 && !updating) {
++      return null
++    }
++
++    return (
++      <Row className='mt-1'>
++        <Col>
++          <Card>
++            <CardHeader>
++              <Icon icon='logs' /> {_('xoaHlUpdateLog')}
++            </CardHeader>
++            <CardBlock>
++              {updating && (
++                <Banner icon='loading' level='info'>
++                  {started ? _('xoaHlUpdateRunning') : _('xoaHlUpdateStarting')}
++                  {reconnecting && <span className='ml-1'>{_('xoaHlUpdateReconnecting')}</span>}
++                </Banner>
++              )}
++              {log.length === 0 ? (
++                <p className='mb-0 text-muted'>{_('xoaHlWaitingForOutput')}</p>
++              ) : (
++                <pre className='mb-0' onScroll={this._onLogScroll} ref={this._setLogNode} style={LOG_STYLE}>
++                  {log.join('\n')}
++                </pre>
++              )}
++            </CardBlock>
++          </Card>
++        </Col>
++      </Row>
++    )
 +  }
 +
 +  render() {
-+    const { checking, updateAvailable, packages, log } = this.state
++    const { checking, status, updating, version } = this.state
++    const updateAvailable = status !== undefined && status.updateAvailable
 +
 +    return (
-+      <div style={CONTAINER_STYLE}>
-+        <div style={NO_SHRINK_STYLE}>
-+          <ActionButton btnStyle='info' handler={this._checkForUpdate} icon='refresh' pending={checking}>
-+            {_('xoaHlCheckForUpdate')}
-+          </ActionButton>{' '}
-+          <ActionButton btnStyle='success' disabled={!updateAvailable} handler={this._startUpdate} icon='upgrade'>
-+            {_('xoaHlStartUpdate')}
-+          </ActionButton>
-+        </div>
-+        <div style={STATUS_STYLE}>
-+          {updateAvailable && packages.length > 0 ? (
-+            <div>
-+              <p>{_('xoaHlPackagesAvailable')}</p>
-+              <table className='table'>
-+                <thead>
-+                  <tr>
-+                    <th>{_('xoaHlPackageName')}</th>
-+                    <th>{_('xoaHlPackageVersion')}</th>
-+                  </tr>
-+                </thead>
-+                <tbody>
-+                  {packages.map(({ name, version }) => (
-+                    <tr key={name}>
-+                      <td>{name}</td>
-+                      <td>{version}</td>
-+                    </tr>
-+                  ))}
-+                </tbody>
-+              </table>
-+            </div>
-+          ) : (
-+            <p>{_('xoaHlUpToDate')}</p>
-+          )}
-+        </div>
-+        {log.length > 0 && (
-+          <div style={LOG_STYLE}>
-+            <hr style={NO_SHRINK_STYLE} />
-+            <pre className='overflow-auto' style={LOG_PRE_STYLE}>
-+              {log.join('\n')}
-+            </pre>
-+          </div>
-+        )}
-+      </div>
++      <Container>
++        <Row>
++          <Col>
++            <Card>
++              <CardHeader>
++                <Icon icon='upgrade' /> {_('xoaHlAppliance')}
++              </CardHeader>
++              <CardBlock>
++                <p>
++                  {_('xoaHlInstalledVersion')}:{' '}
++                  <span className='text-monospace'>{version !== undefined ? version : _('xoaHlUnknownVersion')}</span>
++                </p>
++                {this._renderStatus()}
++                <p className='text-muted'>
++                  <Icon icon='info' /> {_('xoaHlUpdateScope')}
++                </p>
++                <ActionButton
++                  btnStyle='info'
++                  disabled={updating}
++                  handler={this._checkForUpdate}
++                  icon='refresh'
++                  pending={checking}
++                >
++                  {_('xoaHlCheckForUpdate')}
++                </ActionButton>{' '}
++                <ActionButton
++                  btnStyle='success'
++                  disabled={!updateAvailable || checking}
++                  handler={this._startUpdate}
++                  icon='upgrade'
++                  pending={updating}
++                >
++                  {_('xoaHlStartUpdate')}
++                </ActionButton>
++              </CardBlock>
++            </Card>
++          </Col>
++        </Row>
++        {this._renderLog()}
++      </Container>
 +    )
 +  }
 +}
