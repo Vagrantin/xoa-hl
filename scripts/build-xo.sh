@@ -36,7 +36,9 @@ if [ -f "$PATCH_METADATA" ]; then
     echo "  Validating patches against metadata..."
     
     # Count patches in metadata
-    METADATA_PATCH_COUNT=$(grep -c '^\[\[patches\]\]' "$PATCH_METADATA" || echo "0")
+    # grep -c already prints 0 on no match; `|| true` only absorbs its exit 1
+    # (`|| echo 0` would append a second line and break the -ne test below).
+    METADATA_PATCH_COUNT=$(grep -c '^\[\[patches\]\]' "$PATCH_METADATA" || true)
     ACTUAL_PATCH_COUNT=$(find "$PATCH_DIR" -maxdepth 1 -name '*.patch' | wc -l)
     
     echo "  Metadata entries: $METADATA_PATCH_COUNT, Actual patch files: $ACTUAL_PATCH_COUNT"
@@ -55,8 +57,11 @@ if [ -f "$PATCH_METADATA" ]; then
     done
     
     # Validate each metadata entry has a corresponding patch file
+    # Regex kept in a variable: inline quoting inside [[ =~ ]] breaks on the
+    # quotes in the character class and makes the pattern literal.
+    METADATA_ID_RE='^id[[:space:]]*=[[:space:]]*"([^"]+)"'
     while IFS= read -r line; do
-        if [[ "$line" =~ ^id\ =\ "([^"]+)" ]]; then
+        if [[ "$line" =~ $METADATA_ID_RE ]]; then
             PATCH_ID="${BASH_REMATCH[1]}"
             if [ ! -f "$PATCH_DIR/${PATCH_ID}.patch" ]; then
                 echo "::warning:: Metadata entry for '$PATCH_ID' has no corresponding .patch file"
