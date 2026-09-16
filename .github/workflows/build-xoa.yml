@@ -34,6 +34,16 @@ jobs:
           echo "RELEASE_TAG=${TAG}" >> $GITHUB_ENV
           echo "Target release tag established as: ${TAG}"
 
+      # A parse error in a build script aborts the whole job after the
+      # container and upstream checkout are already done. Catch it up front.
+      - name: Check shell script syntax
+        run: |
+          set -euo pipefail
+          for s in scripts/*.sh; do
+            echo "  bash -n $s"
+            bash -n "$s"
+          done
+
       - name: Build in AlmaLinux 9 container
         run: |
           docker build -t xoa-hl-builder -f container/Containerfile container/

@@ -19,7 +19,7 @@ fi
 
 echo "[OK] Patch metadata found"
 
-METADATA_PATCH_COUNT=$(grep -c '^\[\[patches\]\]' "$PATCH_METADATA" || echo "0")
+METADATA_PATCH_COUNT=$(grep -c '^\[\[patches\]\]' "$PATCH_METADATA" || true)
 ACTUAL_PATCH_COUNT=$(find "$PATCH_DIR" -maxdepth 1 -name '*.patch' | wc -l)
 echo "  Metadata entries: $METADATA_PATCH_COUNT"
 echo "  Patch files: $ACTUAL_PATCH_COUNT"
