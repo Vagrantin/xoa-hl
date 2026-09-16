@@ -1,3 +1,6 @@
 # xo-server already runs as root (no User= in xo-server.service), so this is a no-op today; it fixes the command shape ahead of a future de-rooting.
-xo-server ALL=(root) NOPASSWD: /usr/bin/systemctl start xoa-hl-update.service
+# --no-block is part of the command sudo matches, so the grant has to carry it:
+# without it the API call would block for the whole transaction and the UI could
+# not show a single line of the update log until it was over.
+xo-server ALL=(root) NOPASSWD: /usr/bin/systemctl start --no-block xoa-hl-update.service
 xo-server ALL=(root) NOPASSWD: /usr/bin/systemctl start xoa-hl-check-update.service

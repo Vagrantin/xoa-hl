@@ -56,6 +56,13 @@ mkdir -p %{buildroot}/etc/sudoers.d
 install -m 440 %{_sourcedir}/xoa-hl.sudoers %{buildroot}/etc/sudoers.d/xoa-hl
 visudo -cf %{buildroot}/etc/sudoers.d/xoa-hl
 
+# Where update.sh streams the log the UI tails. The unit's StateDirectory=
+# would create it too, but owning it here means it is also removed on erase.
+# The log itself is touched only so that rpm can record the %%ghost path below;
+# it is not packaged, and every byte in it is written at runtime.
+mkdir -p %{buildroot}/var/lib/xoa-hl
+touch %{buildroot}/var/lib/xoa-hl/update.log
+
 %files
 # /opt/xo covers the TLS pair too, the install section already set their modes.
 /opt/xo
@@ -66,6 +73,10 @@ visudo -cf %{buildroot}/etc/sudoers.d/xoa-hl
 /etc/yum.repos.d/xoa-hl.repo
 /usr/libexec/xoa-hl
 /etc/sudoers.d/xoa-hl
+%dir /var/lib/xoa-hl
+# Written at runtime by update.sh, so not shipped -- but owned, so an erase
+# removes it instead of leaving the directory behind.
+%ghost /var/lib/xoa-hl/update.log
 
 %post
 # Bootstrap xo-server user config on first install.

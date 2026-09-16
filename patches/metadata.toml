@@ -49,4 +49,4 @@ applies_to = ["5.113.2"]
 maintainer = "vagrantin"
 status = "active"
 dependencies = []
-notes = "Adds new API endpoints: getVersion, checkForUpdate, getUpdateStatus, startUpdate, getUpdateProgress. Also adds XOA-HL Updates settings tab to the UI."
+notes = "Adds new API endpoints: getVersion, checkForUpdate, getUpdateStatus, startUpdate, getUpdateProgress. Also adds XOA-HL Updates settings tab to the UI. startUpdate uses systemctl --no-block and getUpdateProgress serves incremental lines of /var/lib/xoa-hl/update.log, so the page streams the transaction as it runs; it pairs with SOURCES/xoa-hl-update.sh and SOURCES/xoa-hl.sudoers, which have to move together."

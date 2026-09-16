@@ -43,6 +43,13 @@ jobs:
             echo "  bash -n $s"
             bash -n "$s"
           done
+          # SOURCES/*.sh are #!/bin/sh and ship inside the RPM, so a syntax
+          # error in one of them only shows up on an appliance. sh is dash on
+          # the runner, which also rejects the bashisms they must not use.
+          for s in SOURCES/*.sh; do
+            echo "  sh -n $s"
+            sh -n "$s"
+          done
 
       - name: Build in AlmaLinux 9 container
         run: |
