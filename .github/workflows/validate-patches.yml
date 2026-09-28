@@ -1,0 +1,41 @@
+name: Validate XO patches
+
+on:
+  pull_request:
+    paths:
+      - 'patches/**'
+      - 'UPSTREAM_XO'
+      - '.github/workflows/validate-patches.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'patches/**'
+      - 'UPSTREAM_XO'
+      - '.github/workflows/validate-patches.yml'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch pinned Xen Orchestra source
+        run: |
+          set -euo pipefail
+          . ./UPSTREAM_XO
+          xo_dir="${RUNNER_TEMP}/xen-orchestra"
+          git -C "${RUNNER_TEMP}" init xen-orchestra
+          git -C "${xo_dir}" remote add origin https://github.com/vatesfr/xen-orchestra.git
+          git -C "${xo_dir}" fetch --depth 1 origin "${XO_COMMIT}"
+          git -C "${xo_dir}" checkout FETCH_HEAD
+          echo "XO_DIR=${xo_dir}" >> "${GITHUB_ENV}"
+      - name: Apply patch series
+        run: |
+          set -euo pipefail
+          for patch in patches/*.patch; do
+            echo "checking ${patch}"
+            git -C "${XO_DIR}" apply --check "${GITHUB_WORKSPACE}/${patch}"
+            git -C "${XO_DIR}" apply "${GITHUB_WORKSPACE}/${patch}"
+          done
+      - name: Check server module syntax
+        run: node --check "${XO_DIR}/packages/xo-server/src/api/xoaHl.mjs"
