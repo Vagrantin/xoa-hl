@@ -7,7 +7,7 @@ on:
       - 'SOURCES/xoa-hl-*.service'
       - 'SOURCES/xoa-hl-*.timer'
       - 'SPECS/xoa-hl.spec'
-      - 'tests/test-update-scripts.sh'
+      - 'tests/*.sh'
       - '.github/workflows/test-update-scripts.yml'
   push:
     branches:
@@ -17,7 +17,7 @@ on:
       - 'SOURCES/xoa-hl-*.service'
       - 'SOURCES/xoa-hl-*.timer'
       - 'SPECS/xoa-hl.spec'
-      - 'tests/test-update-scripts.sh'
+      - 'tests/*.sh'
       - '.github/workflows/test-update-scripts.yml'
 
 jobs:
