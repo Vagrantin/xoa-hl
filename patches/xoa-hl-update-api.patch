@@ -3,7 +3,7 @@ new file mode 100644
 index 0000000..0918094
 --- /dev/null
 +++ b/packages/xo-server/src/api/xoaHl.mjs
-@@ -0,0 +1,177 @@
+@@ -0,0 +1,280 @@
 +import { execa } from 'execa'
 +import { readFile, stat } from 'fs/promises'
 +
@@ -18,6 +18,14 @@ index 0000000..0918094
 +
 +const CHECK_UNIT = 'xoa-hl-check-update.service'
 +const UPDATE_UNIT = 'xoa-hl-update.service'
++const CONFIG_FILE = '/etc/xoa-hl/update.conf'
++const AUTO_STATUS_FILE = '/var/lib/xoa-hl/auto-update.status'
++const CONFIGURE_HELPER = '/usr/libexec/xoa-hl/configure-updates.sh'
++
++const MODES = new Set(['manual', 'check', 'install'])
++const FREQUENCIES = new Set(['daily', 'weekly'])
++const DAYS = new Set(['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'])
++const RANDOM_DELAYS = new Set([0, 5, 10, 15, 30, 60])
 +
 +// -------------------------------------------------------------------
 +
@@ -181,15 +189,130 @@ index 0000000..0918094
 +getUpdateProgress.params = {
 +  since: { type: 'number', optional: true },
 +}
++
++// -------------------------------------------------------------------
++
++function parseKeyValue(content) {
++  const values = {}
++  for (const line of content.split('\n')) {
++    const i = line.indexOf('=')
++    if (i > 0) {
++      values[line.slice(0, i)] = line.slice(i + 1)
++    }
++  }
++  return values
++}
++
++async function readKeyValueFile(path) {
++  try {
++    return parseKeyValue(await readFile(path, 'utf8'))
++  } catch (error) {
++    if (error.code === 'ENOENT') {
++      return {}
++    }
++    throw error
++  }
++}
++
++export async function getUpdateConfiguration() {
++  const [raw, lastRun] = await Promise.all([readKeyValueFile(CONFIG_FILE), readKeyValueFile(AUTO_STATUS_FILE)])
++  const mode = MODES.has(raw.MODE) ? raw.MODE : 'manual'
++  const frequency = FREQUENCIES.has(raw.FREQUENCY) ? raw.FREQUENCY : 'daily'
++  const day = DAYS.has(raw.DAY) ? raw.DAY : 'Sun'
++  const time = /^([01][0-9]|2[0-3]):[0-5][0-9]$/.test(raw.TIME) ? raw.TIME : '03:00'
++  const randomDelayMinutes = Number.parseInt(raw.RANDOM_DELAY, 10)
++
++  let timezone = 'UTC'
++  try {
++    const { stdout } = await execa('timedatectl', ['show', '--property=Timezone', '--value'])
++    timezone = stdout.trim() || timezone
++  } catch (_) {}
++
++  let nextRun
++  if (mode !== 'manual') {
++    const timer = mode === 'install' ? 'xoa-hl-auto-update.timer' : 'xoa-hl-check-update.timer'
++    try {
++      const { stdout } = await execa('systemctl', ['show', timer, '--property=NextElapseUSecRealtime', '--value'])
++      const value = stdout.trim()
++      if (value !== '' && value !== 'n/a') {
++        nextRun = value
++      }
++    } catch (_) {}
++  }
++
++  return {
++    autoReboot: false,
++    day,
++    frequency,
++    lastRun,
++    mode,
++    nextRun,
++    randomDelayMinutes: RANDOM_DELAYS.has(randomDelayMinutes) ? randomDelayMinutes : 15,
++    time,
++    timezone,
++  }
++}
++getUpdateConfiguration.permission = 'admin'
++getUpdateConfiguration.description = 'get the XOA-HL automatic update configuration and last unattended result'
++
++export async function setUpdateConfiguration({ day, frequency, mode, randomDelayMinutes, time }) {
++  if (!MODES.has(mode)) {
++    throw new Error('invalid automatic update mode')
++  }
++  if (!FREQUENCIES.has(frequency)) {
++    throw new Error('invalid automatic update frequency')
++  }
++  if (!DAYS.has(day)) {
++    throw new Error('invalid automatic update day')
++  }
++  if (!/^([01][0-9]|2[0-3]):[0-5][0-9]$/.test(time)) {
++    throw new Error('invalid automatic update time')
++  }
++  if (!RANDOM_DELAYS.has(randomDelayMinutes)) {
++    throw new Error('invalid automatic update random delay')
++  }
++
++  await execa('sudo', [CONFIGURE_HELPER, mode, frequency, day, time, String(randomDelayMinutes)])
++  return getUpdateConfiguration()
++}
++setUpdateConfiguration.permission = 'admin'
++setUpdateConfiguration.description = 'validate and set the XOA-HL automatic update configuration'
++setUpdateConfiguration.params = {
++  day: { type: 'string' },
++  frequency: { type: 'string' },
++  mode: { type: 'string' },
++  randomDelayMinutes: { type: 'number' },
++  time: { type: 'string' },
++}
 diff --git a/packages/xo-web/src/common/intl/messages.js b/packages/xo-web/src/common/intl/messages.js
 index 2aea8e7..680e6e9 100644
 --- a/packages/xo-web/src/common/intl/messages.js
 +++ b/packages/xo-web/src/common/intl/messages.js
-@@ -244,6 +244,35 @@ const messages = {
+@@ -244,6 +244,55 @@ const messages = {
    settingsLogsPage: 'Logs',
    settingsCloudConfigsPage: 'Cloud configs',
    settingsIpsPage: 'IPs',
 +  settingsXoaHlUpdatesPage: 'XOA-HL Updates',
++  xoaHlAutomaticUpdates: 'Automatic updates',
++  xoaHlAutomaticUpdatesConfirm: 'I understand that unattended updates may restart services and leave a reboot pending.',
++  xoaHlAutomaticUpdatesDisabled: 'Automatic installation is disabled by default.',
++  xoaHlDay: 'Day',
++  xoaHlFrequency: 'Frequency',
++  xoaHlFrequencyDaily: 'Daily',
++  xoaHlFrequencyWeekly: 'Weekly',
++  xoaHlLastAutomaticResult: 'Last automatic result',
++  xoaHlMode: 'Mode',
++  xoaHlModeCheck: 'Check automatically',
++  xoaHlModeInstall: 'Install automatically',
++  xoaHlModeManual: 'Manual only',
++  xoaHlNextRun: 'Next scheduled run',
++  xoaHlNoAutomaticRun: 'No automatic update has run yet.',
++  xoaHlRandomDelay: 'Random delay',
++  xoaHlSaveAutomaticUpdates: 'Save automatic update settings',
++  xoaHlScheduleLoading: 'Loading automatic update settings…',
++  xoaHlScheduleUnavailable: 'Automatic update settings could not be loaded.',
++  xoaHlTime: 'Local start time',
++  xoaHlTimezone: 'Appliance timezone',
 +  xoaHlAppliance: 'Appliance',
 +  xoaHlCheckFailed: 'The update check failed',
 +  xoaHlCheckForUpdate: 'Check for update',
@@ -289,7 +412,7 @@ index b8110b2..2d72fd3 100644
  }
  
  const xo = invoke(() => {
-@@ -884,6 +917,14 @@ export const exportConfig = () =>
+@@ -884,6 +917,16 @@ export const exportConfig = () =>
      noop
    )
  
@@ -300,6 +423,8 @@ index b8110b2..2d72fd3 100644
 +export const getXoaHlUpdateStatus = () => _call('xoaHl.getUpdateStatus')
 +export const startXoaHlUpdate = () => _call('xoaHl.startUpdate')
 +export const getXoaHlUpdateProgress = since => _call('xoaHl.getUpdateProgress', { since })
++export const getXoaHlUpdateConfiguration = () => _call('xoaHl.getUpdateConfiguration')
++export const setXoaHlUpdateConfiguration = configuration => _call('xoaHl.setUpdateConfiguration', configuration)
 +
  // Server ------------------------------------------------------------
  
@@ -371,7 +496,7 @@ new file mode 100644
 index 0000000..6684fd6
 --- /dev/null
 +++ b/packages/xo-web/src/xo-app/settings/xoa-hl-updates/index.js
-@@ -0,0 +1,549 @@
+@@ -0,0 +1,693 @@
 +import _ from 'intl'
 +import ActionButton from 'action-button'
 +import Component from 'base-component'
@@ -381,7 +506,14 @@ index 0000000..6684fd6
 +import { Card, CardBlock, CardHeader } from 'card'
 +import { Col, Container, Row } from 'grid'
 +import { FormattedRelative } from 'react-intl'
-+import { checkXoaHlUpdate, getXoaHlUpdateProgress, getXoaHlVersion, startXoaHlUpdate } from 'xo'
++import {
++  checkXoaHlUpdate,
++  getXoaHlUpdateConfiguration,
++  getXoaHlUpdateProgress,
++  getXoaHlVersion,
++  setXoaHlUpdateConfiguration,
++  startXoaHlUpdate,
++} from 'xo'
 +
 +// ===================================================================
 +
@@ -508,7 +640,11 @@ index 0000000..6684fd6
 +  constructor(props) {
 +    super(props)
 +    this.state = {
++      automaticInstallConfirmed: false,
 +      checking: false,
++      configuration: undefined,
++      configurationLoading: true,
++      configurationSaving: false,
 +      log: [],
 +      // undefined while an update is running, then 'succeeded', 'failed' or
 +      // 'didNotStart'
@@ -546,6 +682,11 @@ index 0000000..6684fd6
 +
 +  componentDidMount() {
 +    this._mounted = true
++
++    getXoaHlUpdateConfiguration().then(
++      configuration => this._mounted && this.setState({ configuration, configurationLoading: false }),
++      () => this._mounted && this.setState({ configurationLoading: false })
++    )
 +
 +    getXoaHlVersion().then(
 +      version => this._mounted && this.setState({ version: typeof version === 'string' ? version : undefined }),
@@ -592,6 +733,37 @@ index 0000000..6684fd6
 +  }
 +
 +  // -----------------------------------------------------------------
++
++
++  _setConfigurationField = field => event => {
++    const value = field === 'randomDelayMinutes' ? Number(event.target.value) : event.target.value
++    this.setState(({ automaticInstallConfirmed, configuration }) => ({
++      automaticInstallConfirmed: field === 'mode' && value !== 'install' ? false : automaticInstallConfirmed,
++      configuration: { ...configuration, [field]: value },
++    }))
++  }
++
++  _saveConfiguration = async () => {
++    const { configuration } = this.state
++    this.setState({ configurationSaving: true })
++    try {
++      const saved = await setXoaHlUpdateConfiguration({
++        day: configuration.day,
++        frequency: configuration.frequency,
++        mode: configuration.mode,
++        randomDelayMinutes: configuration.randomDelayMinutes,
++        time: configuration.time,
++      })
++      if (this._mounted) {
++        this.setState({ automaticInstallConfirmed: false, configuration: saved, configurationSaving: false })
++      }
++    } catch (error) {
++      if (this._mounted) {
++        this.setState({ configurationSaving: false })
++      }
++      throw error
++    }
++  }
 +
 +  _checkForUpdate = async () => {
 +    // Clearing the verdict is the point: "Up to date" describes the previous
@@ -873,6 +1045,93 @@ index 0000000..6684fd6
 +    )
 +  }
 +
++
++  _renderAutomaticUpdates() {
++    const {
++      automaticInstallConfirmed,
++      configuration,
++      configurationLoading,
++      configurationSaving,
++    } = this.state
++
++    if (configurationLoading) {
++      return <p className='text-muted'>{_('xoaHlScheduleLoading')}</p>
++    }
++    if (configuration === undefined) {
++      return <Banner icon='error' level='danger'>{_('xoaHlScheduleUnavailable')}</Banner>
++    }
++
++    const installationSelected = configuration.mode === 'install'
++    const lastResult = configuration.lastRun.result
++
++    return (
++      <div>
++        <p className='text-muted'>{_('xoaHlAutomaticUpdatesDisabled')}</p>
++        <Row>
++          <Col mediumSize={6}>
++            <label>{_('xoaHlMode')}</label>
++            <select className='form-control' disabled={configurationSaving} onChange={this._setConfigurationField('mode')} value={configuration.mode}>
++              <option value='manual'>{_('xoaHlModeManual')}</option>
++              <option value='check'>{_('xoaHlModeCheck')}</option>
++              <option value='install'>{_('xoaHlModeInstall')}</option>
++            </select>
++          </Col>
++          <Col mediumSize={6}>
++            <label>{_('xoaHlFrequency')}</label>
++            <select className='form-control' disabled={configurationSaving || configuration.mode === 'manual'} onChange={this._setConfigurationField('frequency')} value={configuration.frequency}>
++              <option value='daily'>{_('xoaHlFrequencyDaily')}</option>
++              <option value='weekly'>{_('xoaHlFrequencyWeekly')}</option>
++            </select>
++          </Col>
++        </Row>
++        <Row className='mt-1'>
++          <Col mediumSize={4}>
++            <label>{_('xoaHlDay')}</label>
++            <select className='form-control' disabled={configurationSaving || configuration.mode === 'manual' || configuration.frequency !== 'weekly'} onChange={this._setConfigurationField('day')} value={configuration.day}>
++              {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(day => <option key={day} value={day}>{day}</option>)}
++            </select>
++          </Col>
++          <Col mediumSize={4}>
++            <label>{_('xoaHlTime')}</label>
++            <input className='form-control' disabled={configurationSaving || configuration.mode === 'manual'} onChange={this._setConfigurationField('time')} type='time' value={configuration.time} />
++          </Col>
++          <Col mediumSize={4}>
++            <label>{_('xoaHlRandomDelay')}</label>
++            <select className='form-control' disabled={configurationSaving || configuration.mode === 'manual'} onChange={this._setConfigurationField('randomDelayMinutes')} value={configuration.randomDelayMinutes}>
++              {[0, 5, 10, 15, 30, 60].map(minutes => <option key={minutes} value={minutes}>{minutes} min</option>)}
++            </select>
++          </Col>
++        </Row>
++        <p className='mt-1 mb-1 text-muted'>
++          {_('xoaHlTimezone')}: {configuration.timezone}
++          {configuration.nextRun !== undefined && <span> · {_('xoaHlNextRun')}: {configuration.nextRun}</span>}
++        </p>
++        {lastResult === undefined ? (
++          <p className='text-muted'>{_('xoaHlNoAutomaticRun')}</p>
++        ) : (
++          <p className='text-muted'>
++            {_('xoaHlLastAutomaticResult')}: {lastResult}
++            {configuration.lastRun.finishedAt !== undefined && <span> · {configuration.lastRun.finishedAt}</span>}
++          </p>
++        )}
++        {installationSelected && (
++          <div>
++            <Banner icon='alarm' level='warning'>{_('xoaHlUpdateScope')}</Banner>
++            <label>
++              <input checked={automaticInstallConfirmed} disabled={configurationSaving} onChange={event => this.setState({ automaticInstallConfirmed: event.target.checked })} type='checkbox' />{' '}
++              {_('xoaHlAutomaticUpdatesConfirm')}
++            </label>
++          </div>
++        )}
++        <div className='mt-1'>
++          <ActionButton btnStyle='primary' disabled={installationSelected && !automaticInstallConfirmed} handler={this._saveConfiguration} icon='save' pending={configurationSaving}>
++            {_('xoaHlSaveAutomaticUpdates')}
++          </ActionButton>
++        </div>
++      </div>
++    )
++  }
++
 +  render() {
 +    const { checking, status, updating, version } = this.state
 +    const updateAvailable = status !== undefined && status.updateAvailable
@@ -913,6 +1172,16 @@ index 0000000..6684fd6
 +                  {_('xoaHlStartUpdate')}
 +                </ActionButton>
 +              </CardBlock>
++            </Card>
++          </Col>
++        </Row>
++        <Row className='mt-1'>
++          <Col>
++            <Card>
++              <CardHeader>
++                <Icon icon='calendar' /> {_('xoaHlAutomaticUpdates')}
++              </CardHeader>
++              <CardBlock>{this._renderAutomaticUpdates()}</CardBlock>
 +            </Card>
 +          </Col>
 +        </Row>
