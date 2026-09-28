@@ -4,12 +4,18 @@
 %global debug_package %{nil}
 
 Name:           xoa-hl
+# Outranks pre-ce RPMs whose Release used the old run number. Permanent:
+# an epoch can never be lowered again, which is intended here.
 Epoch:          1
 Version:        %{_version}
+# CI passes _version, _release and _shortcommit via --define.
+# _release is the tag's ce counter, g<shortcommit> the xoa-hl commit.
 Release:        %{_release}.g%{_shortcommit}.xcpng8.3%{?dist}
 Summary:        Xen Orchestra HomeLab Edition
 License:        AGPLv3
 URL:            https://github.com/Vagrantin/xoa-hl
+# Not noarch: the shipped node_modules tree carries native addons (.node).
+# No dependency scan of the shipped node_modules tree, deps are declared below.
 AutoReqProv:    no
 Requires:       (nodejs >= 24 with nodejs < 25)
 Requires:       redis, ntfs-3g, nfs-utils, cifs-utils, lvm2, dnf-plugins-core
@@ -27,6 +33,7 @@ web UI, shipped in the package and installed under /opt/xo.
 mkdir -p %{buildroot}/opt/xo
 cp -a . %{buildroot}/opt/xo/
 
+# The config the appliance runs with references the TLS pair from /opt/xo.
 mv %{buildroot}/opt/xo/packages/xo-server/xoahl.key %{buildroot}/opt/xo/
 mv %{buildroot}/opt/xo/packages/xo-server/xoahl.crt %{buildroot}/opt/xo/
 chmod 600 %{buildroot}/opt/xo/xoahl.key
@@ -60,10 +67,13 @@ install -m 440 %{_sourcedir}/xoa-hl.sudoers %{buildroot}/etc/sudoers.d/xoa-hl
 visudo -cf %{buildroot}/etc/sudoers.d/xoa-hl
 
 mkdir -p %{buildroot}/var/lib/xoa-hl
+# Runtime files are touched only so RPM can own their %%ghost paths. Their
+# contents are created by the scripts on the appliance, not packaged.
 touch %{buildroot}/var/lib/xoa-hl/update.log
 touch %{buildroot}/var/lib/xoa-hl/auto-update.status
 
 %files
+# /opt/xo covers the TLS pair too, the install section already set their modes.
 /opt/xo
 /usr/local/bin/xo-cli
 /usr/lib/systemd/system/xo-server.service
@@ -82,6 +92,8 @@ touch %{buildroot}/var/lib/xoa-hl/auto-update.status
 %ghost /var/lib/xoa-hl/auto-update.status
 
 %post
+# Bootstrap xo-server user config on first install. On update the file is left
+# untouched to preserve operator customisations.
 if [ ! -f /root/.config/xo-server/config.toml ]; then
     mkdir -p /root/.config/xo-server
     cp /opt/xo/packages/xo-server/xoahl.config.toml \
@@ -96,6 +108,7 @@ systemctl restart xo-server
 # change is required before checks or installations become automatic.
 
 %preun
+# $1 = instances remaining after this action: 0 = final removal, 1 = upgrade.
 if [ "$1" -eq 0 ]; then
     systemctl disable --now xoa-hl-check-update.timer xoa-hl-auto-update.timer 2>/dev/null || true
     systemctl stop xo-server 2>/dev/null || true
@@ -103,6 +116,7 @@ if [ "$1" -eq 0 ]; then
 fi
 
 %postun
+# RPM owns the packaged files; only the systemd reload remains after erasure.
 if [ "$1" -eq 0 ]; then
     systemctl daemon-reload 2>/dev/null || true
 fi
