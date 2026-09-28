@@ -50,3 +50,39 @@ systemctl status xoa-hl-check-update.timer xoa-hl-auto-update.timer
 cat /var/lib/xoa-hl/auto-update.status
 journalctl -u xoa-hl-auto-update.service
 ```
+
+
+## Appliance smoke test
+
+After installing a newly built RPM or XVA, run the preflight from a checkout of
+this repository:
+
+```bash
+sudo ./tests/smoke-auto-updates.sh
+```
+
+Preflight only inspects the installed package and does not change the update
+mode. During a maintenance window, exercise all three modes and one real update
+check with:
+
+```bash
+sudo ./tests/smoke-auto-updates.sh --exercise-timers
+```
+
+The exercise chooses an automatic-install window three days in the future,
+never starts `xoa-hl-auto-update.service`, and restores the original
+configuration on success, failure, or interruption.
+
+A reboot test remains deliberately manual because validation must not reboot an
+appliance or start an unattended DNF transaction automatically:
+
+1. In Settings, configure **Install automatically** for a time a few minutes in
+   the past.
+2. Power the appliance off before that time and boot it afterwards.
+3. Confirm the missed window was not replayed:
+
+   ```bash
+   journalctl -b -u xoa-hl-auto-update.service
+   ```
+
+4. Restore the desired update mode in Settings.
