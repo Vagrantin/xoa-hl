@@ -39,3 +39,10 @@ jobs:
           done
       - name: Check server module syntax
         run: node --check "${XO_DIR}/packages/xo-server/src/api/xoaHl.mjs"
+      - name: Verify combined update contracts
+        run: |
+          set -euo pipefail
+          grep -q 'RECONNECT_RETRY_DELAY' "${XO_DIR}/packages/xo-web/src/common/xo/index.js"
+          grep -q 'ACTIVE_UPDATE_KEY' "${XO_DIR}/packages/xo-web/src/xo-app/settings/xoa-hl-updates/index.js"
+          grep -q 'getUpdateConfiguration' "${XO_DIR}/packages/xo-server/src/api/xoaHl.mjs"
+          grep -q '_renderAutomaticUpdates' "${XO_DIR}/packages/xo-web/src/xo-app/settings/xoa-hl-updates/index.js"
