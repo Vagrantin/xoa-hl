@@ -182,10 +182,10 @@ index 0000000..0918094
 +  since: { type: 'number', optional: true },
 +}
 diff --git a/packages/xo-web/src/common/intl/messages.js b/packages/xo-web/src/common/intl/messages.js
-index 2aea8e7..2922bb0 100644
+index 2aea8e7..680e6e9 100644
 --- a/packages/xo-web/src/common/intl/messages.js
 +++ b/packages/xo-web/src/common/intl/messages.js
-@@ -244,6 +244,31 @@ const messages = {
+@@ -244,6 +244,35 @@ const messages = {
    settingsLogsPage: 'Logs',
    settingsCloudConfigsPage: 'Cloud configs',
    settingsIpsPage: 'IPs',
@@ -201,6 +201,8 @@ index 2aea8e7..2922bb0 100644
 +  xoaHlPackagesAvailable: 'Packages with updates available:',
 +  xoaHlPackageVersion: 'Version',
 +  xoaHlRecheckAfterUpdate: 'Check for updates again to confirm the new state.',
++  xoaHlReloadPage: 'Reload page',
++  xoaHlServerUnreachable: 'xo-server is not answering yet, try again in a moment.',
 +  xoaHlStartUpdate: 'Update now',
 +  xoaHlUnknownVersion: 'Unknown',
 +  xoaHlUpdateAvailable: '{n, number} update{n, plural, one {} other {s}} available',
@@ -208,6 +210,8 @@ index 2aea8e7..2922bb0 100644
 +  xoaHlUpdateFailed: 'The update failed, see the log below.',
 +  xoaHlUpdateLog: 'Update log',
 +  xoaHlUpdateReconnecting: 'Reconnecting to xo-server, the update restarts it…',
++  xoaHlUpdateReconnectingSlow:
++    'xo-server has been unreachable for {seconds, number} s. The update keeps running on the appliance and this page keeps trying to reconnect. Once xo-server answers again you can also reload the page, it picks the update back up.',
 +  xoaHlUpdateRunning: 'Update in progress…',
 +  xoaHlUpdateScope: 'Updating installs every pending package on the appliance, including AlmaLinux and the kernel.',
 +  xoaHlUpdateStarting: 'Starting the update…',
@@ -218,10 +222,74 @@ index 2aea8e7..2922bb0 100644
    aboutXoaPlan: 'About XO {xoaPlan}',
    newMenu: 'New',
 diff --git a/packages/xo-web/src/common/xo/index.js b/packages/xo-web/src/common/xo/index.js
-index b8110b2..2d7cda3 100644
+index b8110b2..2d72fd3 100644
 --- a/packages/xo-web/src/common/xo/index.js
 +++ b/packages/xo-web/src/common/xo/index.js
-@@ -884,6 +884,14 @@ export const exportConfig = () =>
+@@ -8,7 +8,7 @@ import semver from 'semver'
+ import updater from 'xoa-updater'
+ import URL from 'url-parse'
+ import Xo from 'xo-lib'
+-import { createBackoff } from 'jsonrpc-websocket-client'
++import { AbortedConnection, createBackoff } from 'jsonrpc-websocket-client'
+ import { get as getDefined } from '@xen-orchestra/defined'
+ import { pFinally, reflect, retry, tap, tapCatch } from 'promise-toolbox'
+ import { SelectHost } from 'select-objects'
+@@ -86,8 +86,21 @@ export const isVmRunning = vm => vm && vm.power_state === 'Running'
+ 
+ // ===================================================================
+ 
++// XOA-HL: createBackoff() gives up after 10 attempts (about 2.5 minutes), and
++// the client only emits "closed" when an open connection drops, not when a
++// reconnection attempt fails. Once one backoff ran out nothing tried again, and
++// an xoa-hl update that kept xo-server down longer than that left every page
++// disconnected until a manual refresh. Start a new backoff instead.
++const RECONNECT_RETRY_DELAY = 5e3
++
++let connecting = false
++let reconnectTimeout
++let reconnectStopped = false
++
+ const reload = () => {
+   // prevent automatic reconnection
++  reconnectStopped = true
++  clearTimeout(reconnectTimeout)
+   xo.removeListener('closed', connect)
+ 
+   window.location.reload(true)
+@@ -100,9 +113,29 @@ export const signOut = () => {
+ }
+ 
+ export const connect = () => {
+-  xo.open(createBackoff()).catch(error => {
+-    logError(error, 'failed to connect to xo-server')
+-  })
++  clearTimeout(reconnectTimeout)
++
++  // One backoff at a time: a second one would find the client CONNECTING,
++  // fail its status check and schedule yet another.
++  if (connecting || reconnectStopped) {
++    return
++  }
++  connecting = true
++
++  xo.open(createBackoff()).then(
++    () => {
++      connecting = false
++    },
++    error => {
++      connecting = false
++      logError(error, 'failed to connect to xo-server')
++
++      // AbortedConnection means close() was called on purpose.
++      if (!reconnectStopped && !(error instanceof AbortedConnection)) {
++        reconnectTimeout = setTimeout(connect, RECONNECT_RETRY_DELAY)
++      }
++    }
++  )
+ }
+ 
+ const xo = invoke(() => {
+@@ -884,6 +917,14 @@ export const exportConfig = () =>
      noop
    )
  
@@ -300,15 +368,16 @@ index 6936473..b0bec97 100644
      <Page header={HEADER} title='settingsPage' formatTitle>
 diff --git a/packages/xo-web/src/xo-app/settings/xoa-hl-updates/index.js b/packages/xo-web/src/xo-app/settings/xoa-hl-updates/index.js
 new file mode 100644
-index 0000000..23b23be
+index 0000000..6684fd6
 --- /dev/null
 +++ b/packages/xo-web/src/xo-app/settings/xoa-hl-updates/index.js
-@@ -0,0 +1,451 @@
+@@ -0,0 +1,549 @@
 +import _ from 'intl'
 +import ActionButton from 'action-button'
 +import Component from 'base-component'
 +import Icon from 'icon'
 +import React from 'react'
++import UserError from 'user-error'
 +import { Card, CardBlock, CardHeader } from 'card'
 +import { Col, Container, Row } from 'grid'
 +import { FormattedRelative } from 'react-intl'
@@ -326,6 +395,59 @@ index 0000000..23b23be
 +// How long a queued update may take to touch its log before the page calls it a
 +// failure to start. Generous: this only covers systemd dispatching the job.
 +const START_TIMEOUT = 3e4
++
++// How long xo-server may stay unreachable before the page stops calling it a
++// routine restart and offers a reload as well.
++const SLOW_RECONNECT_DELAY = 6e4
++
++// Where this tab remembers the update it started, so a reload in the middle of
++// it -- the one thing a user can do while xo-server is restarting -- comes back
++// to the same run and its outcome instead of an idle page. Per tab on purpose:
++// another tab adopts a running update on its own, and has no business being
++// shown the outcome of one it did not start.
++const ACTIVE_UPDATE_KEY = 'xoaHlActiveUpdate'
++
++// Storage can be disabled or full; losing the marker only loses the recovery.
++const loadActiveUpdate = () => {
++  try {
++    const value = JSON.parse(window.sessionStorage.getItem(ACTIVE_UPDATE_KEY))
++    if (value !== null && typeof value.requestedAt === 'number' && typeof value.startedAt === 'number') {
++      return value
++    }
++  } catch (error) {
++    // no marker, or one this page cannot read: nothing to recover
++  }
++}
++
++const saveActiveUpdate = value => {
++  try {
++    if (value === undefined) {
++      window.sessionStorage.removeItem(ACTIVE_UPDATE_KEY)
++    } else {
++      window.sessionStorage.setItem(ACTIVE_UPDATE_KEY, JSON.stringify(value))
++    }
++  } catch (error) {
++    // the update itself is unaffected, only a reload would not find it again
++  }
++}
++
++// xo-server serves this page too, so reloading it while xo-server is down
++// swaps a page that will reconnect on its own for a browser error page. Only
++// reload once the server answers.
++const reloadWhenReachable = async () => {
++  let response
++  try {
++    response = await window.fetch(window.location.href, { cache: 'no-store', method: 'HEAD' })
++  } catch (error) {
++    // a network error is the answer we are testing for, reported below
++  }
++
++  if (response === undefined || !response.ok) {
++    throw new UserError(_('xoaHlReloadPage'), _('xoaHlServerUnreachable'))
++  }
++
++  window.location.reload()
++}
 +
 +// Tall enough to be worth reading, capped so the buttons stay on screen.
 +const LOG_STYLE = {
@@ -394,6 +516,10 @@ index 0000000..23b23be
 +      // set while polling is failing, which is expected rather than an error:
 +      // the transaction restarts xo-server underneath this very page
 +      reconnecting: false,
++      // browser clock readings: when polling started failing, and when it last
++      // failed. The second one changing is also what re-renders the elapsed time.
++      reconnectingSince: 0,
++      lastFailedPollAt: 0,
 +      // server clock reading taken when this page queued the update. The log on
 +      // disk belongs to the previous run until its mtime passes this.
 +      requestedAt: 0,
@@ -427,6 +553,14 @@ index 0000000..23b23be
 +      // page, everything else on it still works
 +      () => {}
 +    )
++
++    // This tab started an update and was reloaded before seeing its outcome:
++    // follow the same run again.
++    const activeUpdate = loadActiveUpdate()
++    if (activeUpdate !== undefined) {
++      this._updateStartedAt = activeUpdate.startedAt
++      this.setState({ requestedAt: activeUpdate.requestedAt, status: undefined, updating: true })
++    }
 +
 +    // An update may already be running -- started from another browser tab, or
 +    // from the shell -- so adopt it instead of showing an idle page.
@@ -504,10 +638,19 @@ index 0000000..23b23be
 +      throw error
 +    }
 +
++    saveActiveUpdate({ requestedAt, startedAt: this._updateStartedAt })
++
 +    if (this._mounted) {
 +      this.setState({ requestedAt })
 +      this._schedule(FIRST_POLL_INTERVAL)
 +    }
++  }
++
++  // Every way a followed run ends goes through here, so the marker never
++  // outlives the run it describes.
++  _setOutcome(outcome) {
++    saveActiveUpdate(undefined)
++    this.setState({ outcome, reconnecting: false, updating: false })
 +  }
 +
 +  // -----------------------------------------------------------------
@@ -530,7 +673,12 @@ index 0000000..23b23be
 +      // restarts xo-server, so the connection this page polls over drops for a
 +      // few seconds. Keep the log on screen and keep trying.
 +      if (this._mounted && this.state.updating) {
-+        this.setState({ reconnecting: true })
++        const now = Date.now()
++        this.setState(({ reconnecting, reconnectingSince }) => ({
++          lastFailedPollAt: now,
++          reconnecting: true,
++          reconnectingSince: reconnecting ? reconnectingSince : now,
++        }))
 +        this._schedule()
 +      }
 +      return
@@ -555,7 +703,7 @@ index 0000000..23b23be
 +    // a "starting" spinner.
 +    if (logModifiedAt === undefined || logModifiedAt < requestedAt) {
 +      if (Date.now() - this._updateStartedAt > START_TIMEOUT) {
-+        this.setState({ outcome: 'didNotStart', reconnecting: false, updating: false })
++        this._setOutcome('didNotStart')
 +      } else {
 +        this.setState({ reconnecting: false })
 +        this._schedule()
@@ -579,7 +727,7 @@ index 0000000..23b23be
 +      return
 +    }
 +
-+    this.setState({ outcome: failed ? 'failed' : 'succeeded', updating: false })
++    this._setOutcome(failed ? 'failed' : 'succeeded')
 +  }
 +
 +  // -----------------------------------------------------------------
@@ -672,6 +820,24 @@ index 0000000..23b23be
 +    }
 +  }
 +
++  _renderReconnecting() {
++    const { lastFailedPollAt, reconnectingSince } = this.state
++    const elapsed = lastFailedPollAt - reconnectingSince
++
++    if (elapsed < SLOW_RECONNECT_DELAY) {
++      return <span className='ml-1'>{_('xoaHlUpdateReconnecting')}</span>
++    }
++
++    return (
++      <div className='mt-1'>
++        <p className='mb-1'>{_('xoaHlUpdateReconnectingSlow', { seconds: Math.round(elapsed / 1e3) })}</p>
++        <ActionButton btnStyle='primary' handler={reloadWhenReachable} icon='refresh' size='small'>
++          {_('xoaHlReloadPage')}
++        </ActionButton>
++      </div>
++    )
++  }
++
 +  _renderLog() {
 +    const { log, reconnecting, started, updating } = this.state
 +
@@ -690,7 +856,7 @@ index 0000000..23b23be
 +              {updating && (
 +                <Banner icon='loading' level='info'>
 +                  {started ? _('xoaHlUpdateRunning') : _('xoaHlUpdateStarting')}
-+                  {reconnecting && <span className='ml-1'>{_('xoaHlUpdateReconnecting')}</span>}
++                  {reconnecting && this._renderReconnecting()}
 +                </Banner>
 +              )}
 +              {log.length === 0 ? (

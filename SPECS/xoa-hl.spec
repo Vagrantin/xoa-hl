@@ -93,11 +93,20 @@ fi
 systemctl daemon-reload
 systemctl enable redis --now
 systemctl enable xo-server
+
+%posttrans
+# Restart once the whole transaction is done, not from %%post. %%post runs in the
+# middle of it: the old package's files that the new one dropped are still on
+# disk and only erased afterwards, and the rest of a full `dnf update` (a kernel
+# and its initramfs, say) still has to run, which starves xo-server's start and
+# keeps the update page disconnected for longer. The new package's %%posttrans
+# is what runs on an upgrade, so this also applies to the upgrade that brings it.
 systemctl restart xo-server
 
 %preun
 # $1 = instances remaining after this action: 0 = final removal, 1 = upgrade.
-# Skip on upgrade so we don't stop the service the new %post just started.
+# Skip on upgrade: the service keeps running until the new %%posttrans
+# restarts it.
 if [ "$1" -eq 0 ]; then
     systemctl stop xo-server 2>/dev/null || true
     systemctl disable xo-server 2>/dev/null || true
