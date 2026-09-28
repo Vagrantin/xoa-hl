@@ -1,0 +1,39 @@
+name: Test update scripts
+
+on:
+  pull_request:
+    paths:
+      - 'SOURCES/xoa-hl-*.sh'
+      - 'SOURCES/xoa-hl-*.service'
+      - 'SOURCES/xoa-hl-*.timer'
+      - 'SPECS/xoa-hl.spec'
+      - 'tests/test-update-scripts.sh'
+      - '.github/workflows/test-update-scripts.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'SOURCES/xoa-hl-*.sh'
+      - 'SOURCES/xoa-hl-*.service'
+      - 'SOURCES/xoa-hl-*.timer'
+      - 'SPECS/xoa-hl.spec'
+      - 'tests/test-update-scripts.sh'
+      - '.github/workflows/test-update-scripts.yml'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check POSIX shell syntax
+        run: |
+          set -eu
+          for script in SOURCES/*.sh tests/*.sh; do
+            sh -n "$script"
+          done
+      - name: Test update scripts
+        run: sh tests/test-update-scripts.sh
+      - name: Validate timer calendars
+        run: |
+          systemd-analyze calendar '*-*-* 03:00:00'
+          systemd-analyze calendar 'Sun *-*-* 03:00:00'

@@ -1,22 +1,14 @@
 #!/bin/sh
 # Run the transaction and stream it to a file the UI can tail.
-#
-# Before this the only sink was the journal, and the unit is Type=oneshot, so
-# systemd did not report the job done until ExecStart had exited: a UI that
-# started the unit and waited got the whole update in one burst at the end.
-# /var/lib rather than /run because an update can finish with a pending reboot,
-# and a tmpfs log would be gone exactly when someone wants to read it.
 set -eu
 
-STATE_DIR=/var/lib/xoa-hl
-LOG_FILE="$STATE_DIR/update.log"
+STATE_DIR=${XOA_HL_STATE_DIR:-/var/lib/xoa-hl}
+LOG_FILE=${XOA_HL_UPDATE_LOG:-$STATE_DIR/update.log}
 RC_FILE="$STATE_DIR/.update.rc"
+LOCK_FILE=${XOA_HL_DNF_LOCK_FILE:-/run/xoa-hl/dnf.lock}
+DNF_COMMAND=${DNF_COMMAND:-dnf}
 
-mkdir -p "$STATE_DIR"
-
-# Truncated, not appended: the pane shows this run, not every run ever. The UI
-# keys off the file's mtime to tell this run's log from the previous one's, so
-# this has to be the first thing that happens.
+mkdir -p "$STATE_DIR" "$(dirname "$LOCK_FILE")"
 : > "$LOG_FILE"
 rm -f "$RC_FILE"
 
@@ -26,15 +18,17 @@ stamp() {
 
 printf '=== xoa-hl update started at %s ===\n' "$(stamp)" >> "$LOG_FILE"
 
-# PYTHONUNBUFFERED: dnf is a Python program and block-buffers its stdout when it
-# is a pipe, which would keep the pane empty until the transaction ended -- the
-# exact symptom this file exists to remove. stdbuf covers the helpers it spawns.
-# --color=never: dnf's escape sequences are noise inside the UI's <pre>.
-# The exit code travels through a file because $? after a pipeline is tee's, and
-# PIPESTATUS is a bashism a /bin/sh script must not rely on.
+exec 9>"$LOCK_FILE"
+if ! flock -n 9; then
+    printf '=== another update operation is already running ===\n' >> "$LOG_FILE"
+    exit 75
+fi
+
 {
     rc=0
-    PYTHONUNBUFFERED=1 stdbuf -oL -eL dnf -y --color=never update 2>&1 || rc=$?
+    # Node.js is supplied by NodeSource. Keep the supported major pinned until
+    # a deliberately tested XOA-HL release raises the RPM dependency bound.
+    PYTHONUNBUFFERED=1 stdbuf -oL -eL "$DNF_COMMAND" -y --refresh --color=never --exclude=nodejs update 2>&1 || rc=$?
     printf '%s\n' "$rc" > "$RC_FILE"
 } | tee -a "$LOG_FILE"
 

@@ -1,0 +1,12 @@
+[Unit]
+Description=Periodically check for XOA-HL appliance updates
+
+[Timer]
+OnBootSec=10min
+OnCalendar=*-*-* 03:00:00
+RandomizedDelaySec=15m
+Persistent=true
+Unit=xoa-hl-check-update.service
+
+[Install]
+WantedBy=timers.target
