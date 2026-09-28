@@ -173,6 +173,11 @@ grep -Fx 'MODE=manual' "$repo_dir/SOURCES/xoa-hl-update.conf" >/dev/null
 grep -Fx 'AUTO_REBOOT=no' "$repo_dir/SOURCES/xoa-hl-update.conf" >/dev/null
 grep -Fx 'Persistent=false' "$repo_dir/SOURCES/xoa-hl-auto-update.timer" >/dev/null
 grep -Fx 'Persistent=true' "$repo_dir/SOURCES/xoa-hl-check-update.timer" >/dev/null
-grep -F 'nodejs < 25' "$repo_dir/SPECS/xoa-hl.spec" >/dev/null
+# NodeSource ships nodejs as epoch 2: an epoch-less bound can never be satisfied.
+grep -F 'Requires:       (nodejs >= 2:24 with nodejs < 2:25)' "$repo_dir/SPECS/xoa-hl.spec" >/dev/null
+if grep -E '^Requires:.*nodejs [<>=]+ [0-9]+[^0-9:]' "$repo_dir/SPECS/xoa-hl.spec" >/dev/null; then
+    echo 'nodejs requirement without an epoch' >&2
+    exit 1
+fi
 
 echo 'update acceptance tests passed'

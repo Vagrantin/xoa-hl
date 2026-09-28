@@ -42,7 +42,7 @@ do
 done
 pass 'all automatic-update files are packaged'
 
-rpm -q --requires xoa-hl | grep -F 'nodejs < 25' >/dev/null ||
+rpm -q --requires xoa-hl | grep -F 'nodejs < 2:25' >/dev/null ||
     fail 'the RPM does not bound the Node.js major version'
 grep -F -- '--exclude=nodejs' /usr/libexec/xoa-hl/update.sh >/dev/null ||
     fail 'the system update does not exclude Node.js'

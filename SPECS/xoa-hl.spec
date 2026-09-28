@@ -17,7 +17,8 @@ URL:            https://github.com/Vagrantin/xoa-hl
 # Not noarch: the shipped node_modules tree carries native addons (.node).
 # No dependency scan of the shipped node_modules tree, deps are declared below.
 AutoReqProv:    no
-Requires:       (nodejs >= 24 with nodejs < 25)
+# NodeSource's nodejs carries epoch 2; without it, "< 25" means 0:25 and 2:24.x never matches.
+Requires:       (nodejs >= 2:24 with nodejs < 2:25)
 Requires:       redis, ntfs-3g, nfs-utils, cifs-utils, lvm2, dnf-plugins-core
 
 Source0:        xoa-hl-%{version}.tar.gz
