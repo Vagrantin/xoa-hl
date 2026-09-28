@@ -1,0 +1,11 @@
+[Unit]
+Description=Run the configured XOA-HL automatic update
+
+[Timer]
+OnCalendar=*-*-* 03:00:00
+RandomizedDelaySec=15m
+Persistent=false
+Unit=xoa-hl-auto-update.service
+
+[Install]
+WantedBy=timers.target
