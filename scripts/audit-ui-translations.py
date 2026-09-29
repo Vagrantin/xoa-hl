@@ -2,7 +2,7 @@
 """Audit the pinned XO UI catalog after the XOA-HL patches have been applied.
 
 The upstream catalog has incomplete translations. Report those gaps, but require
-every XOA-HL update string to be present and preserve its ICU arguments.
+all XOA-HL strings and the prioritized inherited core UI keys to be translated.
 """
 
 import argparse
@@ -10,7 +10,8 @@ import re
 from pathlib import Path
 
 
-ENTRY = re.compile(r"^  ([A-Za-z]\w*):\s*(.*)$", re.MULTILINE)
+ENTRY = re.compile(r"^  ([A-Za-z]\w*):[ \t]*(.*)$", re.MULTILINE)
+
 
 def arguments(message):
     """Collect ICU arguments at the outer level, excluding plural branches."""
@@ -37,8 +38,8 @@ def entries(path):
 
 
 def string_value(source, key):
-    # XOA-HL's translations are single-line JS string literals; the English
-    # reference has one long message on the following line.
+    # Translations are single-line JS string literals; the English reference
+    # has some long messages on the following line.
     expression = re.search(
         rf"^  {re.escape(key)}:\s*('(?:\\.|[^'\\])*'|\"(?:\\.|[^\"\\])*\"),",
         source,
@@ -57,19 +58,31 @@ def main():
     english = entries(english_path)
     custom = {key for key in english if key.startswith("xoaHl")}
     custom.add("settingsXoaHlUpdatesPage")
+    core = {
+        line.strip()
+        for line in Path(__file__).with_name("core-ui-keys.txt").read_text(encoding="utf-8").splitlines()
+        if line.strip() and not line.startswith("#")
+    }
     failures = []
-    print("Locale | missing catalog keys | undefined entries | XOA-HL translated")
-    print("--- | ---: | ---: | ---:")
+    print("Locale | missing catalog keys | undefined entries | XOA-HL translated | core UI translated")
+    print("--- | ---: | ---: | ---: | ---:")
     locale_paths = sorted((catalog / "locales").glob("*.js"))
     if len(locale_paths) != 13 or len(custom) != 49:
         failures.append(f"expected 13 locales and 49 XOA-HL keys; found {len(locale_paths)} and {len(custom)}")
+    if len(core) != 46 or core - english.keys() or core & custom:
+        failures.append("core UI key list must contain 46 distinct inherited English catalog keys")
     for path in locale_paths:
         source = path.read_text(encoding="utf-8")
         translated = entries(path)
         missing = len(english.keys() - translated.keys())
         undefined = sum(value.startswith("undefined") for value in translated.values())
-        passed = 0
-        for key in sorted(custom):
+        passed_custom = 0
+        passed_core = 0
+        for key in sorted(custom | core):
+            occurrences = re.findall(rf"^  {re.escape(key)}:", source, re.MULTILINE)
+            if len(occurrences) != 1:
+                failures.append(f"{path.name}: expected one definition of {key}, found {len(occurrences)}")
+                continue
             value = string_value(source, key)
             reference = string_value(english_source, key)
             if value is None or reference is None:
@@ -87,8 +100,11 @@ def main():
             if actual != expected:
                 failures.append(f"{path.name}: {key} ICU arguments {sorted(actual)} != {sorted(expected)}")
                 continue
-            passed += 1
-        print(f"{path.stem} | {missing} | {undefined} | {passed}/{len(custom)}")
+            if key in custom:
+                passed_custom += 1
+            else:
+                passed_core += 1
+        print(f"{path.stem} | {missing} | {undefined} | {passed_custom}/{len(custom)} | {passed_core}/{len(core)}")
     for failure in failures:
         print("ERROR:", failure)
     return bool(failures)
