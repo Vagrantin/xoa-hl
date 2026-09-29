@@ -1,0 +1,825 @@
+diff --git a/packages/xo-web/src/common/intl/locales/es.js b/packages/xo-web/src/common/intl/locales/es.js
+index ae9fccd..10a6fd7 100644
+--- a/packages/xo-web/src/common/intl/locales/es.js
++++ b/packages/xo-web/src/common/intl/locales/es.js
+@@ -3787,4 +3787,55 @@ export default {
+ 
+   // Original text: 'At least one of these version requirements must be satisfied by all the hosts in this pool:'
+   xosanPackRequirements: undefined,
++
++  // XOA-HL appliance updates
++  settingsXoaHlUpdatesPage: 'Actualizaciones de XOA-HL',
++  xoaHlAutomaticUpdates: 'Actualizaciones automáticas',
++  xoaHlAutomaticUpdatesConfirm: 'Entiendo que las actualizaciones desatendidas pueden reiniciar servicios y dejar pendiente un reinicio del dispositivo.',
++  xoaHlAutomaticUpdatesDisabled: 'La instalación automática está desactivada de forma predeterminada.',
++  xoaHlDay: 'Día',
++  xoaHlFrequency: 'Frecuencia',
++  xoaHlFrequencyDaily: 'Diaria',
++  xoaHlFrequencyWeekly: 'Semanal',
++  xoaHlLastAutomaticResult: 'Resultado de la última ejecución automática',
++  xoaHlMode: 'Modo',
++  xoaHlModeCheck: 'Comprobar automáticamente',
++  xoaHlModeInstall: 'Instalar automáticamente',
++  xoaHlModeManual: 'Solo manual',
++  xoaHlNextRun: 'Próxima ejecución programada',
++  xoaHlNoAutomaticRun: 'Todavía no se ha ejecutado ninguna actualización automática.',
++  xoaHlRandomDelay: 'Retraso aleatorio',
++  xoaHlSaveAutomaticUpdates: 'Guardar la configuración de actualizaciones automáticas',
++  xoaHlScheduleLoading: 'Cargando la configuración de actualizaciones automáticas…',
++  xoaHlScheduleUnavailable: 'No se pudo cargar la configuración de actualizaciones automáticas.',
++  xoaHlTime: 'Hora local de inicio',
++  xoaHlTimezone: 'Zona horaria del dispositivo',
++  xoaHlAppliance: 'Dispositivo',
++  xoaHlCheckFailed: 'Error al comprobar las actualizaciones',
++  xoaHlCheckForUpdate: 'Buscar actualizaciones',
++  xoaHlChecking: 'Buscando actualizaciones…',
++  xoaHlInstalledVersion: 'Versión instalada',
++  xoaHlLastChecked: 'Última comprobación',
++  xoaHlNeverChecked: 'Se desconoce el estado de las actualizaciones. Búsquelas para conocerlo.',
++  xoaHlPackageName: 'Paquete',
++  xoaHlPackagesAvailable: 'Paquetes con actualizaciones disponibles:',
++  xoaHlPackageVersion: 'Versión',
++  xoaHlRecheckAfterUpdate: 'Vuelva a buscar actualizaciones para confirmar el nuevo estado.',
++  xoaHlReloadPage: 'Recargar la página',
++  xoaHlServerUnreachable: 'xo-server aún no responde. Inténtelo de nuevo en un momento.',
++  xoaHlStartUpdate: 'Actualizar ahora',
++  xoaHlUnknownVersion: 'Desconocida',
++  xoaHlUpdateAvailable: '{n, plural, one {# actualización disponible} other {# actualizaciones disponibles}}',
++  xoaHlUpdateDidNotStart: 'El servicio de actualización no se inició.',
++  xoaHlUpdateFailed: 'La actualización falló. Consulte el registro siguiente.',
++  xoaHlUpdateLog: 'Registro de actualización',
++  xoaHlUpdateReconnecting: 'Reconectando con xo-server, que se reinicia durante la actualización…',
++  xoaHlUpdateReconnectingSlow: 'xo-server lleva {seconds, number} s sin responder. La actualización continúa en el dispositivo y esta página sigue intentando reconectarse. Cuando xo-server vuelva a responder, también puede recargar la página para retomar el seguimiento.',
++  xoaHlUpdateRunning: 'Actualización en curso…',
++  xoaHlUpdateScope: 'La actualización instala todos los paquetes pendientes del dispositivo, incluidos AlmaLinux y el kernel.',
++  xoaHlUpdateStarting: 'Iniciando la actualización…',
++  xoaHlUpdateSucceeded: 'Actualización completada correctamente.',
++  xoaHlUpToDate: 'Actualizado',
++  xoaHlWaitingForOutput: 'Esperando la primera línea del registro…',
++  xoaHlMinutes: '{n, number} min',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/fa.js b/packages/xo-web/src/common/intl/locales/fa.js
+index 1a2b6e4..8d06463 100644
+--- a/packages/xo-web/src/common/intl/locales/fa.js
++++ b/packages/xo-web/src/common/intl/locales/fa.js
+@@ -5112,4 +5112,55 @@ export default {
+   // Original text: '{days, plural, =0 {} one {# day } other {# days }}{hours, plural, =0 {} one {# hour } other {# hours }}{minutes, plural, =0 {} one {# minute } other {# minutes }}{seconds, plural, =0 {} one {# second} other {# seconds}}'
+   durationFormat:
+     '{days, plural, =0 {} one {# day } other {# days }}{hours, plural, =0 {} one {# hour } other {# hours }}{minutes, plural, =0 {} one {# minute } other {# minutes }}{seconds, plural, =0 {} one {# second} other {# seconds}}',
++
++  // XOA-HL appliance updates
++  settingsXoaHlUpdatesPage: 'به‌روزرسانی‌های XOA-HL',
++  xoaHlAutomaticUpdates: 'به‌روزرسانی‌های خودکار',
++  xoaHlAutomaticUpdatesConfirm: 'می‌دانم که به‌روزرسانی‌های بدون نظارت ممکن است سرویس‌ها را راه‌اندازی مجدد کنند و نیاز به راه‌اندازی مجدد دستگاه داشته باشند.',
++  xoaHlAutomaticUpdatesDisabled: 'نصب خودکار به‌طور پیش‌فرض غیرفعال است.',
++  xoaHlDay: 'روز',
++  xoaHlFrequency: 'تناوب',
++  xoaHlFrequencyDaily: 'روزانه',
++  xoaHlFrequencyWeekly: 'هفتگی',
++  xoaHlLastAutomaticResult: 'نتیجهٔ آخرین اجرای خودکار',
++  xoaHlMode: 'حالت',
++  xoaHlModeCheck: 'بررسی خودکار',
++  xoaHlModeInstall: 'نصب خودکار',
++  xoaHlModeManual: 'فقط دستی',
++  xoaHlNextRun: 'اجرای برنامه‌ریزی‌شدهٔ بعدی',
++  xoaHlNoAutomaticRun: 'هنوز هیچ به‌روزرسانی خودکاری اجرا نشده است.',
++  xoaHlRandomDelay: 'تأخیر تصادفی',
++  xoaHlSaveAutomaticUpdates: 'ذخیرهٔ تنظیمات به‌روزرسانی خودکار',
++  xoaHlScheduleLoading: 'در حال بارگذاری تنظیمات به‌روزرسانی خودکار…',
++  xoaHlScheduleUnavailable: 'تنظیمات به‌روزرسانی خودکار بارگذاری نشد.',
++  xoaHlTime: 'زمان شروع محلی',
++  xoaHlTimezone: 'منطقهٔ زمانی دستگاه',
++  xoaHlAppliance: 'دستگاه',
++  xoaHlCheckFailed: 'بررسی به‌روزرسانی‌ها ناموفق بود',
++  xoaHlCheckForUpdate: 'بررسی به‌روزرسانی‌ها',
++  xoaHlChecking: 'در حال بررسی به‌روزرسانی‌ها…',
++  xoaHlInstalledVersion: 'نسخهٔ نصب‌شده',
++  xoaHlLastChecked: 'آخرین بررسی',
++  xoaHlNeverChecked: 'وضعیت به‌روزرسانی نامشخص است. برای اطلاع از وضعیت، به‌روزرسانی‌ها را بررسی کنید.',
++  xoaHlPackageName: 'بسته',
++  xoaHlPackagesAvailable: 'بسته‌هایی که به‌روزرسانی دارند:',
++  xoaHlPackageVersion: 'نسخه',
++  xoaHlRecheckAfterUpdate: 'برای تأیید وضعیت جدید، دوباره به‌روزرسانی‌ها را بررسی کنید.',
++  xoaHlReloadPage: 'بارگذاری مجدد صفحه',
++  xoaHlServerUnreachable: 'xo-server هنوز پاسخ نمی‌دهد. کمی بعد دوباره تلاش کنید.',
++  xoaHlStartUpdate: 'هم‌اکنون به‌روزرسانی شود',
++  xoaHlUnknownVersion: 'نامشخص',
++  xoaHlUpdateAvailable: 'تعداد به‌روزرسانی‌های موجود: {n, number}',
++  xoaHlUpdateDidNotStart: 'سرویس به‌روزرسانی آغاز نشد.',
++  xoaHlUpdateFailed: 'به‌روزرسانی ناموفق بود. گزارش زیر را ببینید.',
++  xoaHlUpdateLog: 'گزارش به‌روزرسانی',
++  xoaHlUpdateReconnecting: 'در حال اتصال مجدد به xo-server؛ به‌روزرسانی آن را راه‌اندازی مجدد می‌کند…',
++  xoaHlUpdateReconnectingSlow: 'xo-server به مدت {seconds, number} ثانیه پاسخ نداده است. به‌روزرسانی روی دستگاه ادامه دارد و این صفحه همچنان برای اتصال مجدد تلاش می‌کند. پس از پاسخ‌گویی مجدد xo-server، می‌توانید صفحه را نیز بارگذاری مجدد کنید تا پیگیری به‌روزرسانی ادامه یابد.',
++  xoaHlUpdateRunning: 'به‌روزرسانی در حال انجام است…',
++  xoaHlUpdateScope: 'این به‌روزرسانی تمام بسته‌های در انتظار دستگاه، از جمله AlmaLinux و کرنل را نصب می‌کند.',
++  xoaHlUpdateStarting: 'در حال آغاز به‌روزرسانی…',
++  xoaHlUpdateSucceeded: 'به‌روزرسانی با موفقیت پایان یافت.',
++  xoaHlUpToDate: 'به‌روز است',
++  xoaHlWaitingForOutput: 'در انتظار نخستین خط گزارش…',
++  xoaHlMinutes: '{n, number} دقیقه',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/fr.js b/packages/xo-web/src/common/intl/locales/fr.js
+index 94fc080..c5054e5 100644
+--- a/packages/xo-web/src/common/intl/locales/fr.js
++++ b/packages/xo-web/src/common/intl/locales/fr.js
+@@ -3872,4 +3872,55 @@ export default {
+   // Original text: "At least one of these version requirements must be satisfied by all the hosts in this pool:"
+   xosanPackRequirements:
+     'Au moins une de ces condtions de version doit être satisfaite par tous les hôtes de ce pool :',
++
++  // XOA-HL appliance updates
++  settingsXoaHlUpdatesPage: 'Mises à jour XOA-HL',
++  xoaHlAutomaticUpdates: 'Mises à jour automatiques',
++  xoaHlAutomaticUpdatesConfirm: 'Je comprends que les mises à jour sans intervention peuvent redémarrer des services et nécessiter un redémarrage de l\'appliance.',
++  xoaHlAutomaticUpdatesDisabled: 'L\'installation automatique est désactivée par défaut.',
++  xoaHlDay: 'Jour',
++  xoaHlFrequency: 'Fréquence',
++  xoaHlFrequencyDaily: 'Quotidienne',
++  xoaHlFrequencyWeekly: 'Hebdomadaire',
++  xoaHlLastAutomaticResult: 'Résultat de la dernière exécution automatique',
++  xoaHlMode: 'Mode',
++  xoaHlModeCheck: 'Vérification automatique',
++  xoaHlModeInstall: 'Installation automatique',
++  xoaHlModeManual: 'Manuel uniquement',
++  xoaHlNextRun: 'Prochaine exécution prévue',
++  xoaHlNoAutomaticRun: 'Aucune mise à jour automatique n\'a encore été exécutée.',
++  xoaHlRandomDelay: 'Délai aléatoire',
++  xoaHlSaveAutomaticUpdates: 'Enregistrer les paramètres de mise à jour automatique',
++  xoaHlScheduleLoading: 'Chargement des paramètres de mise à jour automatique…',
++  xoaHlScheduleUnavailable: 'Impossible de charger les paramètres de mise à jour automatique.',
++  xoaHlTime: 'Heure de début locale',
++  xoaHlTimezone: 'Fuseau horaire de l\'appliance',
++  xoaHlAppliance: 'Appliance',
++  xoaHlCheckFailed: 'La recherche de mises à jour a échoué',
++  xoaHlCheckForUpdate: 'Rechercher des mises à jour',
++  xoaHlChecking: 'Recherche de mises à jour…',
++  xoaHlInstalledVersion: 'Version installée',
++  xoaHlLastChecked: 'Dernière vérification',
++  xoaHlNeverChecked: 'État des mises à jour inconnu. Recherchez les mises à jour pour le connaître.',
++  xoaHlPackageName: 'Paquet',
++  xoaHlPackagesAvailable: 'Paquets pour lesquels une mise à jour est disponible :',
++  xoaHlPackageVersion: 'Version',
++  xoaHlRecheckAfterUpdate: 'Relancez la recherche de mises à jour pour confirmer le nouvel état.',
++  xoaHlReloadPage: 'Recharger la page',
++  xoaHlServerUnreachable: 'xo-server ne répond pas encore. Réessayez dans un instant.',
++  xoaHlStartUpdate: 'Mettre à jour maintenant',
++  xoaHlUnknownVersion: 'Inconnue',
++  xoaHlUpdateAvailable: '{n, number} mise{n, plural, one {} other {s}} à jour disponible{n, plural, one {} other {s}}',
++  xoaHlUpdateDidNotStart: 'Le service de mise à jour n\'a pas démarré.',
++  xoaHlUpdateFailed: 'La mise à jour a échoué. Consultez le journal ci-dessous.',
++  xoaHlUpdateLog: 'Journal de mise à jour',
++  xoaHlUpdateReconnecting: 'Reconnexion à xo-server : la mise à jour le redémarre…',
++  xoaHlUpdateReconnectingSlow: 'xo-server ne répond pas depuis {seconds, number} s. La mise à jour se poursuit sur l\'appliance et cette page tente de se reconnecter. Dès que xo-server répond de nouveau, vous pouvez aussi recharger la page : elle reprendra le suivi de la mise à jour.',
++  xoaHlUpdateRunning: 'Mise à jour en cours…',
++  xoaHlUpdateScope: 'La mise à jour installe tous les paquets en attente sur l\'appliance, y compris ceux d\'AlmaLinux et le noyau.',
++  xoaHlUpdateStarting: 'Démarrage de la mise à jour…',
++  xoaHlUpdateSucceeded: 'Mise à jour terminée avec succès.',
++  xoaHlUpToDate: 'À jour',
++  xoaHlWaitingForOutput: 'En attente de la première ligne du journal…',
++  xoaHlMinutes: '{n, number} min',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/he.js b/packages/xo-web/src/common/intl/locales/he.js
+index aa4ea5c..8d043e8 100644
+--- a/packages/xo-web/src/common/intl/locales/he.js
++++ b/packages/xo-web/src/common/intl/locales/he.js
+@@ -3118,4 +3118,55 @@ export default {
+ 
+   // Original text: 'Network'
+   settingsAclsButtonTooltipnetwork: undefined,
++
++  // XOA-HL appliance updates
++  settingsXoaHlUpdatesPage: 'עדכוני XOA-HL',
++  xoaHlAutomaticUpdates: 'עדכונים אוטומטיים',
++  xoaHlAutomaticUpdatesConfirm: 'ברור לי שעדכונים ללא השגחה עלולים להפעיל מחדש שירותים ולהצריך הפעלה מחדש של המערכת.',
++  xoaHlAutomaticUpdatesDisabled: 'התקנה אוטומטית מושבתת כברירת מחדל.',
++  xoaHlDay: 'יום',
++  xoaHlFrequency: 'תדירות',
++  xoaHlFrequencyDaily: 'יומי',
++  xoaHlFrequencyWeekly: 'שבועי',
++  xoaHlLastAutomaticResult: 'תוצאת ההרצה האוטומטית האחרונה',
++  xoaHlMode: 'מצב',
++  xoaHlModeCheck: 'בדיקה אוטומטית',
++  xoaHlModeInstall: 'התקנה אוטומטית',
++  xoaHlModeManual: 'ידני בלבד',
++  xoaHlNextRun: 'ההרצה המתוזמנת הבאה',
++  xoaHlNoAutomaticRun: 'עדיין לא בוצע עדכון אוטומטי.',
++  xoaHlRandomDelay: 'השהיה אקראית',
++  xoaHlSaveAutomaticUpdates: 'שמירת הגדרות העדכון האוטומטי',
++  xoaHlScheduleLoading: 'הגדרות העדכון האוטומטי נטענות…',
++  xoaHlScheduleUnavailable: 'לא ניתן לטעון את הגדרות העדכון האוטומטי.',
++  xoaHlTime: 'שעת התחלה מקומית',
++  xoaHlTimezone: 'אזור הזמן של המערכת',
++  xoaHlAppliance: 'מערכת',
++  xoaHlCheckFailed: 'בדיקת העדכונים נכשלה',
++  xoaHlCheckForUpdate: 'בדיקת עדכונים',
++  xoaHlChecking: 'מתבצעת בדיקת עדכונים…',
++  xoaHlInstalledVersion: 'גרסה מותקנת',
++  xoaHlLastChecked: 'בדיקה אחרונה',
++  xoaHlNeverChecked: 'מצב העדכונים אינו ידוע. יש לבדוק עדכונים כדי לברר אותו.',
++  xoaHlPackageName: 'חבילה',
++  xoaHlPackagesAvailable: 'חבילות שיש להן עדכונים זמינים:',
++  xoaHlPackageVersion: 'גרסה',
++  xoaHlRecheckAfterUpdate: 'יש לבדוק שוב עדכונים כדי לאמת את המצב החדש.',
++  xoaHlReloadPage: 'טעינת הדף מחדש',
++  xoaHlServerUnreachable: 'xo-server עדיין אינו מגיב. יש לנסות שוב בעוד רגע.',
++  xoaHlStartUpdate: 'עדכון כעת',
++  xoaHlUnknownVersion: 'לא ידוע',
++  xoaHlUpdateAvailable: 'מספר העדכונים הזמינים: {n, number}',
++  xoaHlUpdateDidNotStart: 'שירות העדכון לא הופעל.',
++  xoaHlUpdateFailed: 'העדכון נכשל. יש לעיין ביומן שלהלן.',
++  xoaHlUpdateLog: 'יומן העדכון',
++  xoaHlUpdateReconnecting: 'מתבצע חיבור מחדש אל xo-server, שמופעל מחדש במהלך העדכון…',
++  xoaHlUpdateReconnectingSlow: 'xo-server אינו מגיב במשך {seconds, number} שניות. העדכון ממשיך במערכת והדף ממשיך לנסות להתחבר מחדש. כאשר xo-server יחזור להגיב, אפשר גם לטעון את הדף מחדש כדי להמשיך לעקוב אחר העדכון.',
++  xoaHlUpdateRunning: 'העדכון מתבצע…',
++  xoaHlUpdateScope: 'העדכון מתקין את כל החבילות הממתינות במערכת, לרבות AlmaLinux והקרנל.',
++  xoaHlUpdateStarting: 'העדכון מתחיל…',
++  xoaHlUpdateSucceeded: 'העדכון הושלם בהצלחה.',
++  xoaHlUpToDate: 'מעודכן',
++  xoaHlWaitingForOutput: 'ממתינים לשורה הראשונה ביומן…',
++  xoaHlMinutes: '{n, number} דקות',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/hu.js b/packages/xo-web/src/common/intl/locales/hu.js
+index e62a732..f6ab2b5 100644
+--- a/packages/xo-web/src/common/intl/locales/hu.js
++++ b/packages/xo-web/src/common/intl/locales/hu.js
+@@ -3580,4 +3580,55 @@ export default {
+ 
+   // Original text: 'Install {pack} v{version}?'
+   xosanInstallPack: undefined,
++
++  // XOA-HL appliance updates
++  settingsXoaHlUpdatesPage: 'XOA-HL frissítések',
++  xoaHlAutomaticUpdates: 'Automatikus frissítések',
++  xoaHlAutomaticUpdatesConfirm: 'Tudomásul veszem, hogy a felügyelet nélküli frissítések újraindíthatják a szolgáltatásokat, és szükségessé tehetik a készülék újraindítását.',
++  xoaHlAutomaticUpdatesDisabled: 'Az automatikus telepítés alapértelmezés szerint ki van kapcsolva.',
++  xoaHlDay: 'Nap',
++  xoaHlFrequency: 'Gyakoriság',
++  xoaHlFrequencyDaily: 'Naponta',
++  xoaHlFrequencyWeekly: 'Hetente',
++  xoaHlLastAutomaticResult: 'Az utolsó automatikus futás eredménye',
++  xoaHlMode: 'Mód',
++  xoaHlModeCheck: 'Automatikus ellenőrzés',
++  xoaHlModeInstall: 'Automatikus telepítés',
++  xoaHlModeManual: 'Csak kézzel',
++  xoaHlNextRun: 'Következő ütemezett futás',
++  xoaHlNoAutomaticRun: 'Még nem futott automatikus frissítés.',
++  xoaHlRandomDelay: 'Véletlenszerű késleltetés',
++  xoaHlSaveAutomaticUpdates: 'Automatikus frissítési beállítások mentése',
++  xoaHlScheduleLoading: 'Automatikus frissítési beállítások betöltése…',
++  xoaHlScheduleUnavailable: 'Az automatikus frissítési beállítások nem tölthetők be.',
++  xoaHlTime: 'Helyi kezdési idő',
++  xoaHlTimezone: 'A készülék időzónája',
++  xoaHlAppliance: 'Készülék',
++  xoaHlCheckFailed: 'A frissítések ellenőrzése sikertelen',
++  xoaHlCheckForUpdate: 'Frissítések keresése',
++  xoaHlChecking: 'Frissítések keresése…',
++  xoaHlInstalledVersion: 'Telepített verzió',
++  xoaHlLastChecked: 'Utolsó ellenőrzés',
++  xoaHlNeverChecked: 'A frissítések állapota ismeretlen. Az állapot megállapításához keressen frissítéseket.',
++  xoaHlPackageName: 'Csomag',
++  xoaHlPackagesAvailable: 'Frissíthető csomagok:',
++  xoaHlPackageVersion: 'Verzió',
++  xoaHlRecheckAfterUpdate: 'Az új állapot megerősítéséhez keressen ismét frissítéseket.',
++  xoaHlReloadPage: 'Oldal újratöltése',
++  xoaHlServerUnreachable: 'Az xo-server még nem válaszol. Próbálja újra rövidesen.',
++  xoaHlStartUpdate: 'Frissítés most',
++  xoaHlUnknownVersion: 'Ismeretlen',
++  xoaHlUpdateAvailable: 'Elérhető frissítések száma: {n, number}',
++  xoaHlUpdateDidNotStart: 'A frissítési szolgáltatás nem indult el.',
++  xoaHlUpdateFailed: 'A frissítés sikertelen. Tekintse meg az alábbi naplót.',
++  xoaHlUpdateLog: 'Frissítési napló',
++  xoaHlUpdateReconnecting: 'Újracsatlakozás az xo-server szolgáltatáshoz; a frissítés újraindítja…',
++  xoaHlUpdateReconnectingSlow: 'Az xo-server {seconds, number} másodperce nem válaszol. A frissítés tovább fut a készüléken, az oldal pedig megpróbál újracsatlakozni. Ha az xo-server ismét válaszol, az oldalt újratöltve is folytathatja a frissítés követését.',
++  xoaHlUpdateRunning: 'Frissítés folyamatban…',
++  xoaHlUpdateScope: 'A frissítés az összes függőben lévő csomagot telepíti a készülékre, beleértve az AlmaLinux rendszert és a kernelt is.',
++  xoaHlUpdateStarting: 'Frissítés indítása…',
++  xoaHlUpdateSucceeded: 'A frissítés sikeresen befejeződött.',
++  xoaHlUpToDate: 'Naprakész',
++  xoaHlWaitingForOutput: 'Várakozás a napló első sorára…',
++  xoaHlMinutes: '{n, number} perc',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/it.js b/packages/xo-web/src/common/intl/locales/it.js
+index 052c757..b3a5fcd 100644
+--- a/packages/xo-web/src/common/intl/locales/it.js
++++ b/packages/xo-web/src/common/intl/locales/it.js
+@@ -5918,4 +5918,55 @@ export default {
+   // Original text: '{days, plural, =0 {} one {# day } other {# days }}{hours, plural, =0 {} one {# hour } other {# hours }}{minutes, plural, =0 {} one {# minute } other {# minutes }}{seconds, plural, =0 {} one {# second} other {# seconds}}'
+   durationFormat:
+     '{days, plural, =0 {} one {# giorno } other {# giorni }}{hours, plural, =0 {} one {# ora } other {# ore }}{minutes, plural, =0 {} one {# minuto } other {# minuti }}{seconds, plural, =0 {} one {# secondo} other {# secondi}}',
++
++  // XOA-HL appliance updates
++  settingsXoaHlUpdatesPage: 'Aggiornamenti XOA-HL',
++  xoaHlAutomaticUpdates: 'Aggiornamenti automatici',
++  xoaHlAutomaticUpdatesConfirm: 'Ho capito che gli aggiornamenti non presidiati possono riavviare i servizi e richiedere il riavvio dell\'appliance.',
++  xoaHlAutomaticUpdatesDisabled: 'L\'installazione automatica è disattivata per impostazione predefinita.',
++  xoaHlDay: 'Giorno',
++  xoaHlFrequency: 'Frequenza',
++  xoaHlFrequencyDaily: 'Giornaliera',
++  xoaHlFrequencyWeekly: 'Settimanale',
++  xoaHlLastAutomaticResult: 'Esito dell\'ultima esecuzione automatica',
++  xoaHlMode: 'Modalità',
++  xoaHlModeCheck: 'Controlla automaticamente',
++  xoaHlModeInstall: 'Installa automaticamente',
++  xoaHlModeManual: 'Solo manuale',
++  xoaHlNextRun: 'Prossima esecuzione pianificata',
++  xoaHlNoAutomaticRun: 'Non è stato ancora eseguito alcun aggiornamento automatico.',
++  xoaHlRandomDelay: 'Ritardo casuale',
++  xoaHlSaveAutomaticUpdates: 'Salva le impostazioni degli aggiornamenti automatici',
++  xoaHlScheduleLoading: 'Caricamento delle impostazioni degli aggiornamenti automatici…',
++  xoaHlScheduleUnavailable: 'Impossibile caricare le impostazioni degli aggiornamenti automatici.',
++  xoaHlTime: 'Ora locale di avvio',
++  xoaHlTimezone: 'Fuso orario dell\'appliance',
++  xoaHlAppliance: 'Appliance',
++  xoaHlCheckFailed: 'Controllo degli aggiornamenti non riuscito',
++  xoaHlCheckForUpdate: 'Controlla gli aggiornamenti',
++  xoaHlChecking: 'Controllo degli aggiornamenti…',
++  xoaHlInstalledVersion: 'Versione installata',
++  xoaHlLastChecked: 'Ultimo controllo',
++  xoaHlNeverChecked: 'Stato degli aggiornamenti sconosciuto. Eseguire un controllo per verificarlo.',
++  xoaHlPackageName: 'Pacchetto',
++  xoaHlPackagesAvailable: 'Pacchetti con aggiornamenti disponibili:',
++  xoaHlPackageVersion: 'Versione',
++  xoaHlRecheckAfterUpdate: 'Controllare nuovamente gli aggiornamenti per confermare il nuovo stato.',
++  xoaHlReloadPage: 'Ricarica la pagina',
++  xoaHlServerUnreachable: 'xo-server non risponde ancora. Riprovare tra poco.',
++  xoaHlStartUpdate: 'Aggiorna ora',
++  xoaHlUnknownVersion: 'Sconosciuta',
++  xoaHlUpdateAvailable: '{n, number} aggiornament{n, plural, one {o} other {i}} disponibil{n, plural, one {e} other {i}}',
++  xoaHlUpdateDidNotStart: 'Il servizio di aggiornamento non si è avviato.',
++  xoaHlUpdateFailed: 'L\'aggiornamento non è riuscito. Consultare il registro qui sotto.',
++  xoaHlUpdateLog: 'Registro degli aggiornamenti',
++  xoaHlUpdateReconnecting: 'Riconnessione a xo-server: l\'aggiornamento lo riavvia…',
++  xoaHlUpdateReconnectingSlow: 'xo-server non risponde da {seconds, number} s. L\'aggiornamento continua sull\'appliance e questa pagina prova a riconnettersi. Quando xo-server torna a rispondere, è possibile anche ricaricare la pagina per riprendere il monitoraggio.',
++  xoaHlUpdateRunning: 'Aggiornamento in corso…',
++  xoaHlUpdateScope: 'L\'aggiornamento installa tutti i pacchetti in sospeso sull\'appliance, inclusi AlmaLinux e il kernel.',
++  xoaHlUpdateStarting: 'Avvio dell\'aggiornamento…',
++  xoaHlUpdateSucceeded: 'Aggiornamento completato correttamente.',
++  xoaHlUpToDate: 'Aggiornato',
++  xoaHlWaitingForOutput: 'In attesa della prima riga del registro…',
++  xoaHlMinutes: '{n, number} min',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/ja.js b/packages/xo-web/src/common/intl/locales/ja.js
+index 9bc53d6..602e393 100644
+--- a/packages/xo-web/src/common/intl/locales/ja.js
++++ b/packages/xo-web/src/common/intl/locales/ja.js
+@@ -7601,4 +7601,55 @@ export default {
+ 
+   // Original text: 'Total power'
+   totalPower: undefined,
++
++  // XOA-HL appliance updates
++  settingsXoaHlUpdatesPage: 'XOA-HL のアップデート',
++  xoaHlAutomaticUpdates: '自動アップデート',
++  xoaHlAutomaticUpdatesConfirm: '自動アップデートによってサービスが再起動し、アプライアンスの再起動が必要になる場合があることを理解しました。',
++  xoaHlAutomaticUpdatesDisabled: '自動インストールは初期設定では無効です。',
++  xoaHlDay: '曜日',
++  xoaHlFrequency: '頻度',
++  xoaHlFrequencyDaily: '毎日',
++  xoaHlFrequencyWeekly: '毎週',
++  xoaHlLastAutomaticResult: '前回の自動実行結果',
++  xoaHlMode: 'モード',
++  xoaHlModeCheck: '自動確認',
++  xoaHlModeInstall: '自動インストール',
++  xoaHlModeManual: '手動のみ',
++  xoaHlNextRun: '次回の実行予定',
++  xoaHlNoAutomaticRun: '自動アップデートはまだ実行されていません。',
++  xoaHlRandomDelay: 'ランダムな遅延',
++  xoaHlSaveAutomaticUpdates: '自動アップデートの設定を保存',
++  xoaHlScheduleLoading: '自動アップデートの設定を読み込み中…',
++  xoaHlScheduleUnavailable: '自動アップデートの設定を読み込めませんでした。',
++  xoaHlTime: '現地時刻での開始時刻',
++  xoaHlTimezone: 'アプライアンスのタイムゾーン',
++  xoaHlAppliance: 'アプライアンス',
++  xoaHlCheckFailed: 'アップデートの確認に失敗しました',
++  xoaHlCheckForUpdate: 'アップデートを確認',
++  xoaHlChecking: 'アップデートを確認中…',
++  xoaHlInstalledVersion: 'インストール済みのバージョン',
++  xoaHlLastChecked: '前回の確認',
++  xoaHlNeverChecked: 'アップデートの状態は不明です。確認を実行してください。',
++  xoaHlPackageName: 'パッケージ',
++  xoaHlPackagesAvailable: 'アップデート可能なパッケージ：',
++  xoaHlPackageVersion: 'バージョン',
++  xoaHlRecheckAfterUpdate: '再度アップデートを確認し、現在の状態を確かめてください。',
++  xoaHlReloadPage: 'ページを再読み込み',
++  xoaHlServerUnreachable: 'xo-server がまだ応答していません。しばらくしてから再試行してください。',
++  xoaHlStartUpdate: '今すぐアップデート',
++  xoaHlUnknownVersion: '不明',
++  xoaHlUpdateAvailable: '利用可能なアップデート：{n, number} 件',
++  xoaHlUpdateDidNotStart: 'アップデートサービスが起動しませんでした。',
++  xoaHlUpdateFailed: 'アップデートに失敗しました。以下のログを確認してください。',
++  xoaHlUpdateLog: 'アップデートログ',
++  xoaHlUpdateReconnecting: 'xo-server に再接続中です。アップデートにより再起動されます…',
++  xoaHlUpdateReconnectingSlow: 'xo-server が {seconds, number} 秒間応答していません。アップデートはアプライアンス上で続行され、このページは再接続を試みます。xo-server が応答した後は、ページを再読み込みしても進行状況を引き継げます。',
++  xoaHlUpdateRunning: 'アップデート中…',
++  xoaHlUpdateScope: 'アップデートでは、AlmaLinux とカーネルを含むアプライアンス上の保留中の全パッケージがインストールされます。',
++  xoaHlUpdateStarting: 'アップデートを開始中…',
++  xoaHlUpdateSucceeded: 'アップデートが正常に完了しました。',
++  xoaHlUpToDate: '最新の状態です',
++  xoaHlWaitingForOutput: 'ログの最初の行を待機中…',
++  xoaHlMinutes: '{n, number} 分',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/pl.js b/packages/xo-web/src/common/intl/locales/pl.js
+index 81473aa..b410adc 100644
+--- a/packages/xo-web/src/common/intl/locales/pl.js
++++ b/packages/xo-web/src/common/intl/locales/pl.js
+@@ -3134,4 +3134,55 @@ export default {
+ 
+   // Original text: "Network"
+   settingsAclsButtonTooltipnetwork: 'Sieć',
++
++  // XOA-HL appliance updates
++  settingsXoaHlUpdatesPage: 'Aktualizacje XOA-HL',
++  xoaHlAutomaticUpdates: 'Aktualizacje automatyczne',
++  xoaHlAutomaticUpdatesConfirm: 'Rozumiem, że aktualizacje bez nadzoru mogą ponownie uruchomić usługi i wymagać restartu urządzenia.',
++  xoaHlAutomaticUpdatesDisabled: 'Automatyczna instalacja jest domyślnie wyłączona.',
++  xoaHlDay: 'Dzień',
++  xoaHlFrequency: 'Częstotliwość',
++  xoaHlFrequencyDaily: 'Codziennie',
++  xoaHlFrequencyWeekly: 'Co tydzień',
++  xoaHlLastAutomaticResult: 'Wynik ostatniego automatycznego uruchomienia',
++  xoaHlMode: 'Tryb',
++  xoaHlModeCheck: 'Sprawdzaj automatycznie',
++  xoaHlModeInstall: 'Instaluj automatycznie',
++  xoaHlModeManual: 'Tylko ręcznie',
++  xoaHlNextRun: 'Następne zaplanowane uruchomienie',
++  xoaHlNoAutomaticRun: 'Nie wykonano jeszcze automatycznej aktualizacji.',
++  xoaHlRandomDelay: 'Losowe opóźnienie',
++  xoaHlSaveAutomaticUpdates: 'Zapisz ustawienia automatycznych aktualizacji',
++  xoaHlScheduleLoading: 'Ładowanie ustawień automatycznych aktualizacji…',
++  xoaHlScheduleUnavailable: 'Nie udało się załadować ustawień automatycznych aktualizacji.',
++  xoaHlTime: 'Lokalna godzina rozpoczęcia',
++  xoaHlTimezone: 'Strefa czasowa urządzenia',
++  xoaHlAppliance: 'Urządzenie',
++  xoaHlCheckFailed: 'Sprawdzenie aktualizacji nie powiodło się',
++  xoaHlCheckForUpdate: 'Sprawdź aktualizacje',
++  xoaHlChecking: 'Sprawdzanie aktualizacji…',
++  xoaHlInstalledVersion: 'Zainstalowana wersja',
++  xoaHlLastChecked: 'Ostatnio sprawdzono',
++  xoaHlNeverChecked: 'Stan aktualizacji jest nieznany. Sprawdź dostępność aktualizacji.',
++  xoaHlPackageName: 'Pakiet',
++  xoaHlPackagesAvailable: 'Pakiety z dostępnymi aktualizacjami:',
++  xoaHlPackageVersion: 'Wersja',
++  xoaHlRecheckAfterUpdate: 'Sprawdź aktualizacje ponownie, aby potwierdzić nowy stan.',
++  xoaHlReloadPage: 'Załaduj stronę ponownie',
++  xoaHlServerUnreachable: 'xo-server jeszcze nie odpowiada. Spróbuj ponownie za chwilę.',
++  xoaHlStartUpdate: 'Aktualizuj teraz',
++  xoaHlUnknownVersion: 'Nieznana',
++  xoaHlUpdateAvailable: 'Dostępne aktualizacje: {n, number}',
++  xoaHlUpdateDidNotStart: 'Usługa aktualizacji nie uruchomiła się.',
++  xoaHlUpdateFailed: 'Aktualizacja nie powiodła się. Zobacz dziennik poniżej.',
++  xoaHlUpdateLog: 'Dziennik aktualizacji',
++  xoaHlUpdateReconnecting: 'Ponowne łączenie z xo-server: aktualizacja uruchamia go ponownie…',
++  xoaHlUpdateReconnectingSlow: 'xo-server nie odpowiada od {seconds, number} s. Aktualizacja trwa na urządzeniu, a strona nadal próbuje nawiązać połączenie. Gdy xo-server zacznie odpowiadać, możesz też odświeżyć stronę, aby wznowić śledzenie aktualizacji.',
++  xoaHlUpdateRunning: 'Trwa aktualizacja…',
++  xoaHlUpdateScope: 'Aktualizacja instaluje wszystkie oczekujące pakiety na urządzeniu, w tym AlmaLinux i jądro.',
++  xoaHlUpdateStarting: 'Uruchamianie aktualizacji…',
++  xoaHlUpdateSucceeded: 'Aktualizacja zakończona pomyślnie.',
++  xoaHlUpToDate: 'Aktualne',
++  xoaHlWaitingForOutput: 'Oczekiwanie na pierwszy wiersz dziennika…',
++  xoaHlMinutes: '{n, number} min',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/pt.js b/packages/xo-web/src/common/intl/locales/pt.js
+index 23bef9c..6ca5d79 100644
+--- a/packages/xo-web/src/common/intl/locales/pt.js
++++ b/packages/xo-web/src/common/intl/locales/pt.js
+@@ -3131,4 +3131,55 @@ export default {
+ 
+   // Original text: 'Network'
+   settingsAclsButtonTooltipnetwork: undefined,
++
++  // XOA-HL appliance updates
++  settingsXoaHlUpdatesPage: 'Atualizações do XOA-HL',
++  xoaHlAutomaticUpdates: 'Atualizações automáticas',
++  xoaHlAutomaticUpdatesConfirm: 'Compreendo que as atualizações automáticas podem reiniciar serviços e deixar um reinício do appliance pendente.',
++  xoaHlAutomaticUpdatesDisabled: 'A instalação automática está desativada por predefinição.',
++  xoaHlDay: 'Dia',
++  xoaHlFrequency: 'Frequência',
++  xoaHlFrequencyDaily: 'Diária',
++  xoaHlFrequencyWeekly: 'Semanal',
++  xoaHlLastAutomaticResult: 'Resultado da última execução automática',
++  xoaHlMode: 'Modo',
++  xoaHlModeCheck: 'Verificar automaticamente',
++  xoaHlModeInstall: 'Instalar automaticamente',
++  xoaHlModeManual: 'Apenas manual',
++  xoaHlNextRun: 'Próxima execução agendada',
++  xoaHlNoAutomaticRun: 'Ainda não foi executada nenhuma atualização automática.',
++  xoaHlRandomDelay: 'Atraso aleatório',
++  xoaHlSaveAutomaticUpdates: 'Guardar as definições de atualizações automáticas',
++  xoaHlScheduleLoading: 'A carregar as definições de atualizações automáticas…',
++  xoaHlScheduleUnavailable: 'Não foi possível carregar as definições de atualizações automáticas.',
++  xoaHlTime: 'Hora local de início',
++  xoaHlTimezone: 'Fuso horário do appliance',
++  xoaHlAppliance: 'Appliance',
++  xoaHlCheckFailed: 'Falha na verificação de atualizações',
++  xoaHlCheckForUpdate: 'Verificar atualizações',
++  xoaHlChecking: 'A verificar atualizações…',
++  xoaHlInstalledVersion: 'Versão instalada',
++  xoaHlLastChecked: 'Última verificação',
++  xoaHlNeverChecked: 'O estado das atualizações é desconhecido. Verifique as atualizações para o conhecer.',
++  xoaHlPackageName: 'Pacote',
++  xoaHlPackagesAvailable: 'Pacotes com atualizações disponíveis:',
++  xoaHlPackageVersion: 'Versão',
++  xoaHlRecheckAfterUpdate: 'Verifique novamente as atualizações para confirmar o novo estado.',
++  xoaHlReloadPage: 'Recarregar a página',
++  xoaHlServerUnreachable: 'O xo-server ainda não responde. Tente novamente dentro de momentos.',
++  xoaHlStartUpdate: 'Atualizar agora',
++  xoaHlUnknownVersion: 'Desconhecida',
++  xoaHlUpdateAvailable: '{n, plural, one {# atualização disponível} other {# atualizações disponíveis}}',
++  xoaHlUpdateDidNotStart: 'O serviço de atualização não iniciou.',
++  xoaHlUpdateFailed: 'A atualização falhou. Consulte o registo abaixo.',
++  xoaHlUpdateLog: 'Registo de atualização',
++  xoaHlUpdateReconnecting: 'A restabelecer a ligação ao xo-server, que é reiniciado pela atualização…',
++  xoaHlUpdateReconnectingSlow: 'O xo-server não responde há {seconds, number} s. A atualização continua no appliance e esta página continua a tentar restabelecer a ligação. Quando o xo-server voltar a responder, também pode recarregar a página para retomar o acompanhamento.',
++  xoaHlUpdateRunning: 'Atualização em curso…',
++  xoaHlUpdateScope: 'A atualização instala todos os pacotes pendentes no appliance, incluindo AlmaLinux e o kernel.',
++  xoaHlUpdateStarting: 'A iniciar a atualização…',
++  xoaHlUpdateSucceeded: 'Atualização concluída com sucesso.',
++  xoaHlUpToDate: 'Atualizado',
++  xoaHlWaitingForOutput: 'À espera da primeira linha do registo…',
++  xoaHlMinutes: '{n, number} min',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/ru.js b/packages/xo-web/src/common/intl/locales/ru.js
+index 1848bee..e441413 100644
+--- a/packages/xo-web/src/common/intl/locales/ru.js
++++ b/packages/xo-web/src/common/intl/locales/ru.js
+@@ -7486,4 +7486,55 @@ export default {
+ 
+   // Original text: '{days, plural, =0 {} one {# day } other {# days }}{hours, plural, =0 {} one {# hour } other {# hours }}{minutes, plural, =0 {} one {# minute } other {# minutes }}{seconds, plural, =0 {} one {# second} other {# seconds}}'
+   durationFormat: undefined,
++
++  // XOA-HL appliance updates
++  settingsXoaHlUpdatesPage: 'Обновления XOA-HL',
++  xoaHlAutomaticUpdates: 'Автоматические обновления',
++  xoaHlAutomaticUpdatesConfirm: 'Я понимаю, что автоматическая установка обновлений может перезапустить службы и потребовать перезагрузки виртуального устройства.',
++  xoaHlAutomaticUpdatesDisabled: 'Автоматическая установка по умолчанию отключена.',
++  xoaHlDay: 'День',
++  xoaHlFrequency: 'Периодичность',
++  xoaHlFrequencyDaily: 'Ежедневно',
++  xoaHlFrequencyWeekly: 'Еженедельно',
++  xoaHlLastAutomaticResult: 'Результат последнего автоматического запуска',
++  xoaHlMode: 'Режим',
++  xoaHlModeCheck: 'Проверять автоматически',
++  xoaHlModeInstall: 'Устанавливать автоматически',
++  xoaHlModeManual: 'Только вручную',
++  xoaHlNextRun: 'Следующий запланированный запуск',
++  xoaHlNoAutomaticRun: 'Автоматическое обновление ещё не выполнялось.',
++  xoaHlRandomDelay: 'Случайная задержка',
++  xoaHlSaveAutomaticUpdates: 'Сохранить настройки автоматического обновления',
++  xoaHlScheduleLoading: 'Загрузка настроек автоматического обновления…',
++  xoaHlScheduleUnavailable: 'Не удалось загрузить настройки автоматического обновления.',
++  xoaHlTime: 'Местное время начала',
++  xoaHlTimezone: 'Часовой пояс виртуального устройства',
++  xoaHlAppliance: 'Виртуальное устройство',
++  xoaHlCheckFailed: 'Не удалось проверить наличие обновлений',
++  xoaHlCheckForUpdate: 'Проверить обновления',
++  xoaHlChecking: 'Проверка обновлений…',
++  xoaHlInstalledVersion: 'Установленная версия',
++  xoaHlLastChecked: 'Последняя проверка',
++  xoaHlNeverChecked: 'Состояние обновлений неизвестно. Выполните проверку.',
++  xoaHlPackageName: 'Пакет',
++  xoaHlPackagesAvailable: 'Пакеты, для которых доступны обновления:',
++  xoaHlPackageVersion: 'Версия',
++  xoaHlRecheckAfterUpdate: 'Повторите проверку обновлений, чтобы подтвердить новое состояние.',
++  xoaHlReloadPage: 'Перезагрузить страницу',
++  xoaHlServerUnreachable: 'xo-server пока не отвечает. Повторите попытку чуть позже.',
++  xoaHlStartUpdate: 'Обновить сейчас',
++  xoaHlUnknownVersion: 'Неизвестно',
++  xoaHlUpdateAvailable: 'Доступно обновлений: {n, number}',
++  xoaHlUpdateDidNotStart: 'Служба обновления не запустилась.',
++  xoaHlUpdateFailed: 'Ошибка обновления. См. журнал ниже.',
++  xoaHlUpdateLog: 'Журнал обновления',
++  xoaHlUpdateReconnecting: 'Повторное подключение к xo-server: обновление перезапускает его…',
++  xoaHlUpdateReconnectingSlow: 'xo-server не отвечает уже {seconds, number} с. Обновление продолжается на виртуальном устройстве, а страница пытается восстановить соединение. Когда xo-server снова ответит, можно также перезагрузить страницу: она продолжит отслеживать обновление.',
++  xoaHlUpdateRunning: 'Идёт обновление…',
++  xoaHlUpdateScope: 'При обновлении устанавливаются все ожидающие пакеты виртуального устройства, включая AlmaLinux и ядро.',
++  xoaHlUpdateStarting: 'Запуск обновления…',
++  xoaHlUpdateSucceeded: 'Обновление успешно завершено.',
++  xoaHlUpToDate: 'Обновления не требуются',
++  xoaHlWaitingForOutput: 'Ожидание первой строки журнала…',
++  xoaHlMinutes: '{n, number} мин',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/sv.js b/packages/xo-web/src/common/intl/locales/sv.js
+index c2043d9..46ab68f 100644
+--- a/packages/xo-web/src/common/intl/locales/sv.js
++++ b/packages/xo-web/src/common/intl/locales/sv.js
+@@ -3798,4 +3798,55 @@ export default {
+ 
+   // Original text: 'At least one of these version requirements must be satisfied by all the hosts in this pool:'
+   xosanPackRequirements: 'Åtminstone en av dessa versionskrav måste uppfyllas av alla värdar i denna poolen:',
++
++  // XOA-HL appliance updates
++  settingsXoaHlUpdatesPage: 'XOA-HL-uppdateringar',
++  xoaHlAutomaticUpdates: 'Automatiska uppdateringar',
++  xoaHlAutomaticUpdatesConfirm: 'Jag förstår att obevakade uppdateringar kan starta om tjänster och kräva en omstart av enheten.',
++  xoaHlAutomaticUpdatesDisabled: 'Automatisk installation är avstängd som standard.',
++  xoaHlDay: 'Dag',
++  xoaHlFrequency: 'Frekvens',
++  xoaHlFrequencyDaily: 'Dagligen',
++  xoaHlFrequencyWeekly: 'Varje vecka',
++  xoaHlLastAutomaticResult: 'Resultat från senaste automatiska körningen',
++  xoaHlMode: 'Läge',
++  xoaHlModeCheck: 'Sök automatiskt',
++  xoaHlModeInstall: 'Installera automatiskt',
++  xoaHlModeManual: 'Endast manuellt',
++  xoaHlNextRun: 'Nästa schemalagda körning',
++  xoaHlNoAutomaticRun: 'Ingen automatisk uppdatering har körts ännu.',
++  xoaHlRandomDelay: 'Slumpmässig fördröjning',
++  xoaHlSaveAutomaticUpdates: 'Spara inställningar för automatiska uppdateringar',
++  xoaHlScheduleLoading: 'Läser in inställningar för automatiska uppdateringar…',
++  xoaHlScheduleUnavailable: 'Det gick inte att läsa in inställningarna för automatiska uppdateringar.',
++  xoaHlTime: 'Lokal starttid',
++  xoaHlTimezone: 'Enhetens tidszon',
++  xoaHlAppliance: 'Enhet',
++  xoaHlCheckFailed: 'Sökningen efter uppdateringar misslyckades',
++  xoaHlCheckForUpdate: 'Sök efter uppdateringar',
++  xoaHlChecking: 'Söker efter uppdateringar…',
++  xoaHlInstalledVersion: 'Installerad version',
++  xoaHlLastChecked: 'Senaste kontroll',
++  xoaHlNeverChecked: 'Uppdateringsstatus är okänd. Sök efter uppdateringar för att se aktuell status.',
++  xoaHlPackageName: 'Paket',
++  xoaHlPackagesAvailable: 'Paket med tillgängliga uppdateringar:',
++  xoaHlPackageVersion: 'Version',
++  xoaHlRecheckAfterUpdate: 'Sök efter uppdateringar igen för att bekräfta den nya statusen.',
++  xoaHlReloadPage: 'Läs in sidan igen',
++  xoaHlServerUnreachable: 'xo-server svarar inte ännu. Försök igen om en stund.',
++  xoaHlStartUpdate: 'Uppdatera nu',
++  xoaHlUnknownVersion: 'Okänd',
++  xoaHlUpdateAvailable: 'Tillgängliga uppdateringar: {n, number}',
++  xoaHlUpdateDidNotStart: 'Uppdateringstjänsten startade inte.',
++  xoaHlUpdateFailed: 'Uppdateringen misslyckades. Se loggen nedan.',
++  xoaHlUpdateLog: 'Uppdateringslogg',
++  xoaHlUpdateReconnecting: 'Återansluter till xo-server, som startas om av uppdateringen…',
++  xoaHlUpdateReconnectingSlow: 'xo-server har inte svarat på {seconds, number} s. Uppdateringen fortsätter på enheten och sidan försöker ansluta igen. När xo-server svarar kan du också läsa in sidan igen för att återuppta uppföljningen.',
++  xoaHlUpdateRunning: 'Uppdatering pågår…',
++  xoaHlUpdateScope: 'Uppdateringen installerar alla väntande paket på enheten, inklusive AlmaLinux och kärnan.',
++  xoaHlUpdateStarting: 'Startar uppdateringen…',
++  xoaHlUpdateSucceeded: 'Uppdateringen slutfördes.',
++  xoaHlUpToDate: 'Uppdaterad',
++  xoaHlWaitingForOutput: 'Väntar på första raden i loggen…',
++  xoaHlMinutes: '{n, number} min',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/tr.js b/packages/xo-web/src/common/intl/locales/tr.js
+index 5051baa..3e3070e 100644
+--- a/packages/xo-web/src/common/intl/locales/tr.js
++++ b/packages/xo-web/src/common/intl/locales/tr.js
+@@ -5006,4 +5006,55 @@ export default {
+   // Original text: "{days, plural, =0 {} one {# day } other {# days }}{hours, plural, =0 {} one {# hour } other {# hours }}{minutes, plural, =0 {} one {# minute } other {# minutes }}{seconds, plural, =0 {} one {# second} other {# seconds}}"
+   durationFormat:
+     '{days, plural, =0 {} one {# day } other {# days }}{hours, plural, =0 {} one {# hour } other {# hours }}{minutes, plural, =0 {} one {# minute } other {# minutes }}{seconds, plural, =0 {} one {# second} other {# seconds}}',
++
++  // XOA-HL appliance updates
++  settingsXoaHlUpdatesPage: 'XOA-HL Güncellemeleri',
++  xoaHlAutomaticUpdates: 'Otomatik güncellemeler',
++  xoaHlAutomaticUpdatesConfirm: 'Katılımsız güncellemelerin hizmetleri yeniden başlatabileceğini ve cihazın yeniden başlatılmasını gerektirebileceğini anlıyorum.',
++  xoaHlAutomaticUpdatesDisabled: 'Otomatik yükleme varsayılan olarak devre dışıdır.',
++  xoaHlDay: 'Gün',
++  xoaHlFrequency: 'Sıklık',
++  xoaHlFrequencyDaily: 'Günlük',
++  xoaHlFrequencyWeekly: 'Haftalık',
++  xoaHlLastAutomaticResult: 'Son otomatik çalıştırmanın sonucu',
++  xoaHlMode: 'Mod',
++  xoaHlModeCheck: 'Otomatik olarak denetle',
++  xoaHlModeInstall: 'Otomatik olarak yükle',
++  xoaHlModeManual: 'Yalnızca el ile',
++  xoaHlNextRun: 'Sonraki zamanlanmış çalıştırma',
++  xoaHlNoAutomaticRun: 'Henüz otomatik güncelleme çalıştırılmadı.',
++  xoaHlRandomDelay: 'Rastgele gecikme',
++  xoaHlSaveAutomaticUpdates: 'Otomatik güncelleme ayarlarını kaydet',
++  xoaHlScheduleLoading: 'Otomatik güncelleme ayarları yükleniyor…',
++  xoaHlScheduleUnavailable: 'Otomatik güncelleme ayarları yüklenemedi.',
++  xoaHlTime: 'Yerel başlangıç saati',
++  xoaHlTimezone: 'Cihazın saat dilimi',
++  xoaHlAppliance: 'Cihaz',
++  xoaHlCheckFailed: 'Güncelleme denetimi başarısız oldu',
++  xoaHlCheckForUpdate: 'Güncellemeleri denetle',
++  xoaHlChecking: 'Güncellemeler denetleniyor…',
++  xoaHlInstalledVersion: 'Yüklü sürüm',
++  xoaHlLastChecked: 'Son denetim',
++  xoaHlNeverChecked: 'Güncelleme durumu bilinmiyor. Öğrenmek için güncellemeleri denetleyin.',
++  xoaHlPackageName: 'Paket',
++  xoaHlPackagesAvailable: 'Güncellemesi bulunan paketler:',
++  xoaHlPackageVersion: 'Sürüm',
++  xoaHlRecheckAfterUpdate: 'Yeni durumu doğrulamak için güncellemeleri yeniden denetleyin.',
++  xoaHlReloadPage: 'Sayfayı yeniden yükle',
++  xoaHlServerUnreachable: 'xo-server henüz yanıt vermiyor. Biraz sonra yeniden deneyin.',
++  xoaHlStartUpdate: 'Şimdi güncelle',
++  xoaHlUnknownVersion: 'Bilinmiyor',
++  xoaHlUpdateAvailable: 'Kullanılabilir güncelleme sayısı: {n, number}',
++  xoaHlUpdateDidNotStart: 'Güncelleme hizmeti başlamadı.',
++  xoaHlUpdateFailed: 'Güncelleme başarısız oldu. Aşağıdaki günlüğe bakın.',
++  xoaHlUpdateLog: 'Güncelleme günlüğü',
++  xoaHlUpdateReconnecting: 'Güncelleme tarafından yeniden başlatılan xo-server\'a yeniden bağlanılıyor…',
++  xoaHlUpdateReconnectingSlow: 'xo-server {seconds, number} saniyedir yanıt vermiyor. Güncelleme cihazda sürüyor ve bu sayfa yeniden bağlanmayı deniyor. xo-server yeniden yanıt verdiğinde sayfayı yenileyerek güncellemeyi izlemeye devam edebilirsiniz.',
++  xoaHlUpdateRunning: 'Güncelleme sürüyor…',
++  xoaHlUpdateScope: 'Güncelleme, AlmaLinux ve çekirdek dahil cihazdaki tüm bekleyen paketleri yükler.',
++  xoaHlUpdateStarting: 'Güncelleme başlatılıyor…',
++  xoaHlUpdateSucceeded: 'Güncelleme başarıyla tamamlandı.',
++  xoaHlUpToDate: 'Güncel',
++  xoaHlWaitingForOutput: 'Günlüğün ilk satırı bekleniyor…',
++  xoaHlMinutes: '{n, number} dk',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/zh.js b/packages/xo-web/src/common/intl/locales/zh.js
+index bd3bffb..dc962dd 100644
+--- a/packages/xo-web/src/common/intl/locales/zh.js
++++ b/packages/xo-web/src/common/intl/locales/zh.js
+@@ -2273,4 +2273,55 @@ export default {
+ 
+   // Original text: "Others"
+   others: '其他',
++
++  // XOA-HL appliance updates
++  settingsXoaHlUpdatesPage: 'XOA-HL 更新',
++  xoaHlAutomaticUpdates: '自动更新',
++  xoaHlAutomaticUpdatesConfirm: '我了解无人值守更新可能会重启服务，并可能需要重启设备。',
++  xoaHlAutomaticUpdatesDisabled: '默认禁用自动安装。',
++  xoaHlDay: '日期',
++  xoaHlFrequency: '频率',
++  xoaHlFrequencyDaily: '每天',
++  xoaHlFrequencyWeekly: '每周',
++  xoaHlLastAutomaticResult: '上次自动运行结果',
++  xoaHlMode: '模式',
++  xoaHlModeCheck: '自动检查',
++  xoaHlModeInstall: '自动安装',
++  xoaHlModeManual: '仅手动',
++  xoaHlNextRun: '下次计划运行时间',
++  xoaHlNoAutomaticRun: '尚未运行过自动更新。',
++  xoaHlRandomDelay: '随机延迟',
++  xoaHlSaveAutomaticUpdates: '保存自动更新设置',
++  xoaHlScheduleLoading: '正在加载自动更新设置…',
++  xoaHlScheduleUnavailable: '无法加载自动更新设置。',
++  xoaHlTime: '本地开始时间',
++  xoaHlTimezone: '设备时区',
++  xoaHlAppliance: '设备',
++  xoaHlCheckFailed: '检查更新失败',
++  xoaHlCheckForUpdate: '检查更新',
++  xoaHlChecking: '正在检查更新…',
++  xoaHlInstalledVersion: '已安装版本',
++  xoaHlLastChecked: '上次检查时间',
++  xoaHlNeverChecked: '更新状态未知。请检查更新以确定当前状态。',
++  xoaHlPackageName: '软件包',
++  xoaHlPackagesAvailable: '有可用更新的软件包：',
++  xoaHlPackageVersion: '版本',
++  xoaHlRecheckAfterUpdate: '请再次检查更新以确认最新状态。',
++  xoaHlReloadPage: '重新加载页面',
++  xoaHlServerUnreachable: 'xo-server 尚未响应。请稍后重试。',
++  xoaHlStartUpdate: '立即更新',
++  xoaHlUnknownVersion: '未知',
++  xoaHlUpdateAvailable: '有 {n, number} 项可用更新',
++  xoaHlUpdateDidNotStart: '更新服务未启动。',
++  xoaHlUpdateFailed: '更新失败。请查看下面的日志。',
++  xoaHlUpdateLog: '更新日志',
++  xoaHlUpdateReconnecting: '正在重新连接 xo-server；更新会使其重启…',
++  xoaHlUpdateReconnectingSlow: 'xo-server 已有 {seconds, number} 秒未响应。更新仍在设备上继续，此页面将继续尝试重新连接。xo-server 恢复响应后，您也可以重新加载页面，页面会恢复更新进度。',
++  xoaHlUpdateRunning: '正在更新…',
++  xoaHlUpdateScope: '更新会安装设备上所有待更新的软件包，包括 AlmaLinux 和内核。',
++  xoaHlUpdateStarting: '正在启动更新…',
++  xoaHlUpdateSucceeded: '更新已成功完成。',
++  xoaHlUpToDate: '已是最新版本',
++  xoaHlWaitingForOutput: '正在等待第一行日志…',
++  xoaHlMinutes: '{n, number} 分钟',
+ }
+diff --git a/packages/xo-web/src/common/intl/messages.js b/packages/xo-web/src/common/intl/messages.js
+index 3f6e104..f1cf538 100644
+--- a/packages/xo-web/src/common/intl/messages.js
++++ b/packages/xo-web/src/common/intl/messages.js
+@@ -260,6 +260,7 @@ const messages = {
+   xoaHlNextRun: 'Next scheduled run',
+   xoaHlNoAutomaticRun: 'No automatic update has run yet.',
+   xoaHlRandomDelay: 'Random delay',
++  xoaHlMinutes: '{n, number} min',
+   xoaHlSaveAutomaticUpdates: 'Save automatic update settings',
+   xoaHlScheduleLoading: 'Loading automatic update settings…',
+   xoaHlScheduleUnavailable: 'Automatic update settings could not be loaded.',
+diff --git a/packages/xo-web/src/xo-app/settings/xoa-hl-updates/index.js b/packages/xo-web/src/xo-app/settings/xoa-hl-updates/index.js
+index 8e846cb..464bfa0 100644
+--- a/packages/xo-web/src/xo-app/settings/xoa-hl-updates/index.js
++++ b/packages/xo-web/src/xo-app/settings/xoa-hl-updates/index.js
+@@ -6,7 +6,7 @@ import React from 'react'
+ import UserError from 'user-error'
+ import { Card, CardBlock, CardHeader } from 'card'
+ import { Col, Container, Row } from 'grid'
+-import { FormattedRelative } from 'react-intl'
++import { FormattedDate, FormattedRelative } from 'react-intl'
+ import {
+   checkXoaHlUpdate,
+   getXoaHlUpdateConfiguration,
+@@ -589,7 +589,9 @@ export default class XoaHlUpdates extends Component {
+           <Col mediumSize={4}>
+             <label>{_('xoaHlDay')}</label>
+             <select className='form-control' disabled={configurationSaving || configuration.mode === 'manual' || configuration.frequency !== 'weekly'} onChange={this._setConfigurationField('day')} value={configuration.day}>
+-              {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(day => <option key={day} value={day}>{day}</option>)}
++              {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day, index) => (
++                <option key={day} value={day}><FormattedDate value={new Date(2024, 0, index + 1)} weekday='short' /></option>
++              ))}
+             </select>
+           </Col>
+           <Col mediumSize={4}>
+@@ -599,7 +601,7 @@ export default class XoaHlUpdates extends Component {
+           <Col mediumSize={4}>
+             <label>{_('xoaHlRandomDelay')}</label>
+             <select className='form-control' disabled={configurationSaving || configuration.mode === 'manual'} onChange={this._setConfigurationField('randomDelayMinutes')} value={configuration.randomDelayMinutes}>
+-              {[0, 5, 10, 15, 30, 60].map(minutes => <option key={minutes} value={minutes}>{minutes} min</option>)}
++              {[0, 5, 10, 15, 30, 60].map(minutes => <option key={minutes} value={minutes}>{_('xoaHlMinutes', { n: minutes })}</option>)}
+             </select>
+           </Col>
+         </Row>

@@ -5,6 +5,7 @@ on:
     paths:
       - 'patches/**'
       - 'UPSTREAM_XO'
+      - 'scripts/audit-ui-translations.py'
       - '.github/workflows/validate-patches.yml'
   push:
     branches:
@@ -12,6 +13,7 @@ on:
     paths:
       - 'patches/**'
       - 'UPSTREAM_XO'
+      - 'scripts/audit-ui-translations.py'
       - '.github/workflows/validate-patches.yml'
 
 jobs:
@@ -39,6 +41,8 @@ jobs:
           done
       - name: Check server module syntax
         run: node --check "${XO_DIR}/packages/xo-server/src/api/xoaHl.mjs"
+      - name: Audit UI translations
+        run: python3 scripts/audit-ui-translations.py "${XO_DIR}"
       - name: Verify combined update contracts
         run: |
           set -euo pipefail
