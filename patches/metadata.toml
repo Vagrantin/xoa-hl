@@ -50,3 +50,14 @@ maintainer = "vagrantin"
 status = "active"
 dependencies = []
 notes = "Adds new API endpoints: getVersion, checkForUpdate, getUpdateStatus, startUpdate, getUpdateProgress. Also adds XOA-HL Updates settings tab to the UI. startUpdate uses systemctl --no-block and getUpdateProgress serves incremental lines of /var/lib/xoa-hl/update.log, so the page streams the transaction as it runs; it pairs with SOURCES/xoa-hl-update.sh and SOURCES/xoa-hl.sudoers, which have to move together. Also patches connect() in packages/xo-web/src/common/xo/index.js to start a new reconnection backoff when one is exhausted (upstream gives up after 10 attempts, about 2.5 minutes, and never retries), and remembers the update a tab started in sessionStorage so a reload recovers it. It also adds admin-only getUpdateConfiguration and setUpdateConfiguration endpoints plus the Settings controls for validated manual, automatic-check, and automatic-install modes; these move together with the packaged timers, configuration helper, and sudoers rule."
+
+[[patches]]
+id = "zz-xoa-hl-translations"
+description = "Translate XOA-HL update settings in all shipped UI locales and localize weekday and delay controls"
+target = "packages/xo-web/src/common/intl and packages/xo-web/src/xo-app/settings/xoa-hl-updates/index.js"
+upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
+applies_to = ["5.113.2"]
+maintainer = "vagrantin"
+status = "active"
+dependencies = ["xoa-hl-update-api"]
+notes = "Applied after xoa-hl-update-api; the translation audit requires all 49 XOA-HL strings in every shipped locale. Existing upstream XO translation gaps are reported separately."
