@@ -72,3 +72,14 @@ maintainer = "vagrantin"
 status = "active"
 dependencies = ["zz-xoa-hl-translations"]
 notes = "Adds missing values or replaces undefined entries for common actions, status, navigation, VM, and storage labels. The audit enforces these 46 keys in all 13 locales while reporting other inherited gaps."
+
+[[patches]]
+id = "zzzz-xo-core-ui-translations-batch2"
+description = "Translate inherited XO network, state, licensing, and certificate labels"
+target = "packages/xo-web/src/common/intl/locales/*.js"
+upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
+applies_to = ["5.113.2"]
+maintainer = "vagrantin"
+status = "active"
+dependencies = ["zzz-xo-core-ui-translations"]
+notes = "Adds 20 high-frequency inherited keys in all 13 shipped locales; the audit enforces 66 core keys in total."
