@@ -83,3 +83,14 @@ maintainer = "vagrantin"
 status = "active"
 dependencies = ["zzz-xo-core-ui-translations"]
 notes = "Adds 20 high-frequency inherited keys in all 13 shipped locales; the audit enforces 66 core keys in total."
+
+[[patches]]
+id = "zzzzz-xo-core-ui-translations-batch3"
+description = "Translate inherited XO certificate, tag, custom-field, and licensing labels"
+target = "packages/xo-web/src/common/intl/locales/*.js"
+upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
+applies_to = ["5.113.2"]
+maintainer = "vagrantin"
+status = "active"
+dependencies = ["zzzz-xo-core-ui-translations-batch2"]
+notes = "Adds 17 high-frequency inherited keys in all 13 shipped locales; the audit enforces 83 core keys in total."
