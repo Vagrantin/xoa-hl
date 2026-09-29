@@ -62,7 +62,7 @@
                <Link className='nav-link' style={{ display: 'flex' }} to='/about'>
                  {+process.env.XOA_PLAN === 5 ? (
 diff --git a/packages/xo-web/src/common/intl/messages.js b/packages/xo-web/src/common/intl/messages.js
-index 5fad0ce97..54b31f92a 100644
+index 5fad0ce97..2f9c3b4a1 100644
 --- a/packages/xo-web/src/common/intl/messages.js
 +++ b/packages/xo-web/src/common/intl/messages.js
 @@ -2422,8 +2422,8 @@ const messages = {
@@ -71,8 +71,8 @@ index 5fad0ce97..54b31f92a 100644
    disclaimerText2: "If you are a company, it's better to use it with our appliance + pro support included:",
 -  disclaimerText3: 'This version is not bundled with any support nor updates. Use it with caution.',
 -  disclaimerText4: 'Why do I see this message?',
-+  disclaimerText3: 'Thank you for using XOA-HL!',
-+  disclaimerText4: ' Documentation is available here',
++  disclaimerText3: 'Vates XO doc',
++  disclaimerText4: 'XOA-HL doc',
    notRegisteredDisclaimerInfo: 'You are not registered. Your XOA may not be up to date.',
    notRegisteredDisclaimerCreateAccount: 'Click here to create an account.',
    notRegisteredDisclaimerRegister: 'Click here to register and update your XOA.',
@@ -85,7 +85,7 @@ index a441b9ecd..b151554cb 100644
                  <div className='alert alert-danger mb-0'>
                    <a
 -                    href='https://vates.tech/deploy/?pk_campaign=xo_source_banner'
-+                    href='https://vagrantin.github.io/xcp-hl/'
++                    href='https://docs.xen-orchestra.com/'
                      rel='noopener noreferrer'
                      target='_blank'
                    >
@@ -93,7 +93,7 @@ index a441b9ecd..b151554cb 100644
                    </a>{' '}
                    <a
 -                    href='https://docs.xen-orchestra.com/installation#banner-and-warnings'
-+                    href='https://vagrantin.github.io/xcp-hl/'
++                    href='https://xoa-hl.net/'
                      rel='noopener noreferrer'
                      target='_blank'
                    >
