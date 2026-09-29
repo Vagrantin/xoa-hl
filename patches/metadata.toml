@@ -61,3 +61,14 @@ maintainer = "vagrantin"
 status = "active"
 dependencies = ["xoa-hl-update-api"]
 notes = "Applied after xoa-hl-update-api; the translation audit requires all 49 XOA-HL strings in every shipped locale. Existing upstream XO translation gaps are reported separately."
+
+[[patches]]
+id = "zzz-xo-core-ui-translations"
+description = "Translate 46 inherited XO core UI labels in all shipped locales"
+target = "packages/xo-web/src/common/intl/locales/*.js"
+upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
+applies_to = ["5.113.2"]
+maintainer = "vagrantin"
+status = "active"
+dependencies = ["zz-xoa-hl-translations"]
+notes = "Adds missing values or replaces undefined entries for common actions, status, navigation, VM, and storage labels. The audit enforces these 46 keys in all 13 locales while reporting other inherited gaps."
