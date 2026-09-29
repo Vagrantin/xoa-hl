@@ -136,7 +136,7 @@ The GPG signing subkeys expire 2027-05-10. After that date, repository metadata 
 These files move together. Changing one without the other breaks a contract,
 usually **silently**.
 
-- **repo-id-contract** — `xcp-hl/SOURCES/xcp-hl.repo@0bbd7cf46c80665547952512fe94c29972749d61#L41,50,59` ↔ `xoa-hl/patches/xcp-hl-updates.patch` (member path; commit unpinned) ↔ `/etc/xapi.d/plugins/updater.py` (installed runtime path; source unverified)  Renaming a stanza produces NO error. The packages silently vanish from the Patches tab in XO. Silent failure is why this must be a bundle.
+- **repo-id-contract** — `xcp-hl/SOURCES/xcp-hl.repo@0bbd7cf46c80665547952512fe94c29972749d61#L41,50,59` ↔ `xoa-hl/patches/xcp-hl-updates.patch` (member path; commit unpinned) ↔ `xcp-ng-updater/SOURCES/etc/xapi.d/plugins/updater.py@9367cd63400a105f9a6c128d59a0812456a2112b#L107-111`  Renaming a stanza produces NO error. The packages silently vanish from the Patches tab in XO. Silent failure is why this must be a bundle.
 
 ## Querying the knowledge base
 
