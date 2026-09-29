@@ -1,0 +1,923 @@
+diff --git a/packages/xo-web/src/common/intl/locales/es.js b/packages/xo-web/src/common/intl/locales/es.js
+index f80842f..e102602 100644
+--- a/packages/xo-web/src/common/intl/locales/es.js
++++ b/packages/xo-web/src/common/intl/locales/es.js
+@@ -3886,4 +3886,64 @@ export default {
+   thick: 'Grueso',
+   thin: 'Fino',
+   noFileSelected: 'No se ha seleccionado ningún archivo',
++
++  // Core network, state, licensing, and certificate labels
++  destinationSR: 'SR de destino',
++
++  // Core network, state, licensing, and certificate labels
++  destinationNetwork: 'Red de destino',
++
++  // Core network, state, licensing, and certificate labels
++  dhcp: 'DHCP',
++
++  // Core network, state, licensing, and certificate labels
++  static: 'Estática',
++
++  // Core network, state, licensing, and certificate labels
++  ip: 'IP',
++
++  // Core network, state, licensing, and certificate labels
++  deletedUser: 'eliminado ({ name })',
++
++  // Core network, state, licensing, and certificate labels
++  networkConfiguration: 'Configuración de red',
++
++  // Core network, state, licensing, and certificate labels
++  integrity: 'Integridad',
++
++  // Core network, state, licensing, and certificate labels
++  altered: 'Alterado',
++
++  // Core network, state, licensing, and certificate labels
++  missing: 'Faltante',
++
++  // Core network, state, licensing, and certificate labels
++  verified: 'Verificado',
++
++  // Core network, state, licensing, and certificate labels
++  snapshotMode: 'Modo de instantánea',
++
++  // Core network, state, licensing, and certificate labels
++  normal: 'Normal',
++
++  // Core network, state, licensing, and certificate labels
++  withMemory: 'Con memoria',
++
++  // Core network, state, licensing, and certificate labels
++  offline: 'Sin conexión',
++
++  // Core network, state, licensing, and certificate labels
++  noLicenseAvailable: 'No hay ninguna licencia disponible',
++
++  // Core network, state, licensing, and certificate labels
++  emailPlaceholderExample: 'Dirección de correo, p. ej.: it@company.net',
++
++  // Core network, state, licensing, and certificate labels
++  unknownSize: 'Tamaño desconocido',
++
++  // Core network, state, licensing, and certificate labels
++  installedCertificates: 'Certificados instalados',
++
++  // Core network, state, licensing, and certificate labels
++  expiry: 'Vencimiento',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/fa.js b/packages/xo-web/src/common/intl/locales/fa.js
+index 93c31ea..d5a3e46 100644
+--- a/packages/xo-web/src/common/intl/locales/fa.js
++++ b/packages/xo-web/src/common/intl/locales/fa.js
+@@ -5211,4 +5211,64 @@ export default {
+   thick: 'ضخیم',
+   thin: 'نازک',
+   noFileSelected: 'فایلی انتخاب نشده است',
++
++  // Core network, state, licensing, and certificate labels
++  destinationSR: '‏SR مقصد',
++
++  // Core network, state, licensing, and certificate labels
++  destinationNetwork: 'شبکه مقصد',
++
++  // Core network, state, licensing, and certificate labels
++  dhcp: 'DHCP',
++
++  // Core network, state, licensing, and certificate labels
++  static: 'ایستا',
++
++  // Core network, state, licensing, and certificate labels
++  ip: 'IP',
++
++  // Core network, state, licensing, and certificate labels
++  deletedUser: 'حذف‌شده ({ name })',
++
++  // Core network, state, licensing, and certificate labels
++  networkConfiguration: 'پیکربندی شبکه',
++
++  // Core network, state, licensing, and certificate labels
++  integrity: 'یکپارچگی',
++
++  // Core network, state, licensing, and certificate labels
++  altered: 'تغییریافته',
++
++  // Core network, state, licensing, and certificate labels
++  missing: 'مفقود',
++
++  // Core network, state, licensing, and certificate labels
++  verified: 'تأییدشده',
++
++  // Core network, state, licensing, and certificate labels
++  snapshotMode: 'حالت اسنپ‌شات',
++
++  // Core network, state, licensing, and certificate labels
++  normal: 'عادی',
++
++  // Core network, state, licensing, and certificate labels
++  withMemory: 'همراه حافظه',
++
++  // Core network, state, licensing, and certificate labels
++  offline: 'آفلاین',
++
++  // Core network, state, licensing, and certificate labels
++  noLicenseAvailable: 'مجوزی در دسترس نیست',
++
++  // Core network, state, licensing, and certificate labels
++  emailPlaceholderExample: 'نشانی ایمیل، مثال: it@company.net',
++
++  // Core network, state, licensing, and certificate labels
++  unknownSize: 'اندازه نامشخص',
++
++  // Core network, state, licensing, and certificate labels
++  installedCertificates: 'گواهی‌های نصب‌شده',
++
++  // Core network, state, licensing, and certificate labels
++  expiry: 'انقضا',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/fr.js b/packages/xo-web/src/common/intl/locales/fr.js
+index eab6d47..9cb9d72 100644
+--- a/packages/xo-web/src/common/intl/locales/fr.js
++++ b/packages/xo-web/src/common/intl/locales/fr.js
+@@ -3971,4 +3971,64 @@ export default {
+   thick: 'Épais',
+   thin: 'Fin',
+   noFileSelected: 'Aucun fichier sélectionné',
++
++  // Core network, state, licensing, and certificate labels
++  destinationSR: 'SR de destination',
++
++  // Core network, state, licensing, and certificate labels
++  destinationNetwork: 'Réseau de destination',
++
++  // Core network, state, licensing, and certificate labels
++  dhcp: 'DHCP',
++
++  // Core network, state, licensing, and certificate labels
++  static: 'Statique',
++
++  // Core network, state, licensing, and certificate labels
++  ip: 'IP',
++
++  // Core network, state, licensing, and certificate labels
++  deletedUser: 'supprimé ({ name })',
++
++  // Core network, state, licensing, and certificate labels
++  networkConfiguration: 'Configuration réseau',
++
++  // Core network, state, licensing, and certificate labels
++  integrity: 'Intégrité',
++
++  // Core network, state, licensing, and certificate labels
++  altered: 'Modifié',
++
++  // Core network, state, licensing, and certificate labels
++  missing: 'Manquant',
++
++  // Core network, state, licensing, and certificate labels
++  verified: 'Vérifié',
++
++  // Core network, state, licensing, and certificate labels
++  snapshotMode: 'Mode instantané',
++
++  // Core network, state, licensing, and certificate labels
++  normal: 'Normal',
++
++  // Core network, state, licensing, and certificate labels
++  withMemory: 'Avec mémoire',
++
++  // Core network, state, licensing, and certificate labels
++  offline: 'Hors ligne',
++
++  // Core network, state, licensing, and certificate labels
++  noLicenseAvailable: 'Aucune licence disponible',
++
++  // Core network, state, licensing, and certificate labels
++  emailPlaceholderExample: 'Adresse e-mail, ex. : it@company.net',
++
++  // Core network, state, licensing, and certificate labels
++  unknownSize: 'Taille inconnue',
++
++  // Core network, state, licensing, and certificate labels
++  installedCertificates: 'Certificats installés',
++
++  // Core network, state, licensing, and certificate labels
++  expiry: 'Expiration',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/he.js b/packages/xo-web/src/common/intl/locales/he.js
+index 31b5656..e26dc60 100644
+--- a/packages/xo-web/src/common/intl/locales/he.js
++++ b/packages/xo-web/src/common/intl/locales/he.js
+@@ -3217,4 +3217,64 @@ export default {
+   thick: 'עבה',
+   thin: 'דק',
+   noFileSelected: 'לא נבחר קובץ',
++
++  // Core network, state, licensing, and certificate labels
++  destinationSR: 'SR יעד',
++
++  // Core network, state, licensing, and certificate labels
++  destinationNetwork: 'רשת יעד',
++
++  // Core network, state, licensing, and certificate labels
++  dhcp: 'DHCP',
++
++  // Core network, state, licensing, and certificate labels
++  static: 'סטטי',
++
++  // Core network, state, licensing, and certificate labels
++  ip: 'IP',
++
++  // Core network, state, licensing, and certificate labels
++  deletedUser: 'נמחק ({ name })',
++
++  // Core network, state, licensing, and certificate labels
++  networkConfiguration: 'תצורת רשת',
++
++  // Core network, state, licensing, and certificate labels
++  integrity: 'תקינות',
++
++  // Core network, state, licensing, and certificate labels
++  altered: 'שונה',
++
++  // Core network, state, licensing, and certificate labels
++  missing: 'חסר',
++
++  // Core network, state, licensing, and certificate labels
++  verified: 'מאומת',
++
++  // Core network, state, licensing, and certificate labels
++  snapshotMode: 'מצב תמונת מצב',
++
++  // Core network, state, licensing, and certificate labels
++  normal: 'רגיל',
++
++  // Core network, state, licensing, and certificate labels
++  withMemory: 'עם זיכרון',
++
++  // Core network, state, licensing, and certificate labels
++  offline: 'לא מקוון',
++
++  // Core network, state, licensing, and certificate labels
++  noLicenseAvailable: 'אין רישיון זמין',
++
++  // Core network, state, licensing, and certificate labels
++  emailPlaceholderExample: 'כתובת דוא״ל, לדוגמה: it@company.net',
++
++  // Core network, state, licensing, and certificate labels
++  unknownSize: 'גודל לא ידוע',
++
++  // Core network, state, licensing, and certificate labels
++  installedCertificates: 'אישורים מותקנים',
++
++  // Core network, state, licensing, and certificate labels
++  expiry: 'תפוגה',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/hu.js b/packages/xo-web/src/common/intl/locales/hu.js
+index fa43bf7..c01804f 100644
+--- a/packages/xo-web/src/common/intl/locales/hu.js
++++ b/packages/xo-web/src/common/intl/locales/hu.js
+@@ -3679,4 +3679,64 @@ export default {
+   thick: 'Vastag',
+   thin: 'Vékony',
+   noFileSelected: 'Nincs kiválasztva fájl',
++
++  // Core network, state, licensing, and certificate labels
++  destinationSR: 'Cél SR',
++
++  // Core network, state, licensing, and certificate labels
++  destinationNetwork: 'Célhálózat',
++
++  // Core network, state, licensing, and certificate labels
++  dhcp: 'DHCP',
++
++  // Core network, state, licensing, and certificate labels
++  static: 'Statikus',
++
++  // Core network, state, licensing, and certificate labels
++  ip: 'IP',
++
++  // Core network, state, licensing, and certificate labels
++  deletedUser: 'törölve ({ name })',
++
++  // Core network, state, licensing, and certificate labels
++  networkConfiguration: 'Hálózati konfiguráció',
++
++  // Core network, state, licensing, and certificate labels
++  integrity: 'Integritás',
++
++  // Core network, state, licensing, and certificate labels
++  altered: 'Módosítva',
++
++  // Core network, state, licensing, and certificate labels
++  missing: 'Hiányzik',
++
++  // Core network, state, licensing, and certificate labels
++  verified: 'Ellenőrizve',
++
++  // Core network, state, licensing, and certificate labels
++  snapshotMode: 'Pillanatkép mód',
++
++  // Core network, state, licensing, and certificate labels
++  normal: 'Normál',
++
++  // Core network, state, licensing, and certificate labels
++  withMemory: 'Memóriával',
++
++  // Core network, state, licensing, and certificate labels
++  offline: 'Offline',
++
++  // Core network, state, licensing, and certificate labels
++  noLicenseAvailable: 'Nincs elérhető licenc',
++
++  // Core network, state, licensing, and certificate labels
++  emailPlaceholderExample: 'E-mail-cím, pl.: it@company.net',
++
++  // Core network, state, licensing, and certificate labels
++  unknownSize: 'Ismeretlen méret',
++
++  // Core network, state, licensing, and certificate labels
++  installedCertificates: 'Telepített tanúsítványok',
++
++  // Core network, state, licensing, and certificate labels
++  expiry: 'Lejárat',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/it.js b/packages/xo-web/src/common/intl/locales/it.js
+index 33bef1c..c61b6f7 100644
+--- a/packages/xo-web/src/common/intl/locales/it.js
++++ b/packages/xo-web/src/common/intl/locales/it.js
+@@ -186,7 +186,7 @@ export default {
+   user: 'Utente',
+ 
+   // Original text: 'deleted ({ name })'
+-  deletedUser: 'eliminato ({name})',
++  deletedUser: 'eliminato ({ name })',
+ 
+   // Original text: 'Network configuration'
+   networkConfiguration: 'Configurazione di rete',
+@@ -5999,4 +5999,19 @@ export default {
+   thick: 'Thick',
+   thin: 'Thin',
+   noFileSelected: 'Nessun file selezionato',
++
++  // Core network, state, licensing, and certificate labels
++  noLicenseAvailable: 'Nessuna licenza disponibile',
++
++  // Core network, state, licensing, and certificate labels
++  emailPlaceholderExample: 'Indirizzo e-mail, es.: it@company.net',
++
++  // Core network, state, licensing, and certificate labels
++  unknownSize: 'Dimensione sconosciuta',
++
++  // Core network, state, licensing, and certificate labels
++  installedCertificates: 'Certificati installati',
++
++  // Core network, state, licensing, and certificate labels
++  expiry: 'Scadenza',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/ja.js b/packages/xo-web/src/common/intl/locales/ja.js
+index 6251db8..d0db139 100644
+--- a/packages/xo-web/src/common/intl/locales/ja.js
++++ b/packages/xo-web/src/common/intl/locales/ja.js
+@@ -297,61 +297,61 @@ export default {
+   vm: undefined,
+ 
+   // Original text: 'Destination SR'
+-  destinationSR: undefined,
++  destinationSR: '宛先 SR',
+ 
+   // Original text: 'Destination network'
+-  destinationNetwork: undefined,
++  destinationNetwork: '宛先ネットワーク',
+ 
+   // Original text: 'DHCP'
+-  dhcp: undefined,
++  dhcp: 'DHCP',
+ 
+   // Original text: 'ID'
+   id: undefined,
+ 
+   // Original text: 'IP'
+-  ip: undefined,
++  ip: 'IP',
+ 
+   // Original text: 'Static'
+-  static: undefined,
++  static: '静的',
+ 
+   // Original text: 'User'
+   user: 'ユーザー',
+ 
+   // Original text: 'deleted ({ name })'
+-  deletedUser: undefined,
++  deletedUser: '削除済み（{ name }）',
+ 
+   // Original text: 'Network configuration'
+-  networkConfiguration: undefined,
++  networkConfiguration: 'ネットワーク設定',
+ 
+   // Original text: 'Integrity'
+-  integrity: undefined,
++  integrity: '整合性',
+ 
+   // Original text: 'Altered'
+-  altered: undefined,
++  altered: '変更済み',
+ 
+   // Original text: 'Missing'
+-  missing: undefined,
++  missing: '不足',
+ 
+   // Original text: 'Verified'
+-  verified: undefined,
++  verified: '検証済み',
+ 
+   // Original text: 'Snapshot mode'
+-  snapshotMode: undefined,
++  snapshotMode: 'スナップショットモード',
+ 
+   // Original text: 'Normal'
+-  normal: undefined,
++  normal: '通常',
+ 
+   // Original text: 'With memory'
+-  withMemory: undefined,
++  withMemory: 'メモリを含む',
+ 
+   // Original text: 'Offline'
+-  offline: undefined,
++  offline: 'オフライン',
+ 
+   // Original text: 'No license available'
+-  noLicenseAvailable: undefined,
++  noLicenseAvailable: '利用可能なライセンスがありません',
+ 
+   // Original text: 'Email address, e.g.: it@company.net'
+-  emailPlaceholderExample: undefined,
++  emailPlaceholderExample: 'メールアドレス（例：it@company.net）',
+ 
+   // Original text: 'Unknown'
+   unknown: '不明',
+@@ -375,13 +375,13 @@ export default {
+   thin: 'シン',
+ 
+   // Original text: 'Unknown size'
+-  unknownSize: undefined,
++  unknownSize: 'サイズ不明',
+ 
+   // Original text: 'Installed certificates'
+-  installedCertificates: undefined,
++  installedCertificates: 'インストール済み証明書',
+ 
+   // Original text: 'Expiry'
+-  expiry: undefined,
++  expiry: '有効期限',
+ 
+   // Original text: 'Fingerprint'
+   fingerprint: undefined,
+diff --git a/packages/xo-web/src/common/intl/locales/pl.js b/packages/xo-web/src/common/intl/locales/pl.js
+index f26a0ae..ce84a68 100644
+--- a/packages/xo-web/src/common/intl/locales/pl.js
++++ b/packages/xo-web/src/common/intl/locales/pl.js
+@@ -3233,4 +3233,64 @@ export default {
+   thick: 'Gruby',
+   thin: 'Cienki',
+   noFileSelected: 'Nie wybrano pliku',
++
++  // Core network, state, licensing, and certificate labels
++  destinationSR: 'Docelowy SR',
++
++  // Core network, state, licensing, and certificate labels
++  destinationNetwork: 'Sieć docelowa',
++
++  // Core network, state, licensing, and certificate labels
++  dhcp: 'DHCP',
++
++  // Core network, state, licensing, and certificate labels
++  static: 'Statyczny',
++
++  // Core network, state, licensing, and certificate labels
++  ip: 'IP',
++
++  // Core network, state, licensing, and certificate labels
++  deletedUser: 'usunięty ({ name })',
++
++  // Core network, state, licensing, and certificate labels
++  networkConfiguration: 'Konfiguracja sieci',
++
++  // Core network, state, licensing, and certificate labels
++  integrity: 'Integralność',
++
++  // Core network, state, licensing, and certificate labels
++  altered: 'Zmieniony',
++
++  // Core network, state, licensing, and certificate labels
++  missing: 'Brak',
++
++  // Core network, state, licensing, and certificate labels
++  verified: 'Zweryfikowano',
++
++  // Core network, state, licensing, and certificate labels
++  snapshotMode: 'Tryb migawki',
++
++  // Core network, state, licensing, and certificate labels
++  normal: 'Normalny',
++
++  // Core network, state, licensing, and certificate labels
++  withMemory: 'Z pamięcią',
++
++  // Core network, state, licensing, and certificate labels
++  offline: 'Offline',
++
++  // Core network, state, licensing, and certificate labels
++  noLicenseAvailable: 'Brak dostępnej licencji',
++
++  // Core network, state, licensing, and certificate labels
++  emailPlaceholderExample: 'Adres e-mail, np.: it@company.net',
++
++  // Core network, state, licensing, and certificate labels
++  unknownSize: 'Nieznany rozmiar',
++
++  // Core network, state, licensing, and certificate labels
++  installedCertificates: 'Zainstalowane certyfikaty',
++
++  // Core network, state, licensing, and certificate labels
++  expiry: 'Wygaśnięcie',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/pt.js b/packages/xo-web/src/common/intl/locales/pt.js
+index 988fd0b..0dbb11f 100644
+--- a/packages/xo-web/src/common/intl/locales/pt.js
++++ b/packages/xo-web/src/common/intl/locales/pt.js
+@@ -3230,4 +3230,64 @@ export default {
+   thick: 'Espesso',
+   thin: 'Fino',
+   noFileSelected: 'Nenhum ficheiro selecionado',
++
++  // Core network, state, licensing, and certificate labels
++  destinationSR: 'SR de destino',
++
++  // Core network, state, licensing, and certificate labels
++  destinationNetwork: 'Rede de destino',
++
++  // Core network, state, licensing, and certificate labels
++  dhcp: 'DHCP',
++
++  // Core network, state, licensing, and certificate labels
++  static: 'Estático',
++
++  // Core network, state, licensing, and certificate labels
++  ip: 'IP',
++
++  // Core network, state, licensing, and certificate labels
++  deletedUser: 'eliminado ({ name })',
++
++  // Core network, state, licensing, and certificate labels
++  networkConfiguration: 'Configuração de rede',
++
++  // Core network, state, licensing, and certificate labels
++  integrity: 'Integridade',
++
++  // Core network, state, licensing, and certificate labels
++  altered: 'Alterado',
++
++  // Core network, state, licensing, and certificate labels
++  missing: 'Em falta',
++
++  // Core network, state, licensing, and certificate labels
++  verified: 'Verificado',
++
++  // Core network, state, licensing, and certificate labels
++  snapshotMode: 'Modo de instantâneo',
++
++  // Core network, state, licensing, and certificate labels
++  normal: 'Normal',
++
++  // Core network, state, licensing, and certificate labels
++  withMemory: 'Com memória',
++
++  // Core network, state, licensing, and certificate labels
++  offline: 'Offline',
++
++  // Core network, state, licensing, and certificate labels
++  noLicenseAvailable: 'Não há licença disponível',
++
++  // Core network, state, licensing, and certificate labels
++  emailPlaceholderExample: 'Endereço de e-mail, ex.: it@company.net',
++
++  // Core network, state, licensing, and certificate labels
++  unknownSize: 'Tamanho desconhecido',
++
++  // Core network, state, licensing, and certificate labels
++  installedCertificates: 'Certificados instalados',
++
++  // Core network, state, licensing, and certificate labels
++  expiry: 'Validade',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/ru.js b/packages/xo-web/src/common/intl/locales/ru.js
+index 03f6fdc..a3741f0 100644
+--- a/packages/xo-web/src/common/intl/locales/ru.js
++++ b/packages/xo-web/src/common/intl/locales/ru.js
+@@ -294,61 +294,61 @@ export default {
+   vm: undefined,
+ 
+   // Original text: 'Destination SR'
+-  destinationSR: undefined,
++  destinationSR: 'Целевой SR',
+ 
+   // Original text: 'Destination network'
+-  destinationNetwork: undefined,
++  destinationNetwork: 'Целевая сеть',
+ 
+   // Original text: 'DHCP'
+-  dhcp: undefined,
++  dhcp: 'DHCP',
+ 
+   // Original text: 'ID'
+   id: undefined,
+ 
+   // Original text: 'IP'
+-  ip: undefined,
++  ip: 'IP',
+ 
+   // Original text: 'Static'
+-  static: undefined,
++  static: 'Статический',
+ 
+   // Original text: 'User'
+   user: 'Пользователь',
+ 
+   // Original text: 'deleted ({ name })'
+-  deletedUser: undefined,
++  deletedUser: 'удалён ({ name })',
+ 
+   // Original text: 'Network configuration'
+-  networkConfiguration: undefined,
++  networkConfiguration: 'Сетевая конфигурация',
+ 
+   // Original text: 'Integrity'
+-  integrity: undefined,
++  integrity: 'Целостность',
+ 
+   // Original text: 'Altered'
+-  altered: undefined,
++  altered: 'Изменён',
+ 
+   // Original text: 'Missing'
+-  missing: undefined,
++  missing: 'Отсутствует',
+ 
+   // Original text: 'Verified'
+-  verified: undefined,
++  verified: 'Проверено',
+ 
+   // Original text: 'Snapshot mode'
+-  snapshotMode: undefined,
++  snapshotMode: 'Режим снимка',
+ 
+   // Original text: 'Normal'
+-  normal: undefined,
++  normal: 'Обычный',
+ 
+   // Original text: 'With memory'
+-  withMemory: undefined,
++  withMemory: 'С памятью',
+ 
+   // Original text: 'Offline'
+-  offline: undefined,
++  offline: 'Офлайн',
+ 
+   // Original text: 'No license available'
+-  noLicenseAvailable: undefined,
++  noLicenseAvailable: 'Лицензия недоступна',
+ 
+   // Original text: 'Email address, e.g.: it@company.net'
+-  emailPlaceholderExample: undefined,
++  emailPlaceholderExample: 'Адрес электронной почты, например: it@company.net',
+ 
+   // Original text: 'Unknown'
+   unknown: 'Неизвестно',
+@@ -372,13 +372,13 @@ export default {
+   thin: 'Тонкий',
+ 
+   // Original text: 'Unknown size'
+-  unknownSize: undefined,
++  unknownSize: 'Неизвестный размер',
+ 
+   // Original text: 'Installed certificates'
+-  installedCertificates: undefined,
++  installedCertificates: 'Установленные сертификаты',
+ 
+   // Original text: 'Expiry'
+-  expiry: undefined,
++  expiry: 'Срок действия',
+ 
+   // Original text: 'Fingerprint'
+   fingerprint: undefined,
+diff --git a/packages/xo-web/src/common/intl/locales/sv.js b/packages/xo-web/src/common/intl/locales/sv.js
+index fade5e3..1e24e2e 100644
+--- a/packages/xo-web/src/common/intl/locales/sv.js
++++ b/packages/xo-web/src/common/intl/locales/sv.js
+@@ -3897,4 +3897,64 @@ export default {
+   thick: 'Tjock',
+   thin: 'Tunn',
+   noFileSelected: 'Ingen fil har valts',
++
++  // Core network, state, licensing, and certificate labels
++  destinationSR: 'Destinations-SR',
++
++  // Core network, state, licensing, and certificate labels
++  destinationNetwork: 'Destinationsnätverk',
++
++  // Core network, state, licensing, and certificate labels
++  dhcp: 'DHCP',
++
++  // Core network, state, licensing, and certificate labels
++  static: 'Statisk',
++
++  // Core network, state, licensing, and certificate labels
++  ip: 'IP',
++
++  // Core network, state, licensing, and certificate labels
++  deletedUser: 'borttagen ({ name })',
++
++  // Core network, state, licensing, and certificate labels
++  networkConfiguration: 'Nätverkskonfiguration',
++
++  // Core network, state, licensing, and certificate labels
++  integrity: 'Integritet',
++
++  // Core network, state, licensing, and certificate labels
++  altered: 'Ändrad',
++
++  // Core network, state, licensing, and certificate labels
++  missing: 'Saknas',
++
++  // Core network, state, licensing, and certificate labels
++  verified: 'Verifierad',
++
++  // Core network, state, licensing, and certificate labels
++  snapshotMode: 'Ögonblicksbildsläge',
++
++  // Core network, state, licensing, and certificate labels
++  normal: 'Normal',
++
++  // Core network, state, licensing, and certificate labels
++  withMemory: 'Med minne',
++
++  // Core network, state, licensing, and certificate labels
++  offline: 'Frånkopplad',
++
++  // Core network, state, licensing, and certificate labels
++  noLicenseAvailable: 'Ingen licens tillgänglig',
++
++  // Core network, state, licensing, and certificate labels
++  emailPlaceholderExample: 'E-postadress, t.ex.: it@company.net',
++
++  // Core network, state, licensing, and certificate labels
++  unknownSize: 'Okänd storlek',
++
++  // Core network, state, licensing, and certificate labels
++  installedCertificates: 'Installerade certifikat',
++
++  // Core network, state, licensing, and certificate labels
++  expiry: 'Utgångsdatum',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/tr.js b/packages/xo-web/src/common/intl/locales/tr.js
+index 1174f84..27f4f63 100644
+--- a/packages/xo-web/src/common/intl/locales/tr.js
++++ b/packages/xo-web/src/common/intl/locales/tr.js
+@@ -5105,4 +5105,64 @@ export default {
+   thick: 'Kalın',
+   thin: 'İnce',
+   noFileSelected: 'Dosya seçilmedi',
++
++  // Core network, state, licensing, and certificate labels
++  destinationSR: 'Hedef SR',
++
++  // Core network, state, licensing, and certificate labels
++  destinationNetwork: 'Hedef ağ',
++
++  // Core network, state, licensing, and certificate labels
++  dhcp: 'DHCP',
++
++  // Core network, state, licensing, and certificate labels
++  static: 'Statik',
++
++  // Core network, state, licensing, and certificate labels
++  ip: 'IP',
++
++  // Core network, state, licensing, and certificate labels
++  deletedUser: 'silindi ({ name })',
++
++  // Core network, state, licensing, and certificate labels
++  networkConfiguration: 'Ağ yapılandırması',
++
++  // Core network, state, licensing, and certificate labels
++  integrity: 'Bütünlük',
++
++  // Core network, state, licensing, and certificate labels
++  altered: 'Değiştirildi',
++
++  // Core network, state, licensing, and certificate labels
++  missing: 'Eksik',
++
++  // Core network, state, licensing, and certificate labels
++  verified: 'Doğrulandı',
++
++  // Core network, state, licensing, and certificate labels
++  snapshotMode: 'Anlık görüntü modu',
++
++  // Core network, state, licensing, and certificate labels
++  normal: 'Normal',
++
++  // Core network, state, licensing, and certificate labels
++  withMemory: 'Bellek ile',
++
++  // Core network, state, licensing, and certificate labels
++  offline: 'Çevrimdışı',
++
++  // Core network, state, licensing, and certificate labels
++  noLicenseAvailable: 'Kullanılabilir lisans yok',
++
++  // Core network, state, licensing, and certificate labels
++  emailPlaceholderExample: 'E-posta adresi, ör.: it@company.net',
++
++  // Core network, state, licensing, and certificate labels
++  unknownSize: 'Bilinmeyen boyut',
++
++  // Core network, state, licensing, and certificate labels
++  installedCertificates: 'Yüklü sertifikalar',
++
++  // Core network, state, licensing, and certificate labels
++  expiry: 'Son kullanma tarihi',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/zh.js b/packages/xo-web/src/common/intl/locales/zh.js
+index fbbba54..3c8ff4c 100644
+--- a/packages/xo-web/src/common/intl/locales/zh.js
++++ b/packages/xo-web/src/common/intl/locales/zh.js
+@@ -2372,4 +2372,64 @@ export default {
+   thick: '厚置备',
+   thin: '精简置备',
+   noFileSelected: '未选择文件',
++
++  // Core network, state, licensing, and certificate labels
++  destinationSR: '目标 SR',
++
++  // Core network, state, licensing, and certificate labels
++  destinationNetwork: '目标网络',
++
++  // Core network, state, licensing, and certificate labels
++  dhcp: 'DHCP',
++
++  // Core network, state, licensing, and certificate labels
++  static: '静态',
++
++  // Core network, state, licensing, and certificate labels
++  ip: 'IP',
++
++  // Core network, state, licensing, and certificate labels
++  deletedUser: '已删除（{ name }）',
++
++  // Core network, state, licensing, and certificate labels
++  networkConfiguration: '网络配置',
++
++  // Core network, state, licensing, and certificate labels
++  integrity: '完整性',
++
++  // Core network, state, licensing, and certificate labels
++  altered: '已更改',
++
++  // Core network, state, licensing, and certificate labels
++  missing: '缺失',
++
++  // Core network, state, licensing, and certificate labels
++  verified: '已验证',
++
++  // Core network, state, licensing, and certificate labels
++  snapshotMode: '快照模式',
++
++  // Core network, state, licensing, and certificate labels
++  normal: '正常',
++
++  // Core network, state, licensing, and certificate labels
++  withMemory: '包含内存',
++
++  // Core network, state, licensing, and certificate labels
++  offline: '离线',
++
++  // Core network, state, licensing, and certificate labels
++  noLicenseAvailable: '没有可用许可证',
++
++  // Core network, state, licensing, and certificate labels
++  emailPlaceholderExample: '电子邮件地址，例如：it@company.net',
++
++  // Core network, state, licensing, and certificate labels
++  unknownSize: '大小未知',
++
++  // Core network, state, licensing, and certificate labels
++  installedCertificates: '已安装证书',
++
++  // Core network, state, licensing, and certificate labels
++  expiry: '到期时间',
+ }
