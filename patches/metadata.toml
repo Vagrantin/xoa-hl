@@ -94,3 +94,15 @@ maintainer = "vagrantin"
 status = "active"
 dependencies = ["zzzz-xo-core-ui-translations-batch2"]
 notes = "Adds 17 high-frequency inherited keys in all 13 shipped locales; the audit enforces 83 core keys in total."
+
+[[patches]]
+id = "zzzzzz-xoa-hl-links-and-labels"
+description = "Correct XOA-HL home help labels and documentation links"
+target = "packages/xo-web/src/xo-app/home/index.js and packages/xo-web/src/common/intl"
+upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
+applies_to = ["5.113.2"]
+maintainer = "vagrantin"
+status = "active"
+dependencies = ["zzzzz-xo-core-ui-translations-batch3"]
+notes = "Uses Xen Orchestra documentation at https://docs.xen-orchestra.com/ and XCP-HL documentation at https://xcp-hl.net."
+
