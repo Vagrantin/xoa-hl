@@ -1,0 +1,250 @@
+diff --git a/packages/xo-web/src/common/intl/locales/es.js b/packages/xo-web/src/common/intl/locales/es.js
+index 44dad25..5fc6df7 100644
+--- a/packages/xo-web/src/common/intl/locales/es.js
++++ b/packages/xo-web/src/common/intl/locales/es.js
+@@ -255,10 +255,10 @@ export default {
+   homeConnectServer: undefined,
+ 
+   // Original text: "Online Doc"
+-  homeOnlineDoc: 'Documentación en línea',
++  homeOnlineDoc: 'Documentación de Xen Orchestra',
+ 
+   // Original text: "Pro Support"
+-  homeProSupport: 'Soporte Pro',
++  homeProSupport: 'Documentación de XCP-hl',
+ 
+   // Original text: "There are no VMs!"
+   homeNoVms: '¡No hay VMs!',
+diff --git a/packages/xo-web/src/common/intl/locales/fa.js b/packages/xo-web/src/common/intl/locales/fa.js
+index fcf7f78..fdf083f 100644
+--- a/packages/xo-web/src/common/intl/locales/fa.js
++++ b/packages/xo-web/src/common/intl/locales/fa.js
+@@ -311,10 +311,10 @@ export default {
+   homeConnectServer: 'اتصال سرورها',
+ 
+   // Original text: 'Online Doc'
+-  homeOnlineDoc: 'اسناد آنلاین',
++  homeOnlineDoc: 'مستندات Xen Orchestra',
+ 
+   // Original text: 'Pro Support'
+-  homeProSupport: 'پشتیبانی حرفه ای',
++  homeProSupport: 'مستندات XCP-hl',
+ 
+   // Original text: 'There are no VMs!'
+   homeNoVms: 'هیچ ماشین مجازی وجود ندارد!',
+diff --git a/packages/xo-web/src/common/intl/locales/fr.js b/packages/xo-web/src/common/intl/locales/fr.js
+index dcdeb3b..3121642 100644
+--- a/packages/xo-web/src/common/intl/locales/fr.js
++++ b/packages/xo-web/src/common/intl/locales/fr.js
+@@ -258,10 +258,10 @@ export default {
+   homeConnectServer: 'Connecter des serveurs',
+ 
+   // Original text: "Online Doc"
+-  homeOnlineDoc: 'Documentation en ligne',
++  homeOnlineDoc: 'Documentation Xen Orchestra',
+ 
+   // Original text: "Pro Support"
+-  homeProSupport: 'Support professionel',
++  homeProSupport: 'Documentation XCP-hl',
+ 
+   // Original text: "There are no VMs!"
+   homeNoVms: "Il n'y a pas de VMs !",
+diff --git a/packages/xo-web/src/common/intl/locales/he.js b/packages/xo-web/src/common/intl/locales/he.js
+index c570da7..ce5a961 100644
+--- a/packages/xo-web/src/common/intl/locales/he.js
++++ b/packages/xo-web/src/common/intl/locales/he.js
+@@ -219,10 +219,10 @@ export default {
+   homeAddServer: 'הוספת שרת',
+ 
+   // Original text: "Online Doc"
+-  homeOnlineDoc: 'דוקומנטציה',
++  homeOnlineDoc: 'תיעוד Xen Orchestra',
+ 
+   // Original text: "Pro Support"
+-  homeProSupport: 'תמיכה מקצועית',
++  homeProSupport: 'תיעוד XCP-hl',
+ 
+   // Original text: "There are no VMs!"
+   homeNoVms: 'אין מכונות',
+diff --git a/packages/xo-web/src/common/intl/locales/hu.js b/packages/xo-web/src/common/intl/locales/hu.js
+index d9dea5d..63f49c6 100644
+--- a/packages/xo-web/src/common/intl/locales/hu.js
++++ b/packages/xo-web/src/common/intl/locales/hu.js
+@@ -240,10 +240,10 @@ export default {
+   homeConnectServer: 'Csatlakozás servers',
+ 
+   // Original text: "Online Doc"
+-  homeOnlineDoc: 'Online Doc',
++  homeOnlineDoc: 'Xen Orchestra dokumentáció',
+ 
+   // Original text: "Pro Support"
+-  homeProSupport: 'Pro Support',
++  homeProSupport: 'XCP-hl dokumentáció',
+ 
+   // Original text: "There are no VMs!"
+   homeNoVms: 'Nincsenek VPS-ek!',
+diff --git a/packages/xo-web/src/common/intl/locales/it.js b/packages/xo-web/src/common/intl/locales/it.js
+index 1b46a58..17b2c31 100644
+--- a/packages/xo-web/src/common/intl/locales/it.js
++++ b/packages/xo-web/src/common/intl/locales/it.js
+@@ -528,10 +528,10 @@ export default {
+   homeConnectServer: 'Collega i server',
+ 
+   // Original text: 'Online doc'
+-  homeOnlineDoc: 'Documentazione online',
++  homeOnlineDoc: 'Documentazione Xen Orchestra',
+ 
+   // Original text: 'Pro support'
+-  homeProSupport: 'Supporto professionale',
++  homeProSupport: 'Documentazione XCP-hl',
+ 
+   // Original text: 'There are no VMs!'
+   homeNoVms: 'Non ci sono VMs!',
+diff --git a/packages/xo-web/src/common/intl/locales/ja.js b/packages/xo-web/src/common/intl/locales/ja.js
+index 8cc2c19..e8f9dfa 100644
+--- a/packages/xo-web/src/common/intl/locales/ja.js
++++ b/packages/xo-web/src/common/intl/locales/ja.js
+@@ -810,10 +810,10 @@ export default {
+   homeConnectServer: 'サーバへの接続',
+ 
+   // Original text: "Online doc"
+-  homeOnlineDoc: 'オンラインドキュメント',
++  homeOnlineDoc: 'Xen Orchestra ドキュメント',
+ 
+   // Original text: "Pro support"
+-  homeProSupport: 'プロフェッショナルサポート',
++  homeProSupport: 'XCP-hl ドキュメント',
+ 
+   // Original text: "There are no VMs!"
+   homeNoVms: 'VMがありません!',
+diff --git a/packages/xo-web/src/common/intl/locales/pl.js b/packages/xo-web/src/common/intl/locales/pl.js
+index f8b01db..46bc6d4 100644
+--- a/packages/xo-web/src/common/intl/locales/pl.js
++++ b/packages/xo-web/src/common/intl/locales/pl.js
+@@ -222,10 +222,10 @@ export default {
+   homeAddServer: 'Dodaj serwer',
+ 
+   // Original text: "Online Doc"
+-  homeOnlineDoc: 'Online Doc',
++  homeOnlineDoc: 'Dokumentacja Xen Orchestra',
+ 
+   // Original text: "Pro Support"
+-  homeProSupport: 'Profesjonalne wsparcie',
++  homeProSupport: 'Dokumentacja XCP-hl',
+ 
+   // Original text: "There are no VMs!"
+   homeNoVms: 'Nie masz żadnych VMs!',
+diff --git a/packages/xo-web/src/common/intl/locales/pt.js b/packages/xo-web/src/common/intl/locales/pt.js
+index 5d6ebe7..7bf27c9 100644
+--- a/packages/xo-web/src/common/intl/locales/pt.js
++++ b/packages/xo-web/src/common/intl/locales/pt.js
+@@ -219,10 +219,10 @@ export default {
+   homeAddServer: 'Adicionar Servidor',
+ 
+   // Original text: "Online Doc"
+-  homeOnlineDoc: 'Documentação Online',
++  homeOnlineDoc: 'Documentação Xen Orchestra',
+ 
+   // Original text: "Pro Support"
+-  homeProSupport: 'Suporte Especializado',
++  homeProSupport: 'Documentação XCP-hl',
+ 
+   // Original text: "There are no VMs!"
+   homeNoVms: 'Não foram encontradas VMs!',
+diff --git a/packages/xo-web/src/common/intl/locales/ru.js b/packages/xo-web/src/common/intl/locales/ru.js
+index 0afcbc8..9e20ddb 100644
+--- a/packages/xo-web/src/common/intl/locales/ru.js
++++ b/packages/xo-web/src/common/intl/locales/ru.js
+@@ -801,10 +801,10 @@ export default {
+   homeConnectServer: 'Подключить серверы',
+ 
+   // Original text: "Online doc"
+-  homeOnlineDoc: 'Онлайн документация',
++  homeOnlineDoc: 'Документация Xen Orchestra',
+ 
+   // Original text: "Pro support"
+-  homeProSupport: 'Поддержка уровня "Pro"',
++  homeProSupport: 'Документация XCP-hl',
+ 
+   // Original text: "There are no VMs!"
+   homeNoVms: 'Виртуальных машин нет!',
+diff --git a/packages/xo-web/src/common/intl/locales/sv.js b/packages/xo-web/src/common/intl/locales/sv.js
+index 93f2828..6d73208 100644
+--- a/packages/xo-web/src/common/intl/locales/sv.js
++++ b/packages/xo-web/src/common/intl/locales/sv.js
+@@ -255,10 +255,10 @@ export default {
+   homeConnectServer: 'Anslut servrar',
+ 
+   // Original text: "Online Doc"
+-  homeOnlineDoc: 'Online dokumentation',
++  homeOnlineDoc: 'Xen Orchestra-dokumentation',
+ 
+   // Original text: "Pro Support"
+-  homeProSupport: undefined,
++  homeProSupport: 'XCP-hl-dokumentation',
+ 
+   // Original text: "There are no VMs!"
+   homeNoVms: 'Det finns inga VMs!',
+diff --git a/packages/xo-web/src/common/intl/locales/tr.js b/packages/xo-web/src/common/intl/locales/tr.js
+index c439597..7c3558b 100644
+--- a/packages/xo-web/src/common/intl/locales/tr.js
++++ b/packages/xo-web/src/common/intl/locales/tr.js
+@@ -309,10 +309,10 @@ export default {
+   homeConnectServer: 'Bağlı sunucular',
+ 
+   // Original text: "Online Doc"
+-  homeOnlineDoc: 'Çevrimiçi Doküman',
++  homeOnlineDoc: 'Xen Orchestra belgeleri',
+ 
+   // Original text: "Pro Support"
+-  homeProSupport: 'Profesyonel Destek',
++  homeProSupport: 'XCP-hl belgeleri',
+ 
+   // Original text: "There are no VMs!"
+   homeNoVms: 'Hiç VM yok',
+diff --git a/packages/xo-web/src/common/intl/locales/zh.js b/packages/xo-web/src/common/intl/locales/zh.js
+index 1343c40..bbee9d6 100644
+--- a/packages/xo-web/src/common/intl/locales/zh.js
++++ b/packages/xo-web/src/common/intl/locales/zh.js
+@@ -177,10 +177,10 @@ export default {
+   homeAddServer: '添加服务器',
+ 
+   // Original text: "Online Doc"
+-  homeOnlineDoc: '在线文档',
++  homeOnlineDoc: 'Xen Orchestra 文档',
+ 
+   // Original text: "Pro Support"
+-  homeProSupport: '专业支持',
++  homeProSupport: 'XCP-hl 文档',
+ 
+   // Original text: "There are no VMs!"
+   homeNoVms: '没有可用的虚拟机',
+diff --git a/packages/xo-web/src/common/intl/messages.js b/packages/xo-web/src/common/intl/messages.js
+index f1cf538..b6524e1 100644
+--- a/packages/xo-web/src/common/intl/messages.js
++++ b/packages/xo-web/src/common/intl/messages.js
+@@ -373,8 +373,8 @@ const messages = {
+   homeHelp: 'Want some help?',
+   homeAddServer: 'Add server',
+   homeConnectServer: 'Connect servers',
+-  homeOnlineDoc: 'Online doc',
+-  homeProSupport: 'Pro support',
++  homeOnlineDoc: 'Xen Orchestra doc',
++  homeProSupport: 'XCP-hl doc',
+   homeNoVms: 'There are no VMs!',
+   homeNoVmsOr: 'Or…',
+   homeImportVm: 'Import VM',
+diff --git a/packages/xo-web/src/xo-app/home/index.js b/packages/xo-web/src/xo-app/home/index.js
+index bb68d59..2fccd5f 100644
+--- a/packages/xo-web/src/xo-app/home/index.js
++++ b/packages/xo-web/src/xo-app/home/index.js
+@@ -385,7 +385,7 @@ class NoObjectsWithoutServers extends Component {
+                 </Col>
+                 <Col mediumSize={6}>
+                   <a
+-                    href='https://xen-orchestra.com/#!/member/support'
++                    href='https://xcp-hl.net'
+                     rel='noopener noreferrer'
+                     target='_blank'
+                     className='btn btn-link'
+
