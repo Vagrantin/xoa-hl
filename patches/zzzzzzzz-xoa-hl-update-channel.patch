@@ -1,0 +1,366 @@
+diff --git a/packages/xo-server/src/api/xoaHl.mjs b/packages/xo-server/src/api/xoaHl.mjs
+index 1c1020e6e..ce40e9d58 100644
+--- a/packages/xo-server/src/api/xoaHl.mjs
++++ b/packages/xo-server/src/api/xoaHl.mjs
+@@ -20,6 +20,7 @@ const MODES = new Set(['manual', 'check', 'install'])
+ const FREQUENCIES = new Set(['daily', 'weekly'])
+ const DAYS = new Set(['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'])
+ const RANDOM_DELAYS = new Set([0, 5, 10, 15, 30, 60])
++const CHANNELS = new Set(['stable', 'testing'])
+ 
+ // -------------------------------------------------------------------
+ 
+@@ -210,6 +211,7 @@ async function readKeyValueFile(path) {
+ 
+ export async function getUpdateConfiguration() {
+   const [raw, lastRun] = await Promise.all([readKeyValueFile(CONFIG_FILE), readKeyValueFile(AUTO_STATUS_FILE)])
++  const channel = CHANNELS.has(raw.CHANNEL) ? raw.CHANNEL : 'stable'
+   const mode = MODES.has(raw.MODE) ? raw.MODE : 'manual'
+   const frequency = FREQUENCIES.has(raw.FREQUENCY) ? raw.FREQUENCY : 'daily'
+   const day = DAYS.has(raw.DAY) ? raw.DAY : 'Sun'
+@@ -236,6 +238,7 @@ export async function getUpdateConfiguration() {
+ 
+   return {
+     autoReboot: false,
++    channel,
+     day,
+     frequency,
+     lastRun,
+@@ -278,3 +281,17 @@ setUpdateConfiguration.params = {
+   randomDelayMinutes: { type: 'number' },
+   time: { type: 'string' },
+ }
++
++export async function setUpdateChannel({ channel }) {
++  if (!CHANNELS.has(channel)) {
++    throw new Error('invalid update channel')
++  }
++
++  await execa('sudo', [CONFIGURE_HELPER, 'channel', channel])
++  return getUpdateConfiguration()
++}
++setUpdateChannel.permission = 'admin'
++setUpdateChannel.description = 'choose the XOA-HL update channel, stable or testing'
++setUpdateChannel.params = {
++  channel: { type: 'string' },
++}
+diff --git a/packages/xo-web/src/common/intl/locales/es.js b/packages/xo-web/src/common/intl/locales/es.js
+index fdf08362a..b19aed66e 100644
+--- a/packages/xo-web/src/common/intl/locales/es.js
++++ b/packages/xo-web/src/common/intl/locales/es.js
+@@ -4001,4 +4001,10 @@ export default {
+   // XOA-HL source banner
+   xoaHlSourceBannerThanks: '¡Gracias por usar XOA-HL!',
+   xoaHlSourceBannerDocumentation: 'La documentación está disponible aquí',
++
++  // XOA-HL update channel
++  xoaHlChannel: 'Canal de actualización',
++  xoaHlChannelStable: 'Estable',
++  xoaHlChannelTesting: 'Pruebas',
++  xoaHlChannelTestingWarning: 'Las compilaciones de prueba son candidatas que aún no han sido aprobadas. Use este canal solo en un dispositivo desechable.',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/fa.js b/packages/xo-web/src/common/intl/locales/fa.js
+index 451632cd7..f897fde13 100644
+--- a/packages/xo-web/src/common/intl/locales/fa.js
++++ b/packages/xo-web/src/common/intl/locales/fa.js
+@@ -5326,4 +5326,10 @@ export default {
+   // XOA-HL source banner
+   xoaHlSourceBannerThanks: 'از استفاده از XOA-HL سپاسگزاریم!',
+   xoaHlSourceBannerDocumentation: 'مستندات از اینجا در دسترس است',
++
++  // XOA-HL update channel
++  xoaHlChannel: 'کانال به‌روزرسانی',
++  xoaHlChannelStable: 'پایدار',
++  xoaHlChannelTesting: 'آزمایشی',
++  xoaHlChannelTestingWarning: 'نسخه‌های آزمایشی نامزدهایی هستند که هنوز تأیید نشده‌اند. این کانال را فقط روی یک دستگاه یک‌بارمصرف استفاده کنید.',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/fr.js b/packages/xo-web/src/common/intl/locales/fr.js
+index c41e39c0d..39cfb006a 100644
+--- a/packages/xo-web/src/common/intl/locales/fr.js
++++ b/packages/xo-web/src/common/intl/locales/fr.js
+@@ -4086,4 +4086,10 @@ export default {
+   // XOA-HL source banner
+   xoaHlSourceBannerThanks: 'Merci d’utiliser XOA-HL !',
+   xoaHlSourceBannerDocumentation: 'La documentation est disponible ici',
++
++  // XOA-HL update channel
++  xoaHlChannel: 'Canal de mise à jour',
++  xoaHlChannelStable: 'Stable',
++  xoaHlChannelTesting: 'Test',
++  xoaHlChannelTestingWarning: 'Les versions de test sont des candidates qui ne sont pas encore approuvées. Utilisez ce canal uniquement sur une appliance jetable.',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/he.js b/packages/xo-web/src/common/intl/locales/he.js
+index b69409661..c6d84555d 100644
+--- a/packages/xo-web/src/common/intl/locales/he.js
++++ b/packages/xo-web/src/common/intl/locales/he.js
+@@ -3332,4 +3332,10 @@ export default {
+   // XOA-HL source banner
+   xoaHlSourceBannerThanks: 'תודה שבחרת להשתמש ב־XOA-HL!',
+   xoaHlSourceBannerDocumentation: 'התיעוד זמין כאן',
++
++  // XOA-HL update channel
++  xoaHlChannel: 'ערוץ עדכונים',
++  xoaHlChannelStable: 'יציב',
++  xoaHlChannelTesting: 'בדיקות',
++  xoaHlChannelTestingWarning: 'גרסאות הבדיקות הן מועמדות שטרם אושרו. השתמשו בערוץ זה רק על מכשיר חד-פעמי.',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/hu.js b/packages/xo-web/src/common/intl/locales/hu.js
+index cf7dbde1e..02b5c9035 100644
+--- a/packages/xo-web/src/common/intl/locales/hu.js
++++ b/packages/xo-web/src/common/intl/locales/hu.js
+@@ -3794,4 +3794,10 @@ export default {
+   // XOA-HL source banner
+   xoaHlSourceBannerThanks: 'Köszönjük, hogy az XOA-HL-t használja!',
+   xoaHlSourceBannerDocumentation: 'A dokumentáció itt érhető el',
++
++  // XOA-HL update channel
++  xoaHlChannel: 'Frissítési csatorna',
++  xoaHlChannelStable: 'Stabil',
++  xoaHlChannelTesting: 'Tesztelés',
++  xoaHlChannelTestingWarning: 'A tesztelési buildek még nem jóváhagyott jelöltek. Ezt a csatornát csak eldobható appliance-en használja.',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/it.js b/packages/xo-web/src/common/intl/locales/it.js
+index e74c44164..7e80a64fd 100644
+--- a/packages/xo-web/src/common/intl/locales/it.js
++++ b/packages/xo-web/src/common/intl/locales/it.js
+@@ -6069,4 +6069,10 @@ export default {
+   // XOA-HL source banner
+   xoaHlSourceBannerThanks: 'Grazie per aver scelto XOA-HL!',
+   xoaHlSourceBannerDocumentation: 'La documentazione è disponibile qui',
++
++  // XOA-HL update channel
++  xoaHlChannel: 'Canale di aggiornamento',
++  xoaHlChannelStable: 'Stabile',
++  xoaHlChannelTesting: 'Test',
++  xoaHlChannelTestingWarning: 'Le build di test sono candidate non ancora approvate. Usa questo canale solo su un\'appliance usa e getta.',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/ja.js b/packages/xo-web/src/common/intl/locales/ja.js
+index a0492f611..e62dc5a0a 100644
+--- a/packages/xo-web/src/common/intl/locales/ja.js
++++ b/packages/xo-web/src/common/intl/locales/ja.js
+@@ -7659,4 +7659,10 @@ export default {
+   // XOA-HL source banner
+   xoaHlSourceBannerThanks: 'XOA-HL をご利用いただきありがとうございます！',
+   xoaHlSourceBannerDocumentation: 'マニュアルはこちらです',
++
++  // XOA-HL update channel
++  xoaHlChannel: '更新チャネル',
++  xoaHlChannelStable: '安定版',
++  xoaHlChannelTesting: 'テスト',
++  xoaHlChannelTestingWarning: 'テストビルドはまだ承認されていない候補です。使い捨てのアプライアンスでのみこのチャネルを使用してください。',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/pl.js b/packages/xo-web/src/common/intl/locales/pl.js
+index 2b50c3b7b..b51d5ead8 100644
+--- a/packages/xo-web/src/common/intl/locales/pl.js
++++ b/packages/xo-web/src/common/intl/locales/pl.js
+@@ -3348,4 +3348,10 @@ export default {
+   // XOA-HL source banner
+   xoaHlSourceBannerThanks: 'Dziękujemy za korzystanie z XOA-HL!',
+   xoaHlSourceBannerDocumentation: 'Dokumentacja jest dostępna tutaj',
++
++  // XOA-HL update channel
++  xoaHlChannel: 'Kanał aktualizacji',
++  xoaHlChannelStable: 'Stabilny',
++  xoaHlChannelTesting: 'Testowy',
++  xoaHlChannelTestingWarning: 'Kompilacje testowe to kandydaci, które nie zostały jeszcze zatwierdzone. Używaj tego kanału wyłącznie na jednorazowym urządzeniu.',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/pt.js b/packages/xo-web/src/common/intl/locales/pt.js
+index a5cb1cccf..ae619a282 100644
+--- a/packages/xo-web/src/common/intl/locales/pt.js
++++ b/packages/xo-web/src/common/intl/locales/pt.js
+@@ -3345,4 +3345,10 @@ export default {
+   // XOA-HL source banner
+   xoaHlSourceBannerThanks: 'Obrigado por utilizar o XOA-HL!',
+   xoaHlSourceBannerDocumentation: 'A documentação está disponível aqui',
++
++  // XOA-HL update channel
++  xoaHlChannel: 'Canal de atualização',
++  xoaHlChannelStable: 'Estável',
++  xoaHlChannelTesting: 'Teste',
++  xoaHlChannelTestingWarning: 'As compilações de teste são candidatas ainda não aprovadas. Use este canal apenas num dispositivo descartável.',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/ru.js b/packages/xo-web/src/common/intl/locales/ru.js
+index c5204713f..97e2eda08 100644
+--- a/packages/xo-web/src/common/intl/locales/ru.js
++++ b/packages/xo-web/src/common/intl/locales/ru.js
+@@ -7544,4 +7544,10 @@ export default {
+   // XOA-HL source banner
+   xoaHlSourceBannerThanks: 'Спасибо, что используете XOA-HL!',
+   xoaHlSourceBannerDocumentation: 'Документация доступна здесь',
++
++  // XOA-HL update channel
++  xoaHlChannel: 'Канал обновлений',
++  xoaHlChannelStable: 'Стабильный',
++  xoaHlChannelTesting: 'Тестовый',
++  xoaHlChannelTestingWarning: 'Тестовые сборки это кандидаты, которые ещё не одобрены. Используйте этот канал только на одноразовом устройстве.',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/sv.js b/packages/xo-web/src/common/intl/locales/sv.js
+index 966a79f5c..a33c89a49 100644
+--- a/packages/xo-web/src/common/intl/locales/sv.js
++++ b/packages/xo-web/src/common/intl/locales/sv.js
+@@ -4012,4 +4012,10 @@ export default {
+   // XOA-HL source banner
+   xoaHlSourceBannerThanks: 'Tack för att du använder XOA-HL!',
+   xoaHlSourceBannerDocumentation: 'Dokumentationen finns här',
++
++  // XOA-HL update channel
++  xoaHlChannel: 'Uppdateringskanal',
++  xoaHlChannelStable: 'Stabil',
++  xoaHlChannelTesting: 'Test',
++  xoaHlChannelTestingWarning: 'Testbyggen är kandidater som ännu inte har godkänts. Använd den här kanalen endast på en engångsmaskin.',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/tr.js b/packages/xo-web/src/common/intl/locales/tr.js
+index fed941395..8d29a3593 100644
+--- a/packages/xo-web/src/common/intl/locales/tr.js
++++ b/packages/xo-web/src/common/intl/locales/tr.js
+@@ -5220,4 +5220,10 @@ export default {
+   // XOA-HL source banner
+   xoaHlSourceBannerThanks: 'XOA-HL kullandığınız için teşekkür ederiz!',
+   xoaHlSourceBannerDocumentation: 'Belgeler burada',
++
++  // XOA-HL update channel
++  xoaHlChannel: 'Güncelleme kanalı',
++  xoaHlChannelStable: 'Kararlı',
++  xoaHlChannelTesting: 'Test',
++  xoaHlChannelTestingWarning: 'Test derlemeleri henüz onaylanmamış adaylardır. Bu kanalı yalnızca atılabilir bir cihazda kullanın.',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/zh.js b/packages/xo-web/src/common/intl/locales/zh.js
+index 184aa6294..a1e212b89 100644
+--- a/packages/xo-web/src/common/intl/locales/zh.js
++++ b/packages/xo-web/src/common/intl/locales/zh.js
+@@ -2487,4 +2487,10 @@ export default {
+   // XOA-HL source banner
+   xoaHlSourceBannerThanks: '感谢使用 XOA-HL！',
+   xoaHlSourceBannerDocumentation: '文档可在此处查看',
++
++  // XOA-HL update channel
++  xoaHlChannel: '更新通道',
++  xoaHlChannelStable: '稳定版',
++  xoaHlChannelTesting: '测试版',
++  xoaHlChannelTestingWarning: '测试版是尚未获批的候选版本。请仅在可随时丢弃的设备上使用此通道。',
+ }
+diff --git a/packages/xo-web/src/common/intl/messages.js b/packages/xo-web/src/common/intl/messages.js
+index 644f70792..d4349d583 100644
+--- a/packages/xo-web/src/common/intl/messages.js
++++ b/packages/xo-web/src/common/intl/messages.js
+@@ -248,6 +248,11 @@ const messages = {
+   xoaHlSourceBannerThanks: 'Thank you for using XOA-HL!',
+   xoaHlSourceBannerDocumentation: 'Documentation is available here',
+   xoaHlAutomaticUpdates: 'Automatic updates',
++  xoaHlChannel: 'Update channel',
++  xoaHlChannelStable: 'Stable',
++  xoaHlChannelTesting: 'Testing',
++  xoaHlChannelTestingWarning:
++    'Testing builds are candidates that have not been approved yet. Use this channel on a disposable appliance only.',
+   xoaHlAutomaticUpdatesConfirm: 'I understand that unattended updates may restart services and leave a reboot pending.',
+   xoaHlAutomaticUpdatesDisabled: 'Automatic installation is disabled by default.',
+   xoaHlDay: 'Day',
+diff --git a/packages/xo-web/src/common/xo/index.js b/packages/xo-web/src/common/xo/index.js
+index 057a9d0af..84dac8b72 100644
+--- a/packages/xo-web/src/common/xo/index.js
++++ b/packages/xo-web/src/common/xo/index.js
+@@ -926,6 +926,7 @@ export const startXoaHlUpdate = () => _call('xoaHl.startUpdate')
+ export const getXoaHlUpdateProgress = since => _call('xoaHl.getUpdateProgress', { since })
+ export const getXoaHlUpdateConfiguration = () => _call('xoaHl.getUpdateConfiguration')
+ export const setXoaHlUpdateConfiguration = configuration => _call('xoaHl.setUpdateConfiguration', configuration)
++export const setXoaHlUpdateChannel = channel => _call('xoaHl.setUpdateChannel', { channel })
+ 
+ // Server ------------------------------------------------------------
+ 
+diff --git a/packages/xo-web/src/xo-app/settings/xoa-hl-updates/index.js b/packages/xo-web/src/xo-app/settings/xoa-hl-updates/index.js
+index 7057733de..ca8f52a30 100644
+--- a/packages/xo-web/src/xo-app/settings/xoa-hl-updates/index.js
++++ b/packages/xo-web/src/xo-app/settings/xoa-hl-updates/index.js
+@@ -6,12 +6,14 @@ import React from 'react'
+ import UserError from 'user-error'
+ import { Card, CardBlock, CardHeader } from 'card'
+ import { Col, Container, Row } from 'grid'
++import { error as notifyError } from 'notification'
+ import { FormattedDate, FormattedRelative } from 'react-intl'
+ import {
+   checkXoaHlUpdate,
+   getXoaHlUpdateConfiguration,
+   getXoaHlUpdateProgress,
+   getXoaHlVersion,
++  setXoaHlUpdateChannel,
+   setXoaHlUpdateConfiguration,
+   startXoaHlUpdate,
+ } from 'xo'
+@@ -142,6 +144,7 @@ export default class XoaHlUpdates extends Component {
+     super(props)
+     this.state = {
+       automaticInstallConfirmed: false,
++      channelSaving: false,
+       checking: false,
+       configuration: undefined,
+       configurationLoading: true,
+@@ -244,6 +247,27 @@ export default class XoaHlUpdates extends Component {
+     }))
+   }
+ 
++  _setChannel = async event => {
++    const channel = event.target.value
++    this.setState({ channelSaving: true })
++    try {
++      const saved = await setXoaHlUpdateChannel(channel)
++      if (this._mounted) {
++        // The verdict was computed against the previous channel.
++        this.setState(({ configuration }) => ({
++          channelSaving: false,
++          configuration: { ...configuration, channel: saved.channel },
++          status: undefined,
++        }))
++      }
++    } catch (error) {
++      if (this._mounted) {
++        this.setState({ channelSaving: false })
++      }
++      notifyError({ title: _('xoaHlChannel'), message: error.message })
++    }
++  }
++
+   _saveConfiguration = async () => {
+     const { configuration } = this.state
+     this.setState({ configurationSaving: true })
+@@ -547,6 +571,33 @@ export default class XoaHlUpdates extends Component {
+   }
+ 
+ 
++  _renderChannel() {
++    const { channelSaving, configuration, updating } = this.state
++    if (configuration === undefined) {
++      return null
++    }
++
++    return (
++      <div className='mb-1'>
++        <label>{_('xoaHlChannel')}</label>
++        <select
++          className='form-control'
++          disabled={channelSaving || updating}
++          onChange={this._setChannel}
++          value={configuration.channel}
++        >
++          <option value='stable'>{_('xoaHlChannelStable')}</option>
++          <option value='testing'>{_('xoaHlChannelTesting')}</option>
++        </select>
++        {configuration.channel === 'testing' && (
++          <Banner icon='alarm' level='warning'>
++            {_('xoaHlChannelTestingWarning')}
++          </Banner>
++        )}
++      </div>
++    )
++  }
++
+   _renderAutomaticUpdates() {
+     const {
+       automaticInstallConfirmed,
+@@ -652,6 +703,7 @@ export default class XoaHlUpdates extends Component {
+                   {_('xoaHlInstalledVersion')}:{' '}
+                   <span className='text-monospace'>{version !== undefined ? version : _('xoaHlUnknownVersion')}</span>
+                 </p>
++                {this._renderChannel()}
+                 {this._renderStatus()}
+                 <p className='text-muted'>
+                   <Icon icon='info' /> {_('xoaHlUpdateScope')}
