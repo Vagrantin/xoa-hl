@@ -42,6 +42,14 @@ in place instead of reinstalling from scratch.</p>
   as a manual bootstrap if that file is ever missing.
 </div>
 
+<div class="note"><strong>Stable and testing.</strong> This URL is the <em>stable</em>
+channel: only versions that passed QA and were approved (and the versions already
+offered before that gate existed). New builds go first to the <em>testing</em> channel,
+<code>https://vagrantin.github.io/xoa-hl/testing/8.3/x86_64/</code>
+(<a href="xoa-hl-testing.repo">xoa-hl-testing.repo</a>, disabled by default),
+meant for disposable test appliances. A build found broken after release is replaced
+by a newer one; <code>yum updateinfo list</code> shows the advisory.</div>
+
 <h2>Add the repository</h2>
 <p>On an XOA-HL appliance, as root:</p>
 <pre><code>curl -o /etc/yum.repos.d/xoa-hl.repo \
@@ -55,8 +63,8 @@ yum check-update xoa-hl</code></pre>
 <h2>Update</h2>
 <pre><code>yum update xoa-hl</code></pre>
 
-<p>A handful of recent releases are kept, so you can list what is available
-and roll back within that window:</p>
+<p>The promoted releases are kept, so you can list what is available
+and roll back to one of them:</p>
 <pre><code>yum --showduplicates list xoa-hl
 yum downgrade xoa-hl-&lt;version&gt;</code></pre>
 
