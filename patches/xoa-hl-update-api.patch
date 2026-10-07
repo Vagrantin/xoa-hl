@@ -1175,6 +1175,7 @@ index 0000000..6684fd6
 +            </Card>
 +          </Col>
 +        </Row>
++        {this._renderLog()}
 +        <Row className='mt-1'>
 +          <Col>
 +            <Card>
@@ -1185,7 +1186,6 @@ index 0000000..6684fd6
 +            </Card>
 +          </Col>
 +        </Row>
-+        {this._renderLog()}
 +      </Container>
 +    )
 +  }
