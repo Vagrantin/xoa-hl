@@ -13,7 +13,7 @@ mkdir -p "$STATE_DIR" "$(dirname "$LOCK_FILE")"
 rm -f "$RC_FILE"
 
 stamp() {
-    date -u '+%Y-%m-%dT%H:%M:%SZ'
+    date '+%Y-%m-%d %H:%M:%S %Z'
 }
 
 printf '=== xoa-hl update started at %s ===\n' "$(stamp)" >> "$LOG_FILE"
