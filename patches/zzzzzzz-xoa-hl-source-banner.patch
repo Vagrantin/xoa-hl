@@ -1,0 +1,233 @@
+diff --git a/packages/xo-web/src/common/intl/locales/es.js b/packages/xo-web/src/common/intl/locales/es.js
+index 5fc6df7..fdf0836 100644
+--- a/packages/xo-web/src/common/intl/locales/es.js
++++ b/packages/xo-web/src/common/intl/locales/es.js
+@@ -3997,4 +3997,8 @@ export default {
+ 
+   // Certificate, tag, and licensing labels
+   removeColor: 'Eliminar color',
++
++  // XOA-HL source banner
++  xoaHlSourceBannerThanks: '¡Gracias por usar XOA-HL!',
++  xoaHlSourceBannerDocumentation: 'La documentación está disponible aquí',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/fa.js b/packages/xo-web/src/common/intl/locales/fa.js
+index fdf083f..451632c 100644
+--- a/packages/xo-web/src/common/intl/locales/fa.js
++++ b/packages/xo-web/src/common/intl/locales/fa.js
+@@ -5322,4 +5322,8 @@ export default {
+ 
+   // Certificate, tag, and licensing labels
+   removeColor: 'حذف رنگ',
++
++  // XOA-HL source banner
++  xoaHlSourceBannerThanks: 'از استفاده از XOA-HL سپاسگزاریم!',
++  xoaHlSourceBannerDocumentation: 'مستندات از اینجا در دسترس است',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/fr.js b/packages/xo-web/src/common/intl/locales/fr.js
+index 3121642..c41e39c 100644
+--- a/packages/xo-web/src/common/intl/locales/fr.js
++++ b/packages/xo-web/src/common/intl/locales/fr.js
+@@ -4082,4 +4082,8 @@ export default {
+ 
+   // Certificate, tag, and licensing labels
+   removeColor: 'Supprimer la couleur',
++
++  // XOA-HL source banner
++  xoaHlSourceBannerThanks: 'Merci d’utiliser XOA-HL !',
++  xoaHlSourceBannerDocumentation: 'La documentation est disponible ici',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/he.js b/packages/xo-web/src/common/intl/locales/he.js
+index ce5a961..b694096 100644
+--- a/packages/xo-web/src/common/intl/locales/he.js
++++ b/packages/xo-web/src/common/intl/locales/he.js
+@@ -3328,4 +3328,8 @@ export default {
+ 
+   // Certificate, tag, and licensing labels
+   removeColor: 'הסרת צבע',
++
++  // XOA-HL source banner
++  xoaHlSourceBannerThanks: 'תודה שבחרת להשתמש ב־XOA-HL!',
++  xoaHlSourceBannerDocumentation: 'התיעוד זמין כאן',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/hu.js b/packages/xo-web/src/common/intl/locales/hu.js
+index 63f49c6..cf7dbde 100644
+--- a/packages/xo-web/src/common/intl/locales/hu.js
++++ b/packages/xo-web/src/common/intl/locales/hu.js
+@@ -3790,4 +3790,8 @@ export default {
+ 
+   // Certificate, tag, and licensing labels
+   removeColor: 'Szín eltávolítása',
++
++  // XOA-HL source banner
++  xoaHlSourceBannerThanks: 'Köszönjük, hogy az XOA-HL-t használja!',
++  xoaHlSourceBannerDocumentation: 'A dokumentáció itt érhető el',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/it.js b/packages/xo-web/src/common/intl/locales/it.js
+index 17b2c31..e74c441 100644
+--- a/packages/xo-web/src/common/intl/locales/it.js
++++ b/packages/xo-web/src/common/intl/locales/it.js
+@@ -6065,4 +6065,8 @@ export default {
+ 
+   // Certificate, tag, and licensing labels
+   removeColor: 'Rimuovi colore',
++
++  // XOA-HL source banner
++  xoaHlSourceBannerThanks: 'Grazie per aver scelto XOA-HL!',
++  xoaHlSourceBannerDocumentation: 'La documentazione è disponibile qui',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/ja.js b/packages/xo-web/src/common/intl/locales/ja.js
+index e8f9dfa..a0492f6 100644
+--- a/packages/xo-web/src/common/intl/locales/ja.js
++++ b/packages/xo-web/src/common/intl/locales/ja.js
+@@ -810,10 +810,10 @@ export default {
+   homeConnectServer: 'サーバへの接続',
+ 
+   // Original text: "Online doc"
+-  homeOnlineDoc: 'Xen Orchestra ドキュメント',
++  homeOnlineDoc: 'Xen Orchestra マニュアル',
+ 
+   // Original text: "Pro support"
+-  homeProSupport: 'XCP-hl ドキュメント',
++  homeProSupport: 'XCP-hl マニュアル',
+ 
+   // Original text: "There are no VMs!"
+   homeNoVms: 'VMがありません!',
+@@ -7655,4 +7655,8 @@ export default {
+ 
+   // Certificate, tag, and licensing labels
+   availableXoaPlan: 'XOA {plan} で利用可能',
++
++  // XOA-HL source banner
++  xoaHlSourceBannerThanks: 'XOA-HL をご利用いただきありがとうございます！',
++  xoaHlSourceBannerDocumentation: 'マニュアルはこちらです',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/pl.js b/packages/xo-web/src/common/intl/locales/pl.js
+index 46bc6d4..2b50c3b 100644
+--- a/packages/xo-web/src/common/intl/locales/pl.js
++++ b/packages/xo-web/src/common/intl/locales/pl.js
+@@ -3344,4 +3344,8 @@ export default {
+ 
+   // Certificate, tag, and licensing labels
+   removeColor: 'Usuń kolor',
++
++  // XOA-HL source banner
++  xoaHlSourceBannerThanks: 'Dziękujemy za korzystanie z XOA-HL!',
++  xoaHlSourceBannerDocumentation: 'Dokumentacja jest dostępna tutaj',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/pt.js b/packages/xo-web/src/common/intl/locales/pt.js
+index 7bf27c9..a5cb1cc 100644
+--- a/packages/xo-web/src/common/intl/locales/pt.js
++++ b/packages/xo-web/src/common/intl/locales/pt.js
+@@ -3341,4 +3341,8 @@ export default {
+ 
+   // Certificate, tag, and licensing labels
+   removeColor: 'Remover cor',
++
++  // XOA-HL source banner
++  xoaHlSourceBannerThanks: 'Obrigado por utilizar o XOA-HL!',
++  xoaHlSourceBannerDocumentation: 'A documentação está disponível aqui',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/ru.js b/packages/xo-web/src/common/intl/locales/ru.js
+index 9e20ddb..c520471 100644
+--- a/packages/xo-web/src/common/intl/locales/ru.js
++++ b/packages/xo-web/src/common/intl/locales/ru.js
+@@ -7540,4 +7540,8 @@ export default {
+ 
+   // Certificate, tag, and licensing labels
+   availableXoaPlan: 'Доступно в XOA {plan}',
++
++  // XOA-HL source banner
++  xoaHlSourceBannerThanks: 'Спасибо, что используете XOA-HL!',
++  xoaHlSourceBannerDocumentation: 'Документация доступна здесь',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/sv.js b/packages/xo-web/src/common/intl/locales/sv.js
+index 6d73208..966a79f 100644
+--- a/packages/xo-web/src/common/intl/locales/sv.js
++++ b/packages/xo-web/src/common/intl/locales/sv.js
+@@ -4008,4 +4008,8 @@ export default {
+ 
+   // Certificate, tag, and licensing labels
+   removeColor: 'Ta bort färg',
++
++  // XOA-HL source banner
++  xoaHlSourceBannerThanks: 'Tack för att du använder XOA-HL!',
++  xoaHlSourceBannerDocumentation: 'Dokumentationen finns här',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/tr.js b/packages/xo-web/src/common/intl/locales/tr.js
+index 7c3558b..fed9413 100644
+--- a/packages/xo-web/src/common/intl/locales/tr.js
++++ b/packages/xo-web/src/common/intl/locales/tr.js
+@@ -5216,4 +5216,8 @@ export default {
+ 
+   // Certificate, tag, and licensing labels
+   removeColor: 'Rengi kaldır',
++
++  // XOA-HL source banner
++  xoaHlSourceBannerThanks: 'XOA-HL kullandığınız için teşekkür ederiz!',
++  xoaHlSourceBannerDocumentation: 'Belgeler burada',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/zh.js b/packages/xo-web/src/common/intl/locales/zh.js
+index bbee9d6..184aa62 100644
+--- a/packages/xo-web/src/common/intl/locales/zh.js
++++ b/packages/xo-web/src/common/intl/locales/zh.js
+@@ -2483,4 +2483,8 @@ export default {
+ 
+   // Certificate, tag, and licensing labels
+   removeColor: '删除颜色',
++
++  // XOA-HL source banner
++  xoaHlSourceBannerThanks: '感谢使用 XOA-HL！',
++  xoaHlSourceBannerDocumentation: '文档可在此处查看',
+ }
+diff --git a/packages/xo-web/src/common/intl/messages.js b/packages/xo-web/src/common/intl/messages.js
+index b6524e1..644f707 100644
+--- a/packages/xo-web/src/common/intl/messages.js
++++ b/packages/xo-web/src/common/intl/messages.js
+@@ -245,6 +245,8 @@ const messages = {
+   settingsCloudConfigsPage: 'Cloud configs',
+   settingsIpsPage: 'IPs',
+   settingsXoaHlUpdatesPage: 'XOA-HL Updates',
++  xoaHlSourceBannerThanks: 'Thank you for using XOA-HL!',
++  xoaHlSourceBannerDocumentation: 'Documentation is available here',
+   xoaHlAutomaticUpdates: 'Automatic updates',
+   xoaHlAutomaticUpdatesConfirm: 'I understand that unattended updates may restart services and leave a reboot pending.',
+   xoaHlAutomaticUpdatesDisabled: 'Automatic installation is disabled by default.',
+@@ -2458,8 +2460,8 @@ const messages = {
+   disclaimerTitle: 'Xen Orchestra from the sources',
+   disclaimerText1: "You are using XO from the sources! That's great for a personal/non-profit usage.",
+   disclaimerText2: "If you are a company, it's better to use it with our appliance + pro support included:",
+-  disclaimerText3: 'Vates XO doc',
+-  disclaimerText4: 'XOA-HL doc',
++  disclaimerText3: 'This version is not bundled with any support nor updates. Use it with caution.',
++  disclaimerText4: 'Why do I see this message?',
+   notRegisteredDisclaimerInfo: 'You are not registered. Your XOA may not be up to date.',
+   notRegisteredDisclaimerCreateAccount: 'Click here to create an account.',
+   notRegisteredDisclaimerRegister: 'Click here to register and update your XOA.',
+diff --git a/packages/xo-web/src/xo-app/index.js b/packages/xo-web/src/xo-app/index.js
+index a2b0cca..366b896 100644
+--- a/packages/xo-web/src/xo-app/index.js
++++ b/packages/xo-web/src/xo-app/index.js
+@@ -475,19 +475,9 @@ export default class XoApp extends Component {
+               )}
+               {plan === 'Community' && !this.state.dismissedSourceBanner && (
+                 <div className='alert alert-danger mb-0'>
+-                  <a
+-                    href='https://docs.xen-orchestra.com/'
+-                    rel='noopener noreferrer'
+-                    target='_blank'
+-                  >
+-                    {_('disclaimerText3')}
+-                  </a>{' '}
+-                  <a
+-                    href='https://xoa-hl.net/'
+-                    rel='noopener noreferrer'
+-                    target='_blank'
+-                  >
+-                    {_('disclaimerText4')}
++                  {_('xoaHlSourceBannerThanks')}{' '}
++                  <a href='https://xcp-hl.net' rel='noopener noreferrer' target='_blank'>
++                    {_('xoaHlSourceBannerDocumentation')}
+                   </a>
+                   <button className='close' onClick={this.dismissSourceBanner}>
+                     &times;
