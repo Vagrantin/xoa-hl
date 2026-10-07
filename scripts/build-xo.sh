@@ -80,6 +80,9 @@ for p in "$PATCH_DIR"/*.patch; do
     git apply --verbose "$p"
 done
 
+echo "==> Compacting untranslated locale entries for the initial UI bundle"
+python3 /build/scripts/compact-xo-locales.py --minimum-entries 1000 "$XO_SRC"
+
 echo "==> Configuring sample.config.toml (XO5 UI + Redis)"
 # Target sample.config.toml, this is what %post copies to the user config
 # location (~/.config/xo-server/config.toml), which is the file xo-server
