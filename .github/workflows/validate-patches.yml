@@ -7,6 +7,8 @@ on:
       - 'UPSTREAM_XO'
       - 'scripts/audit-ui-translations.py'
       - 'scripts/core-ui-keys.txt'
+      - 'scripts/compact-xo-locales.py'
+      - 'tests/test-compact-xo-locales.py'
       - '.github/workflows/validate-patches.yml'
   push:
     branches:
@@ -16,6 +18,8 @@ on:
       - 'UPSTREAM_XO'
       - 'scripts/audit-ui-translations.py'
       - 'scripts/core-ui-keys.txt'
+      - 'scripts/compact-xo-locales.py'
+      - 'tests/test-compact-xo-locales.py'
       - '.github/workflows/validate-patches.yml'
 
 jobs:
@@ -45,6 +49,10 @@ jobs:
         run: node --check "${XO_DIR}/packages/xo-server/src/api/xoaHl.mjs"
       - name: Audit UI translations
         run: python3 scripts/audit-ui-translations.py "${XO_DIR}"
+      - name: Test locale compaction
+        run: python3 -m unittest tests/test-compact-xo-locales.py
+      - name: Compact the production locale catalogs
+        run: python3 scripts/compact-xo-locales.py --minimum-entries 1000 "${XO_DIR}"
       - name: Verify combined update contracts
         run: |
           set -euo pipefail
