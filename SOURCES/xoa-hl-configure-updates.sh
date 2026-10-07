@@ -3,8 +3,29 @@ set -eu
 
 usage() {
     echo "usage: $0 {manual|check|install} {daily|weekly} {Mon|Tue|Wed|Thu|Fri|Sat|Sun} HH:MM {0|5|10|15|30|60}" >&2
+    echo "       $0 channel {stable|testing}" >&2
     exit 2
 }
+
+CONFIG_DIR=${XOA_HL_CONFIG_DIR:-/etc/xoa-hl}
+CONFIG_FILE="$CONFIG_DIR/update.conf"
+LOCK_FILE=${XOA_HL_CONFIG_LOCK:-/run/xoa-hl-configure-updates.lock}
+
+# Rewrite only the CHANNEL line, leaving the schedule and timers untouched.
+if [ "${1:-}" = channel ]; then
+    [ "$#" -eq 2 ] || usage
+    case "$2" in stable|testing) ;; *) usage ;; esac
+    exec 9>"$LOCK_FILE"
+    flock -x 9
+    mkdir -p "$CONFIG_DIR"
+    channel_tmp=$(mktemp "$CONFIG_DIR/.update.conf.XXXXXX")
+    trap 'rm -f "$channel_tmp"' EXIT HUP INT TERM
+    { grep -v '^CHANNEL=' "$CONFIG_FILE" 2>/dev/null || true; printf 'CHANNEL=%s\n' "$2"; } > "$channel_tmp"
+    chmod 0644 "$channel_tmp"
+    mv -f "$channel_tmp" "$CONFIG_FILE"
+    trap - EXIT HUP INT TERM
+    exit 0
+fi
 
 [ "$#" -eq 5 ] || usage
 mode=$1
@@ -32,15 +53,16 @@ fi
 # Validate with systemd before changing any persistent file or enabled unit.
 systemd-analyze calendar "$calendar" >/dev/null
 
-CONFIG_DIR=${XOA_HL_CONFIG_DIR:-/etc/xoa-hl}
 SYSTEMD_DIR=${XOA_HL_SYSTEMD_DIR:-/etc/systemd/system}
-CONFIG_FILE="$CONFIG_DIR/update.conf"
 CHECK_DROPIN_DIR="$SYSTEMD_DIR/xoa-hl-check-update.timer.d"
 AUTO_DROPIN_DIR="$SYSTEMD_DIR/xoa-hl-auto-update.timer.d"
-LOCK_FILE=${XOA_HL_CONFIG_LOCK:-/run/xoa-hl-configure-updates.lock}
 
 exec 9>"$LOCK_FILE"
 flock -x 9
+
+# A schedule change keeps the channel chosen earlier.
+channel=$(sed -n 's/^CHANNEL=//p' "$CONFIG_FILE" 2>/dev/null | head -n 1)
+[ "$channel" = testing ] || channel=stable
 
 mkdir -p "$CONFIG_DIR" "$CHECK_DROPIN_DIR" "$AUTO_DROPIN_DIR"
 config_tmp=$(mktemp "$CONFIG_DIR/.update.conf.XXXXXX")
@@ -55,6 +77,7 @@ trap 'rm -f "$config_tmp" "$check_tmp" "$auto_tmp"' EXIT HUP INT TERM
     printf 'TIME=%s\n' "$run_time"
     printf 'RANDOM_DELAY=%sm\n' "$random_minutes"
     printf 'AUTO_REBOOT=no\n'
+    printf 'CHANNEL=%s\n' "$channel"
 } > "$config_tmp"
 
 write_dropin() {

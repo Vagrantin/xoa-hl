@@ -7,6 +7,13 @@ DNF_COMMAND=${DNF_COMMAND:-dnf}
 
 mkdir -p "$(dirname "$STATUS_FILE")" "$(dirname "$LOCK_FILE")"
 
+# CHANNEL=testing in update.conf adds the candidate repo; anything else is stable.
+if [ "$(sed -n 's/^CHANNEL=//p' "${XOA_HL_CONFIG_DIR:-/etc/xoa-hl}/update.conf" 2>/dev/null | head -n 1)" = testing ]; then
+    set -- --enablerepo=xoa-hl-testing
+else
+    set --
+fi
+
 now=$(date -u '+%Y-%m-%dT%H:%M:%SZ')
 
 write_status() {
@@ -25,7 +32,7 @@ if ! flock -n 9; then
     exit 0
 fi
 
-out=$("$DNF_COMMAND" -y --refresh --color=never check-update 2>&1) && rc=0 || rc=$?
+out=$("$DNF_COMMAND" -y --refresh --color=never "$@" check-update 2>&1) && rc=0 || rc=$?
 
 if [ "$rc" -eq 100 ]; then
     {

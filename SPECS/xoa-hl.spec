@@ -55,6 +55,7 @@ install -m 644 %{_sourcedir}/xoa-hl-auto-update.timer %{buildroot}/usr/lib/syste
 
 mkdir -p %{buildroot}/etc/yum.repos.d
 install -m 644 %{_sourcedir}/xoa-hl.repo %{buildroot}/etc/yum.repos.d/
+install -m 644 %{_sourcedir}/xoa-hl-testing.repo %{buildroot}/etc/yum.repos.d/
 mkdir -p %{buildroot}/usr/libexec/xoa-hl
 install -m 755 %{_sourcedir}/xoa-hl-check-update.sh %{buildroot}/usr/libexec/xoa-hl/check-update.sh
 install -m 755 %{_sourcedir}/xoa-hl-update.sh %{buildroot}/usr/libexec/xoa-hl/update.sh
@@ -84,6 +85,7 @@ touch %{buildroot}/var/lib/xoa-hl/auto-update.status
 /usr/lib/systemd/system/xoa-hl-auto-update.service
 /usr/lib/systemd/system/xoa-hl-auto-update.timer
 /etc/yum.repos.d/xoa-hl.repo
+/etc/yum.repos.d/xoa-hl-testing.repo
 /usr/libexec/xoa-hl
 /etc/sudoers.d/xoa-hl
 %dir /etc/xoa-hl

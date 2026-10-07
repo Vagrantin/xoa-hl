@@ -155,6 +155,32 @@ if sh "$repo_dir/SOURCES/xoa-hl-configure-updates.sh" install weekly Fri 25:00 3
 fi
 [ "$(cksum "$XOA_HL_CONFIG_DIR/update.conf")" = "$config_checksum" ] || fail 'invalid input changed the configuration'
 
+# Update channel: testing adds the candidate repo to check and update, and a
+# schedule change keeps the choice.
+sh "$repo_dir/SOURCES/xoa-hl-configure-updates.sh" channel testing
+grep -Fx 'CHANNEL=testing' "$XOA_HL_CONFIG_DIR/update.conf" >/dev/null
+grep -Fx 'MODE=manual' "$XOA_HL_CONFIG_DIR/update.conf" >/dev/null
+FAKE_DNF_RC=0 FAKE_DNF_OUTPUT='' sh "$repo_dir/SOURCES/xoa-hl-check-update.sh"
+grep -F -- '--enablerepo=xoa-hl-testing' "$FAKE_DNF_ARGS" >/dev/null
+FAKE_DNF_RC=0 FAKE_DNF_OUTPUT='updated' sh "$repo_dir/SOURCES/xoa-hl-update.sh"
+grep -F -- '--enablerepo=xoa-hl-testing' "$FAKE_DNF_ARGS" >/dev/null
+grep -F 'channel: testing' "$state_dir/update.log" >/dev/null
+sh "$repo_dir/SOURCES/xoa-hl-configure-updates.sh" install weekly Fri 02:30 30
+grep -Fx 'CHANNEL=testing' "$XOA_HL_CONFIG_DIR/update.conf" >/dev/null
+sh "$repo_dir/SOURCES/xoa-hl-configure-updates.sh" channel stable
+[ "$(grep -c '^CHANNEL=' "$XOA_HL_CONFIG_DIR/update.conf")" -eq 1 ] || fail 'the channel line was duplicated'
+grep -Fx 'CHANNEL=stable' "$XOA_HL_CONFIG_DIR/update.conf" >/dev/null
+grep -Fx 'MODE=install' "$XOA_HL_CONFIG_DIR/update.conf" >/dev/null
+FAKE_DNF_RC=0 FAKE_DNF_OUTPUT='' sh "$repo_dir/SOURCES/xoa-hl-check-update.sh"
+if grep -F -- 'xoa-hl-testing' "$FAKE_DNF_ARGS" >/dev/null; then fail 'stable channel enabled the testing repo'; fi
+FAKE_DNF_RC=0 FAKE_DNF_OUTPUT='updated' sh "$repo_dir/SOURCES/xoa-hl-update.sh"
+if grep -F -- 'xoa-hl-testing' "$FAKE_DNF_ARGS" >/dev/null; then fail 'stable channel enabled the testing repo'; fi
+if sh "$repo_dir/SOURCES/xoa-hl-configure-updates.sh" channel beta 2>/dev/null; then
+    fail 'an unknown channel was accepted'
+fi
+grep -Fx 'CHANNEL=stable' "$repo_dir/SOURCES/xoa-hl-update.conf" >/dev/null
+grep -Fx 'enabled=0' "$repo_dir/SOURCES/xoa-hl-testing.repo" >/dev/null
+
 # An automatic failure remains durable, keeps the real exit status, and records
 # the reboot requirement reported by needs-restarting.
 if FAKE_CHECK_VERDICT=AVAILABLE FAKE_UPDATE_RC=42 FAKE_REBOOT_RC=1 \
