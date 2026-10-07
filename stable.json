@@ -1,0 +1,82 @@
+{
+  "generation": 1,
+  "latest": "v5.113.2_e281c536-ce27",
+  "updated_at": "2026-10-07T00:00:00Z",
+  "entries": [
+    {
+      "tag": "v5.113.2_e281c536-ce27",
+      "release_id": 405440415,
+      "commit": "197d945627885c52f76cf0c0cccac67035cf7530",
+      "assets": [
+        {
+          "name": "xoa-hl-5.113.2_e281c536-27.g197d945.xcpng8.3.el9.x86_64.rpm",
+          "nevra": "xoa-hl-5.113.2_e281c536-27.g197d945.xcpng8.3.el9.x86_64",
+          "sha256": "eb17f443398fd5e4fe32e226fb581f08c2c743be95f4fbadcc2696f043c93c31"
+        }
+      ],
+      "basis": "legacy-baseline",
+      "status": "stable",
+      "note": "served by stable at cutover (2026-10-07, xcp-hl#179); not QA-approved by this gate"
+    },
+    {
+      "tag": "v5.113.2_e281c536-ce26",
+      "release_id": 400387377,
+      "commit": "f5baea9d7923d0e7278618319c33c93e3ad28c80",
+      "assets": [
+        {
+          "name": "xoa-hl-5.113.2_e281c536-26.gf5baea9.xcpng8.3.el9.x86_64.rpm",
+          "nevra": "xoa-hl-5.113.2_e281c536-26.gf5baea9.xcpng8.3.el9.x86_64",
+          "sha256": "19c701e6aaf2a72ba4257f763c0c03d22d1e44809b69815a09ca6d2bc172ac15"
+        }
+      ],
+      "basis": "legacy-baseline",
+      "status": "stable",
+      "note": "served by stable at cutover (2026-10-07, xcp-hl#179); not QA-approved by this gate"
+    },
+    {
+      "tag": "v5.113.2_e281c536-ce25",
+      "release_id": 399458279,
+      "commit": "d75025d3cdf7c6e54441901ee29b063698e1e693",
+      "assets": [
+        {
+          "name": "xoa-hl-5.113.2_e281c536-25.gd75025d.xcpng8.3.el9.x86_64.rpm",
+          "nevra": "xoa-hl-5.113.2_e281c536-25.gd75025d.xcpng8.3.el9.x86_64",
+          "sha256": "96064da7b661ea77bea557eaea1c536c01bfa31af424a3ae4b5e24ed5af98765"
+        }
+      ],
+      "basis": "legacy-baseline",
+      "status": "stable",
+      "note": "served by stable at cutover (2026-10-07, xcp-hl#179); not QA-approved by this gate"
+    },
+    {
+      "tag": "v5.113.2_e281c536-ce24",
+      "release_id": 399261348,
+      "commit": "4b1bf843e4066c457082c513d7606f93bf30bf02",
+      "assets": [
+        {
+          "name": "xoa-hl-5.113.2_e281c536-24.g4b1bf84.xcpng8.3.el9.x86_64.rpm",
+          "nevra": "xoa-hl-5.113.2_e281c536-24.g4b1bf84.xcpng8.3.el9.x86_64",
+          "sha256": "d360f884b92594bb30910f28b7d32618f06ba2f2d9677cb31fab0733c0e527dd"
+        }
+      ],
+      "basis": "legacy-baseline",
+      "status": "stable",
+      "note": "served by stable at cutover (2026-10-07, xcp-hl#179); not QA-approved by this gate"
+    },
+    {
+      "tag": "v5.113.2_e281c536-ce23",
+      "release_id": 399236335,
+      "commit": "7c01bdf49a199206bb732483d60ee1aafe904515",
+      "assets": [
+        {
+          "name": "xoa-hl-5.113.2_e281c536-23.g7c01bdf.xcpng8.3.el9.x86_64.rpm",
+          "nevra": "xoa-hl-5.113.2_e281c536-23.g7c01bdf.xcpng8.3.el9.x86_64",
+          "sha256": "3b1d32499a2c72334e132585c7dc92e7a7b3d3b501b3ac04b60ad83ffe7dd678"
+        }
+      ],
+      "basis": "legacy-baseline",
+      "status": "stable",
+      "note": "served by stable at cutover (2026-10-07, xcp-hl#179); not QA-approved by this gate"
+    }
+  ]
+}
