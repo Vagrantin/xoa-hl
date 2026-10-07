@@ -109,4 +109,6 @@ jobs:
         with:
           tag_name: ${{ env.RELEASE_TAG }}
           draft: false
+          # A candidate (xcp-hl#179): only the testing channel serves it until prod/promote moves it to stable.
+          prerelease: true
           files: ${{ env.new_rpm }}
