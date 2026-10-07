@@ -1,0 +1,12 @@
+diff --git a/packages/xo-web/src/xo-app/index.js b/packages/xo-web/src/xo-app/index.js
+--- a/packages/xo-web/src/xo-app/index.js
++++ b/packages/xo-web/src/xo-app/index.js
+@@ -380,8 +380,5 @@ export default class XoApp extends Component {
+   componentDidMount() {
+     this.refs.bodyWrapper.style.minHeight = this.refs.menu.getWrappedInstance().height + 'px'
+-    if (+process.env.XOA_PLAN === 5) {
+-      this.displayOpenSourceDisclaimer()
+-    }
+   }
+ 
+   componentDidUpdate(prev) {
