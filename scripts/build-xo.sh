@@ -103,15 +103,6 @@ cat > packages/xo-server/xoahl.config.toml << 'EOF'
 uri = 'redis://127.0.0.1:6379/0'
 EOF
 
-echo "==> Generating self-signed TLS certificate"
-openssl req -x509 -newkey rsa:4096 \
-  -keyout packages/xo-server/xoahl.key \
-  -out packages/xo-server/xoahl.crt \
-  -days 3650 -nodes \
-  -subj '/CN=xoa.local'
-chmod 600 packages/xo-server/xoahl.key
-chmod 644 packages/xo-server/xoahl.crt
-
 # Hard verification, sed exits 0 even on no-match, so confirm the lines
 # actually changed. CI must fail loudly rather than ship a broken tarball.
 #grep -q "^'/' = '../xo-web/dist/'" packages/xo-server/sample.config.toml || \

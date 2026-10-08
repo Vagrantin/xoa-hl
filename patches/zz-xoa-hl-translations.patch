@@ -2,7 +2,7 @@ diff --git a/packages/xo-web/src/common/intl/locales/es.js b/packages/xo-web/src
 index ae9fccd..10a6fd7 100644
 --- a/packages/xo-web/src/common/intl/locales/es.js
 +++ b/packages/xo-web/src/common/intl/locales/es.js
-@@ -3787,4 +3787,55 @@ export default {
+@@ -3787,4 +3787,56 @@ export default {
  
    // Original text: 'At least one of these version requirements must be satisfied by all the hosts in this pool:'
    xosanPackRequirements: undefined,
@@ -44,6 +44,7 @@ index ae9fccd..10a6fd7 100644
 +  xoaHlServerUnreachable: 'xo-server aún no responde. Inténtelo de nuevo en un momento.',
 +  xoaHlStartUpdate: 'Actualizar ahora',
 +  xoaHlUnknownVersion: 'Desconocida',
++  xoaHlUpdateAutoReload: 'La página se recargará sola en {seconds, number} s. Acepte el nuevo certificado si el navegador lo solicita.',
 +  xoaHlUpdateAvailable: '{n, plural, one {# actualización disponible} other {# actualizaciones disponibles}}',
 +  xoaHlUpdateDidNotStart: 'El servicio de actualización no se inició.',
 +  xoaHlUpdateFailed: 'La actualización falló. Consulte el registro siguiente.',
@@ -62,7 +63,7 @@ diff --git a/packages/xo-web/src/common/intl/locales/fa.js b/packages/xo-web/src
 index 1a2b6e4..8d06463 100644
 --- a/packages/xo-web/src/common/intl/locales/fa.js
 +++ b/packages/xo-web/src/common/intl/locales/fa.js
-@@ -5112,4 +5112,55 @@ export default {
+@@ -5112,4 +5112,56 @@ export default {
    // Original text: '{days, plural, =0 {} one {# day } other {# days }}{hours, plural, =0 {} one {# hour } other {# hours }}{minutes, plural, =0 {} one {# minute } other {# minutes }}{seconds, plural, =0 {} one {# second} other {# seconds}}'
    durationFormat:
      '{days, plural, =0 {} one {# day } other {# days }}{hours, plural, =0 {} one {# hour } other {# hours }}{minutes, plural, =0 {} one {# minute } other {# minutes }}{seconds, plural, =0 {} one {# second} other {# seconds}}',
@@ -104,6 +105,7 @@ index 1a2b6e4..8d06463 100644
 +  xoaHlServerUnreachable: 'xo-server هنوز پاسخ نمی‌دهد. کمی بعد دوباره تلاش کنید.',
 +  xoaHlStartUpdate: 'هم‌اکنون به‌روزرسانی شود',
 +  xoaHlUnknownVersion: 'نامشخص',
++  xoaHlUpdateAutoReload: 'صفحه تا {seconds, number} ثانیه دیگر خودکار بارگذاری مجدد می‌شود. اگر مرورگر درخواست کرد، گواهی جدید را بپذیرید.',
 +  xoaHlUpdateAvailable: 'تعداد به‌روزرسانی‌های موجود: {n, number}',
 +  xoaHlUpdateDidNotStart: 'سرویس به‌روزرسانی آغاز نشد.',
 +  xoaHlUpdateFailed: 'به‌روزرسانی ناموفق بود. گزارش زیر را ببینید.',
@@ -122,7 +124,7 @@ diff --git a/packages/xo-web/src/common/intl/locales/fr.js b/packages/xo-web/src
 index 94fc080..c5054e5 100644
 --- a/packages/xo-web/src/common/intl/locales/fr.js
 +++ b/packages/xo-web/src/common/intl/locales/fr.js
-@@ -3872,4 +3872,55 @@ export default {
+@@ -3872,4 +3872,56 @@ export default {
    // Original text: "At least one of these version requirements must be satisfied by all the hosts in this pool:"
    xosanPackRequirements:
      'Au moins une de ces condtions de version doit être satisfaite par tous les hôtes de ce pool :',
@@ -164,6 +166,7 @@ index 94fc080..c5054e5 100644
 +  xoaHlServerUnreachable: 'xo-server ne répond pas encore. Réessayez dans un instant.',
 +  xoaHlStartUpdate: 'Mettre à jour maintenant',
 +  xoaHlUnknownVersion: 'Inconnue',
++  xoaHlUpdateAutoReload: 'La page se rechargera d\'elle-même dans {seconds, number} s. Acceptez le nouveau certificat si le navigateur le demande.',
 +  xoaHlUpdateAvailable: '{n, number} mise{n, plural, one {} other {s}} à jour disponible{n, plural, one {} other {s}}',
 +  xoaHlUpdateDidNotStart: 'Le service de mise à jour n\'a pas démarré.',
 +  xoaHlUpdateFailed: 'La mise à jour a échoué. Consultez le journal ci-dessous.',
@@ -182,7 +185,7 @@ diff --git a/packages/xo-web/src/common/intl/locales/he.js b/packages/xo-web/src
 index aa4ea5c..8d043e8 100644
 --- a/packages/xo-web/src/common/intl/locales/he.js
 +++ b/packages/xo-web/src/common/intl/locales/he.js
-@@ -3118,4 +3118,55 @@ export default {
+@@ -3118,4 +3118,56 @@ export default {
  
    // Original text: 'Network'
    settingsAclsButtonTooltipnetwork: undefined,
@@ -224,6 +227,7 @@ index aa4ea5c..8d043e8 100644
 +  xoaHlServerUnreachable: 'xo-server עדיין אינו מגיב. יש לנסות שוב בעוד רגע.',
 +  xoaHlStartUpdate: 'עדכון כעת',
 +  xoaHlUnknownVersion: 'לא ידוע',
++  xoaHlUpdateAutoReload: 'הדף ייטען מחדש מעצמו בעוד {seconds, number} שניות. אם הדפדפן יבקש, יש לאשר את האישור החדש.',
 +  xoaHlUpdateAvailable: 'מספר העדכונים הזמינים: {n, number}',
 +  xoaHlUpdateDidNotStart: 'שירות העדכון לא הופעל.',
 +  xoaHlUpdateFailed: 'העדכון נכשל. יש לעיין ביומן שלהלן.',
@@ -242,7 +246,7 @@ diff --git a/packages/xo-web/src/common/intl/locales/hu.js b/packages/xo-web/src
 index e62a732..f6ab2b5 100644
 --- a/packages/xo-web/src/common/intl/locales/hu.js
 +++ b/packages/xo-web/src/common/intl/locales/hu.js
-@@ -3580,4 +3580,55 @@ export default {
+@@ -3580,4 +3580,56 @@ export default {
  
    // Original text: 'Install {pack} v{version}?'
    xosanInstallPack: undefined,
@@ -284,6 +288,7 @@ index e62a732..f6ab2b5 100644
 +  xoaHlServerUnreachable: 'Az xo-server még nem válaszol. Próbálja újra rövidesen.',
 +  xoaHlStartUpdate: 'Frissítés most',
 +  xoaHlUnknownVersion: 'Ismeretlen',
++  xoaHlUpdateAutoReload: 'Az oldal {seconds, number} másodperc múlva magától újratöltődik. Fogadja el az új tanúsítványt, ha a böngésző kéri.',
 +  xoaHlUpdateAvailable: 'Elérhető frissítések száma: {n, number}',
 +  xoaHlUpdateDidNotStart: 'A frissítési szolgáltatás nem indult el.',
 +  xoaHlUpdateFailed: 'A frissítés sikertelen. Tekintse meg az alábbi naplót.',
@@ -302,7 +307,7 @@ diff --git a/packages/xo-web/src/common/intl/locales/it.js b/packages/xo-web/src
 index 052c757..b3a5fcd 100644
 --- a/packages/xo-web/src/common/intl/locales/it.js
 +++ b/packages/xo-web/src/common/intl/locales/it.js
-@@ -5918,4 +5918,55 @@ export default {
+@@ -5918,4 +5918,56 @@ export default {
    // Original text: '{days, plural, =0 {} one {# day } other {# days }}{hours, plural, =0 {} one {# hour } other {# hours }}{minutes, plural, =0 {} one {# minute } other {# minutes }}{seconds, plural, =0 {} one {# second} other {# seconds}}'
    durationFormat:
      '{days, plural, =0 {} one {# giorno } other {# giorni }}{hours, plural, =0 {} one {# ora } other {# ore }}{minutes, plural, =0 {} one {# minuto } other {# minuti }}{seconds, plural, =0 {} one {# secondo} other {# secondi}}',
@@ -344,6 +349,7 @@ index 052c757..b3a5fcd 100644
 +  xoaHlServerUnreachable: 'xo-server non risponde ancora. Riprovare tra poco.',
 +  xoaHlStartUpdate: 'Aggiorna ora',
 +  xoaHlUnknownVersion: 'Sconosciuta',
++  xoaHlUpdateAutoReload: 'La pagina si ricaricherà da sola tra {seconds, number} s. Accettare il nuovo certificato se il browser lo chiede.',
 +  xoaHlUpdateAvailable: '{n, number} aggiornament{n, plural, one {o} other {i}} disponibil{n, plural, one {e} other {i}}',
 +  xoaHlUpdateDidNotStart: 'Il servizio di aggiornamento non si è avviato.',
 +  xoaHlUpdateFailed: 'L\'aggiornamento non è riuscito. Consultare il registro qui sotto.',
@@ -362,7 +368,7 @@ diff --git a/packages/xo-web/src/common/intl/locales/ja.js b/packages/xo-web/src
 index 9bc53d6..602e393 100644
 --- a/packages/xo-web/src/common/intl/locales/ja.js
 +++ b/packages/xo-web/src/common/intl/locales/ja.js
-@@ -7601,4 +7601,55 @@ export default {
+@@ -7601,4 +7601,56 @@ export default {
  
    // Original text: 'Total power'
    totalPower: undefined,
@@ -404,6 +410,7 @@ index 9bc53d6..602e393 100644
 +  xoaHlServerUnreachable: 'xo-server がまだ応答していません。しばらくしてから再試行してください。',
 +  xoaHlStartUpdate: '今すぐアップデート',
 +  xoaHlUnknownVersion: '不明',
++  xoaHlUpdateAutoReload: '{seconds, number} 秒後にページが自動的に再読み込みされます。ブラウザーから確認されたら、新しい証明書を承認してください。',
 +  xoaHlUpdateAvailable: '利用可能なアップデート：{n, number} 件',
 +  xoaHlUpdateDidNotStart: 'アップデートサービスが起動しませんでした。',
 +  xoaHlUpdateFailed: 'アップデートに失敗しました。以下のログを確認してください。',
@@ -422,7 +429,7 @@ diff --git a/packages/xo-web/src/common/intl/locales/pl.js b/packages/xo-web/src
 index 81473aa..b410adc 100644
 --- a/packages/xo-web/src/common/intl/locales/pl.js
 +++ b/packages/xo-web/src/common/intl/locales/pl.js
-@@ -3134,4 +3134,55 @@ export default {
+@@ -3134,4 +3134,56 @@ export default {
  
    // Original text: "Network"
    settingsAclsButtonTooltipnetwork: 'Sieć',
@@ -464,6 +471,7 @@ index 81473aa..b410adc 100644
 +  xoaHlServerUnreachable: 'xo-server jeszcze nie odpowiada. Spróbuj ponownie za chwilę.',
 +  xoaHlStartUpdate: 'Aktualizuj teraz',
 +  xoaHlUnknownVersion: 'Nieznana',
++  xoaHlUpdateAutoReload: 'Strona załaduje się ponownie samoczynnie za {seconds, number} s. Zaakceptuj nowy certyfikat, jeśli przeglądarka o to poprosi.',
 +  xoaHlUpdateAvailable: 'Dostępne aktualizacje: {n, number}',
 +  xoaHlUpdateDidNotStart: 'Usługa aktualizacji nie uruchomiła się.',
 +  xoaHlUpdateFailed: 'Aktualizacja nie powiodła się. Zobacz dziennik poniżej.',
@@ -482,7 +490,7 @@ diff --git a/packages/xo-web/src/common/intl/locales/pt.js b/packages/xo-web/src
 index 23bef9c..6ca5d79 100644
 --- a/packages/xo-web/src/common/intl/locales/pt.js
 +++ b/packages/xo-web/src/common/intl/locales/pt.js
-@@ -3131,4 +3131,55 @@ export default {
+@@ -3131,4 +3131,56 @@ export default {
  
    // Original text: 'Network'
    settingsAclsButtonTooltipnetwork: undefined,
@@ -524,6 +532,7 @@ index 23bef9c..6ca5d79 100644
 +  xoaHlServerUnreachable: 'O xo-server ainda não responde. Tente novamente dentro de momentos.',
 +  xoaHlStartUpdate: 'Atualizar agora',
 +  xoaHlUnknownVersion: 'Desconhecida',
++  xoaHlUpdateAutoReload: 'A página será recarregada automaticamente dentro de {seconds, number} s. Aceite o novo certificado se o navegador pedir.',
 +  xoaHlUpdateAvailable: '{n, plural, one {# atualização disponível} other {# atualizações disponíveis}}',
 +  xoaHlUpdateDidNotStart: 'O serviço de atualização não iniciou.',
 +  xoaHlUpdateFailed: 'A atualização falhou. Consulte o registo abaixo.',
@@ -542,7 +551,7 @@ diff --git a/packages/xo-web/src/common/intl/locales/ru.js b/packages/xo-web/src
 index 1848bee..e441413 100644
 --- a/packages/xo-web/src/common/intl/locales/ru.js
 +++ b/packages/xo-web/src/common/intl/locales/ru.js
-@@ -7486,4 +7486,55 @@ export default {
+@@ -7486,4 +7486,56 @@ export default {
  
    // Original text: '{days, plural, =0 {} one {# day } other {# days }}{hours, plural, =0 {} one {# hour } other {# hours }}{minutes, plural, =0 {} one {# minute } other {# minutes }}{seconds, plural, =0 {} one {# second} other {# seconds}}'
    durationFormat: undefined,
@@ -584,6 +593,7 @@ index 1848bee..e441413 100644
 +  xoaHlServerUnreachable: 'xo-server пока не отвечает. Повторите попытку чуть позже.',
 +  xoaHlStartUpdate: 'Обновить сейчас',
 +  xoaHlUnknownVersion: 'Неизвестно',
++  xoaHlUpdateAutoReload: 'Страница перезагрузится сама через {seconds, number} с. Если браузер попросит, примите новый сертификат.',
 +  xoaHlUpdateAvailable: 'Доступно обновлений: {n, number}',
 +  xoaHlUpdateDidNotStart: 'Служба обновления не запустилась.',
 +  xoaHlUpdateFailed: 'Ошибка обновления. См. журнал ниже.',
@@ -602,7 +612,7 @@ diff --git a/packages/xo-web/src/common/intl/locales/sv.js b/packages/xo-web/src
 index c2043d9..46ab68f 100644
 --- a/packages/xo-web/src/common/intl/locales/sv.js
 +++ b/packages/xo-web/src/common/intl/locales/sv.js
-@@ -3798,4 +3798,55 @@ export default {
+@@ -3798,4 +3798,56 @@ export default {
  
    // Original text: 'At least one of these version requirements must be satisfied by all the hosts in this pool:'
    xosanPackRequirements: 'Åtminstone en av dessa versionskrav måste uppfyllas av alla värdar i denna poolen:',
@@ -644,6 +654,7 @@ index c2043d9..46ab68f 100644
 +  xoaHlServerUnreachable: 'xo-server svarar inte ännu. Försök igen om en stund.',
 +  xoaHlStartUpdate: 'Uppdatera nu',
 +  xoaHlUnknownVersion: 'Okänd',
++  xoaHlUpdateAutoReload: 'Sidan läses in igen av sig själv om {seconds, number} s. Godkänn det nya certifikatet om webbläsaren frågar.',
 +  xoaHlUpdateAvailable: 'Tillgängliga uppdateringar: {n, number}',
 +  xoaHlUpdateDidNotStart: 'Uppdateringstjänsten startade inte.',
 +  xoaHlUpdateFailed: 'Uppdateringen misslyckades. Se loggen nedan.',
@@ -662,7 +673,7 @@ diff --git a/packages/xo-web/src/common/intl/locales/tr.js b/packages/xo-web/src
 index 5051baa..3e3070e 100644
 --- a/packages/xo-web/src/common/intl/locales/tr.js
 +++ b/packages/xo-web/src/common/intl/locales/tr.js
-@@ -5006,4 +5006,55 @@ export default {
+@@ -5006,4 +5006,56 @@ export default {
    // Original text: "{days, plural, =0 {} one {# day } other {# days }}{hours, plural, =0 {} one {# hour } other {# hours }}{minutes, plural, =0 {} one {# minute } other {# minutes }}{seconds, plural, =0 {} one {# second} other {# seconds}}"
    durationFormat:
      '{days, plural, =0 {} one {# day } other {# days }}{hours, plural, =0 {} one {# hour } other {# hours }}{minutes, plural, =0 {} one {# minute } other {# minutes }}{seconds, plural, =0 {} one {# second} other {# seconds}}',
@@ -704,6 +715,7 @@ index 5051baa..3e3070e 100644
 +  xoaHlServerUnreachable: 'xo-server henüz yanıt vermiyor. Biraz sonra yeniden deneyin.',
 +  xoaHlStartUpdate: 'Şimdi güncelle',
 +  xoaHlUnknownVersion: 'Bilinmiyor',
++  xoaHlUpdateAutoReload: 'Sayfa {seconds, number} sn içinde kendiliğinden yeniden yüklenecek. Tarayıcı isterse yeni sertifikayı kabul edin.',
 +  xoaHlUpdateAvailable: 'Kullanılabilir güncelleme sayısı: {n, number}',
 +  xoaHlUpdateDidNotStart: 'Güncelleme hizmeti başlamadı.',
 +  xoaHlUpdateFailed: 'Güncelleme başarısız oldu. Aşağıdaki günlüğe bakın.',
@@ -722,7 +734,7 @@ diff --git a/packages/xo-web/src/common/intl/locales/zh.js b/packages/xo-web/src
 index bd3bffb..dc962dd 100644
 --- a/packages/xo-web/src/common/intl/locales/zh.js
 +++ b/packages/xo-web/src/common/intl/locales/zh.js
-@@ -2273,4 +2273,55 @@ export default {
+@@ -2273,4 +2273,56 @@ export default {
  
    // Original text: "Others"
    others: '其他',
@@ -764,6 +776,7 @@ index bd3bffb..dc962dd 100644
 +  xoaHlServerUnreachable: 'xo-server 尚未响应。请稍后重试。',
 +  xoaHlStartUpdate: '立即更新',
 +  xoaHlUnknownVersion: '未知',
++  xoaHlUpdateAutoReload: '页面将在 {seconds, number} 秒后自动重新加载。如果浏览器提示，请接受新证书。',
 +  xoaHlUpdateAvailable: '有 {n, number} 项可用更新',
 +  xoaHlUpdateDidNotStart: '更新服务未启动。',
 +  xoaHlUpdateFailed: '更新失败。请查看下面的日志。',
@@ -794,8 +807,7 @@ diff --git a/packages/xo-web/src/xo-app/settings/xoa-hl-updates/index.js b/packa
 index 8e846cb..464bfa0 100644
 --- a/packages/xo-web/src/xo-app/settings/xoa-hl-updates/index.js
 +++ b/packages/xo-web/src/xo-app/settings/xoa-hl-updates/index.js
-@@ -6,7 +6,7 @@ import React from 'react'
- import UserError from 'user-error'
+@@ -6,6 +6,6 @@ import React from 'react'
  import { Card, CardBlock, CardHeader } from 'card'
  import { Col, Container, Row } from 'grid'
 -import { FormattedRelative } from 'react-intl'

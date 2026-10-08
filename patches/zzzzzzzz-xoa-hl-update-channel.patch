@@ -271,8 +271,7 @@ diff --git a/packages/xo-web/src/xo-app/settings/xoa-hl-updates/index.js b/packa
 index 7057733de..ca8f52a30 100644
 --- a/packages/xo-web/src/xo-app/settings/xoa-hl-updates/index.js
 +++ b/packages/xo-web/src/xo-app/settings/xoa-hl-updates/index.js
-@@ -6,12 +6,14 @@ import React from 'react'
- import UserError from 'user-error'
+@@ -6,11 +6,13 @@ import React from 'react'
  import { Card, CardBlock, CardHeader } from 'card'
  import { Col, Container, Row } from 'grid'
 +import { error as notifyError } from 'notification'
