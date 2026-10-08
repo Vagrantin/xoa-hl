@@ -1,0 +1,49 @@
+diff --git a/packages/xo-web/src/xo-app/home/host-item.js b/packages/xo-web/src/xo-app/home/host-item.js
+index ccf5eedff..8a39b5063 100644
+--- a/packages/xo-web/src/xo-app/home/host-item.js
++++ b/packages/xo-web/src/xo-app/home/host-item.js
+@@ -102,7 +102,8 @@ export default class HostItem extends Component {
+   _onSelect = () => this.props.onSelect(this.props.item.id)
+   _getProSupportStatus = () => {
+     const { state: reacletteState, item: host } = this.props
+-    if (host.productBrand !== 'XCP-ng') {
++    // XOA-HL has no Vates pro support to report on.
++    if (host.productBrand !== 'XCP-ng' || getXoaPlan() === SOURCES) {
+       return
+     }
+ 
+diff --git a/packages/xo-web/src/xo-app/home/pool-item.js b/packages/xo-web/src/xo-app/home/pool-item.js
+index b6311971c..f2d3f4b87 100644
+--- a/packages/xo-web/src/xo-app/home/pool-item.js
++++ b/packages/xo-web/src/xo-app/home/pool-item.js
+@@ -113,7 +113,8 @@ export default class PoolItem extends Component {
+     (isAdmin, poolLicenseInfo, areHostsVersionsEqual, hosts, poolId) => {
+       const alerts = []
+ 
+-      if (isAdmin && this._isXcpngPool()) {
++      // XOA-HL has no Vates pro support to report on.
++      if (isAdmin && this._isXcpngPool() && getXoaPlan() !== SOURCES) {
+         const { icon, supportLevel } = poolLicenseInfo
+         if (supportLevel !== 'total') {
+           alerts.push({
+diff --git a/packages/xo-web/src/xo-app/menu/index.js b/packages/xo-web/src/xo-app/menu/index.js
+index dbe8698fa..5077d227e 100644
+--- a/packages/xo-web/src/xo-app/menu/index.js
++++ b/packages/xo-web/src/xo-app/menu/index.js
+@@ -43,6 +43,7 @@ const HIDDEN_MENU_ITEMS = {
+   proxies: true,
+   xostor: true,
+   noSupport: true,
++  fromVmware: true,
+ }
+ 
+ const LINK_STYLE = {
+@@ -536,7 +537,7 @@ export default class Menu extends Component {
+             icon: 'disk',
+             label: 'labelDisk',
+           },
+-          {
++          !HIDDEN_MENU_ITEMS.fromVmware && {
+             to: '/import/vmware',
+             icon: 'vm',
+             label: 'fromVmware',
