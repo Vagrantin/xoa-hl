@@ -127,3 +127,14 @@ maintainer = "vagrantin"
 status = "active"
 dependencies = ["zzzzzzz-xoa-hl-source-banner"]
 notes = "Stops calling displayOpenSourceDisclaimer on mount, so no modal implying Vates support is shown."
+
+[[patches]]
+id = "zzzzzzzz-xoa-hl-update-channel"
+description = "Add a stable or testing update channel choice to the XOA-HL Updates page"
+target = "packages/xo-server/src/api/xoaHl.mjs, packages/xo-web/src/xo-app/settings/xoa-hl-updates and packages/xo-web/src/common/intl"
+upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
+applies_to = ["5.113.2"]
+maintainer = "vagrantin"
+status = "active"
+dependencies = ["zzzzzzz-xoa-hl-source-banner"]
+notes = "Adds xoaHl.setUpdateChannel and a select in the Appliance card; four messages translated in all 13 locales."
