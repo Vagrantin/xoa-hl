@@ -1,0 +1,380 @@
+diff --git a/packages/xo-server/src/api/xoaHl.mjs b/packages/xo-server/src/api/xoaHl.mjs
+index ce40e9d58..aed2679d3 100644
+--- a/packages/xo-server/src/api/xoaHl.mjs
++++ b/packages/xo-server/src/api/xoaHl.mjs
+@@ -38,6 +38,19 @@ getVersion.description = 'get the installed version of xoa-hl'
+ 
+ // -------------------------------------------------------------------
+ 
++export async function getVmVersion() {
++  try {
++    return (await readFile('/etc/xoa-hl-vm-release', 'utf8')).trim()
++  } catch (error) {
++    // image built before the release stamp existed
++    return { error: 'unknown' }
++  }
++}
++getVmVersion.permission = 'admin'
++getVmVersion.description = 'get the version of the xoa-hl appliance image'
++
++// -------------------------------------------------------------------
++
+ // check-update.sh writes a verdict on the first line, then any number of
+ // "key=value" metadata lines and "name<TAB>version" package lines:
+ //
+diff --git a/packages/xo-web/src/common/intl/locales/es.js b/packages/xo-web/src/common/intl/locales/es.js
+index 4f9c0f601..0c9687afb 100644
+--- a/packages/xo-web/src/common/intl/locales/es.js
++++ b/packages/xo-web/src/common/intl/locales/es.js
+@@ -4008,4 +4008,9 @@ export default {
+   xoaHlChannelStable: 'Estable',
+   xoaHlChannelTesting: 'Pruebas',
+   xoaHlChannelTestingWarning: 'Las compilaciones de prueba son candidatas que aún no han sido aprobadas. Use este canal solo en un dispositivo desechable.',
++  xoaHlAboutTitle: 'XOA-HL',
++  xoaHlAboutAppVersion: 'Versión de XOA-HL',
++  xoaHlAboutVmVersion: 'Versión de la VM XOA-HL',
++  xoaHlAboutUpstreamTitle: 'Origen de Vates',
++  xoaHlAboutVersionUnknown: 'Desconocida',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/fa.js b/packages/xo-web/src/common/intl/locales/fa.js
+index e7f9d44ab..c78476ce7 100644
+--- a/packages/xo-web/src/common/intl/locales/fa.js
++++ b/packages/xo-web/src/common/intl/locales/fa.js
+@@ -5333,4 +5333,9 @@ export default {
+   xoaHlChannelStable: 'پایدار',
+   xoaHlChannelTesting: 'آزمایشی',
+   xoaHlChannelTestingWarning: 'نسخه‌های آزمایشی نامزدهایی هستند که هنوز تأیید نشده‌اند. این کانال را فقط روی یک دستگاه یک‌بارمصرف استفاده کنید.',
++  xoaHlAboutTitle: 'XOA-HL',
++  xoaHlAboutAppVersion: 'نسخه XOA-HL',
++  xoaHlAboutVmVersion: 'نسخه ماشین مجازی XOA-HL',
++  xoaHlAboutUpstreamTitle: 'بالادست از Vates',
++  xoaHlAboutVersionUnknown: 'نامشخص',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/fr.js b/packages/xo-web/src/common/intl/locales/fr.js
+index 78b4ce897..6b46b438a 100644
+--- a/packages/xo-web/src/common/intl/locales/fr.js
++++ b/packages/xo-web/src/common/intl/locales/fr.js
+@@ -4093,4 +4093,9 @@ export default {
+   xoaHlChannelStable: 'Stable',
+   xoaHlChannelTesting: 'Test',
+   xoaHlChannelTestingWarning: 'Les versions de test sont des candidates qui ne sont pas encore approuvées. Utilisez ce canal uniquement sur une appliance jetable.',
++  xoaHlAboutTitle: 'XOA-HL',
++  xoaHlAboutAppVersion: 'Version de XOA-HL',
++  xoaHlAboutVmVersion: 'Version de la VM XOA-HL',
++  xoaHlAboutUpstreamTitle: 'Amont de Vates',
++  xoaHlAboutVersionUnknown: 'Inconnue',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/he.js b/packages/xo-web/src/common/intl/locales/he.js
+index 712979a95..c6cf9ec28 100644
+--- a/packages/xo-web/src/common/intl/locales/he.js
++++ b/packages/xo-web/src/common/intl/locales/he.js
+@@ -3339,4 +3339,9 @@ export default {
+   xoaHlChannelStable: 'יציב',
+   xoaHlChannelTesting: 'בדיקות',
+   xoaHlChannelTestingWarning: 'גרסאות הבדיקות הן מועמדות שטרם אושרו. השתמשו בערוץ זה רק על מכשיר חד-פעמי.',
++  xoaHlAboutTitle: 'XOA-HL',
++  xoaHlAboutAppVersion: 'גרסת XOA-HL',
++  xoaHlAboutVmVersion: 'גרסת המכונה הווירטואלית של XOA-HL',
++  xoaHlAboutUpstreamTitle: 'מקור במעלה הזרם מ-Vates',
++  xoaHlAboutVersionUnknown: 'לא ידוע',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/hu.js b/packages/xo-web/src/common/intl/locales/hu.js
+index e3865e3a1..73d289789 100644
+--- a/packages/xo-web/src/common/intl/locales/hu.js
++++ b/packages/xo-web/src/common/intl/locales/hu.js
+@@ -3801,4 +3801,9 @@ export default {
+   xoaHlChannelStable: 'Stabil',
+   xoaHlChannelTesting: 'Tesztelés',
+   xoaHlChannelTestingWarning: 'A tesztelési buildek még nem jóváhagyott jelöltek. Ezt a csatornát csak eldobható appliance-en használja.',
++  xoaHlAboutTitle: 'XOA-HL',
++  xoaHlAboutAppVersion: 'XOA-HL verzió',
++  xoaHlAboutVmVersion: 'XOA-HL VM verzió',
++  xoaHlAboutUpstreamTitle: 'Upstream a Vatestől',
++  xoaHlAboutVersionUnknown: 'Ismeretlen',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/it.js b/packages/xo-web/src/common/intl/locales/it.js
+index 66866f14c..0821f9c6f 100644
+--- a/packages/xo-web/src/common/intl/locales/it.js
++++ b/packages/xo-web/src/common/intl/locales/it.js
+@@ -6076,4 +6076,9 @@ export default {
+   xoaHlChannelStable: 'Stabile',
+   xoaHlChannelTesting: 'Test',
+   xoaHlChannelTestingWarning: 'Le build di test sono candidate non ancora approvate. Usa questo canale solo su un\'appliance usa e getta.',
++  xoaHlAboutTitle: 'XOA-HL',
++  xoaHlAboutAppVersion: 'Versione di XOA-HL',
++  xoaHlAboutVmVersion: 'Versione della VM XOA-HL',
++  xoaHlAboutUpstreamTitle: 'Upstream da Vates',
++  xoaHlAboutVersionUnknown: 'Sconosciuta',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/ja.js b/packages/xo-web/src/common/intl/locales/ja.js
+index 6dfd81112..ac2555fc4 100644
+--- a/packages/xo-web/src/common/intl/locales/ja.js
++++ b/packages/xo-web/src/common/intl/locales/ja.js
+@@ -7666,4 +7666,9 @@ export default {
+   xoaHlChannelStable: '安定版',
+   xoaHlChannelTesting: 'テスト',
+   xoaHlChannelTestingWarning: 'テストビルドはまだ承認されていない候補です。使い捨てのアプライアンスでのみこのチャネルを使用してください。',
++  xoaHlAboutTitle: 'XOA-HL',
++  xoaHlAboutAppVersion: 'XOA-HL のバージョン',
++  xoaHlAboutVmVersion: 'XOA-HL VM のバージョン',
++  xoaHlAboutUpstreamTitle: 'Vates 由来のアップストリーム',
++  xoaHlAboutVersionUnknown: '不明',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/pl.js b/packages/xo-web/src/common/intl/locales/pl.js
+index 820fb5803..91cf48c43 100644
+--- a/packages/xo-web/src/common/intl/locales/pl.js
++++ b/packages/xo-web/src/common/intl/locales/pl.js
+@@ -3355,4 +3355,9 @@ export default {
+   xoaHlChannelStable: 'Stabilny',
+   xoaHlChannelTesting: 'Testowy',
+   xoaHlChannelTestingWarning: 'Kompilacje testowe to kandydaci, które nie zostały jeszcze zatwierdzone. Używaj tego kanału wyłącznie na jednorazowym urządzeniu.',
++  xoaHlAboutTitle: 'XOA-HL',
++  xoaHlAboutAppVersion: 'Wersja XOA-HL',
++  xoaHlAboutVmVersion: 'Wersja maszyny wirtualnej XOA-HL',
++  xoaHlAboutUpstreamTitle: 'Źródło nadrzędne od Vates',
++  xoaHlAboutVersionUnknown: 'Nieznana',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/pt.js b/packages/xo-web/src/common/intl/locales/pt.js
+index a2a2d79d2..7d357715b 100644
+--- a/packages/xo-web/src/common/intl/locales/pt.js
++++ b/packages/xo-web/src/common/intl/locales/pt.js
+@@ -3352,4 +3352,9 @@ export default {
+   xoaHlChannelStable: 'Estável',
+   xoaHlChannelTesting: 'Teste',
+   xoaHlChannelTestingWarning: 'As compilações de teste são candidatas ainda não aprovadas. Use este canal apenas num dispositivo descartável.',
++  xoaHlAboutTitle: 'XOA-HL',
++  xoaHlAboutAppVersion: 'Versão do XOA-HL',
++  xoaHlAboutVmVersion: 'Versão da VM XOA-HL',
++  xoaHlAboutUpstreamTitle: 'Upstream da Vates',
++  xoaHlAboutVersionUnknown: 'Desconhecida',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/ru.js b/packages/xo-web/src/common/intl/locales/ru.js
+index 194d0fb63..33511c35b 100644
+--- a/packages/xo-web/src/common/intl/locales/ru.js
++++ b/packages/xo-web/src/common/intl/locales/ru.js
+@@ -7551,4 +7551,9 @@ export default {
+   xoaHlChannelStable: 'Стабильный',
+   xoaHlChannelTesting: 'Тестовый',
+   xoaHlChannelTestingWarning: 'Тестовые сборки это кандидаты, которые ещё не одобрены. Используйте этот канал только на одноразовом устройстве.',
++  xoaHlAboutTitle: 'XOA-HL',
++  xoaHlAboutAppVersion: 'Версия XOA-HL',
++  xoaHlAboutVmVersion: 'Версия виртуальной машины XOA-HL',
++  xoaHlAboutUpstreamTitle: 'Исходный код от Vates',
++  xoaHlAboutVersionUnknown: 'Неизвестно',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/sv.js b/packages/xo-web/src/common/intl/locales/sv.js
+index 2f257dc57..88c3f484b 100644
+--- a/packages/xo-web/src/common/intl/locales/sv.js
++++ b/packages/xo-web/src/common/intl/locales/sv.js
+@@ -4019,4 +4019,9 @@ export default {
+   xoaHlChannelStable: 'Stabil',
+   xoaHlChannelTesting: 'Test',
+   xoaHlChannelTestingWarning: 'Testbyggen är kandidater som ännu inte har godkänts. Använd den här kanalen endast på en engångsmaskin.',
++  xoaHlAboutTitle: 'XOA-HL',
++  xoaHlAboutAppVersion: 'XOA-HL-version',
++  xoaHlAboutVmVersion: 'XOA-HL VM-version',
++  xoaHlAboutUpstreamTitle: 'Uppströms från Vates',
++  xoaHlAboutVersionUnknown: 'Okänd',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/tr.js b/packages/xo-web/src/common/intl/locales/tr.js
+index 84241fd99..41010ec32 100644
+--- a/packages/xo-web/src/common/intl/locales/tr.js
++++ b/packages/xo-web/src/common/intl/locales/tr.js
+@@ -5227,4 +5227,9 @@ export default {
+   xoaHlChannelStable: 'Kararlı',
+   xoaHlChannelTesting: 'Test',
+   xoaHlChannelTestingWarning: 'Test derlemeleri henüz onaylanmamış adaylardır. Bu kanalı yalnızca atılabilir bir cihazda kullanın.',
++  xoaHlAboutTitle: 'XOA-HL',
++  xoaHlAboutAppVersion: 'XOA-HL sürümü',
++  xoaHlAboutVmVersion: 'XOA-HL VM sürümü',
++  xoaHlAboutUpstreamTitle: 'Vates kaynaklı yukarı akış',
++  xoaHlAboutVersionUnknown: 'Bilinmiyor',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/zh.js b/packages/xo-web/src/common/intl/locales/zh.js
+index 175e4a0e7..ab6c8e265 100644
+--- a/packages/xo-web/src/common/intl/locales/zh.js
++++ b/packages/xo-web/src/common/intl/locales/zh.js
+@@ -2494,4 +2494,9 @@ export default {
+   xoaHlChannelStable: '稳定版',
+   xoaHlChannelTesting: '测试版',
+   xoaHlChannelTestingWarning: '测试版是尚未获批的候选版本。请仅在可随时丢弃的设备上使用此通道。',
++  xoaHlAboutTitle: 'XOA-HL',
++  xoaHlAboutAppVersion: 'XOA-HL 版本',
++  xoaHlAboutVmVersion: 'XOA-HL 虚拟机版本',
++  xoaHlAboutUpstreamTitle: '来自 Vates 的上游',
++  xoaHlAboutVersionUnknown: '未知',
+ }
+diff --git a/packages/xo-web/src/common/intl/messages.js b/packages/xo-web/src/common/intl/messages.js
+index 52e750ad0..0688d3673 100644
+--- a/packages/xo-web/src/common/intl/messages.js
++++ b/packages/xo-web/src/common/intl/messages.js
+@@ -247,6 +247,11 @@ const messages = {
+   settingsXoaHlUpdatesPage: 'XOA-HL Updates',
+   xoaHlSourceBannerThanks: 'Thank you for using XOA-HL!',
+   xoaHlSourceBannerDocumentation: 'Documentation is available here',
++  xoaHlAboutTitle: 'XOA-HL',
++  xoaHlAboutAppVersion: 'XOA-HL version',
++  xoaHlAboutVmVersion: 'XOA-HL VM version',
++  xoaHlAboutUpstreamTitle: 'Upstream from Vates',
++  xoaHlAboutVersionUnknown: 'Unknown',
+   xoaHlAutomaticUpdates: 'Automatic updates',
+   xoaHlChannel: 'Update channel',
+   xoaHlChannelStable: 'Stable',
+diff --git a/packages/xo-web/src/common/xo/index.js b/packages/xo-web/src/common/xo/index.js
+index 84dac8b72..66a6fa914 100644
+--- a/packages/xo-web/src/common/xo/index.js
++++ b/packages/xo-web/src/common/xo/index.js
+@@ -920,6 +920,7 @@ export const exportConfig = () =>
+ // XOA-HL --------------------------------------------------------------------
+ 
+ export const getXoaHlVersion = () => _call('xoaHl.getVersion')
++export const getXoaHlVmVersion = () => _call('xoaHl.getVmVersion')
+ export const checkXoaHlUpdate = () => _call('xoaHl.checkForUpdate')
+ export const getXoaHlUpdateStatus = () => _call('xoaHl.getUpdateStatus')
+ export const startXoaHlUpdate = () => _call('xoaHl.startUpdate')
+diff --git a/packages/xo-web/src/xo-app/about/index.js b/packages/xo-web/src/xo-app/about/index.js
+index 748cb7d53..48a9e29e9 100644
+--- a/packages/xo-web/src/xo-app/about/index.js
++++ b/packages/xo-web/src/xo-app/about/index.js
+@@ -5,7 +5,7 @@ import Link from 'link'
+ import Page from '../page'
+ import React from 'react'
+ import { getUser } from 'selectors'
+-import { compareCommits, getMasterCommit, serverVersion } from 'xo'
++import { getMasterCommit, getXoaHlVersion, getXoaHlVmVersion, serverVersion } from 'xo'
+ import { Container, Row, Col } from 'grid'
+ import { connectStore, getXoaPlan } from 'utils'
+ 
+@@ -32,30 +32,22 @@ export default class About extends Component {
+       this.setState({ serverVersion })
+     })
+ 
++    const toVersion = version => (typeof version === 'string' ? version : null)
++    getXoaHlVersion().then(
++      version => this.setState({ xoaHlVersion: toVersion(version) }),
++      () => this.setState({ xoaHlVersion: null })
++    )
++    getXoaHlVmVersion().then(
++      version => this.setState({ xoaHlVmVersion: toVersion(version) }),
++      () => this.setState({ xoaHlVmVersion: null })
++    )
++
+     if (process.env.XOA_PLAN > 4 && COMMIT_ID !== '') {
+       try {
+         const commit = await getMasterCommit()
+-        const isOnLatest = commit.sha === COMMIT_ID
+-        const diff = {
+-          nAhead: 0,
+-          nBehind: 0,
+-        }
+-        if (!isOnLatest) {
+-          try {
+-            const { ahead_by, behind_by } = await compareCommits(commit.sha, COMMIT_ID)
+-            diff.nAhead = ahead_by
+-            diff.nBehind = behind_by
+-          } catch (err) {
+-            console.error(err)
+-            diff.nBehind = 'unknown'
+-          }
+-        }
+-
+         this.setState({
+           commit: {
+-            isOnLatest,
+             master: commit,
+-            diffWithMaster: diff,
+             fetched: true,
+           },
+         })
+@@ -71,15 +63,37 @@ export default class About extends Component {
+   }
+   render() {
+     const { user } = this.props
+-    const { commit } = this.state
++    const { commit, xoaHlVersion, xoaHlVmVersion } = this.state
++    const renderVersion = version =>
++      version === undefined ? _('statusLoading') : version === null ? _('xoaHlAboutVersionUnknown') : version
+     const isAdmin = user && user.permission === 'admin'
+ 
+     return (
+       <Page header={HEADER} title='aboutPage' formatTitle>
+         <Container className='text-xs-center'>
++          {isAdmin && (
++            <Col>
++              <h2>{_('xoaHlAboutTitle')}</h2>
++              <Row>
++                <Col mediumSize={6}>
++                  <Icon icon='info' size={4} />
++                  <h4>
++                    {_('xoaHlAboutAppVersion')}: {renderVersion(xoaHlVersion)}
++                  </h4>
++                </Col>
++                <Col mediumSize={6}>
++                  <Icon icon='vm' size={4} />
++                  <h4>
++                    {_('xoaHlAboutVmVersion')}: {renderVersion(xoaHlVmVersion)}
++                  </h4>
++                </Col>
++              </Row>
++            </Col>
++          )}
+           {isAdmin && [
+             process.env.XOA_PLAN > 4 && COMMIT_ID !== '' && (
+               <Col>
++                <h2 className='mt-1'>{_('xoaHlAboutUpstreamTitle')}</h2>
+                 <Row key='0'>
+                   <Col mediumSize={6}>
+                     <Icon icon='git' size={4} />
+@@ -112,51 +126,14 @@ export default class About extends Component {
+                     </h4>
+                   </Col>
+                 </Row>
+-                {commit?.fetched && (
+-                  <Row className={`mt-1 ${commit.isOnLatest ? '' : 'text-warning '}`}>
+-                    <h4>
+-                      {commit.isOnLatest ? (
+-                        <span>
+-                          {_('xoUpToDate')} <Icon icon='check' color='text-success' />
+-                        </span>
+-                      ) : (
+-                        <span>
+-                          {_('xoFromSourceNotUpToDate', {
+-                            nBehind: commit.diffWithMaster.nBehind,
+-                            nAhead: commit.diffWithMaster.nAhead,
+-                          })}{' '}
+-                          <Icon icon='alarm' color='text-warning' />
+-                        </span>
+-                      )}
+-                    </h4>
+-                  </Row>
+-                )}
+               </Col>
+             ),
+           ]}
+           {process.env.XOA_PLAN > 4 ? (
+             <div>
+-              <Row>
+-                <Col>
+-                  <h2 className='text-info'>{_('productionUse')}</h2>
+-                  <h4 className='text-info'>
+-                    {_('getSupport', {
+-                      website: (
+-                        <a
+-                          href='https://vates.tech/pricing-and-support/?pk_campaign=xoa_source_upgrade&pk_kwd=about'
+-                          target='_blank'
+-                          rel='noreferrer'
+-                        >
+-                          https://xen-orchestra.com
+-                        </a>
+-                      ),
+-                    })}
+-                  </h4>
+-                </Col>
+-              </Row>
+               <Row>
+                 <Col mediumSize={6}>
+-                  <a href='https://github.com/vatesfr/xen-orchestra/issues/new/choose' target='_blank' rel='noreferrer'>
++                  <a href='https://github.com/Vagrantin/xcp-hl/issues/new' target='_blank' rel='noreferrer'>
+                     <Icon icon='bug' size={4} />
+                     <h4>{_('bugTracker')}</h4>
+                   </a>
