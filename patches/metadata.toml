@@ -160,3 +160,14 @@ maintainer = "vagrantin"
 status = "active"
 dependencies = ["zzzzzzzzz-xoa-hl-hide-vmware-and-support-alert"]
 notes = "Adds xoaHl.getVmVersion, which reads /etc/xoa-hl-vm-release; the image build must stamp it. Five messages translated in all 13 locales."
+
+[[patches]]
+id = "zzzzzzzzzzz-xoa-hl-update-page-layout"
+description = "Put Appliance and its update log on the left, Automatic updates on the right"
+target = "packages/xo-web/src/xo-app/settings/xoa-hl-updates/index.js"
+upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
+applies_to = ["5.113.2"]
+maintainer = "vagrantin"
+status = "active"
+dependencies = ["zzzzzzzzzz-xoa-hl-about-page"]
+notes = "Two columns so the update log no longer pushes the Automatic updates card down."
