@@ -118,6 +118,17 @@ dependencies = ["zzzzzz-xoa-hl-links-and-labels"]
 notes = "Uses dedicated source-banner messages in all 13 locales, links the banner to https://xcp-hl.net, and changes the Japanese documentation labels to マニュアル."
 
 [[patches]]
+id = "zzzzzzzz-xoa-hl-remove-source-modal"
+description = "Remove the 'Xen Orchestra from the sources' welcome modal"
+target = "packages/xo-web/src/xo-app/index.js"
+upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
+applies_to = ["5.113.2"]
+maintainer = "vagrantin"
+status = "active"
+dependencies = ["zzzzzzz-xoa-hl-source-banner"]
+notes = "Stops calling displayOpenSourceDisclaimer on mount, so no modal implying Vates support is shown."
+
+[[patches]]
 id = "zzzzzzzz-xoa-hl-update-channel"
 description = "Add a stable or testing update channel choice to the XOA-HL Updates page"
 target = "packages/xo-server/src/api/xoaHl.mjs, packages/xo-web/src/xo-app/settings/xoa-hl-updates and packages/xo-web/src/common/intl"
