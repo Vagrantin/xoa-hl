@@ -288,7 +288,7 @@ diff --git a/packages/xo-web/src/common/intl/messages.js b/packages/xo-web/src/c
 index 2aea8e7..680e6e9 100644
 --- a/packages/xo-web/src/common/intl/messages.js
 +++ b/packages/xo-web/src/common/intl/messages.js
-@@ -244,6 +244,55 @@ const messages = {
+@@ -244,6 +244,56 @@ const messages = {
    settingsLogsPage: 'Logs',
    settingsCloudConfigsPage: 'Cloud configs',
    settingsIpsPage: 'IPs',
@@ -328,6 +328,7 @@ index 2aea8e7..680e6e9 100644
 +  xoaHlServerUnreachable: 'xo-server is not answering yet, try again in a moment.',
 +  xoaHlStartUpdate: 'Update now',
 +  xoaHlUnknownVersion: 'Unknown',
++  xoaHlUpdateAutoReload: 'The page reloads by itself in {seconds, number} s. Accept the new certificate if the browser asks.',
 +  xoaHlUpdateAvailable: '{n, number} update{n, plural, one {} other {s}} available',
 +  xoaHlUpdateDidNotStart: 'The update service did not start.',
 +  xoaHlUpdateFailed: 'The update failed, see the log below.',
@@ -496,13 +497,12 @@ new file mode 100644
 index 0000000..6684fd6
 --- /dev/null
 +++ b/packages/xo-web/src/xo-app/settings/xoa-hl-updates/index.js
-@@ -0,0 +1,693 @@
+@@ -0,0 +1,671 @@
 +import _ from 'intl'
 +import ActionButton from 'action-button'
 +import Component from 'base-component'
 +import Icon from 'icon'
 +import React from 'react'
-+import UserError from 'user-error'
 +import { Card, CardBlock, CardHeader } from 'card'
 +import { Col, Container, Row } from 'grid'
 +import { FormattedRelative } from 'react-intl'
@@ -528,9 +528,9 @@ index 0000000..6684fd6
 +// failure to start. Generous: this only covers systemd dispatching the job.
 +const START_TIMEOUT = 3e4
 +
-+// How long xo-server may stay unreachable before the page stops calling it a
-+// routine restart and offers a reload as well.
-+const SLOW_RECONNECT_DELAY = 6e4
++// How long xo-server may stay unreachable before the page reloads itself.
++// A changed TLS certificate blocks this tab until then.
++const AUTO_RELOAD_DELAY = 6e4
 +
 +// Where this tab remembers the update it started, so a reload in the middle of
 +// it -- the one thing a user can do while xo-server is restarting -- comes back
@@ -561,24 +561,6 @@ index 0000000..6684fd6
 +  } catch (error) {
 +    // the update itself is unaffected, only a reload would not find it again
 +  }
-+}
-+
-+// xo-server serves this page too, so reloading it while xo-server is down
-+// swaps a page that will reconnect on its own for a browser error page. Only
-+// reload once the server answers.
-+const reloadWhenReachable = async () => {
-+  let response
-+  try {
-+    response = await window.fetch(window.location.href, { cache: 'no-store', method: 'HEAD' })
-+  } catch (error) {
-+    // a network error is the answer we are testing for, reported below
-+  }
-+
-+  if (response === undefined || !response.ok) {
-+    throw new UserError(_('xoaHlReloadPage'), _('xoaHlServerUnreachable'))
-+  }
-+
-+  window.location.reload()
 +}
 +
 +// Tall enough to be worth reading, capped so the buttons stay on screen.
@@ -846,6 +828,10 @@ index 0000000..6684fd6
 +      // few seconds. Keep the log on screen and keep trying.
 +      if (this._mounted && this.state.updating) {
 +        const now = Date.now()
++        if (this.state.reconnecting && now - this.state.reconnectingSince >= AUTO_RELOAD_DELAY) {
++          window.location.reload()
++          return
++        }
 +        this.setState(({ reconnecting, reconnectingSince }) => ({
 +          lastFailedPollAt: now,
 +          reconnecting: true,
@@ -994,19 +980,12 @@ index 0000000..6684fd6
 +
 +  _renderReconnecting() {
 +    const { lastFailedPollAt, reconnectingSince } = this.state
-+    const elapsed = lastFailedPollAt - reconnectingSince
-+
-+    if (elapsed < SLOW_RECONNECT_DELAY) {
-+      return <span className='ml-1'>{_('xoaHlUpdateReconnecting')}</span>
-+    }
++    const remaining = Math.max(0, Math.ceil((AUTO_RELOAD_DELAY - (lastFailedPollAt - reconnectingSince)) / 1e3))
 +
 +    return (
-+      <div className='mt-1'>
-+        <p className='mb-1'>{_('xoaHlUpdateReconnectingSlow', { seconds: Math.round(elapsed / 1e3) })}</p>
-+        <ActionButton btnStyle='primary' handler={reloadWhenReachable} icon='refresh' size='small'>
-+          {_('xoaHlReloadPage')}
-+        </ActionButton>
-+      </div>
++      <span className='ml-1'>
++        {_('xoaHlUpdateReconnecting')} {_('xoaHlUpdateAutoReload', { seconds: remaining })}
++      </span>
 +    )
 +  }
 +

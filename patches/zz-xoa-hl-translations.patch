@@ -794,8 +794,7 @@ diff --git a/packages/xo-web/src/xo-app/settings/xoa-hl-updates/index.js b/packa
 index 8e846cb..464bfa0 100644
 --- a/packages/xo-web/src/xo-app/settings/xoa-hl-updates/index.js
 +++ b/packages/xo-web/src/xo-app/settings/xoa-hl-updates/index.js
-@@ -6,7 +6,7 @@ import React from 'react'
- import UserError from 'user-error'
+@@ -6,6 +6,6 @@ import React from 'react'
  import { Card, CardBlock, CardHeader } from 'card'
  import { Col, Container, Row } from 'grid'
 -import { FormattedRelative } from 'react-intl'
