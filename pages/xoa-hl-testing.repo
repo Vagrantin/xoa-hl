@@ -1,10 +1,10 @@
 [xoa-hl-testing]
 name=XCP-HL - XOA-HL (testing: candidates before QA approval)
-baseurl=https://vagrantin.github.io/xoa-hl/testing/8.3/x86_64/
+baseurl=https://rpm.xcp-hl.org/xoa-hl/testing/8.3/x86_64/
 # Off by default: enable it per command (dnf --enablerepo=xoa-hl-testing)
 # on a disposable appliance. Stable only ever serves promoted versions.
 enabled=0
 gpgcheck=0
 repo_gpgcheck=1
-gpgkey=https://vagrantin.github.io/xoa-hl/xcp-ng-ce-public.asc
+gpgkey=https://rpm.xcp-hl.org/xcp-ng-ce-public.asc
 skip_if_unavailable=False
