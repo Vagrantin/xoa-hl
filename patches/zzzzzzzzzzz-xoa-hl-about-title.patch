@@ -1,0 +1,164 @@
+diff --git a/packages/xo-web/src/common/intl/locales/es.js b/packages/xo-web/src/common/intl/locales/es.js
+index 0c9687a..b05d8a5 100644
+--- a/packages/xo-web/src/common/intl/locales/es.js
++++ b/packages/xo-web/src/common/intl/locales/es.js
+@@ -4013,4 +4013,5 @@ export default {
+   xoaHlAboutVmVersion: 'Versión de la VM XOA-HL',
+   xoaHlAboutUpstreamTitle: 'Origen de Vates',
+   xoaHlAboutVersionUnknown: 'Desconocida',
++  xoaHlAboutPageTitle: 'Acerca de XOA-hl',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/fa.js b/packages/xo-web/src/common/intl/locales/fa.js
+index c78476c..ef66a2b 100644
+--- a/packages/xo-web/src/common/intl/locales/fa.js
++++ b/packages/xo-web/src/common/intl/locales/fa.js
+@@ -5338,4 +5338,5 @@ export default {
+   xoaHlAboutVmVersion: 'نسخه ماشین مجازی XOA-HL',
+   xoaHlAboutUpstreamTitle: 'بالادست از Vates',
+   xoaHlAboutVersionUnknown: 'نامشخص',
++  xoaHlAboutPageTitle: 'درباره XOA-hl',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/fr.js b/packages/xo-web/src/common/intl/locales/fr.js
+index 6b46b43..b81dc50 100644
+--- a/packages/xo-web/src/common/intl/locales/fr.js
++++ b/packages/xo-web/src/common/intl/locales/fr.js
+@@ -4098,4 +4098,5 @@ export default {
+   xoaHlAboutVmVersion: 'Version de la VM XOA-HL',
+   xoaHlAboutUpstreamTitle: 'Amont de Vates',
+   xoaHlAboutVersionUnknown: 'Inconnue',
++  xoaHlAboutPageTitle: 'À propos de XOA-hl',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/he.js b/packages/xo-web/src/common/intl/locales/he.js
+index c6cf9ec..28cf09b 100644
+--- a/packages/xo-web/src/common/intl/locales/he.js
++++ b/packages/xo-web/src/common/intl/locales/he.js
+@@ -3344,4 +3344,5 @@ export default {
+   xoaHlAboutVmVersion: 'גרסת המכונה הווירטואלית של XOA-HL',
+   xoaHlAboutUpstreamTitle: 'מקור במעלה הזרם מ-Vates',
+   xoaHlAboutVersionUnknown: 'לא ידוע',
++  xoaHlAboutPageTitle: 'אודות XOA-hl',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/hu.js b/packages/xo-web/src/common/intl/locales/hu.js
+index 73d2897..bc3ad1d 100644
+--- a/packages/xo-web/src/common/intl/locales/hu.js
++++ b/packages/xo-web/src/common/intl/locales/hu.js
+@@ -3806,4 +3806,5 @@ export default {
+   xoaHlAboutVmVersion: 'XOA-HL VM verzió',
+   xoaHlAboutUpstreamTitle: 'Upstream a Vatestől',
+   xoaHlAboutVersionUnknown: 'Ismeretlen',
++  xoaHlAboutPageTitle: 'A XOA-hl névjegye',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/it.js b/packages/xo-web/src/common/intl/locales/it.js
+index 0821f9c..300e3fc 100644
+--- a/packages/xo-web/src/common/intl/locales/it.js
++++ b/packages/xo-web/src/common/intl/locales/it.js
+@@ -6081,4 +6081,5 @@ export default {
+   xoaHlAboutVmVersion: 'Versione della VM XOA-HL',
+   xoaHlAboutUpstreamTitle: 'Upstream da Vates',
+   xoaHlAboutVersionUnknown: 'Sconosciuta',
++  xoaHlAboutPageTitle: 'Informazioni su XOA-hl',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/ja.js b/packages/xo-web/src/common/intl/locales/ja.js
+index ac2555f..1698e3c 100644
+--- a/packages/xo-web/src/common/intl/locales/ja.js
++++ b/packages/xo-web/src/common/intl/locales/ja.js
+@@ -7671,4 +7671,5 @@ export default {
+   xoaHlAboutVmVersion: 'XOA-HL VM のバージョン',
+   xoaHlAboutUpstreamTitle: 'Vates 由来のアップストリーム',
+   xoaHlAboutVersionUnknown: '不明',
++  xoaHlAboutPageTitle: 'XOA-hlについて',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/pl.js b/packages/xo-web/src/common/intl/locales/pl.js
+index 91cf48c..936ed43 100644
+--- a/packages/xo-web/src/common/intl/locales/pl.js
++++ b/packages/xo-web/src/common/intl/locales/pl.js
+@@ -3360,4 +3360,5 @@ export default {
+   xoaHlAboutVmVersion: 'Wersja maszyny wirtualnej XOA-HL',
+   xoaHlAboutUpstreamTitle: 'Źródło nadrzędne od Vates',
+   xoaHlAboutVersionUnknown: 'Nieznana',
++  xoaHlAboutPageTitle: 'O XOA-hl',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/pt.js b/packages/xo-web/src/common/intl/locales/pt.js
+index 7d35771..36c1538 100644
+--- a/packages/xo-web/src/common/intl/locales/pt.js
++++ b/packages/xo-web/src/common/intl/locales/pt.js
+@@ -3357,4 +3357,5 @@ export default {
+   xoaHlAboutVmVersion: 'Versão da VM XOA-HL',
+   xoaHlAboutUpstreamTitle: 'Upstream da Vates',
+   xoaHlAboutVersionUnknown: 'Desconhecida',
++  xoaHlAboutPageTitle: 'Sobre o XOA-hl',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/ru.js b/packages/xo-web/src/common/intl/locales/ru.js
+index 33511c3..1402130 100644
+--- a/packages/xo-web/src/common/intl/locales/ru.js
++++ b/packages/xo-web/src/common/intl/locales/ru.js
+@@ -7556,4 +7556,5 @@ export default {
+   xoaHlAboutVmVersion: 'Версия виртуальной машины XOA-HL',
+   xoaHlAboutUpstreamTitle: 'Исходный код от Vates',
+   xoaHlAboutVersionUnknown: 'Неизвестно',
++  xoaHlAboutPageTitle: 'О XOA-hl',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/sv.js b/packages/xo-web/src/common/intl/locales/sv.js
+index 88c3f48..2fc6915 100644
+--- a/packages/xo-web/src/common/intl/locales/sv.js
++++ b/packages/xo-web/src/common/intl/locales/sv.js
+@@ -4024,4 +4024,5 @@ export default {
+   xoaHlAboutVmVersion: 'XOA-HL VM-version',
+   xoaHlAboutUpstreamTitle: 'Uppströms från Vates',
+   xoaHlAboutVersionUnknown: 'Okänd',
++  xoaHlAboutPageTitle: 'Om XOA-hl',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/tr.js b/packages/xo-web/src/common/intl/locales/tr.js
+index 41010ec..bbdccd1 100644
+--- a/packages/xo-web/src/common/intl/locales/tr.js
++++ b/packages/xo-web/src/common/intl/locales/tr.js
+@@ -5232,4 +5232,5 @@ export default {
+   xoaHlAboutVmVersion: 'XOA-HL VM sürümü',
+   xoaHlAboutUpstreamTitle: 'Vates kaynaklı yukarı akış',
+   xoaHlAboutVersionUnknown: 'Bilinmiyor',
++  xoaHlAboutPageTitle: 'XOA-hl Hakkında',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/zh.js b/packages/xo-web/src/common/intl/locales/zh.js
+index ab6c8e2..769a041 100644
+--- a/packages/xo-web/src/common/intl/locales/zh.js
++++ b/packages/xo-web/src/common/intl/locales/zh.js
+@@ -2499,4 +2499,5 @@ export default {
+   xoaHlAboutVmVersion: 'XOA-HL 虚拟机版本',
+   xoaHlAboutUpstreamTitle: '来自 Vates 的上游',
+   xoaHlAboutVersionUnknown: '未知',
++  xoaHlAboutPageTitle: '关于 XOA-hl',
+ }
+diff --git a/packages/xo-web/src/common/intl/messages.js b/packages/xo-web/src/common/intl/messages.js
+index 0688d36..7a5cda7 100644
+--- a/packages/xo-web/src/common/intl/messages.js
++++ b/packages/xo-web/src/common/intl/messages.js
+@@ -248,6 +248,7 @@ const messages = {
+   xoaHlSourceBannerThanks: 'Thank you for using XOA-HL!',
+   xoaHlSourceBannerDocumentation: 'Documentation is available here',
+   xoaHlAboutTitle: 'XOA-HL',
++  xoaHlAboutPageTitle: 'About XOA-hl',
+   xoaHlAboutAppVersion: 'XOA-HL version',
+   xoaHlAboutVmVersion: 'XOA-HL VM version',
+   xoaHlAboutUpstreamTitle: 'Upstream from Vates',
+diff --git a/packages/xo-web/src/xo-app/about/index.js b/packages/xo-web/src/xo-app/about/index.js
+index 48a9e29..b6046ae 100644
+--- a/packages/xo-web/src/xo-app/about/index.js
++++ b/packages/xo-web/src/xo-app/about/index.js
+@@ -7,7 +7,7 @@ import React from 'react'
+ import { getUser } from 'selectors'
+ import { getMasterCommit, getXoaHlVersion, getXoaHlVmVersion, serverVersion } from 'xo'
+ import { Container, Row, Col } from 'grid'
+-import { connectStore, getXoaPlan } from 'utils'
++import { connectStore } from 'utils'
+ 
+ const COMMIT_ID = process.env.GIT_HEAD
+ 
+@@ -16,7 +16,7 @@ const HEADER = (
+     <Row>
+       <Col mediumSize={12}>
+         <h2>
+-          <Icon icon='menu-about' /> {_('aboutXoaPlan', { xoaPlan: getXoaPlan() })}
++          <Icon icon='menu-about' /> {_('xoaHlAboutPageTitle')}
+         </h2>
+       </Col>
+     </Row>

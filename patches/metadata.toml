@@ -171,3 +171,14 @@ maintainer = "vagrantin"
 status = "active"
 dependencies = ["zzzzzzzzzz-xoa-hl-about-page"]
 notes = "Two columns so the update log no longer pushes the Automatic updates card down."
+
+[[patches]]
+id = "zzzzzzzzzzz-xoa-hl-about-title"
+description = "Title the About page 'About XOA-hl' instead of 'About XO Community'"
+target = "packages/xo-web/src/xo-app/about/index.js and packages/xo-web/src/common/intl"
+upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
+applies_to = ["5.113.2"]
+maintainer = "vagrantin"
+status = "active"
+dependencies = ["zzzzzzzzzz-xoa-hl-about-page"]
+notes = "New message xoaHlAboutPageTitle translated in all 13 locales; replaces aboutXoaPlan in the page header."

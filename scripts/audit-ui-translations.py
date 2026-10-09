@@ -67,8 +67,8 @@ def main():
     print("Locale | missing catalog keys | undefined entries | XOA-HL translated | core UI translated")
     print("--- | ---: | ---: | ---: | ---:")
     locale_paths = sorted((catalog / "locales").glob("*.js"))
-    if len(locale_paths) != 13 or len(custom) != 61:
-        failures.append(f"expected 13 locales and 61 XOA-HL keys; found {len(locale_paths)} and {len(custom)}")
+    if len(locale_paths) != 13 or len(custom) != 62:
+        failures.append(f"expected 13 locales and 62 XOA-HL keys; found {len(locale_paths)} and {len(custom)}")
     if len(core) != 83 or core - english.keys() or core & custom:
         failures.append("core UI key list must contain 83 distinct inherited English catalog keys")
     for path in locale_paths:
