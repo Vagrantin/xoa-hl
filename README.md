@@ -36,10 +36,11 @@ Once installed, the RPM is upgradable in place: the package payload replaces
 transaction has finished. Operator config at
 `/root/.config/xo-server/config.toml` is left alone.
 
-`.github/workflows/pages-repo.yml` republishes the RPMs from the most recent
-releases as a signed yum repository at
-[vagrantin.github.io/xoa-hl/8.3/x86_64/](https://vagrantin.github.io/xoa-hl/8.3/x86_64/)
-after every successful build, so an appliance with `xoa-hl.repo` installed can
+Promoted releases are published as a signed yum repository at
+[rpm.xcp-hl.org/xoa-hl/8.3/x86_64/](https://rpm.xcp-hl.org/xoa-hl/8.3/x86_64/)
+by [xcp-hl-rpm](https://github.com/Vagrantin/xcp-hl-rpm) (xcp-hl#190). The legacy
+tree that `.github/workflows/pages-repo.yml` publishes at `vagrantin.github.io/xoa-hl/`
+stays online until appliances have moved. An appliance with `xoa-hl.repo` installed can
 just run:
 
 ```bash

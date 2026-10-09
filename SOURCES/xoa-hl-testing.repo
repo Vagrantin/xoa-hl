@@ -1,9 +1,9 @@
 [xoa-hl-testing]
 name=XCP-HL - XOA-HL (testing: candidates before QA approval)
-baseurl=https://vagrantin.github.io/xoa-hl/testing/8.3/x86_64/
+baseurl=https://rpm.xcp-hl.org/xoa-hl/testing/8.3/x86_64/
 # Enabled per command by the update scripts when the testing channel is chosen.
 enabled=0
 gpgcheck=0
 repo_gpgcheck=1
-gpgkey=https://vagrantin.github.io/xoa-hl/xcp-ng-ce-public.asc
+gpgkey=https://rpm.xcp-hl.org/xcp-ng-ce-public.asc
 skip_if_unavailable=True
