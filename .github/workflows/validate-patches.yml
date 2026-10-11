@@ -9,6 +9,10 @@ on:
       - 'scripts/core-ui-keys.txt'
       - 'scripts/compact-xo-locales.py'
       - 'tests/test-compact-xo-locales.py'
+      - 'scripts/audit-shared-glossary.py'
+      - 'scripts/ui-glossary-*.json'
+      - 'tests/test-shared-glossary.py'
+      - 'docs/shared-glossary-review.md'
       - '.github/workflows/validate-patches.yml'
   push:
     branches:
@@ -20,7 +24,14 @@ on:
       - 'scripts/core-ui-keys.txt'
       - 'scripts/compact-xo-locales.py'
       - 'tests/test-compact-xo-locales.py'
+      - 'scripts/audit-shared-glossary.py'
+      - 'scripts/ui-glossary-*.json'
+      - 'tests/test-shared-glossary.py'
+      - 'docs/shared-glossary-review.md'
       - '.github/workflows/validate-patches.yml'
+
+permissions:
+  contents: read
 
 jobs:
   validate:
@@ -49,6 +60,44 @@ jobs:
         run: node --check "${XO_DIR}/packages/xo-server/src/api/xoaHl.mjs"
       - name: Audit UI translations
         run: python3 scripts/audit-ui-translations.py "${XO_DIR}"
+      - name: Test shared glossary consumer
+        run: python3 -m unittest tests/test-shared-glossary.py
+      - name: Read immutable documentation source pin
+        id: glossary-source
+        run: |
+          set -euo pipefail
+          docs_commit="$(python3 scripts/audit-shared-glossary.py --print-docs-commit)"
+          echo "commit=${docs_commit}" >> "${GITHUB_OUTPUT}"
+      - name: Fetch shared documentation glossary
+        uses: actions/checkout@v4
+        with:
+          repository: Vagrantin/xcp-hl
+          ref: ${{ steps.glossary-source.outputs.commit }}
+          path: .shared-docs
+          persist-credentials: false
+      - name: Export and compare shared terminology
+        run: |
+          set -euo pipefail
+          . ./UPSTREAM_XO
+          review_dir="${RUNNER_TEMP}/ui-glossary-review"
+          test "$(git -C "${XO_DIR}" rev-parse HEAD)" = "${XO_COMMIT}"
+          python3 .shared-docs/site/scripts/export_xoa_glossary.py --output "${review_dir}/glossary.json"
+          python3 scripts/audit-shared-glossary.py \
+            --export "${review_dir}/glossary.json" \
+            --xo-source "${XO_DIR}" \
+            --docs-commit "$(git -C .shared-docs rev-parse HEAD)" \
+            --xoa-commit "$(git rev-parse HEAD)" \
+            --xo-commit "$(git -C "${XO_DIR}" rev-parse HEAD)" \
+            --output "${review_dir}/comparison.json"
+          cp scripts/ui-glossary-source.json scripts/ui-glossary-map.json "${review_dir}/"
+      - name: Upload glossary review evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: xoa-ui-glossary-review
+          path: ${{ runner.temp }}/ui-glossary-review/
+          if-no-files-found: warn
+          retention-days: 14
       - name: Test locale compaction
         run: python3 -m unittest tests/test-compact-xo-locales.py
       - name: Compact the production locale catalogs

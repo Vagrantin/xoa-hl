@@ -27,3 +27,10 @@ This is **not yet a complete translation of the whole XO interface**. Missing up
 The documentation patch names the home-page links explicitly: “Xen Orchestra doc” points to `https://docs.xen-orchestra.com/`, and “XCP-hl doc” points to `https://xcp-hl.net` in every shipped locale. Japanese uses the clearer `マニュアル` label for these links. The source banner has dedicated localized messages and links to `https://xcp-hl.net`, preventing upstream disclaimer translations from replacing the XOA-HL banner.
 
 To reproduce locally: check out the pinned XO commit, apply `patches/*.patch` in filename order, then run `python3 scripts/audit-ui-translations.py <checkout>`. The `Validate XO patches` workflow performs the same checks on pull requests.
+
+The workflow also consumes the pinned EN/FR/JA documentation glossary from
+`xcp-hl` and uploads a comparison artifact with mapped UI labels, explicit gaps
+and pending human review. See [shared glossary review](shared-glossary-review.md)
+for the immutable source pin, report contract and terminology update process.
+The comparison does not replace this catalog coverage/ICU audit or approve
+translations automatically.
