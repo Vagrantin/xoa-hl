@@ -66,7 +66,7 @@ esac
 
 # Print the exit code update.sh logged for this run, or nothing if none yet.
 logged_update_rc() {
-    [ "$UPDATE_LOG" -nt "$run_ref" ] || return 0
+    [ -n "$(find "$UPDATE_LOG" -newer "$run_ref" 2>/dev/null)" ] || return 0
     last=$(tail -n 1 "$UPDATE_LOG" 2>/dev/null) || return 0
     case "$last" in
         '=== xoa-hl update finished successfully'*) echo 0 ;;
