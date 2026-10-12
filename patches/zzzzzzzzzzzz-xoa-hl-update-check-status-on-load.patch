@@ -1,0 +1,33 @@
+diff --git a/packages/xo-web/src/xo-app/settings/xoa-hl-updates/index.js b/packages/xo-web/src/xo-app/settings/xoa-hl-updates/index.js
+index 9231ad5d3..ce3439d10 100644
+--- a/packages/xo-web/src/xo-app/settings/xoa-hl-updates/index.js
++++ b/packages/xo-web/src/xo-app/settings/xoa-hl-updates/index.js
+@@ -11,6 +11,7 @@ import {
+   checkXoaHlUpdate,
+   getXoaHlUpdateConfiguration,
+   getXoaHlUpdateProgress,
++  getXoaHlUpdateStatus,
+   getXoaHlVersion,
+   setXoaHlUpdateChannel,
+   setXoaHlUpdateConfiguration,
+@@ -173,6 +174,20 @@ export default class XoaHlUpdates extends Component {
+       () => this._mounted && this.setState({ configurationLoading: false })
+     )
+ 
++    // Show the stored verdict, such as a timer-driven check's, instead of "never checked".
++    getXoaHlUpdateStatus().then(
++      status =>
++        this._mounted &&
++        status.checkedAt !== undefined &&
++        this.setState(state =>
++          state.status === undefined && state.outcome === undefined && !state.checking && !state.updating
++            ? { status }
++            : null
++        ),
++      // no stored verdict is no reason to fail the page
++      () => {}
++    )
++
+     getXoaHlVersion().then(
+       version => this._mounted && this.setState({ version: typeof version === 'string' ? version : undefined }),
+       // an appliance that cannot report its version is no reason to fail the
