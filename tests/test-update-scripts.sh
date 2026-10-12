@@ -97,6 +97,7 @@ EOF
 chmod +x "$fake_systemctl"
 
 export SYSTEMCTL_COMMAND="$fake_systemctl"
+export XOA_HL_POLL_INTERVAL=0
 export XOA_HL_AUTO_STATUS_FILE="$state_dir/auto-update.status"
 
 FAKE_CHECK_VERDICT=AVAILABLE FAKE_UPDATE_RC=0 sh "$repo_dir/SOURCES/xoa-hl-auto-update.sh"
@@ -131,26 +132,26 @@ export XOA_HL_SYSTEMD_DIR="$tmp_dir/etc/systemd/system"
 export XOA_HL_CONFIG_LOCK="$tmp_dir/configure.lock"
 
 : > "$SYSTEMCTL_LOG"
-sh "$repo_dir/SOURCES/xoa-hl-configure-updates.sh" check daily Sun 04:15 15
+sh "$repo_dir/SOURCES/xoa-hl-configure-updates.sh" check daily Sun 04:15
 grep -Fx 'MODE=check' "$XOA_HL_CONFIG_DIR/update.conf" >/dev/null
 grep -Fx 'OnCalendar=*-*-* 04:15:00' "$XOA_HL_SYSTEMD_DIR/xoa-hl-check-update.timer.d/schedule.conf" >/dev/null
 grep -Fx 'enable --now xoa-hl-check-update.timer' "$SYSTEMCTL_LOG" >/dev/null
 
 : > "$SYSTEMCTL_LOG"
-sh "$repo_dir/SOURCES/xoa-hl-configure-updates.sh" install weekly Fri 02:30 30
+sh "$repo_dir/SOURCES/xoa-hl-configure-updates.sh" install weekly Fri 02:30
 grep -Fx 'MODE=install' "$XOA_HL_CONFIG_DIR/update.conf" >/dev/null
 grep -Fx 'OnCalendar=Fri *-*-* 02:30:00' "$XOA_HL_SYSTEMD_DIR/xoa-hl-auto-update.timer.d/schedule.conf" >/dev/null
-grep -Fx 'RandomizedDelaySec=30m' "$XOA_HL_SYSTEMD_DIR/xoa-hl-auto-update.timer.d/schedule.conf" >/dev/null
+grep -Fx 'RandomizedDelaySec=0' "$XOA_HL_SYSTEMD_DIR/xoa-hl-auto-update.timer.d/schedule.conf" >/dev/null
 grep -Fx 'disable --now xoa-hl-check-update.timer' "$SYSTEMCTL_LOG" >/dev/null
 grep -Fx 'enable --now xoa-hl-auto-update.timer' "$SYSTEMCTL_LOG" >/dev/null
 
 : > "$SYSTEMCTL_LOG"
-sh "$repo_dir/SOURCES/xoa-hl-configure-updates.sh" manual daily Sun 03:00 0
+sh "$repo_dir/SOURCES/xoa-hl-configure-updates.sh" manual daily Sun 03:00
 grep -Fx 'MODE=manual' "$XOA_HL_CONFIG_DIR/update.conf" >/dev/null
 grep -Fx 'disable --now xoa-hl-check-update.timer xoa-hl-auto-update.timer' "$SYSTEMCTL_LOG" >/dev/null
 
 config_checksum=$(cksum "$XOA_HL_CONFIG_DIR/update.conf")
-if sh "$repo_dir/SOURCES/xoa-hl-configure-updates.sh" install weekly Fri 25:00 30 2>/dev/null; then
+if sh "$repo_dir/SOURCES/xoa-hl-configure-updates.sh" install weekly Fri 25:00 2>/dev/null; then
     fail 'an invalid time was accepted'
 fi
 [ "$(cksum "$XOA_HL_CONFIG_DIR/update.conf")" = "$config_checksum" ] || fail 'invalid input changed the configuration'
@@ -165,7 +166,7 @@ grep -F -- '--enablerepo=xoa-hl-testing' "$FAKE_DNF_ARGS" >/dev/null
 FAKE_DNF_RC=0 FAKE_DNF_OUTPUT='updated' sh "$repo_dir/SOURCES/xoa-hl-update.sh"
 grep -F -- '--enablerepo=xoa-hl-testing' "$FAKE_DNF_ARGS" >/dev/null
 grep -F 'channel: testing' "$state_dir/update.log" >/dev/null
-sh "$repo_dir/SOURCES/xoa-hl-configure-updates.sh" install weekly Fri 02:30 30
+sh "$repo_dir/SOURCES/xoa-hl-configure-updates.sh" install weekly Fri 02:30
 grep -Fx 'CHANNEL=testing' "$XOA_HL_CONFIG_DIR/update.conf" >/dev/null
 sh "$repo_dir/SOURCES/xoa-hl-configure-updates.sh" channel stable
 [ "$(grep -c '^CHANNEL=' "$XOA_HL_CONFIG_DIR/update.conf")" -eq 1 ] || fail 'the channel line was duplicated'
@@ -193,6 +194,38 @@ grep -F 'result=failed' "$state_dir/auto-update.status" >/dev/null
 grep -F 'exitCode=42' "$state_dir/auto-update.status" >/dev/null
 grep -F 'rebootNeeded=yes' "$state_dir/auto-update.status" >/dev/null
 grep -F "logPath=$state_dir/update.log" "$state_dir/auto-update.status" >/dev/null
+
+# A systemctl client that dies mid-update must not turn a good update into a
+# failure: the log written by update.sh decides.
+dbus_systemctl="$tmp_dir/dbus-systemctl"
+cat > "$dbus_systemctl" <<'EOF'
+#!/bin/sh
+case "$*" in
+    'start xoa-hl-check-update.service')
+        mkdir -p "$(dirname "$XOA_HL_CHECK_STATUS_FILE")"
+        printf 'AVAILABLE\n' > "$XOA_HL_CHECK_STATUS_FILE"
+        ;;
+    'start xoa-hl-update.service')
+        sleep 1
+        printf '=== xoa-hl update %s ===\n' "$FAKE_LOG_MARKER" > "$XOA_HL_UPDATE_LOG"
+        exit 1
+        ;;
+    *)
+        exit 1
+        ;;
+esac
+EOF
+chmod +x "$dbus_systemctl"
+SYSTEMCTL_COMMAND="$dbus_systemctl" FAKE_LOG_MARKER='finished successfully at now' \
+    sh "$repo_dir/SOURCES/xoa-hl-auto-update.sh"
+grep -F 'result=succeeded' "$state_dir/auto-update.status" >/dev/null
+if SYSTEMCTL_COMMAND="$dbus_systemctl" FAKE_LOG_MARKER='failed with exit code 9 at now' \
+    sh "$repo_dir/SOURCES/xoa-hl-auto-update.sh"; then
+    fail 'a logged failure returned success'
+else
+    [ "$?" -eq 9 ] || fail 'the logged exit code was lost'
+fi
+grep -F 'result=failed' "$state_dir/auto-update.status" >/dev/null
 
 # Packaging defaults: no unattended opt-in and no replay of a missed install.
 grep -Fx 'MODE=manual' "$repo_dir/SOURCES/xoa-hl-update.conf" >/dev/null

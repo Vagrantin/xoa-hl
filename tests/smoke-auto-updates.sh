@@ -82,8 +82,6 @@ original_mode=${MODE:-manual}
 original_frequency=${FREQUENCY:-daily}
 original_day=${DAY:-Sun}
 original_time=${TIME:-03:00}
-original_delay=${RANDOM_DELAY:-15m}
-original_delay=${original_delay%m}
 changed=false
 
 restore() {
@@ -91,7 +89,7 @@ restore() {
     trap - EXIT HUP INT TERM
     if [ "$changed" = true ]; then
         echo 'Restoring the original automatic-update configuration...'
-        "$HELPER" "$original_mode" "$original_frequency" "$original_day" "$original_time" "$original_delay" ||
+        "$HELPER" "$original_mode" "$original_frequency" "$original_day" "$original_time" ||
             echo 'WARNING: automatic restoration failed; restore the saved values manually.' >&2
     fi
     exit "$rc"
@@ -139,7 +137,7 @@ next_run=$(systemctl show "$AUTO_TIMER" --property=NextElapseUSecRealtime --valu
 pass "Install automatically mode is scheduled for $next_run and was not executed"
 
 echo 'Restoring the original configuration...'
-"$HELPER" "$original_mode" "$original_frequency" "$original_day" "$original_time" "$original_delay"
+"$HELPER" "$original_mode" "$original_frequency" "$original_day" "$original_time"
 changed=false
 trap - EXIT HUP INT TERM
 pass 'original configuration restored'

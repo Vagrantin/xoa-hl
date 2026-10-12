@@ -182,3 +182,14 @@ maintainer = "vagrantin"
 status = "active"
 dependencies = ["zzzzzzzzzzz-xoa-hl-update-page-layout"]
 notes = "Calls xoaHl.getUpdateStatus on mount so a timer-driven check shows as Up to date, Available or Error with its time, not Never checked."
+
+[[patches]]
+id = "zzzzzzzzzzzzz-xoa-hl-auto-update-ui-fixes"
+description = "Remove the random delay setting and show a failed automatic run as a red banner"
+target = "packages/xo-web/src/xo-app/settings/xoa-hl-updates/index.js and packages/xo-server/src/api/xoaHl.mjs"
+upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
+applies_to = ["5.113.2"]
+maintainer = "vagrantin"
+status = "active"
+dependencies = ["zzzzzzzzzzzz-xoa-hl-update-check-status-on-load"]
+notes = "setUpdateConfiguration no longer takes randomDelayMinutes; it moves together with SOURCES/xoa-hl-configure-updates.sh, which now takes four arguments."
