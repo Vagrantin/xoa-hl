@@ -2,7 +2,7 @@
 set -eu
 
 usage() {
-    echo "usage: $0 {manual|check|install} {daily|weekly} {Mon|Tue|Wed|Thu|Fri|Sat|Sun} HH:MM {0|5|10|15|30|60}" >&2
+    echo "usage: $0 {manual|check|install} {daily|weekly} {Mon|Tue|Wed|Thu|Fri|Sat|Sun} HH:MM" >&2
     echo "       $0 channel {stable|testing}" >&2
     exit 2
 }
@@ -27,17 +27,15 @@ if [ "${1:-}" = channel ]; then
     exit 0
 fi
 
-[ "$#" -eq 5 ] || usage
+[ "$#" -eq 4 ] || usage
 mode=$1
 frequency=$2
 day=$3
 run_time=$4
-random_minutes=$5
 
 case "$mode" in manual|check|install) ;; *) usage ;; esac
 case "$frequency" in daily|weekly) ;; *) usage ;; esac
 case "$day" in Mon|Tue|Wed|Thu|Fri|Sat|Sun) ;; *) usage ;; esac
-case "$random_minutes" in 0|5|10|15|30|60) ;; *) usage ;; esac
 
 case "$run_time" in
     [0-1][0-9]:[0-5][0-9]|2[0-3]:[0-5][0-9]) ;;
@@ -75,7 +73,6 @@ trap 'rm -f "$config_tmp" "$check_tmp" "$auto_tmp"' EXIT HUP INT TERM
     printf 'FREQUENCY=%s\n' "$frequency"
     printf 'DAY=%s\n' "$day"
     printf 'TIME=%s\n' "$run_time"
-    printf 'RANDOM_DELAY=%sm\n' "$random_minutes"
     printf 'AUTO_REBOOT=no\n'
     printf 'CHANNEL=%s\n' "$channel"
 } > "$config_tmp"
@@ -86,7 +83,7 @@ write_dropin() {
         echo '[Timer]'
         echo 'OnCalendar='
         printf 'OnCalendar=%s\n' "$calendar"
-        printf 'RandomizedDelaySec=%sm\n' "$random_minutes"
+        echo 'RandomizedDelaySec=0'
     } > "$target"
 }
 

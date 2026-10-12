@@ -15,13 +15,13 @@ into unattended updates.
 Configure a mode with the root-owned validated helper:
 
 ```bash
-# MODE FREQUENCY DAY TIME RANDOM_DELAY_MINUTES
-sudo /usr/libexec/xoa-hl/configure-updates.sh check weekly Sun 03:00 15
-sudo /usr/libexec/xoa-hl/configure-updates.sh install weekly Sun 03:00 15
-sudo /usr/libexec/xoa-hl/configure-updates.sh manual daily Sun 03:00 15
+# MODE FREQUENCY DAY TIME
+sudo /usr/libexec/xoa-hl/configure-updates.sh check weekly Sun 03:00
+sudo /usr/libexec/xoa-hl/configure-updates.sh install weekly Sun 03:00
+sudo /usr/libexec/xoa-hl/configure-updates.sh manual daily Sun 03:00
 ```
 
-Accepted random delays are `0`, `5`, `10`, `15`, `30`, and `60` minutes. The
+There is no random delay: the timers fire at the configured time. The
 day argument is validated in every mode and is used only for a weekly schedule.
 The time is interpreted in the appliance's local timezone.
 
