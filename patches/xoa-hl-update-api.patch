@@ -505,7 +505,7 @@ index 0000000..6684fd6
 +import React from 'react'
 +import { Card, CardBlock, CardHeader } from 'card'
 +import { Col, Container, Row } from 'grid'
-+import { FormattedDate, FormattedRelative, FormattedTime } from 'react-intl'
++import { FormattedRelative } from 'react-intl'
 +import {
 +  checkXoaHlUpdate,
 +  getXoaHlUpdateConfiguration,
