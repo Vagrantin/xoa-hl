@@ -104,6 +104,55 @@ jobs:
           echo "new_rpm=${NEW_RPM}" >> $GITHUB_ENV
           ls -lh "${NEW_RPM}"
 
+      - name: Check scriptlets and prepare signing
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y rpm
+          # The builder container writes out/ as root. The runner must own the
+          # RPM for rpmsign and the directory for release-notes.sh.
+          sudo chown -R "$(id -u):$(id -g)" out
+          scripts=$(rpm -qp --scripts "${new_rpm}")
+          echo "${scripts}"
+          if grep -qE '^[[:space:]]*%' <<<"${scripts}"; then
+            echo "Unexpanded RPM macro in scriptlets"; exit 1
+          fi
+
+      - name: Sign RPM
+        env:
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+        run: |
+          set -euo pipefail
+          echo "${GPG_PRIVATE_KEY}" | gpg --batch --pinentry-mode loopback \
+            --passphrase "${GPG_PASSPHRASE}" --import
+          mkdir -p ~/.gnupg && chmod 700 ~/.gnupg
+          echo "allow-loopback-pinentry" >> ~/.gnupg/gpg-agent.conf
+          gpgconf --kill gpg-agent
+          gpgconf --launch gpg-agent
+          echo "${GPG_PASSPHRASE}" | gpg --batch --pinentry-mode loopback \
+            --passphrase-fd 0 --quiet --no-tty \
+            -u "XCP-ng Community Edition" \
+            --sign --output /dev/null /dev/null
+          cat > ~/.rpmmacros <<'EOF'
+          %_gpg_name XCP-ng Community Edition
+          %__gpg_sign_cmd %{__gpg} gpg --batch --no-verbose --no-armor \
+            --no-secmem-warning --pinentry-mode loopback \
+            -u "%{_gpg_name}" -sbo %{__signature_filename} \
+            --digest-algo sha256 %{__plaintext_filename}
+          EOF
+          rpmsign --addsign "${new_rpm}"
+
+      - name: Verify RPM signature
+        run: |
+          set -euo pipefail
+          rpm --import "$GITHUB_WORKSPACE/xcp-ng-ce-public.asc"
+          result=$(rpm --checksig "${new_rpm}")
+          echo "${result}"
+          grep -Fq "digests signatures OK" <<<"${result}" || {
+            echo "RPM signature verification failed"; exit 1;
+          }
+
       - name: Prepare release notes
         run: scripts/release-notes.sh "$RELEASE_TAG" '${{ steps.ver.outputs.version }}' "$new_rpm" out/release-notes.md
 
