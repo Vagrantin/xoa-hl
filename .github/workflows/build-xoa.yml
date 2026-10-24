@@ -104,6 +104,9 @@ jobs:
           echo "new_rpm=${NEW_RPM}" >> $GITHUB_ENV
           ls -lh "${NEW_RPM}"
 
+      - name: Prepare release notes
+        run: scripts/release-notes.sh "$RELEASE_TAG" '${{ steps.ver.outputs.version }}' "$new_rpm" out/release-notes.md
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
@@ -112,4 +115,5 @@ jobs:
           # A candidate (xcp-hl#179): only the testing channel serves it until prod/promote moves it to stable.
           prerelease: true
           generate_release_notes: true
+          body_path: out/release-notes.md
           files: ${{ env.new_rpm }}
