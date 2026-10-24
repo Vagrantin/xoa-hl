@@ -275,7 +275,7 @@ index 7057733de..ca8f52a30 100644
  import { Card, CardBlock, CardHeader } from 'card'
  import { Col, Container, Row } from 'grid'
 +import { error as notifyError } from 'notification'
- import { FormattedDate, FormattedRelative } from 'react-intl'
+ import { FormattedDate, FormattedRelative, FormattedTime } from 'react-intl'
  import {
    checkXoaHlUpdate,
    getXoaHlUpdateConfiguration,
