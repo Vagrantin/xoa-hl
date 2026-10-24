@@ -505,7 +505,7 @@ index 0000000..6684fd6
 +import React from 'react'
 +import { Card, CardBlock, CardHeader } from 'card'
 +import { Col, Container, Row } from 'grid'
-+import { FormattedRelative } from 'react-intl'
++import { FormattedDate, FormattedRelative, FormattedTime } from 'react-intl'
 +import {
 +  checkXoaHlUpdate,
 +  getXoaHlUpdateConfiguration,
@@ -1090,7 +1090,7 @@ index 0000000..6684fd6
 +        ) : (
 +          <p className='text-muted'>
 +            {_('xoaHlLastAutomaticResult')}: {lastResult}
-+            {configuration.lastRun.finishedAt !== undefined && <span> · {configuration.lastRun.finishedAt}</span>}
++            {configuration.lastRun.finishedAt !== undefined && <span> · <FormattedDate value={new Date(configuration.lastRun.finishedAt)} /> <FormattedTime value={new Date(configuration.lastRun.finishedAt)} /></span>}
 +          </p>
 +        )}
 +        {installationSelected && (
