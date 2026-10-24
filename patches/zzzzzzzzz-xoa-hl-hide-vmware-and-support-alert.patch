@@ -50,14 +50,10 @@ index dbe8698fa..5077d227e 100644
 diff --git a/packages/xo-web/src/xo-app/import/index.js b/packages/xo-web/src/xo-app/import/index.js
 --- a/packages/xo-web/src/xo-app/import/index.js
 +++ b/packages/xo-web/src/xo-app/import/index.js
-@@ -6,6 +6,7 @@ import React from 'react'
- import { Col, Container, Row } from 'grid'
+@@ -6,2 +6,3 @@ import React from 'react'
  import { NavLink, NavTabs } from 'nav'
- import { routes } from 'utils'
 +import { getXoaPlan, SOURCES } from '../../common/xoa-plans'
- 
- import DiskImport from '../disk-import'
- import EsxiImport from '../vm-import/esxi/esxi-import'
+ import { routes } from 'utils'
 @@ -26,9 +27,11 @@ const HEADER = (
            <NavLink to='/import/disk'>
              <Icon icon='disk' /> {_('labelDisk')}
