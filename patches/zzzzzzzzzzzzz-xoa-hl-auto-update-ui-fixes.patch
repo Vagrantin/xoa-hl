@@ -119,7 +119,7 @@ index ce3439d10..a0c17beea 100644
 -          <p className='text-muted'>
 +          <Banner icon={lastRunFailed ? 'error' : 'info'} level={lastRunFailed ? 'danger' : lastResult === 'running' ? 'info' : 'success'}>
              {_('xoaHlLastAutomaticResult')}: {lastResult}
-             {configuration.lastRun.finishedAt !== undefined && <span> · {configuration.lastRun.finishedAt}</span>}
+             {configuration.lastRun.finishedAt !== undefined && <span> · <FormattedDate value={new Date(configuration.lastRun.finishedAt)} /> <FormattedTime value={new Date(configuration.lastRun.finishedAt)} /></span>}
 -          </p>
 +          </Banner>
          )}
