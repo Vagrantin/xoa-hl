@@ -243,8 +243,18 @@ index 748cb7d53..48a9e29e9 100644
 -import { compareCommits, getMasterCommit, serverVersion } from 'xo'
 +import { getMasterCommit, getXoaHlVersion, getXoaHlVmVersion, serverVersion } from 'xo'
  import { Container, Row, Col } from 'grid'
- import { connectStore, getXoaPlan } from 'utils'
+-import { connectStore, getXoaPlan } from 'utils'
++import { connectStore } from 'utils'
  
+@@ -16,7 +16,7 @@ const HEADER = (
+     <Row>
+       <Col mediumSize={12}>
+         <h2>
+-          <Icon icon='menu-about' /> {_('aboutXoaPlan', { xoaPlan: getXoaPlan() })}
++          <Icon icon='menu-about' /> {_('xoaHlAboutTitle')}
+         </h2>
+       </Col>
+     </Row>
 @@ -32,30 +32,22 @@ export default class About extends Component {
        this.setState({ serverVersion })
      })
