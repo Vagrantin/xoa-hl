@@ -111,4 +111,5 @@ jobs:
           draft: false
           # A candidate (xcp-hl#179): only the testing channel serves it until prod/promote moves it to stable.
           prerelease: true
+          generate_release_notes: true
           files: ${{ env.new_rpm }}
