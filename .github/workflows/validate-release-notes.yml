@@ -1,0 +1,29 @@
+name: Validate release notes
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/build-xoa.yml'
+      - '.github/workflows/validate-release-notes.yml'
+      - 'scripts/release-notes.sh'
+      - 'tests/test-release-notes.sh'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/build-xoa.yml'
+      - '.github/workflows/validate-release-notes.yml'
+      - 'scripts/release-notes.sh'
+      - 'tests/test-release-notes.sh'
+
+permissions:
+  contents: read
+
+jobs:
+  notes:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate shell and release metadata
+        run: |
+          bash -n scripts/release-notes.sh tests/test-release-notes.sh
+          bash tests/test-release-notes.sh
