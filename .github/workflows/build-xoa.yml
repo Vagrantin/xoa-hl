@@ -134,13 +134,8 @@ jobs:
             --passphrase-fd 0 --quiet --no-tty \
             -u "XCP-ng Community Edition" \
             --sign --output /dev/null /dev/null
-          cat > ~/.rpmmacros <<'EOF'
-          %_gpg_name XCP-ng Community Edition
-          %__gpg_sign_cmd %{__gpg} gpg --batch --no-verbose --no-armor \
-            --no-secmem-warning --pinentry-mode loopback \
-            -u "%{_gpg_name}" -sbo %{__signature_filename} \
-            --digest-algo sha256 %{__plaintext_filename}
-          EOF
+          # rpm 6 (ubuntu-26.04 runner) rejects the old argv0-style sign command; its default uses the cached passphrase.
+          echo "%_gpg_name XCP-ng Community Edition" > ~/.rpmmacros
           rpmsign --addsign "${new_rpm}"
 
       - name: Verify RPM signature

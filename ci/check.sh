@@ -17,6 +17,7 @@ git ls-files -z '*.sh' | xargs -0 shellcheck -S warning
 # The same test the test-update-scripts workflow runs.
 step "update scripts test"
 sh tests/test-update-scripts.sh
+python3 tests/test-update-history.py
 
 step "locale compaction test"
 python3 -m unittest tests/test-compact-xo-locales.py

@@ -1,0 +1,33 @@
+diff --git a/packages/xo-web/src/xo-app/host/tab-patches.js b/packages/xo-web/src/xo-app/host/tab-patches.js
+--- a/packages/xo-web/src/xo-app/host/tab-patches.js
++++ b/packages/xo-web/src/xo-app/host/tab-patches.js
+@@ -1,4 +1,5 @@
+ import _ from 'intl'
++import Icon from 'icon'
+ import PropTypes from 'prop-types'
+ import React, { Component } from 'react'
+ import SortedTable from 'sorted-table'
+@@ -155,6 +156,11 @@
+         <Row>
+           <Col className='text-xs-right'>
+             {this.props.needsRestart && (
++              <span className='text-warning mr-1'>
++                <Icon icon='host-reboot' /> {_('rebootUpdateHostLabel')}
++              </span>
++            )}
++            {this.props.needsRestart && (
+               <TabButton
+                 btnStyle='warning'
+                 handler={restartHost}
+@@ -202,6 +208,11 @@
+       <Container>
+         <Row>
+           <Col className='text-xs-right'>
++            {this.props.needsRestart && (
++              <span className='text-warning mr-1'>
++                <Icon icon='host-reboot' /> {_('rebootUpdateHostLabel')}
++              </span>
++            )}
+             {this.props.needsRestart && (
+               <TabButton
+                 btnStyle='warning'
