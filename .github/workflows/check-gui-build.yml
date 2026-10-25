@@ -1,0 +1,37 @@
+name: Check packaged GUI build
+on:
+  pull_request:
+    paths:
+      - 'scripts/build-xo.sh'
+      - 'scripts/check-gui-assets.py'
+      - 'tests/test-gui-assets.py'
+      - 'UPSTREAM_XO'
+      - 'container/Containerfile'
+      - '.github/workflows/check-gui-build.yml'
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Test GUI payload validation
+        run: |
+          bash -n scripts/build-xo.sh
+          python3 tests/test-gui-assets.py
+      - name: Build the pinned payload without publishing
+        run: |
+          docker build -t xoa-hl-builder -f container/Containerfile container/
+          docker run --rm \
+            -v "$GITHUB_WORKSPACE/patches:/build/patches:ro" \
+            -v "$GITHUB_WORKSPACE/out:/build/out" \
+            -v "$GITHUB_WORKSPACE/scripts:/build/scripts:ro" \
+            -v "$GITHUB_WORKSPACE/UPSTREAM_XO:/build/UPSTREAM_XO:ro" \
+            xoa-hl-builder bash /build/scripts/build-xo.sh
+      - name: Verify archived GUI entry pages
+        run: |
+          set -eu
+          mkdir extracted
+          tar -xzf out/xoa-hl-*.tar.gz -C extracted
+          python3 scripts/check-gui-assets.py extracted/xen-orchestra
