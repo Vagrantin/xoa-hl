@@ -127,7 +127,10 @@ echo "==> Stripping devDependencies (workspace symlinks preserved)"
 yarn workspaces focus --production 2>/dev/null || \
   yarn install --production --ignore-scripts --prefer-offline
 
-echo "==> Verify both GUI payloads survived pruning"\npython3 /build/scripts/check-gui-assets.py "$XO_SRC"\n\necho "==> Packaging tarball (whole pruned monorepo)"
+echo "==> Verify both GUI payloads survived pruning"
+python3 /build/scripts/check-gui-assets.py "$XO_SRC"
+
+echo "==> Packaging tarball (whole pruned monorepo)"
 tar czf "$OUT_DIR/xoa-hl-${VERSION}.tar.gz" \
     --exclude='**/*.map' \
     -C /build xen-orchestra
