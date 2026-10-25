@@ -1,0 +1,22 @@
+.xoa-assistant { max-width: 48rem; border: 1px solid #cdd7df; border-radius: .75rem; background: #fff; color: #203442; font: inherit; overflow: hidden; }
+.xoa-assistant__header { padding: 1.2rem 1.4rem; background: #f4f7f9; border-bottom: 1px solid #dce4e9; }
+.xoa-assistant__header h2 { margin: 0 0 .4rem; font-size: 1.3rem; }
+.xoa-assistant__header p { margin: 0; color: #526876; }
+.xoa-assistant__log { padding: 1rem 1.4rem; min-height: 3rem; max-height: 24rem; overflow-y: auto; }
+.xoa-assistant__message { white-space: pre-wrap; overflow-wrap: anywhere; padding: .8rem 1rem; background: #f2f6f8; border-radius: .5rem; line-height: 1.5; }
+.xoa-assistant__message--user { margin-left: 2rem; background: #e8f1f6; }
+.xoa-assistant__proposal { margin: 0 1.4rem 1.4rem; padding: 1rem; border: 2px solid #597b93; border-radius: .5rem; }
+.xoa-assistant__proposal[hidden] { display: none; }
+.xoa-assistant__proposal h3 { margin: 0 0 .5rem; }
+.xoa-assistant__notice { padding: .6rem .75rem; background: #fff5d9; border-radius: .3rem; color: #645022; }
+.xoa-assistant__fields { display: grid; grid-template-columns: minmax(7rem, 1fr) minmax(0, 2fr); gap: .6rem 1rem; margin: 1rem 0; }
+.xoa-assistant__fields dt { font-weight: 600; }
+.xoa-assistant__fields dd { margin: 0; overflow-wrap: anywhere; }
+.xoa-assistant__status { font-weight: 500; }
+.xoa-assistant__actions { display: flex; flex-wrap: wrap; gap: .75rem; }
+.xoa-assistant__actions button { padding: .6rem .9rem; border-radius: .35rem; font: inherit; cursor: pointer; }
+.xoa-assistant__approve { color: #fff; background: #275f80; border: 1px solid #275f80; }
+.xoa-assistant__reject { color: #203442; background: #fff; border: 1px solid #879eac; }
+.xoa-assistant__actions button:focus-visible { outline: 3px solid #d99934; outline-offset: 3px; }
+.xoa-assistant__actions button:disabled { opacity: .55; cursor: default; }
+@media (max-width: 480px) { .xoa-assistant__fields { grid-template-columns: 1fr; gap: .25rem; } .xoa-assistant__fields dd { margin-bottom: .65rem; } }

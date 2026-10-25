@@ -12,10 +12,13 @@ on:
       - 'SOURCES/xoa-hl-read-chat.recipe.json'
       - 'SOURCES/xoa-hl-proposals.py'
       - 'SOURCES/xoa-hl-create-vm.schema.json'
+      - 'SOURCES/assistant-ui/**'
+      - 'docs/assistant-preview.html'
       - 'scripts/fetch-goose-runtime.py'
       - 'tests/test-goose-package.py'
       - 'tests/test-assistant-*'
       - 'tests/smoke-assistant-read.py'
+      - 'tests/browser-assistant-preview.cjs'
       - '.github/workflows/check-goose-package.yml'
 permissions:
   contents: read
@@ -34,6 +37,10 @@ jobs:
           python3 tests/test-assistant-config.py
           python3 tests/test-assistant-proposals.py
           node --test tests/test-assistant-read.mjs
+      - name: Test localized approval component
+        run: |
+          npm install --prefix "$RUNNER_TEMP/xoa-ui-tests" --ignore-scripts --no-audit --no-fund linkedom@0.18.12
+          ASSISTANT_DOM_MODULE="$RUNNER_TEMP/xoa-ui-tests/node_modules/linkedom" node --test tests/test-assistant-ui.mjs
       - name: Fetch checksum-verified released binary
         run: |
           mkdir -p out/goose
@@ -53,6 +60,9 @@ jobs:
             cp /repo/SOURCES/goose-LICENSE /repo/SOURCES/xoa-hl-assistant.json /root/rpmbuild/SOURCES/
             cp /repo/SOURCES/xoa-hl-mcp-*.mjs /repo/SOURCES/xoa-hl-run-read-chat.py /repo/SOURCES/xoa-hl-read-chat.recipe.json /root/rpmbuild/SOURCES/
             cp /repo/SOURCES/xoa-hl-proposals.py /repo/SOURCES/xoa-hl-create-vm.schema.json /root/rpmbuild/SOURCES/
+            cp /repo/SOURCES/assistant-ui/panel.mjs /root/rpmbuild/SOURCES/assistant-panel.mjs
+            cp /repo/SOURCES/assistant-ui/locales.mjs /root/rpmbuild/SOURCES/assistant-locales.mjs
+            cp /repo/SOURCES/assistant-ui/panel.css /root/rpmbuild/SOURCES/assistant-panel.css
             cp /repo/LICENSE /root/rpmbuild/SOURCES/xoa-hl-LICENSE
             cp /repo/GOOSE_RUNTIME.json /root/rpmbuild/SOURCES/
             rpmbuild -bb /repo/SPECS/xoa-hl-goose.spec
@@ -76,3 +86,24 @@ jobs:
         with:
           name: optional-goose-rpm-test
           path: out/goose/*.rpm
+  ui-browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Install test-only Chromium and Japanese fonts
+        run: |
+          npm install --prefix "$RUNNER_TEMP/ui-browser" --ignore-scripts --no-audit --no-fund playwright@1.56.1
+          node "$RUNNER_TEMP/ui-browser/node_modules/playwright/cli.js" install --with-deps chromium --only-shell
+          sudo apt-get install -y fonts-noto-cjk
+      - name: Check component preview in Chromium
+        env:
+          PLAYWRIGHT_MODULE: ${{ runner.temp }}/ui-browser/node_modules/playwright
+        run: node tests/browser-assistant-preview.cjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: assistant-panel-preview
+          path: out/assistant-ui/*.png
