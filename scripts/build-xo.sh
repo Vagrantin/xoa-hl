@@ -112,6 +112,12 @@ echo "==> Install + build (all workspaces)"
 yarn --network-timeout 300000
 yarn --network-timeout 300000 build
 
+# The pinned root build filters out @xen-orchestra/web. Its /v6 mount and
+# Try XO 6 link already exist, so explicitly build the bundled preview too.
+# Use the upstream asset build used by prepublishOnly, without changing the pin.
+yarn --network-timeout 300000 workspace @xen-orchestra/web run build-only
+python3 /build/scripts/check-gui-assets.py "$XO_SRC"
+
 echo "==> Pruning: drop test/dev/cloud packages, keep everything else"
 rm -rf .git .github .changesets docs
 rm -rf packages/xo-server-test*
@@ -120,6 +126,9 @@ rm -rf packages/xo-server-cloud
 echo "==> Stripping devDependencies (workspace symlinks preserved)"
 yarn workspaces focus --production 2>/dev/null || \
   yarn install --production --ignore-scripts --prefer-offline
+
+echo "==> Verify both GUI payloads survived pruning"
+python3 /build/scripts/check-gui-assets.py "$XO_SRC"
 
 echo "==> Packaging tarball (whole pruned monorepo)"
 tar czf "$OUT_DIR/xoa-hl-${VERSION}.tar.gz" \
