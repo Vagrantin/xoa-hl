@@ -7,12 +7,16 @@ CHECK_STATUS_FILE=${XOA_HL_CHECK_STATUS_FILE:-/run/xoa-hl/status}
 SYSTEMCTL_COMMAND=${SYSTEMCTL_COMMAND:-systemctl}
 UPDATE_LOG=${XOA_HL_UPDATE_LOG:-$STATE_DIR/update.log}
 POLL_INTERVAL=${XOA_HL_POLL_INTERVAL:-2}
+HISTORY_HELPER=${XOA_HL_HISTORY_HELPER:-/usr/libexec/xoa-hl/update-history.py}
+RPM_COMMAND=${RPM_COMMAND:-rpm}
 
 mkdir -p "$STATE_DIR"
 started_at=$(date -u '+%Y-%m-%dT%H:%M:%SZ')
 # Reference point: only a log newer than this belongs to the current run.
 run_ref=$(mktemp "$STATE_DIR/.auto-update.XXXXXX")
-trap 'rm -f "$run_ref"' EXIT
+before_file="$run_ref.before"
+after_file="$run_ref.after"
+trap 'rm -f "$run_ref" "$before_file" "$after_file"' EXIT
 
 write_state() {
     result=$1
@@ -35,7 +39,17 @@ finish() {
     result=$1
     exit_code=$2
     reboot_needed=$3
-    write_state "$result" "$exit_code" "$reboot_needed" "$(date -u '+%Y-%m-%dT%H:%M:%SZ')"
+    finished_at=$(date -u '+%Y-%m-%dT%H:%M:%SZ')
+    write_state "$result" "$exit_code" "$reboot_needed" "$finished_at"
+    if [ -r "$HISTORY_HELPER" ]; then
+        if [ -f "$before_file" ]; then
+            "$RPM_COMMAND" -qa --qf '%{NAME}.%{ARCH}\t%{EPOCHNUM}:%{VERSION}-%{RELEASE}\n' > "$after_file" || rm -f "$after_file"
+        fi
+        python3 "$HISTORY_HELPER" --path "$STATE_DIR/auto-update-history.json" \
+            --before "$before_file" --after "$after_file" --startedAt "$started_at" \
+            --finishedAt "$finished_at" --result "$result" --exitCode "$exit_code" \
+            --rebootNeeded "$reboot_needed" || echo 'Could not save automatic update history' >&2
+    fi
     exit "$exit_code"
 }
 
@@ -78,6 +92,7 @@ logged_update_rc() {
     esac
 }
 
+"$RPM_COMMAND" -qa --qf '%{NAME}.%{ARCH}\t%{EPOCHNUM}:%{VERSION}-%{RELEASE}\n' > "$before_file" || rm -f "$before_file"
 if "$SYSTEMCTL_COMMAND" start xoa-hl-update.service; then
     update_rc=0
 else
