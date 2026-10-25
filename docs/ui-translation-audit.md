@@ -4,6 +4,8 @@ XOA-HL is pinned to Xen Orchestra commit `e281c536d3b1e97ccfb3b0826f91b7dbb6c447
 
 The inherited XO batches now cover 83 shared labels and actions, including status, notifications, VM, backup, storage, network, licensing, certificate, tags, custom fields, and common form terms. Entries already translated in a locale were preserved. `scripts/core-ui-keys.txt` records the scope enforced by CI.
 
+The pages captured in the XOA-HL user documentation (user, servers, about, SR disks, new VM, VM console and VM disks) are translated in French and Japanese, the documentation languages. `scripts/docs-pages-ui-keys.txt` lists those 183 keys, and the audit enforces them for `fr` and `ja` only (xcp-hl#285).
+
 The inherited Xen Orchestra catalog remains incomplete. The following counts come from `python3 scripts/audit-ui-translations.py /path/to/patched/xen-orchestra` after applying all the patches. “Missing” means there is no entry for an English message ID; “undefined” means a locale explicitly declares an untranslated entry. These are distinct ways the UI falls back to English. The catalog contains 2,704 IDs after the XOA-HL patches.
 
 | Locale | Missing IDs | Undefined entries | XOA-HL messages | Core UI |
