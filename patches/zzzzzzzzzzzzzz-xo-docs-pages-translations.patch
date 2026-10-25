@@ -1,0 +1,1111 @@
+diff --git a/packages/xo-web/src/common/intl/locales/fr.js b/packages/xo-web/src/common/intl/locales/fr.js
+index 6b46b43..80e7eb2 100644
+--- a/packages/xo-web/src/common/intl/locales/fr.js
++++ b/packages/xo-web/src/common/intl/locales/fr.js
+@@ -1925,7 +1925,7 @@ export default {
+   noControlDomainVdis: 'Aucun VDI attaché au Control Domain',
+ 
+   // Original text: "Boot flag"
+-  vbdBootableStatus: 'Boot flag',
++  vbdBootableStatus: 'Indicateur d\'amorçage',
+ 
+   // Original text: "Status"
+   vbdStatus: 'État',
+@@ -1946,7 +1946,7 @@ export default {
+   vbdDisconnect: 'Déconnecter un VBD',
+ 
+   // Original text: "Bootable"
+-  vbdBootable: 'Bootable',
++  vbdBootable: 'Amorçable',
+ 
+   // Original text: "Readonly"
+   vbdReadonly: 'Lecture seule',
+@@ -4098,4 +4098,106 @@ export default {
+   xoaHlAboutVmVersion: 'Version de la VM XOA-HL',
+   xoaHlAboutUpstreamTitle: 'Amont de Vates',
+   xoaHlAboutVersionUnknown: 'Inconnue',
++
++  // Pages captured in the XOA-HL user documentation (xcp-hl#285)
++  authToken: 'Jeton',
++  authTokenLastUse: 'Dernière utilisation',
++  authTokens: 'Jetons d\'authentification',
++  deleteAuthTokens: 'Supprimer les jetons d\'authentification sélectionnés',
++  deleteSshKeys: 'Supprimer les clefs SSH sélectionnées',
++  forgetClientId: 'Oublier le Client ID',
++  forgetTokens: 'Oublier tous les jetons d\'authentification',
++  forgetTokensExplained: 'Empêche l\'authentification avec les jetons existants, sauf celui de la session en cours',
++  forgetXsCredentialsConfirm: 'Voulez-vous vraiment oublier votre XenServer Client ID ?',
++  forgetXsCredentialsSuccess: 'Client ID oublié',
++  newAuthToken: 'Nouveau jeton',
++  setXsCredentialsError: 'Impossible d\'envoyer le Client ID',
++  setXsCredentialsSuccess: 'Client ID envoyé',
++  uploadClientId: 'Envoyer le fichier Client ID',
++  xsClientId: 'XenServer Client ID',
++  pool: 'Pool',
++  serverDisable: 'Désactiver le serveur',
++  serverDisabled: 'Désactivé',
++  serverEnable: 'Activer',
++  serverEnabled: 'Activé',
++  serverHttpProxy: 'URL du proxy HTTP',
++  serverHttpProxyPlaceHolder: 'URL du proxy HTTP',
++  settingsAuditPage: 'Audit',
++  settingsCloudConfigsPage: 'Configurations cloud',
++  xoConfig: 'Configuration XO',
++  failedToFetchLatestMasterCommit: 'Impossible de récupérer le dernier commit de master',
++  maintenanceMode: 'Mode maintenance',
++  xostor: 'XOSTOR',
++  copyUuid: 'Copier {uuid}',
++  destroySelectedVdis: 'Détruire les VDI sélectionnés',
++  destroyVdi: 'Détruire le VDI',
++  disabledVdiMigrateTooltip: 'Les snapshots et les copies de base ne peuvent pas être migrés individuellement',
++  exportVdi: 'Exporter le contenu du VDI',
++  importVdi: 'Importer le contenu du VDI',
++  isMetadataVdi: 'Les données de ce snapshot ont été purgées. Il ne contient plus que les métadonnées et les blocs modifiés.',
++  migrateSelectedVdis: 'Migrer les VDI sélectionnés',
++  migrateVdiMessage: 'Pour que la VM puisse démarrer, tous ses VDI doivent se trouver sur un SR partagé ou sur le même hôte (SR local).',
++  multipleActiveVdis: '{firstVdi} et {nVdis} de plus',
++  noActiveVdi: 'Aucun VDI actif',
++  vbdCbt: 'CBT',
++  vdiImageFormat: 'Format d\'image',
++  vdiVms: 'VM',
++  copyHostBiosStrings: 'Copier les chaînes BIOS de l\'hôte dans la VM',
++  coreOsDefaultTemplateError: 'Erreur lors de la récupération du modèle cloud CoreOS par défaut',
++  cpusMax: 'vCPU max.',
++  createVmModalTitle: 'Créer la VM',
++  createVmModalWarningMessage: 'Vous allez utiliser une grande partie des ressources disponibles dans le jeu de ressources. Voulez-vous vraiment continuer ?',
++  destroyCloudConfigVdiAfterBoot: 'Détruire le disque de configuration cloud après le premier démarrage',
++  enableVtpm: 'Activer le VTPM',
++  newVmNetworkConfigLabel: 'Configuration réseau',
++  newVmRamWarning: 'La mémoire est inférieure au seuil ({threshold})',
++  newVmSrsNotOnSameHost: 'Les SR doivent être sur le même hôte ou partagés',
++  newVmUserConfigLabel: 'Configuration utilisateur',
++  noConfigDrive: 'Pas de disque de configuration',
++  removeAcl: 'Supprimer',
++  requiresAdminPermissions: 'Nécessite les droits administrateur',
++  secureBoot: 'Secure Boot',
++  secureBootNotSetup: 'Ce pool n\'est pas encore configuré pour le Secure Boot UEFI des invités. Cliquez pour plus d\'informations.',
++  seeVtpmDocumentation: 'Voir la documentation VTPM',
++  templateHasBiosStrings: 'Le modèle contient déjà les chaînes BIOS',
++  vmAcls: 'ACL',
++  vmAddAcls: 'Ajouter des ACL',
++  vmBootFirmware: 'Firmware de démarrage',
++  vmBootFirmwareIsUefi: 'Le firmware de démarrage est UEFI',
++  vmVgpu: 'vGPU',
++  vtpmNotSupported: 'Le VTPM n\'est pris en charge que sur les pools sous XCP-ng/XS 8.3 ou ultérieur.',
++  warningVtpmRequired: 'Ce modèle nécessite un VTPM ; sans lui, la VM ne pourra probablement pas démarrer.',
++  ctrlAltDelConfirmation: 'Envoyer Ctrl+Alt+Suppr à la VM ?',
++  disabledConsole: 'La console est désactivée pour cette VM',
++  multilineCopyToClipboard: 'Copie multiligne',
++  rdp: 'RDP',
++  rdpRootTooltip: 'Se connecter avec un outil RDP externe',
++  remoteNeedClientTools: 'Aucune adresse IP signalée par les outils invités',
++  sendToClipboard: 'Envoyer vers le presse-papiers',
++  sshRootLabel: 'SSH',
++  sshRootTooltip: 'Se connecter en root avec un outil SSH externe',
++  sshUserLabel: 'SSH en tant que…',
++  sshUserTooltip: 'Se connecter avec un outil SSH externe en tant qu\'utilisateur…',
++  sshUsernameLabel: 'Nom d\'utilisateur SSH',
++  action: 'Action',
++  notEnoughSpaceInResourceSet: 'Espace insuffisant dans le jeu de ressources {resourceSet} ({spaceLeft} restants)',
++  object: 'Objet',
++  progress: 'Progression',
++  removeSelectedVdisFromVm: 'Retirer les VDI sélectionnés de cette VM',
++  removeVdiFromVm: 'Retirer le VDI de cette VM',
++  size: 'Taille',
++  taskEstimatedEnd: 'Fin estimée',
++  taskStarted: 'Démarrée',
++  useQuotaWarning: 'La création de ce disque utilisera le quota d\'espace disque du jeu de ressources {resourceSet} ({spaceLeft} restants)',
++  vbdAttach: 'Attacher',
++  vbdDevice: 'Périphérique',
++  vdiAttachDeviceConfirm: 'Le VDI sélectionné est déjà attaché à cette VM. Voulez-vous vraiment continuer ?',
++  vdiTasks: 'Tâches des VDI',
++  warningVdiSr: 'Pour que la VM puisse démarrer, les SR des VDI doivent être partagés ou sur le même hôte.',
++  sortedTableNoItems: 'Aucun élément',
++  checkXoa: 'Vérifier XOA',
++  proxiesNeedUpgrade: 'Certains proxys doivent être mis à jour.',
++  restApiDoc: 'Doc de l\'API REST',
++  someProxiesHaveErrors: '{n, number} proxy{n, plural, one {} other {s}} en erreur',
++  tryXo6: 'Essayer XO 6',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/ja.js b/packages/xo-web/src/common/intl/locales/ja.js
+index ac2555f..2202c6d 100644
+--- a/packages/xo-web/src/common/intl/locales/ja.js
++++ b/packages/xo-web/src/common/intl/locales/ja.js
+@@ -255,7 +255,7 @@ export default {
+   vms: 'VM',
+ 
+   // Original text: 'Max vCPUs'
+-  cpusMax: undefined,
++  cpusMax: '最大 vCPU 数',
+ 
+   // Original text: 'Metadata'
+   metadata: 'メタデータ',
+@@ -276,7 +276,7 @@ export default {
+   iscsiSessions: undefined,
+ 
+   // Original text: 'Requires admin permissions'
+-  requiresAdminPermissions: undefined,
++  requiresAdminPermissions: '管理者権限が必要です',
+ 
+   // Original text: 'Proxy'
+   proxy: undefined,
+@@ -507,7 +507,7 @@ export default {
+   copyToClipboardVdiUuid: undefined,
+ 
+   // Original text: 'Copy {uuid}'
+-  copyUuid: undefined,
++  copyUuid: '{uuid} をコピー',
+ 
+   // Original text: 'Copy {value}'
+   copyValue: undefined,
+@@ -576,7 +576,7 @@ export default {
+   settingsPage: '設定',
+ 
+   // Original text: 'Audit'
+-  settingsAuditPage: undefined,
++  settingsAuditPage: '監査',
+ 
+   // Original text: "Servers"
+   settingsServersPage: 'サーバ一覧',
+@@ -597,7 +597,7 @@ export default {
+   settingsLogsPage: 'ログ',
+ 
+   // Original text: 'Cloud configs'
+-  settingsCloudConfigsPage: undefined,
++  settingsCloudConfigsPage: 'Cloud config',
+ 
+   // Original text: "IPs"
+   settingsIpsPage: 'IPアドレス',
+@@ -675,7 +675,7 @@ export default {
+   poolMetadata: undefined,
+ 
+   // Original text: 'XO config'
+-  xoConfig: undefined,
++  xoConfig: 'XO の設定',
+ 
+   // Original text: 'VM Backup & Replication'
+   backupVms: undefined,
+@@ -720,7 +720,7 @@ export default {
+   freeUpgrade: 'フリーアップグレード',
+ 
+   // Original text: 'Check XOA'
+-  checkXoa: undefined,
++  checkXoa: 'XOA を確認',
+ 
+   // Original text: 'XOA check'
+   xoaCheck: undefined,
+@@ -756,28 +756,28 @@ export default {
+   editUserProfile: '{username} 設定の変更',
+ 
+   // Original text: 'XenServer Client ID'
+-  xsClientId: undefined,
++  xsClientId: 'XenServer Client ID',
+ 
+   // Original text: 'Upload Client ID file'
+-  uploadClientId: undefined,
++  uploadClientId: 'Client ID ファイルをアップロード',
+ 
+   // Original text: 'Forget Client ID'
+-  forgetClientId: undefined,
++  forgetClientId: 'Client ID を削除',
+ 
+   // Original text: 'Are you sure you want to forget your XenServer Client ID?'
+-  forgetXsCredentialsConfirm: undefined,
++  forgetXsCredentialsConfirm: 'XenServer Client ID を削除してもよろしいですか？',
+ 
+   // Original text: 'Could not forget Client ID'
+   forgetXsCredentialsError: undefined,
+ 
+   // Original text: 'Client ID forgotten'
+-  forgetXsCredentialsSuccess: undefined,
++  forgetXsCredentialsSuccess: 'Client ID を削除しました',
+ 
+   // Original text: 'Could not upload Client ID'
+-  setXsCredentialsError: undefined,
++  setXsCredentialsError: 'Client ID をアップロードできませんでした',
+ 
+   // Original text: 'Client ID uploaded'
+-  setXsCredentialsSuccess: undefined,
++  setXsCredentialsSuccess: 'Client ID をアップロードしました',
+ 
+   // Original text: 'All VMs'
+   allVms: undefined,
+@@ -981,7 +981,7 @@ export default {
+   sortedTableAllItemsSelected: '選択中({nItems, number})',
+ 
+   // Original text: 'No items found'
+-  sortedTableNoItems: undefined,
++  sortedTableNoItems: '項目がありません',
+ 
+   // Original text: "{nFiltered, number} of {nTotal, number} items"
+   sortedTableNumberOfFilteredItems: 'フィルタ中({nFiltered, number}) 全体({nTotal, number})',
+@@ -1071,7 +1071,7 @@ export default {
+   preview: 'プレビュー',
+ 
+   // Original text: 'Action'
+-  action: undefined,
++  action: '操作',
+ 
+   // Original text: "Item"
+   item: 'アイテム',
+@@ -1356,7 +1356,7 @@ export default {
+   taskSkipped: undefined,
+ 
+   // Original text: 'Started'
+-  taskStarted: undefined,
++  taskStarted: '開始',
+ 
+   // Original text: 'Interrupted'
+   taskInterrupted: undefined,
+@@ -1380,7 +1380,7 @@ export default {
+   taskError: undefined,
+ 
+   // Original text: 'Estimated end'
+-  taskEstimatedEnd: undefined,
++  taskEstimatedEnd: '終了予定',
+ 
+   // Original text: 'Reason'
+   taskReason: undefined,
+@@ -2254,16 +2254,16 @@ export default {
+   removeUserFilterBody: 'Are you sure you want to remove custom filter?',
+ 
+   // Original text: "Default filter"
+-  defaultFilter: 'Default filter',
++  defaultFilter: 'デフォルトのフィルター',
+ 
+   // Original text: "Default filters"
+-  defaultFilters: 'Default filters',
++  defaultFilters: 'デフォルトのフィルター',
+ 
+   // Original text: "Custom filters"
+-  customFilters: 'Custom filters',
++  customFilters: 'カスタムフィルター',
+ 
+   // Original text: "Customize filters"
+-  customizeFilters: 'Customize filters',
++  customizeFilters: 'フィルターのカスタマイズ',
+ 
+   // Original text: 'Interpool copy requires at least Enterprise plan'
+   cantInterPoolCopy: undefined,
+@@ -2335,7 +2335,7 @@ export default {
+   cleanVm: undefined,
+ 
+   // Original text: "Fast clone"
+-  fastCloneVmLabel: 'Fast clone',
++  fastCloneVmLabel: '高速クローン',
+ 
+   // Original text: 'Start the migrated VM'
+   startMigratedVm: undefined,
+@@ -2425,7 +2425,7 @@ export default {
+   srRemoveButton: 'Remove this SR',
+ 
+   // Original text: "No VDIs in this storage"
+-  srNoVdis: 'No VDIs in this storage',
++  srNoVdis: 'このストレージには仮想ディスクがありません',
+ 
+   // Original text: 'Reclaim freed space'
+   srReclaimSpace: undefined,
+@@ -2437,10 +2437,10 @@ export default {
+   srReclaimSpaceNotSupported: undefined,
+ 
+   // Original text: '{firstVdi} and {nVdis} more'
+-  multipleActiveVdis: undefined,
++  multipleActiveVdis: '{firstVdi} ほか {nVdis} 件',
+ 
+   // Original text: 'No active VDI'
+-  noActiveVdi: undefined,
++  noActiveVdi: 'アクティブな仮想ディスクはありません',
+ 
+   // Original text: 'Earliest expiration: {dateString}'
+   earliestExpirationDate: undefined,
+@@ -2488,7 +2488,7 @@ export default {
+   counterRestrictionsOptionsXsLicense: undefined,
+ 
+   // Original text: "Hosts"
+-  hostsTabName: 'Hosts',
++  hostsTabName: 'ホスト',
+ 
+   // Original text: "VMs"
+   vmsTabName: 'Vms',
+@@ -3242,7 +3242,7 @@ export default {
+   networkTabName: 'ネットワーク',
+ 
+   // Original text: "Disk{disks, plural, one {} other {s}}"
+-  disksTabName: 'Disk{disks, plural, one {} other {s}}',
++  disksTabName: '仮想ディスク{disks, plural, other {}}',
+ 
+   // Original text: "Halted"
+   powerStateHalted: 'halted',
+@@ -3422,7 +3422,7 @@ export default {
+   sshUserTooltip: '外部SSHツールを用いてユーザ権限で接続',
+ 
+   // Original text: "SSH as…"
+-  sshUserLabel: 'SSH as…',
++  sshUserLabel: 'SSH（ユーザー指定）…',
+ 
+   // Original text: "SSH user name"
+   sshUsernameLabel: 'SSH ユーザID',
+@@ -3479,7 +3479,7 @@ export default {
+   vdiAttachDevice: '仮想ディスクの追加',
+ 
+   // Original text: 'The selected VDI is already attached to this VM. Are you sure you want to continue?'
+-  vdiAttachDeviceConfirm: undefined,
++  vdiAttachDeviceConfirm: '選択した仮想ディスクは既にこの VM に接続されています。続行してもよろしいですか？',
+ 
+   // Original text: "Boot order"
+   vdiBootOrder: 'ブート順',
+@@ -3497,76 +3497,76 @@ export default {
+   vdiTags: 'Tags',
+ 
+   // Original text: 'VDI tasks'
+-  vdiTasks: undefined,
++  vdiTasks: '仮想ディスクのタスク',
+ 
+   // Original text: "Size"
+-  vdiSize: 'Size',
++  vdiSize: 'サイズ',
+ 
+   // Original text: "SR"
+   vdiSr: 'SR',
+ 
+   // Original text: 'VMs'
+-  vdiVms: undefined,
++  vdiVms: 'VM',
+ 
+   // Original text: "Migrate VDI"
+-  vdiMigrate: 'Migrate VDI',
++  vdiMigrate: '仮想ディスクを移行',
+ 
+   // Original text: "Destination SR:"
+   vdiMigrateSelectSr: 'Destination SR:',
+ 
+   // Original text: "No SR"
+-  vdiMigrateNoSr: 'No SR',
++  vdiMigrateNoSr: 'SR がありません',
+ 
+   // Original text: "A target SR is required to migrate a VDI"
+-  vdiMigrateNoSrMessage: 'A target SR is required to migrate a VDI',
++  vdiMigrateNoSrMessage: '仮想ディスクを移行するには移行先の SR が必要です',
+ 
+   // Original text: "Forget"
+-  vdiForget: 'Forget',
++  vdiForget: '登録解除',
+ 
+   // Original text: "No VDIs attached to control domain"
+   noControlDomainVdis: 'No VDIs attached to Control Domain',
+ 
+   // Original text: "Boot flag"
+-  vbdBootableStatus: 'Boot flag',
++  vbdBootableStatus: '起動フラグ',
+ 
+   // Original text: 'Device'
+-  vbdDevice: undefined,
++  vbdDevice: 'デバイス',
+ 
+   // Original text: 'CBT'
+-  vbdCbt: undefined,
++  vbdCbt: 'CBT',
+ 
+   // Original text: "Status"
+-  vbdStatus: 'Status',
++  vbdStatus: '状態',
+ 
+   // Original text: "Connected"
+-  vbdStatusConnected: 'Connected',
++  vbdStatusConnected: '接続済み',
+ 
+   // Original text: "Disconnected"
+-  vbdStatusDisconnected: 'Disconnected',
++  vbdStatusDisconnected: '切断',
+ 
+   // Original text: "Connect VBD"
+-  vbdConnect: 'Connect VBD',
++  vbdConnect: 'VBD を接続',
+ 
+   // Original text: "Disconnect VBD"
+-  vbdDisconnect: 'Disconnect VBD',
++  vbdDisconnect: 'VBD を切断',
+ 
+   // Original text: "Bootable"
+-  vbdBootable: 'Bootable',
++  vbdBootable: '起動可能',
+ 
+   // Original text: "Readonly"
+-  vbdReadonly: 'Readonly',
++  vbdReadonly: '読み取り専用',
+ 
+   // Original text: "Create"
+-  vbdCreate: 'Create',
++  vbdCreate: '作成',
+ 
+   // Original text: 'Attach'
+-  vbdAttach: undefined,
++  vbdAttach: '接続',
+ 
+   // Original text: "Disk name"
+-  vbdNamePlaceHolder: 'Disk name',
++  vbdNamePlaceHolder: 'ディスク名',
+ 
+   // Original text: "Size"
+-  vbdSizePlaceHolder: 'Size',
++  vbdSizePlaceHolder: 'サイズ',
+ 
+   // Original text: "CD drive not completely installed"
+   cdDriveNotInstalled: 'CD drive not completely installed',
+@@ -3581,19 +3581,19 @@ export default {
+   resetBootOption: 'Reset',
+ 
+   // Original text: 'Destroy selected VDIs'
+-  destroySelectedVdis: undefined,
++  destroySelectedVdis: '選択した仮想ディスクを破棄',
+ 
+   // Original text: 'Destroy VDI'
+-  destroyVdi: undefined,
++  destroyVdi: '仮想ディスクを破棄',
+ 
+   // Original text: 'Export VDI content'
+-  exportVdi: undefined,
++  exportVdi: '仮想ディスクの内容をエクスポート',
+ 
+   // Original text: 'Format'
+   format: undefined,
+ 
+   // Original text: 'Import VDI content'
+-  importVdi: undefined,
++  importVdi: '仮想ディスクの内容をインポート',
+ 
+   // Original text: 'No file selected'
+   importVdiNoFile: undefined,
+@@ -3602,19 +3602,19 @@ export default {
+   selectVdiMessage: undefined,
+ 
+   // Original text: 'Creating this disk will use the disk space quota from the resource set {resourceSet} ({spaceLeft} left)'
+-  useQuotaWarning: undefined,
++  useQuotaWarning: 'このディスクを作成すると、リソースセット {resourceSet} のディスク容量クォータを使用します（残り {spaceLeft}）',
+ 
+   // Original text: 'Not enough space in resource set {resourceSet} ({spaceLeft} left)'
+-  notEnoughSpaceInResourceSet: undefined,
++  notEnoughSpaceInResourceSet: 'リソースセット {resourceSet} の空き容量が不足しています（残り {spaceLeft}）',
+ 
+   // Original text: "The VDIs' SRs must either be shared or on the same host for the VM to be able to start."
+-  warningVdiSr: undefined,
++  warningVdiSr: 'VM を起動するには、仮想ディスクの SR が共有されているか、同じホスト上にある必要があります。',
+ 
+   // Original text: 'Remove selected VDIs from this VM'
+-  removeSelectedVdisFromVm: undefined,
++  removeSelectedVdisFromVm: '選択した仮想ディスクをこの VM から取り外す',
+ 
+   // Original text: 'Remove VDI from this VM'
+-  removeVdiFromVm: undefined,
++  removeVdiFromVm: '仮想ディスクをこの VM から取り外す',
+ 
+   // Original text: 'VHD'
+   vhd: undefined,
+@@ -3818,7 +3818,7 @@ export default {
+   exportSnapshotMemory: undefined,
+ 
+   // Original text: 'Secure boot'
+-  secureBoot: undefined,
++  secureBoot: 'セキュアブート',
+ 
+   // Original text: "Creation date"
+   snapshotDate: 'Creation date',
+@@ -3830,7 +3830,7 @@ export default {
+   snapshotName: 'Name',
+ 
+   // Original text: "Description"
+-  snapshotDescription: 'Name',
++  snapshotDescription: '説明',
+ 
+   // Original text: "Quiesced snapshot"
+   snapshotQuiesce: 'Quiesced snapshot',
+@@ -3977,7 +3977,7 @@ export default {
+   osKernel: 'OS kernel',
+ 
+   // Original text: "Auto power on"
+-  autoPowerOn: 'Auto power on',
++  autoPowerOn: '自動起動',
+ 
+   // Original text: 'Protect from accidental deletion'
+   protectFromDeletion: undefined,
+@@ -4052,7 +4052,7 @@ export default {
+   vmCpuLimitsLabel: 'CPU limits',
+ 
+   // Original text: "Topology"
+-  vmCpuTopology: 'Topology',
++  vmCpuTopology: 'トポロジー',
+ 
+   // Original text: "Default behavior"
+   vmChooseCoresPerSocket: 'Default behavior',
+@@ -4086,7 +4086,7 @@ export default {
+   vmUuid: undefined,
+ 
+   // Original text: 'vGPU'
+-  vmVgpu: undefined,
++  vmVgpu: 'vGPU',
+ 
+   // Original text: 'GPUs'
+   vmVgpus: undefined,
+@@ -4101,10 +4101,10 @@ export default {
+   vmSelectVgpuType: undefined,
+ 
+   // Original text: 'ACLs'
+-  vmAcls: undefined,
++  vmAcls: 'ACL',
+ 
+   // Original text: 'Add ACLs'
+-  vmAddAcls: undefined,
++  vmAddAcls: 'ACL を追加',
+ 
+   // Original text: 'Failed to add ACL(s)'
+   addAclsErrorTitle: undefined,
+@@ -4116,7 +4116,7 @@ export default {
+   createVusb: undefined,
+ 
+   // Original text: 'Delete'
+-  removeAcl: undefined,
++  removeAcl: '削除',
+ 
+   // Original text: '{nAcls, number} more…'
+   moreAcls: undefined,
+@@ -4134,7 +4134,7 @@ export default {
+   selectPusb: undefined,
+ 
+   // Original text: 'Boot firmware'
+-  vmBootFirmware: undefined,
++  vmBootFirmware: 'ブートファームウェア',
+ 
+   // Original text: 'VM creator'
+   vmCreator: undefined,
+@@ -4519,16 +4519,16 @@ export default {
+   srVdisToCoalesceWarning: undefined,
+ 
+   // Original text: 'Create VM'
+-  createVmModalTitle: undefined,
++  createVmModalTitle: 'VM の作成',
+ 
+   // Original text: "You're about to use a large amount of resources available on the resource set. Are you sure you want to continue?"
+-  createVmModalWarningMessage: undefined,
++  createVmModalWarningMessage: 'リソースセットで利用可能なリソースの大部分を使用しようとしています。続行してもよろしいですか？',
+ 
+   // Original text: 'Copy host BIOS strings to VM'
+-  copyHostBiosStrings: undefined,
++  copyHostBiosStrings: 'ホストの BIOS 文字列を VM にコピー',
+ 
+   // Original text: 'Enable VTPM'
+-  enableVtpm: undefined,
++  enableVtpm: 'VTPM を有効化',
+ 
+   // Original text: "Create a new VM on {select}"
+   newVmCreateNewVmOn: '仮想マシン(VM)の新規作成 プール：{select}',
+@@ -4540,13 +4540,13 @@ export default {
+   newVmInfoPanel: '仮想マシン(VM)情報',
+ 
+   // Original text: "Name"
+-  newVmNameLabel: '仮想マシン(VM)名',
++  newVmNameLabel: '名前',
+ 
+   // Original text: "Template"
+   newVmTemplateLabel: 'テンプレート',
+ 
+   // Original text: "Description"
+-  newVmDescriptionLabel: 'VMの説明文',
++  newVmDescriptionLabel: '説明',
+ 
+   // Original text: "Performance"
+   newVmPerfPanel: 'スペック',
+@@ -4558,7 +4558,7 @@ export default {
+   newVmRamLabel: 'RAM',
+ 
+   // Original text: 'The memory is below the threshold ({threshold})'
+-  newVmRamWarning: undefined,
++  newVmRamWarning: 'メモリがしきい値（{threshold}）を下回っています',
+ 
+   // Original text: "Static memory max"
+   newVmStaticMaxLabel: 'メモリ(RAM)を固定値で設定',
+@@ -4582,7 +4582,7 @@ export default {
+   newVmInstallNetworkPlaceHolder: '例: http://httpredir.debian.org/debian',
+ 
+   // Original text: "PV Args"
+-  newVmPvArgsLabel: 'PV Args',
++  newVmPvArgsLabel: 'PV 引数',
+ 
+   // Original text: "PXE"
+   newVmPxeLabel: 'PXE',
+@@ -4621,13 +4621,13 @@ export default {
+   newVmSelectTemplate: 'テンプレート選択',
+ 
+   // Original text: "SSH key"
+-  newVmSshKey: 'SSH key',
++  newVmSshKey: 'SSH 鍵',
+ 
+   // Original text: 'No config drive'
+-  noConfigDrive: undefined,
++  noConfigDrive: '設定ドライブなし',
+ 
+   // Original text: "Custom config"
+-  newVmCustomConfig: 'Custom config',
++  newVmCustomConfig: 'カスタム設定',
+ 
+   // Original text: 'Click here to see the available template variables'
+   availableTemplateVarsInfo: undefined,
+@@ -4645,25 +4645,25 @@ export default {
+   templateEscape: undefined,
+ 
+   // Original text: 'Error on getting the default coreOS cloud template'
+-  coreOsDefaultTemplateError: undefined,
++  coreOsDefaultTemplateError: 'CoreOS のデフォルト cloud テンプレートの取得に失敗しました',
+ 
+   // Original text: "Boot VM after creation"
+-  newVmBootAfterCreate: 'Boot VM after creation',
++  newVmBootAfterCreate: '作成後に VM を起動',
+ 
+   // Original text: "Auto-generated if empty"
+-  newVmMacPlaceholder: 'Auto-generated if empty',
++  newVmMacPlaceholder: '空欄の場合は自動生成',
+ 
+   // Original text: "CPU weight"
+-  newVmCpuWeightLabel: 'CPU weight',
++  newVmCpuWeightLabel: 'CPU 重み',
+ 
+   // Original text: "Default: {value, number}"
+-  newVmDefaultCpuWeight: 'Default: {value, number}',
++  newVmDefaultCpuWeight: 'デフォルト: {value, number}',
+ 
+   // Original text: "CPU cap"
+-  newVmCpuCapLabel: 'CPU cap',
++  newVmCpuCapLabel: 'CPU 上限',
+ 
+   // Original text: "Default: {value, number}"
+-  newVmDefaultCpuCap: 'Default: {value, number}',
++  newVmDefaultCpuCap: 'デフォルト: {value, number}',
+ 
+   // Original text: "Cloud config"
+   newVmCloudConfig: 'Cloud config',
+@@ -4675,25 +4675,25 @@ export default {
+   newVmCreateVmsConfirm: 'Are you sure you want to create {nbVms, number} VMs?',
+ 
+   // Original text: "Multiple VMs:"
+-  newVmMultipleVms: 'Multiple VMs:',
++  newVmMultipleVms: '複数の VM:',
+ 
+   // Original text: "Name pattern:"
+-  newVmMultipleVmsPattern: 'Name pattern:',
++  newVmMultipleVmsPattern: '名前のパターン:',
+ 
+   // Original text: "e.g.: \\{name\\}_%"
+   newVmMultipleVmsPatternPlaceholder: 'e.g.: \\{name\\}_%',
+ 
+   // Original text: "First index:"
+-  newVmFirstIndex: 'First index:',
++  newVmFirstIndex: '開始番号:',
+ 
+   // Original text: "Recalculate VMs number"
+-  newVmNumberRecalculate: 'Recalculate VMs number',
++  newVmNumberRecalculate: 'VM 数を再計算',
+ 
+   // Original text: "Refresh VMs name"
+-  newVmNameRefresh: 'Refresh VMs name',
++  newVmNameRefresh: 'VM 名を更新',
+ 
+   // Original text: "Affinity host"
+-  newVmAffinityHost: 'Affinity host',
++  newVmAffinityHost: 'アフィニティホスト',
+ 
+   // Original text: "Advanced"
+   newVmAdvancedPanel: '詳細設定',
+@@ -4708,10 +4708,10 @@ export default {
+   newVmShare: 'このVMを共有',
+ 
+   // Original text: 'The SRs must either be on the same host or shared'
+-  newVmSrsNotOnSameHost: undefined,
++  newVmSrsNotOnSameHost: 'SR は同じホスト上にあるか、共有されている必要があります',
+ 
+   // Original text: 'Network config'
+-  newVmNetworkConfigLabel: undefined,
++  newVmNetworkConfigLabel: 'ネットワーク設定',
+ 
+   // Original text: 'Network configuration is only compatible with the {noCloudDatasourceLink}.'
+   newVmNetworkConfigInfo: undefined,
+@@ -4723,7 +4723,7 @@ export default {
+   newVmNetworkConfigTooltip: undefined,
+ 
+   // Original text: 'User config'
+-  newVmUserConfigLabel: undefined,
++  newVmUserConfigLabel: 'ユーザー設定',
+ 
+   // Original text: 'NoCloud datasource'
+   newVmNoCloudDatasource: undefined,
+@@ -4732,28 +4732,28 @@ export default {
+   newVmNetworkConfigDoc: undefined,
+ 
+   // Original text: 'The template already contains the BIOS strings'
+-  templateHasBiosStrings: undefined,
++  templateHasBiosStrings: 'テンプレートには既に BIOS 文字列が含まれています',
+ 
+   // Original text: 'Click for more information about Guest UEFI Secure Boot.'
+   secureBootLinkToDocumentationMessage: undefined,
+ 
+   // Original text: 'This pool has not yet been setup for Guest UEFI Secure Boot. Click for more information.'
+-  secureBootNotSetup: undefined,
++  secureBootNotSetup: 'このプールはゲスト UEFI セキュアブート用にまだ設定されていません。クリックすると詳細を表示します。',
+ 
+   // Original text: 'See VTPM documentation'
+-  seeVtpmDocumentation: undefined,
++  seeVtpmDocumentation: 'VTPM のドキュメントを参照',
+ 
+   // Original text: 'The boot firmware is UEFI'
+-  vmBootFirmwareIsUefi: undefined,
++  vmBootFirmwareIsUefi: 'ブートファームウェアは UEFI です',
+ 
+   // Original text: 'Destroy cloud config drive after first boot'
+-  destroyCloudConfigVdiAfterBoot: undefined,
++  destroyCloudConfigVdiAfterBoot: '初回起動後に cloud config ドライブを破棄',
+ 
+   // Original text: 'VTPM is only supported on pools running XCP-ng/XS 8.3 or later.'
+-  vtpmNotSupported: undefined,
++  vtpmNotSupported: 'VTPM は XCP-ng/XS 8.3 以降のプールでのみサポートされます。',
+ 
+   // Original text: 'This template requires a VTPM, if you proceed, the VM will likely not be able to boot.'
+-  warningVtpmRequired: undefined,
++  warningVtpmRequired: 'このテンプレートには VTPM が必要です。続行すると VM は起動できない可能性があります。',
+ 
+   // Original text: "Resource sets"
+   resourceSets: 'リソースセット',
+@@ -4996,19 +4996,19 @@ export default {
+   destroyTasks: undefined,
+ 
+   // Original text: 'Object'
+-  object: undefined,
++  object: 'オブジェクト',
+ 
+   // Original text: 'Objects'
+   objects: undefined,
+ 
+   // Original text: 'Pool'
+-  pool: undefined,
++  pool: 'プール',
+ 
+   // Original text: 'Task'
+   task: undefined,
+ 
+   // Original text: 'Progress'
+-  progress: undefined,
++  progress: '進捗',
+ 
+   // Original text: 'Previous tasks'
+   previousTasks: undefined,
+@@ -5690,44 +5690,43 @@ export default {
+   enableServerErrorMessage: undefined,
+ 
+   // Original text: "Label"
+-  serverLabel: 'Label',
++  serverLabel: 'ラベル',
+ 
+   // Original text: "Host"
+-  serverHost: 'Host',
++  serverHost: 'ホスト',
+ 
+   // Original text: "Username"
+-  serverUsername: 'Username',
++  serverUsername: 'ユーザー名',
+ 
+   // Original text: "Password"
+-  serverPassword: 'Password',
++  serverPassword: 'パスワード',
+ 
+   // Original text: "Read Only"
+-  serverReadOnly: 'Read Only',
++  serverReadOnly: '読み取り専用',
+ 
+   // Original text: "Unauthorized Certificates"
+-  serverUnauthorizedCertificates: 'Unauthorized Certificates',
++  serverUnauthorizedCertificates: '未承認の証明書',
+ 
+   // Original text: "Allow Unauthorized Certificates"
+-  serverAllowUnauthorizedCertificates: 'Allow Unauthorized Certificates',
++  serverAllowUnauthorizedCertificates: '未承認の証明書を許可',
+ 
+   // Original text: "Enable it if your certificate is rejected, but it's not recommended because your connection will not be secured."
+-  serverUnauthorizedCertificatesInfo:
+-    "Enable it if your certificate is rejected, but it's not recommended because your connection will not be secured.",
++  serverUnauthorizedCertificatesInfo: '証明書が拒否される場合に有効にします。接続が保護されないため推奨されません。',
+ 
+   // Original text: "username"
+-  serverPlaceHolderUser: 'username',
++  serverPlaceHolderUser: 'ユーザー名',
+ 
+   // Original text: "password"
+-  serverPlaceHolderPassword: 'password',
++  serverPlaceHolderPassword: 'パスワード',
+ 
+   // Original text: "address[:port]"
+-  serverPlaceHolderAddress: 'address[:port]',
++  serverPlaceHolderAddress: 'アドレス[:ポート]',
+ 
+   // Original text: "label"
+-  serverPlaceHolderLabel: 'label',
++  serverPlaceHolderLabel: 'ラベル',
+ 
+   // Original text: "Connect"
+-  serverConnect: 'Connect',
++  serverConnect: '接続',
+ 
+   // Original text: "Error"
+   serverError: 'Error',
+@@ -5736,41 +5735,40 @@ export default {
+   serverAddFailed: 'Adding server failed',
+ 
+   // Original text: "Status"
+-  serverStatus: 'Status',
++  serverStatus: '状態',
+ 
+   // Original text: "Connection failed. Click for more information."
+-  serverConnectionFailed: 'Connection failed. Click for more information.',
++  serverConnectionFailed: '接続に失敗しました。クリックすると詳細を表示します。',
+ 
+   // Original text: "Authentication error"
+-  serverAuthFailed: 'Authentication error',
++  serverAuthFailed: '認証エラー',
+ 
+   // Original text: "Unknown error"
+-  serverUnknownError: 'Unknown error',
++  serverUnknownError: '不明なエラー',
+ 
+   // Original text: "Invalid self-signed certificate"
+-  serverSelfSignedCertError: 'Invalid self-signed certificate',
++  serverSelfSignedCertError: '無効な自己署名証明書',
+ 
+   // Original text: "Do you want to accept self-signed certificate for this server even though it would decrease security?"
+-  serverSelfSignedCertQuestion:
+-    'Do you want to accept self-signed certificate for this server even though it would decrease security?',
++  serverSelfSignedCertQuestion: 'セキュリティが低下しますが、このサーバーの自己署名証明書を受け入れますか？',
+ 
+   // Original text: 'Enable'
+-  serverEnable: undefined,
++  serverEnable: '有効化',
+ 
+   // Original text: 'Enabled'
+-  serverEnabled: undefined,
++  serverEnabled: '有効',
+ 
+   // Original text: 'Disabled'
+-  serverDisabled: undefined,
++  serverDisabled: '無効',
+ 
+   // Original text: 'Disable server'
+-  serverDisable: undefined,
++  serverDisable: 'サーバーを無効化',
+ 
+   // Original text: ' HTTP proxy URL'
+-  serverHttpProxy: undefined,
++  serverHttpProxy: 'HTTP プロキシ URL',
+ 
+   // Original text: ' HTTP proxy URL'
+-  serverHttpProxyPlaceHolder: undefined,
++  serverHttpProxyPlaceHolder: 'HTTP プロキシ URL',
+ 
+   // Original text: "Copy VM"
+   copyVm: 'Copy VM',
+@@ -5931,7 +5929,7 @@ export default {
+   addHostNoHostMessage: 'No host selected to be added',
+ 
+   // Original text: 'Failed to fetch latest master commit'
+-  failedToFetchLatestMasterCommit: undefined,
++  failedToFetchLatestMasterCommit: 'master の最新コミットを取得できませんでした',
+ 
+   // Original text: "Professional support missing!"
+   noProSupport: 'No pro support provided!',
+@@ -5943,46 +5941,46 @@ export default {
+   getSupport: undefined,
+ 
+   // Original text: "Bug Tracker"
+-  bugTracker: 'Bug Tracker',
++  bugTracker: 'バグトラッカー',
+ 
+   // Original text: "Issues? Report it!"
+-  bugTrackerText: 'Issues? Report it!',
++  bugTrackerText: '問題がありましたら報告してください！',
+ 
+   // Original text: "Community"
+-  community: 'Community',
++  community: 'コミュニティ',
+ 
+   // Original text: "Join our community forum!"
+-  communityText: 'Join our community forum!',
++  communityText: 'コミュニティフォーラムに参加しましょう！',
+ 
+   // Original text: "Free Trial for Premium Edition!"
+-  freeTrial: 'Free Trial for Premium Edition!',
++  freeTrial: 'Premium Edition の無料トライアル！',
+ 
+   // Original text: "Request your trial now!"
+-  freeTrialNow: 'Request your trial now!',
++  freeTrialNow: '今すぐトライアルを申し込む！',
+ 
+   // Original text: "Any issue?"
+-  issues: 'Any issue?',
++  issues: '問題がありますか？',
+ 
+   // Original text: "Problem? Contact us!"
+-  issuesText: 'Problem? Contact us!',
++  issuesText: '問題がありましたらご連絡ください！',
+ 
+   // Original text: "Documentation"
+-  documentation: 'Documentation',
++  documentation: 'ドキュメント',
+ 
+   // Original text: "Read our official doc"
+-  documentationText: 'Read our official doc',
++  documentationText: '公式ドキュメントを読む',
+ 
+   // Original text: "Pro support included"
+-  proSupportIncluded: 'Pro support included',
++  proSupportIncluded: 'プロサポート付き',
+ 
+   // Original text: "Access your XO Account"
+-  xoAccount: 'Access your XO Account',
++  xoAccount: 'XO アカウントにアクセス',
+ 
+   // Original text: "Report a problem"
+-  openTicket: 'Report a problem',
++  openTicket: '問題を報告',
+ 
+   // Original text: "Problem? Open a ticket!"
+-  openTicketText: 'Problem? Open a ticket!',
++  openTicketText: '問題がありましたらチケットを作成してください！',
+ 
+   // Original text: 'Your Xen Orchestra is up to date'
+   xoUpToDate: undefined,
+@@ -6191,13 +6189,13 @@ export default {
+   pifPhysicallyDisconnected: 'Physically disconnected',
+ 
+   // Original text: 'Token'
+-  authToken: undefined,
++  authToken: 'トークン',
+ 
+   // Original text: 'Authentication tokens'
+-  authTokens: undefined,
++  authTokens: '認証トークン',
+ 
+   // Original text: 'Last use'
+-  authTokenLastUse: undefined,
++  authTokenLastUse: '最終使用',
+ 
+   // Original text: "Username"
+   username: 'ログインユーザ名',
+@@ -6251,22 +6249,22 @@ export default {
+   forgetTokensError: '認証トークンの破棄の最中にエラーが発生しました。',
+ 
+   // Original text: "SSH keys"
+-  sshKeys: 'SSH keys',
++  sshKeys: 'SSH 鍵',
+ 
+   // Original text: 'New token'
+-  newAuthToken: undefined,
++  newAuthToken: '新規トークン',
+ 
+   // Original text: "New SSH key"
+-  newSshKey: 'New SSH key',
++  newSshKey: '新規 SSH 鍵',
+ 
+   // Original text: 'Delete selected authentication tokens'
+-  deleteAuthTokens: undefined,
++  deleteAuthTokens: '選択した認証トークンを削除',
+ 
+   // Original text: "Delete"
+-  deleteSshKey: 'Delete',
++  deleteSshKey: '削除',
+ 
+   // Original text: 'Delete selected SSH keys'
+-  deleteSshKeys: undefined,
++  deleteSshKeys: '選択した SSH 鍵を削除',
+ 
+   // Original text: 'New authentication token'
+   newAuthTokenModalTitle: undefined,
+@@ -6284,10 +6282,10 @@ export default {
+   sshKeyErrorMessage: 'An SSH key requires both a title and a key.',
+ 
+   // Original text: "Title"
+-  title: 'Title',
++  title: 'タイトル',
+ 
+   // Original text: "Key"
+-  key: 'Key',
++  key: '鍵',
+ 
+   // Original text: 'Delete authentication token'
+   deleteAuthTokenConfirm: undefined,
+@@ -6600,7 +6598,7 @@ export default {
+   andNMore: undefined,
+ 
+   // Original text: "Snapshots and base copies can't be migrated individually"
+-  disabledVdiMigrateTooltip: undefined,
++  disabledVdiMigrateTooltip: 'スナップショットとベースコピーは個別に移行できません',
+ 
+   // Original text: "Reconnect all hosts"
+   srReconnectAllModalTitle: 'Reconnect all hosts',
+@@ -6637,13 +6635,13 @@ export default {
+   maintenanceSrModalBody: undefined,
+ 
+   // Original text: 'Maintenance mode'
+-  maintenanceMode: undefined,
++  maintenanceMode: 'メンテナンスモード',
+ 
+   // Original text: 'Migrate selected VDIs'
+-  migrateSelectedVdis: undefined,
++  migrateSelectedVdis: '選択した仮想ディスクを移行',
+ 
+   // Original text: 'All the VDIs attached to a VM must either be on a shared SR or on the same host (local SR) for the VM to be able to start.'
+-  migrateVdiMessage: undefined,
++  migrateVdiMessage: 'VM を起動するには、接続されたすべての仮想ディスクが共有 SR 上、または同じホスト（ローカル SR）上にある必要があります。',
+ 
+   // Original text: 'Backed up XO Configs'
+   backedUpXoConfigs: undefined,
+@@ -7090,7 +7088,7 @@ export default {
+   wrongNumberOfHosts: undefined,
+ 
+   // Original text: 'XOSTOR'
+-  xostor: undefined,
++  xostor: 'XOSTOR',
+ 
+   // Original text: 'XOSTOR is available in XOA'
+   xostorAvailableInXoa: undefined,
+@@ -7138,7 +7136,7 @@ export default {
+   version: undefined,
+ 
+   // Original text: 'Size'
+-  size: undefined,
++  size: 'サイズ',
+ 
+   // Original text: 'Total disk size'
+   totalDiskSize: undefined,
+@@ -7561,7 +7559,7 @@ export default {
+   proxyRunningBackupsMessage: undefined,
+ 
+   // Original text: 'Some proxies need to be upgraded.'
+-  proxiesNeedUpgrade: undefined,
++  proxiesNeedUpgrade: '一部のプロキシを更新する必要があります。',
+ 
+   // Original text: 'Some proxies need to be upgraded. Click here to get more information.'
+   upgradeNeededForProxies: undefined,
+@@ -7570,7 +7568,7 @@ export default {
+   xoProxyConcreteGuide: undefined,
+ 
+   // Original text: '{n, number} prox{n, plural, one {y} other {ies}} ha{n, plural, one {s} other {ve}} error{n, plural, one {} other {s}}'
+-  someProxiesHaveErrors: undefined,
++  someProxiesHaveErrors: '{n, number} 件のプロキシでエラーが発生しています',
+ 
+   // Original text: '{seconds, plural, one {# second} other {# seconds}}'
+   secondsFormat: undefined,
+@@ -7671,4 +7669,10 @@ export default {
+   xoaHlAboutVmVersion: 'XOA-HL VM のバージョン',
+   xoaHlAboutUpstreamTitle: 'Vates 由来のアップストリーム',
+   xoaHlAboutVersionUnknown: '不明',
++
++  // Pages captured in the XOA-HL user documentation (xcp-hl#285)
++  isMetadataVdi: 'このスナップショットのデータは削除されています。メタデータと変更ブロックのみを含みます。',
++  vdiImageFormat: 'イメージ形式',
++  restApiDoc: 'REST API ドキュメント',
++  tryXo6: 'XO 6 を試す',
+ }
