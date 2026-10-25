@@ -24,7 +24,7 @@ diff --git a/packages/xo-web/src/xo-app/settings/acls/index.js b/packages/xo-web
              action: roles[action],
            })),
 -          ({ subject, object, action }) => subject !== undefined && object !== undefined && action !== undefined
-+          ({ subject, object, action }) => subject !== undefined && action !== undefined
++          ({ subject, action }) => subject !== undefined && action !== undefined
          ),
        groups: (_, { groups }) => keyBy(groups, 'id'),
        roles: (_, { roles }) => keyBy(roles, 'id'),
