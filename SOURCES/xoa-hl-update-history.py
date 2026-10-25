@@ -49,6 +49,8 @@ def main():
         snapshots.append(parse_snapshot(p.read_text()) if p.exists() else None)
     path = Path(args.pop('path'))
     args['exitCode'] = int(args['exitCode'])
+    if args['result'] == 'up_to_date':
+        snapshots = [{}, {}]
     record(path, args, *snapshots)
 
 
