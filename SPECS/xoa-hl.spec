@@ -19,7 +19,7 @@ URL:            https://github.com/Vagrantin/xoa-hl
 AutoReqProv:    no
 # NodeSource's nodejs carries epoch 2; without it, "< 25" means 0:25 and 2:24.x never matches.
 Requires:       (nodejs >= 2:24 with nodejs < 2:25)
-Requires:       openssl, redis, ntfs-3g, nfs-utils, cifs-utils, lvm2, dnf-plugins-core
+Requires:       python3, openssl, redis, ntfs-3g, nfs-utils, cifs-utils, lvm2, dnf-plugins-core
 
 Source0:        xoa-hl-%{version}.tar.gz
 
@@ -53,6 +53,7 @@ install -m 644 %{_sourcedir}/xoa-hl-testing.repo %{buildroot}/etc/yum.repos.d/
 mkdir -p %{buildroot}/usr/libexec/xoa-hl
 install -m 755 %{_sourcedir}/xoa-hl-check-update.sh %{buildroot}/usr/libexec/xoa-hl/check-update.sh
 install -m 755 %{_sourcedir}/xoa-hl-update.sh %{buildroot}/usr/libexec/xoa-hl/update.sh
+install -m 755 %{_sourcedir}/xoa-hl-update-history.py %{buildroot}/usr/libexec/xoa-hl/update-history.py
 install -m 755 %{_sourcedir}/xoa-hl-auto-update.sh %{buildroot}/usr/libexec/xoa-hl/auto-update.sh
 install -m 755 %{_sourcedir}/xoa-hl-configure-updates.sh %{buildroot}/usr/libexec/xoa-hl/configure-updates.sh
 

@@ -10,6 +10,7 @@ import re
 from pathlib import Path
 
 
+DOCS_LOCALES = ("fr", "ja")
 ENTRY = re.compile(r"^  ([A-Za-z]\w*):[ \t]*(.*)$", re.MULTILINE)
 
 
@@ -48,6 +49,35 @@ def string_value(source, key):
     return expression.group(1) if expression else None
 
 
+def check(source, english_source, key):
+    """Return why a locale's entry for key is unusable, or None."""
+    occurrences = re.findall(rf"^  {re.escape(key)}:", source, re.MULTILINE)
+    if len(occurrences) != 1:
+        return f"expected one definition of {key}, found {len(occurrences)}"
+    value = string_value(source, key)
+    reference = string_value(english_source, key)
+    if value is None or reference is None:
+        return f"missing or non-string {key}"
+    if value[1:-1].strip() == "":
+        return f"empty {key}"
+    try:
+        expected = arguments(reference)
+        actual = arguments(value)
+    except ValueError as error:
+        return f"{key} has invalid ICU braces: {error}"
+    if actual != expected:
+        return f"{key} ICU arguments {sorted(actual)} != {sorted(expected)}"
+    return None
+
+
+def key_list(name):
+    return {
+        line.strip()
+        for line in Path(__file__).with_name(name).read_text(encoding="utf-8").splitlines()
+        if line.strip() and not line.startswith("#")
+    }
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("xo_source", type=Path, help="patched xen-orchestra checkout")
@@ -58,12 +88,12 @@ def main():
     english = entries(english_path)
     custom = {key for key in english if key.startswith("xoaHl")}
     custom.add("settingsXoaHlUpdatesPage")
-    core = {
-        line.strip()
-        for line in Path(__file__).with_name("core-ui-keys.txt").read_text(encoding="utf-8").splitlines()
-        if line.strip() and not line.startswith("#")
-    }
+    core = key_list("core-ui-keys.txt")
+    # Pages captured in the user documentation, which is published in English, French and Japanese.
+    docs_pages = key_list("docs-pages-ui-keys.txt")
     failures = []
+    if docs_pages - english.keys():
+        failures.append(f"docs pages keys not in the English catalog: {sorted(docs_pages - english.keys())}")
     print("Locale | missing catalog keys | undefined entries | XOA-HL translated | core UI translated")
     print("--- | ---: | ---: | ---: | ---:")
     locale_paths = sorted((catalog / "locales").glob("*.js"))
@@ -79,32 +109,19 @@ def main():
         passed_custom = 0
         passed_core = 0
         for key in sorted(custom | core):
-            occurrences = re.findall(rf"^  {re.escape(key)}:", source, re.MULTILINE)
-            if len(occurrences) != 1:
-                failures.append(f"{path.name}: expected one definition of {key}, found {len(occurrences)}")
-                continue
-            value = string_value(source, key)
-            reference = string_value(english_source, key)
-            if value is None or reference is None:
-                failures.append(f"{path.name}: missing or non-string {key}")
-                continue
-            if value[1:-1].strip() == "":
-                failures.append(f"{path.name}: empty {key}")
-                continue
-            try:
-                expected = arguments(reference)
-                actual = arguments(value)
-            except ValueError as error:
-                failures.append(f"{path.name}: {key} has invalid ICU braces: {error}")
-                continue
-            if actual != expected:
-                failures.append(f"{path.name}: {key} ICU arguments {sorted(actual)} != {sorted(expected)}")
+            problem = check(source, english_source, key)
+            if problem:
+                failures.append(f"{path.name}: {problem}")
                 continue
             if key in custom:
                 passed_custom += 1
             else:
                 passed_core += 1
         print(f"{path.stem} | {missing} | {undefined} | {passed_custom}/{len(custom)} | {passed_core}/{len(core)}")
+        if path.stem in DOCS_LOCALES:
+            problems = [check(source, english_source, key) for key in sorted(docs_pages)]
+            failures.extend(f"{path.name}: {problem}" for problem in problems if problem)
+            print(f"{path.stem} documentation pages: {problems.count(None)}/{len(docs_pages)}")
     for failure in failures:
         print("ERROR:", failure)
     return bool(failures)
