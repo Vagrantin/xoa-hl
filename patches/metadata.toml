@@ -193,3 +193,14 @@ maintainer = "vagrantin"
 status = "active"
 dependencies = ["zzzzzzzzzzzz-xoa-hl-update-check-status-on-load"]
 notes = "setUpdateConfiguration no longer takes randomDelayMinutes; it moves together with SOURCES/xoa-hl-configure-updates.sh, which now takes four arguments."
+
+[[patches]]
+id = "zzzzzzzzzzzzzz-xo-docs-pages-translations"
+description = "Translate the inherited XO strings on the documented beginner pages in French and Japanese"
+target = "packages/xo-web/src/common/intl/locales/fr.js and packages/xo-web/src/common/intl/locales/ja.js"
+upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
+applies_to = ["5.113.2"]
+maintainer = "vagrantin"
+status = "active"
+dependencies = ["zzzzzzzzzz-xoa-hl-about-page"]
+notes = "Covers user, settings/servers, about, SR disks, new VM, VM console and VM disks (xcp-hl#285); scripts/docs-pages-ui-keys.txt lists the keys the audit enforces for fr and ja. Japanese new-VM name and description labels become neutral because the disk section reuses them."
