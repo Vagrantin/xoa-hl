@@ -1,0 +1,41 @@
+name: Test MCP compatibility probe
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/probe-xo-mcp.mjs'
+      - 'tests/test-mcp-probe.mjs'
+      - 'docs/mcp-phase0.md'
+      - 'UPSTREAM_XO'
+      - '.github/workflows/test-mcp-probe.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/probe-xo-mcp.mjs'
+      - 'tests/test-mcp-probe.mjs'
+      - 'UPSTREAM_XO'
+      - '.github/workflows/test-mcp-probe.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Install published MCP releases for fixture tests only
+        run: |
+          npm install --prefix "$RUNNER_TEMP/mcp-110" --ignore-scripts --no-audit --no-fund @xen-orchestra/mcp@1.1.0
+          npm install --prefix "$RUNNER_TEMP/mcp-143" --ignore-scripts --no-audit --no-fund @xen-orchestra/mcp@1.4.3
+      - name: Check syntax and run protocol and published-binary tests
+        env:
+          XO_MCP_110_ROOT: ${{ runner.temp }}/mcp-110/node_modules/@xen-orchestra/mcp
+          XO_MCP_143_ROOT: ${{ runner.temp }}/mcp-143/node_modules/@xen-orchestra/mcp
+        run: |
+          node --check scripts/probe-xo-mcp.mjs
+          node --test tests/test-mcp-probe.mjs

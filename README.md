@@ -54,5 +54,8 @@ not a package-scoped update.
 
 ## Related
 
+- [Natural-language VM creation: Phase 0 MCP probe](docs/mcp-phase0.md) —
+  compatibility findings and the repeatable lab check for xcp-hl#80.
+
 - `../build-xoa-hl-vm` — packs this into the deployable XVA appliance.
 - `../xolite-ce` — the XO Lite build whose deploy button installs that appliance.
