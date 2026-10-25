@@ -1,0 +1,51 @@
+name: Check optional goose runtime RPM
+
+on:
+  pull_request:
+    paths:
+      - 'GOOSE_RUNTIME.json'
+      - 'SPECS/xoa-hl-goose.spec'
+      - 'SOURCES/goose-LICENSE'
+      - 'SOURCES/xoa-hl-assistant.json'
+      - 'scripts/fetch-goose-runtime.py'
+      - 'tests/test-goose-package.py'
+      - '.github/workflows/check-goose-package.yml'
+permissions:
+  contents: read
+jobs:
+  rpm:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check pin and archive validator
+        run: python3 tests/test-goose-package.py
+      - name: Fetch checksum-verified released binary
+        run: |
+          mkdir -p out/goose
+          python3 scripts/fetch-goose-runtime.py --output out/goose/goose-x86_64-unknown-linux-musl.tar.bz2
+      - name: Build and inspect the optional package in AlmaLinux 9
+        run: |
+          docker run --rm -v "$GITHUB_WORKSPACE:/repo:ro" -v "$GITHUB_WORKSPACE/out/goose:/out" almalinux:9 bash -euc '
+            dnf -qy install rpm-build tar bzip2 binutils python3
+            mkdir -p /root/rpmbuild/{BUILD,BUILDROOT,RPMS,SOURCES,SPECS,SRPMS}
+            cp /out/goose-x86_64-unknown-linux-musl.tar.bz2 /root/rpmbuild/SOURCES/
+            cp /repo/SOURCES/goose-LICENSE /repo/SOURCES/xoa-hl-assistant.json /root/rpmbuild/SOURCES/
+            cp /repo/GOOSE_RUNTIME.json /root/rpmbuild/SOURCES/
+            rpmbuild -bb /repo/SPECS/xoa-hl-goose.spec
+            pkg=$(find /root/rpmbuild/RPMS -name "xoa-hl-goose-*.rpm")
+            test "$(rpm -qp --qf "%{PAYLOADCOMPRESSOR}" "$pkg")" = xz
+            test -z "$(rpm -qp --scripts "$pkg")"
+            ! rpm -qlp "$pkg" | grep -E "systemd|node_modules|models/"
+            # Payload-only installation in a fresh container. XOA-HL is not
+            # installed here; this is not an appliance integration test.
+            rpm -i --nodeps "$pkg"
+            test "$(/usr/libexec/xoa-hl/goose --version | xargs)" = 1.56.0
+            ! readelf -l /usr/libexec/xoa-hl/goose | grep INTERP
+            python3 -c "import json; assert json.load(open(\"/etc/xoa-hl/assistant.json\"))[\"enabled\"] is False"
+            cp "$pkg" /out/
+          '
+      - uses: actions/upload-artifact@v4
+        with:
+          name: optional-goose-rpm-test
+          path: out/goose/*.rpm
