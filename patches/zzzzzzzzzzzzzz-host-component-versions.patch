@@ -1,0 +1,88 @@
+diff --git a/packages/xo-server/src/api/xoaHl.mjs b/packages/xo-server/src/api/xoaHl.mjs
+--- a/packages/xo-server/src/api/xoaHl.mjs
++++ b/packages/xo-server/src/api/xoaHl.mjs
+@@ -301,3 +301,13 @@
+ setUpdateChannel.params = {
+   channel: { type: 'string' },
+ }
++
++// Read-only plugin supplied by xcp-hl-release on each managed host.
++export async function getHostVersions({ host }) {
++  const xapi = this.getXapi(host)
++  return JSON.parse(await xapi.call('host.call_plugin', host._xapiRef, 'xcp-hl-versions', 'versions', {}))
++}
++getHostVersions.permission = 'admin'
++getHostVersions.params = { id: { type: 'string' } }
++getHostVersions.resolve = { host: ['id', 'host', 'administrate'] }
++getHostVersions.description = 'get installed XCP-HL host component versions'
+diff --git a/packages/xo-web/src/common/xo/index.js b/packages/xo-web/src/common/xo/index.js
+--- a/packages/xo-web/src/common/xo/index.js
++++ b/packages/xo-web/src/common/xo/index.js
+@@ -920,6 +920,7 @@
+ // XOA-HL --------------------------------------------------------------------
+ 
+ export const getXoaHlVersion = () => _call('xoaHl.getVersion')
++export const getXoaHlHostVersions = host => _call('xoaHl.getHostVersions', { id: resolveId(host) })
+ export const getXoaHlVmVersion = () => _call('xoaHl.getVmVersion')
+ export const checkXoaHlUpdate = () => _call('xoaHl.checkForUpdate')
+ export const getXoaHlUpdateStatus = () => _call('xoaHl.getUpdateStatus')
+diff --git a/packages/xo-web/src/xo-app/about/index.js b/packages/xo-web/src/xo-app/about/index.js
+--- a/packages/xo-web/src/xo-app/about/index.js
++++ b/packages/xo-web/src/xo-app/about/index.js
+@@ -4,8 +4,8 @@
+ import Link from 'link'
+ import Page from '../page'
+ import React from 'react'
+-import { getUser } from 'selectors'
+-import { getMasterCommit, getXoaHlVersion, getXoaHlVmVersion, serverVersion } from 'xo'
++import { createGetObjectsOfType, getUser } from 'selectors'
++import { getMasterCommit, getXoaHlVersion, getXoaHlVmVersion, getXoaHlHostVersions, serverVersion } from 'xo'
+ import { Container, Row, Col } from 'grid'
+ import { connectStore } from 'utils'
+ 
+@@ -23,8 +23,37 @@
+   </Container>
+ )
+ 
++class HostVersions extends Component {
++  componentDidMount() {
++    this._mounted = true
++    getXoaHlHostVersions(this.props.host).then(
++      versions => this._mounted && this.setState({ versions }),
++      () => this._mounted && this.setState({ versions: null })
++    )
++  }
++  componentWillUnmount() { this._mounted = false }
++  render() {
++    const { versions } = this.state
++    return (
++      <div className='mt-1'>
++        <h4>{this.props.host.name_label}</h4>
++        {versions == null ? (
++          <p>{_(versions === undefined ? 'statusLoading' : 'unknown')}</p>
++        ) : (
++          <ul className='list-unstyled'>
++            {['xcp-hl-release', 'xoa-proxy', 'xo-lite-ce', 'iso'].map(name => (
++              <li key={name}>{name}: {versions[name] || _('unknown')}</li>
++            ))}
++          </ul>
++        )}
++      </div>
++    )
++  }
++}
++
+ @connectStore(() => ({
+   user: getUser,
++  hosts: createGetObjectsOfType('host'),
+ }))
+ export default class About extends Component {
+   async componentWillMount() {
+@@ -90,6 +119,7 @@
+               </Row>
+             </Col>
+           )}
++          {isAdmin && Object.values(this.props.hosts).map(host => <HostVersions host={host} key={host.id} />)}
+           {isAdmin && [
+             process.env.XOA_PLAN > 4 && COMMIT_ID !== '' && (
+               <Col>

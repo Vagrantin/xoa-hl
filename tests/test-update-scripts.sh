@@ -24,6 +24,7 @@ lock_file="$tmp_dir/run/dnf.lock"
 state_dir="$tmp_dir/state"
 export DNF_COMMAND="$fake_dnf"
 export FAKE_DNF_ARGS="$tmp_dir/dnf.args"
+export XOA_HL_CHECK_SCRIPT="$repo_dir/SOURCES/xoa-hl-check-update.sh"
 export XOA_HL_CHECK_STATUS_FILE="$status_file"
 export XOA_HL_DNF_LOCK_FILE="$lock_file"
 export XOA_HL_STATE_DIR="$state_dir"
@@ -45,7 +46,8 @@ grep -F 'message=repository unavailable' "$status_file" >/dev/null
 
 # Successful manual update keeps Node.js on its supported major.
 FAKE_DNF_RC=0 FAKE_DNF_OUTPUT='updated' sh "$repo_dir/SOURCES/xoa-hl-update.sh"
-grep -F -- '--exclude=nodejs update' "$FAKE_DNF_ARGS" >/dev/null
+[ "$(sed -n '1p' "$status_file")" = UP_TO_DATE ]
+grep -F -- 'check-update' "$FAKE_DNF_ARGS" >/dev/null
 grep -F 'finished successfully' "$state_dir/update.log" >/dev/null
 
 # A failed transaction is returned and retained in the log.
@@ -54,6 +56,7 @@ if FAKE_DNF_RC=23 FAKE_DNF_OUTPUT='transaction failed' sh "$repo_dir/SOURCES/xoa
 else
     [ "$?" -eq 23 ] || fail 'the DNF exit status was not preserved'
 fi
+[ ! -e "$status_file" ] || fail 'failed update retained stale package verdict'
 grep -F 'failed with exit code 23' "$state_dir/update.log" >/dev/null
 
 # A scheduled/manual collision never starts a second DNF process.
