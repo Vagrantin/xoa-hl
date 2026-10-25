@@ -141,8 +141,10 @@ jobs:
       - name: Verify RPM signature
         run: |
           set -euo pipefail
-          rpm --import "$GITHUB_WORKSPACE/xcp-ng-ce-public.asc"
-          result=$(rpm --checksig "${new_rpm}")
+          # The runner user cannot write the system rpmdb; verify against a private one.
+          rpmdb_dir=$(mktemp -d)
+          rpm --dbpath "${rpmdb_dir}" --import "$GITHUB_WORKSPACE/xcp-ng-ce-public.asc"
+          result=$(rpm --dbpath "${rpmdb_dir}" --checksig "${new_rpm}")
           echo "${result}"
           grep -Fq "digests signatures OK" <<<"${result}" || {
             echo "RPM signature verification failed"; exit 1;
