@@ -10,6 +10,8 @@ on:
       - 'SOURCES/xoa-hl-mcp-*.mjs'
       - 'SOURCES/xoa-hl-run-read-chat.py'
       - 'SOURCES/xoa-hl-read-chat.recipe.json'
+      - 'SOURCES/xoa-hl-proposals.py'
+      - 'SOURCES/xoa-hl-create-vm.schema.json'
       - 'scripts/fetch-goose-runtime.py'
       - 'tests/test-goose-package.py'
       - 'tests/test-assistant-*'
@@ -30,6 +32,7 @@ jobs:
         run: |
           python3 tests/test-goose-package.py
           python3 tests/test-assistant-config.py
+          python3 tests/test-assistant-proposals.py
           node --test tests/test-assistant-read.mjs
       - name: Fetch checksum-verified released binary
         run: |
@@ -49,6 +52,7 @@ jobs:
             cp /out/goose-x86_64-unknown-linux-musl.tar.bz2 /root/rpmbuild/SOURCES/
             cp /repo/SOURCES/goose-LICENSE /repo/SOURCES/xoa-hl-assistant.json /root/rpmbuild/SOURCES/
             cp /repo/SOURCES/xoa-hl-mcp-*.mjs /repo/SOURCES/xoa-hl-run-read-chat.py /repo/SOURCES/xoa-hl-read-chat.recipe.json /root/rpmbuild/SOURCES/
+            cp /repo/SOURCES/xoa-hl-proposals.py /repo/SOURCES/xoa-hl-create-vm.schema.json /root/rpmbuild/SOURCES/
             cp /repo/LICENSE /root/rpmbuild/SOURCES/xoa-hl-LICENSE
             cp /repo/GOOSE_RUNTIME.json /root/rpmbuild/SOURCES/
             rpmbuild -bb /repo/SPECS/xoa-hl-goose.spec
