@@ -69,6 +69,7 @@ jobs:
         run: |
           set -euo pipefail
           VERSION="${{ steps.ver.outputs.version }}"
+          cp LICENSE SOURCES/xoa-hl-LICENSE
           # The tarball is now a build input, it is not published any more.
           cp "out/xoa-hl-${VERSION}.tar.gz" "SOURCES/xoa-hl-${VERSION}.tar.gz"
 
