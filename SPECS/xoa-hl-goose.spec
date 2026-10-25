@@ -21,6 +21,8 @@ Source5:        xoa-hl-mcp-read-proxy.mjs
 Source6:        xoa-hl-mcp-network.mjs
 Source7:        xoa-hl-read-chat.recipe.json
 Source8:        xoa-hl-LICENSE
+Source9:        xoa-hl-create-vm.schema.json
+Source10:       xoa-hl-proposals.py
 
 %description
 Pinned upstream goose CLI for experimental local XOA-HL assistant work.
@@ -58,6 +60,8 @@ install -D -m 755 %{SOURCE4} %{buildroot}/usr/libexec/xoa-hl/assistant/xoa-hl-ru
 install -D -m 644 %{SOURCE5} %{buildroot}/usr/libexec/xoa-hl/assistant/xoa-hl-mcp-read-proxy.mjs
 install -D -m 644 %{SOURCE6} %{buildroot}/usr/libexec/xoa-hl/assistant/xoa-hl-mcp-network.mjs
 install -D -m 644 %{SOURCE7} %{buildroot}/usr/libexec/xoa-hl/assistant/xoa-hl-read-chat.recipe.json
+install -D -m 644 %{SOURCE9} %{buildroot}/usr/libexec/xoa-hl/assistant/xoa-hl-create-vm.schema.json
+install -D -m 644 %{SOURCE10} %{buildroot}/usr/libexec/xoa-hl/assistant/xoa-hl-proposals.py
 
 %files
 %license LICENSE
