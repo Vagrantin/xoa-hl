@@ -16,11 +16,28 @@ Source0:        goose-x86_64-unknown-linux-musl.tar.bz2
 Source1:        goose-LICENSE
 Source2:        GOOSE_RUNTIME.json
 Source3:        xoa-hl-assistant.json
+Source4:        xoa-hl-run-read-chat.py
+Source5:        xoa-hl-mcp-read-proxy.mjs
+Source6:        xoa-hl-mcp-network.mjs
+Source7:        xoa-hl-read-chat.recipe.json
+Source8:        xoa-hl-LICENSE
 
 %description
 Pinned upstream goose CLI for experimental local XOA-HL assistant work.
 Installed separately from the XOA-HL payload, disabled by default, without
 models, credentials, a daemon or an automatic start action.
+
+%package -n xoa-hl-assistant
+Summary:        Disabled local read-only assistant entry point for XOA-HL
+License:        AGPLv3
+Requires:       xoa-hl-goose = %{version}-%{release}
+Requires:       python3
+Requires:       (nodejs >= 2:24 with nodejs < 2:25)
+
+%description -n xoa-hl-assistant
+Local operator entry point with a bounded read-only MCP proxy and explicit
+goose Approve configuration. No model, MCP dependency, service or UI is
+automatically installed or enabled. Complete local configuration is required.
 
 %prep
 %setup -q -c -T
@@ -28,6 +45,7 @@ models, credentials, a daemon or an automatic start action.
 # before rpmbuild. Extract only the expected regular executable.
 tar -xjf %{SOURCE0} ./goose
 cp %{SOURCE1} LICENSE
+cp %{SOURCE8} PROJECT-LICENSE
 
 %build
 # Released musl executable: deliberately not rebuilt or downloaded by RPM scripts.
@@ -36,9 +54,17 @@ cp %{SOURCE1} LICENSE
 install -D -m 755 goose %{buildroot}/usr/libexec/xoa-hl/goose
 install -D -m 644 %{SOURCE2} %{buildroot}/usr/share/xoa-hl/goose/runtime.json
 install -D -m 644 %{SOURCE3} %{buildroot}/etc/xoa-hl/assistant.json
+install -D -m 755 %{SOURCE4} %{buildroot}/usr/libexec/xoa-hl/assistant/xoa-hl-run-read-chat.py
+install -D -m 644 %{SOURCE5} %{buildroot}/usr/libexec/xoa-hl/assistant/xoa-hl-mcp-read-proxy.mjs
+install -D -m 644 %{SOURCE6} %{buildroot}/usr/libexec/xoa-hl/assistant/xoa-hl-mcp-network.mjs
+install -D -m 644 %{SOURCE7} %{buildroot}/usr/libexec/xoa-hl/assistant/xoa-hl-read-chat.recipe.json
 
 %files
 %license LICENSE
 /usr/libexec/xoa-hl/goose
 /usr/share/xoa-hl/goose/runtime.json
 %config(noreplace) /etc/xoa-hl/assistant.json
+
+%files -n xoa-hl-assistant
+%license PROJECT-LICENSE
+/usr/libexec/xoa-hl/assistant

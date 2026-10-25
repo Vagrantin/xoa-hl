@@ -2,5 +2,8 @@
   "enabled": false,
   "provider": null,
   "model": null,
-  "endpoint": null
+  "endpoint": null,
+  "context_limit": null,
+  "xo_url": null,
+  "mcp_package": null
 }
