@@ -23,6 +23,9 @@ Source7:        xoa-hl-read-chat.recipe.json
 Source8:        xoa-hl-LICENSE
 Source9:        xoa-hl-create-vm.schema.json
 Source10:       xoa-hl-proposals.py
+Source11:       assistant-panel.mjs
+Source12:       assistant-locales.mjs
+Source13:       assistant-panel.css
 
 %description
 Pinned upstream goose CLI for experimental local XOA-HL assistant work.
@@ -62,6 +65,9 @@ install -D -m 644 %{SOURCE6} %{buildroot}/usr/libexec/xoa-hl/assistant/xoa-hl-mc
 install -D -m 644 %{SOURCE7} %{buildroot}/usr/libexec/xoa-hl/assistant/xoa-hl-read-chat.recipe.json
 install -D -m 644 %{SOURCE9} %{buildroot}/usr/libexec/xoa-hl/assistant/xoa-hl-create-vm.schema.json
 install -D -m 644 %{SOURCE10} %{buildroot}/usr/libexec/xoa-hl/assistant/xoa-hl-proposals.py
+install -D -m 644 %{SOURCE11} %{buildroot}/usr/share/xoa-hl/assistant-ui/panel.mjs
+install -D -m 644 %{SOURCE12} %{buildroot}/usr/share/xoa-hl/assistant-ui/locales.mjs
+install -D -m 644 %{SOURCE13} %{buildroot}/usr/share/xoa-hl/assistant-ui/panel.css
 
 %files
 %license LICENSE
@@ -72,3 +78,4 @@ install -D -m 644 %{SOURCE10} %{buildroot}/usr/libexec/xoa-hl/assistant/xoa-hl-p
 %files -n xoa-hl-assistant
 %license PROJECT-LICENSE
 /usr/libexec/xoa-hl/assistant
+/usr/share/xoa-hl/assistant-ui
