@@ -193,3 +193,13 @@ maintainer = "vagrantin"
 status = "active"
 dependencies = ["zzzzzzzzzzzz-xoa-hl-update-check-status-on-load"]
 notes = "setUpdateConfiguration no longer takes randomDelayMinutes; it moves together with SOURCES/xoa-hl-configure-updates.sh, which now takes four arguments."
+
+[[patches]]
+id = "zzzzzzzzzzzzzz-automatic-update-history"
+description = "automatic-update-history"
+target = "packages/xo-server/src/api/xoaHl.mjs"
+upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
+applies_to = ["5.113.2"]
+maintainer = "vagrantin"
+status = "active"
+dependencies = []
