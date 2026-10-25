@@ -8,6 +8,8 @@ on:
       - 'SOURCES/xoa-hl-*.timer'
       - 'SPECS/xoa-hl.spec'
       - 'tests/*.sh'
+      - 'tests/*.py'
+      - 'SOURCES/*.py'
       - '.github/workflows/test-update-scripts.yml'
   push:
     branches:
@@ -18,6 +20,8 @@ on:
       - 'SOURCES/xoa-hl-*.timer'
       - 'SPECS/xoa-hl.spec'
       - 'tests/*.sh'
+      - 'tests/*.py'
+      - 'SOURCES/*.py'
       - '.github/workflows/test-update-scripts.yml'
 
 jobs:
@@ -33,6 +37,8 @@ jobs:
           done
       - name: Test update scripts
         run: sh tests/test-update-scripts.sh
+      - name: Test update history
+        run: python3 tests/test-update-history.py
       - name: Validate timer calendars
         run: |
           systemd-analyze calendar '*-*-* 03:00:00'
