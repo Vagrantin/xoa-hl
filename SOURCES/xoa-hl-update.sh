@@ -7,6 +7,8 @@ LOG_FILE=${XOA_HL_UPDATE_LOG:-$STATE_DIR/update.log}
 RC_FILE="$STATE_DIR/.update.rc"
 LOCK_FILE=${XOA_HL_DNF_LOCK_FILE:-/run/xoa-hl/dnf.lock}
 DNF_COMMAND=${DNF_COMMAND:-dnf}
+CHECK_STATUS_FILE=${XOA_HL_CHECK_STATUS_FILE:-/run/xoa-hl/status}
+CHECK_SCRIPT=${XOA_HL_CHECK_SCRIPT:-/usr/libexec/xoa-hl/check-update.sh}
 
 # CHANNEL=testing in update.conf adds the candidate repo; anything else is stable.
 if [ "$(sed -n 's/^CHANNEL=//p' "${XOA_HL_CONFIG_DIR:-/etc/xoa-hl}/update.conf" 2>/dev/null | head -n 1)" = testing ]; then
@@ -32,6 +34,9 @@ if ! flock -n 9; then
     exit 75
 fi
 
+# A pre-transaction package list must never survive this transaction.
+rm -f "$CHECK_STATUS_FILE"
+
 {
     rc=0
     # Node.js is supplied by NodeSource. Keep the supported major pinned until
@@ -47,6 +52,12 @@ if [ "$rc" -eq 0 ]; then
     printf '=== xoa-hl update finished successfully at %s ===\n' "$(stamp)" >> "$LOG_FILE"
 else
     printf '=== xoa-hl update failed with exit code %s at %s ===\n' "$rc" "$(stamp)" >> "$LOG_FILE"
+fi
+
+# Release the shared DNF lock before refreshing the stored package verdict.
+flock -u 9
+if [ "$rc" -eq 0 ] && [ -r "$CHECK_SCRIPT" ]; then
+    sh "$CHECK_SCRIPT" || rm -f "$CHECK_STATUS_FILE"
 fi
 
 exit "$rc"
