@@ -1,0 +1,30 @@
+diff --git a/packages/xo-web/src/xo-app/settings/acls/index.js b/packages/xo-web/src/xo-app/settings/acls/index.js
+--- a/packages/xo-web/src/xo-app/settings/acls/index.js
++++ b/packages/xo-web/src/xo-app/settings/acls/index.js
+@@ -35,7 +35,12 @@
+   },
+   {
+     name: _('objectName'),
+-    itemRenderer: acl => (acl.object.id ? renderXoItem(acl.object) : renderXoItemFromId(acl.object)),
++    itemRenderer: acl =>
++      typeof acl.object === 'string' ? (
++        <span className='text-warning'>{_('unknown')}: {acl.object}</span>
++      ) : (
++        renderXoItem(acl.object)
++      ),
+     sortCriteria: acl => (acl.object.name || acl.object.name_label || '').toLowerCase(),
+   },
+   {
+@@ -79,10 +84,10 @@
+           map(acls, ({ id, subject, object, action }) => ({
+             id,
+             subject: users[subject] || groups[subject],
+-            object: hosts[object] || networks[object] || pools[object] || srs[object] || vms[object],
++            object: hosts[object] || networks[object] || pools[object] || srs[object] || vms[object] || object,
+             action: roles[action],
+           })),
+-          ({ subject, object, action }) => subject !== undefined && object !== undefined && action !== undefined
++          ({ subject, object, action }) => subject !== undefined && action !== undefined
+         ),
+       groups: (_, { groups }) => keyBy(groups, 'id'),
+       roles: (_, { roles }) => keyBy(roles, 'id'),
