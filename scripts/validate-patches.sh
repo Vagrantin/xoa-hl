@@ -19,6 +19,55 @@ fi
 
 echo "[OK] Patch metadata found"
 
+# Parse TOML and require a complete, well-formed table for every patch.
+# Grep-only checks can miss fields accidentally split into anonymous tables.
+python3 - "$PATCH_METADATA" <<'PY'
+import sys
+import tomllib
+
+path = sys.argv[1]
+with open(path, "rb") as stream:
+    document = tomllib.load(stream)
+
+entries = document.get("patches")
+if not isinstance(entries, list):
+    raise SystemExit("[FAIL] metadata.toml must contain [[patches]] tables")
+
+required = {
+    "id": str,
+    "description": str,
+    "target": str,
+    "upstream_commit": str,
+    "applies_to": list,
+    "maintainer": str,
+    "status": str,
+    "dependencies": list,
+}
+errors = []
+ids = []
+for index, entry in enumerate(entries, 1):
+    missing = [key for key in required if key not in entry]
+    wrong = [key for key, kind in required.items() if key in entry and not isinstance(entry[key], kind)]
+    if missing:
+        errors.append(f"entry {index}: missing {', '.join(missing)}")
+    if wrong:
+        errors.append(f"entry {index}: invalid type for {', '.join(wrong)}")
+    if isinstance(entry.get("id"), str):
+        ids.append(entry["id"])
+
+known = set(ids)
+for index, entry in enumerate(entries, 1):
+    for dependency in entry.get("dependencies", []):
+        if dependency not in known:
+            errors.append(f"entry {index}: unknown dependency {dependency!r}")
+
+if errors:
+    for error in errors:
+        print(f"[FAIL] {error}")
+    raise SystemExit(1)
+print(f"[OK] Parsed {len(entries)} complete metadata entries")
+PY
+
 METADATA_PATCH_COUNT=$(grep -c '^\[\[patches\]\]' "$PATCH_METADATA" || true)
 ACTUAL_PATCH_COUNT=$(find "$PATCH_DIR" -maxdepth 1 -name '*.patch' | wc -l)
 echo "  Metadata entries: $METADATA_PATCH_COUNT"
