@@ -49,6 +49,20 @@ reload, a second account, logout and server preference save failure.
 
 ## Upgrade note
 
+Appliance feedback follow-up (#288): verify the labeled connection form above the
+server table, VM filter button/input boundaries, disk-import React Select search,
+native SR storage-type options, chart axis/title text, empty heatmaps and changing
+weekly metrics. About shows host brand/version/build without requiring the optional
+host component plugin; the application RPM and appliance image remain separate
+version fields. The issue tracker belongs to the XOA-HL section.
+
+The XO 6 preview is a separate Vue application and does not import the XO 5 theme
+stylesheet. Its reported loading failure requires an authenticated runtime check:
+record HTTP status and response for `/rest/v0/hosts?fields=id,name_label`,
+`/rest/v0/dashboard?ndjson=true`, and `/rest/v0/events`, plus the browser console
+and corresponding xo-server journal error. Do not record authentication cookies or
+tokens. A packaged asset build alone does not validate these runtime requests.
+
 This release intentionally replaces the fixed classic XOA-HL appearance for existing
 users. Accounts without an appearance preference start with Arctic/System; users can
 select Graphite, Alpine or Horizon and override System with Light or Dark in Profile.
