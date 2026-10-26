@@ -2,6 +2,7 @@ name: Check packaged GUI build
 on:
   pull_request:
     paths:
+      - 'patches/**'
       - 'scripts/build-xo.sh'
       - 'scripts/check-gui-assets.py'
       - 'tests/test-gui-assets.py'

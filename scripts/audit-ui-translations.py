@@ -86,7 +86,7 @@ def main():
     english_path = catalog / "messages.js"
     english_source = english_path.read_text(encoding="utf-8")
     english = entries(english_path)
-    custom = {key for key in english if key.startswith("xoaHl")}
+    custom = {key for key in english if key.startswith(("xoaHl", "xhl"))}
     custom.add("settingsXoaHlUpdatesPage")
     core = key_list("core-ui-keys.txt")
     # Pages captured in the user documentation, which is published in English, French and Japanese.
@@ -97,8 +97,8 @@ def main():
     print("Locale | missing catalog keys | undefined entries | XOA-HL translated | core UI translated")
     print("--- | ---: | ---: | ---: | ---:")
     locale_paths = sorted((catalog / "locales").glob("*.js"))
-    if len(locale_paths) != 13 or len(custom) != 62:
-        failures.append(f"expected 13 locales and 62 XOA-HL keys; found {len(locale_paths)} and {len(custom)}")
+    if len(locale_paths) != 13 or len(custom) != 70:
+        failures.append(f"expected 13 locales and 70 XOA-HL keys; found {len(locale_paths)} and {len(custom)}")
     if len(core) != 83 or core - english.keys() or core & custom:
         failures.append("core UI key list must contain 83 distinct inherited English catalog keys")
     for path in locale_paths:

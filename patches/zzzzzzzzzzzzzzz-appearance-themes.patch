@@ -1,0 +1,841 @@
+diff --git a/packages/xo-web/src/common/intl/locales/es.js b/packages/xo-web/src/common/intl/locales/es.js
+index 0c9687a..6c2123d 100644
+--- a/packages/xo-web/src/common/intl/locales/es.js
++++ b/packages/xo-web/src/common/intl/locales/es.js
+@@ -8,6 +8,15 @@ addLocaleData(reactIntlData)
+ // ===================================================================
+ 
+ export default {
++  xhlAppearance: "Appearance",
++  xhlTheme: "Theme",
++  xhlColorMode: "Color mode",
++  xhlSystem: "System",
++  xhlLight: "Light",
++  xhlDark: "Dark",
++  xhlAppearanceHelp: "System follows your device appearance. Changes are saved to your account.",
++  xhlAppearanceSaveError: "Could not save appearance",
++
+   // Original text: 'Connecting'
+   statusConnecting: undefined,
+ 
+diff --git a/packages/xo-web/src/common/intl/locales/fa.js b/packages/xo-web/src/common/intl/locales/fa.js
+index c78476c..eeaf91b 100644
+--- a/packages/xo-web/src/common/intl/locales/fa.js
++++ b/packages/xo-web/src/common/intl/locales/fa.js
+@@ -7,6 +7,15 @@ addLocaleData(reactIntlData)
+ // ===================================================================
+ 
+ export default {
++  xhlAppearance: "Appearance",
++  xhlTheme: "Theme",
++  xhlColorMode: "Color mode",
++  xhlSystem: "System",
++  xhlLight: "Light",
++  xhlDark: "Dark",
++  xhlAppearanceHelp: "System follows your device appearance. Changes are saved to your account.",
++  xhlAppearanceSaveError: "Could not save appearance",
++
+   // Original text: '{key}: {value}'
+   keyValue: 'undefined',
+ 
+diff --git a/packages/xo-web/src/common/intl/locales/fr.js b/packages/xo-web/src/common/intl/locales/fr.js
+index 80e7eb2..9aef320 100644
+--- a/packages/xo-web/src/common/intl/locales/fr.js
++++ b/packages/xo-web/src/common/intl/locales/fr.js
+@@ -8,6 +8,15 @@ addLocaleData(reactIntlData)
+ // ===================================================================
+ 
+ export default {
++  xhlAppearance: "Apparence",
++  xhlTheme: "Thème",
++  xhlColorMode: "Mode de couleur",
++  xhlSystem: "Système",
++  xhlLight: "Clair",
++  xhlDark: "Sombre",
++  xhlAppearanceHelp: "Le mode Système suit votre appareil. Les modifications sont enregistrées dans votre compte.",
++  xhlAppearanceSaveError: "Impossible d’enregistrer l’apparence",
++
+   // Original text: "{key}: {value}"
+   keyValue: '{key} : {value}',
+ 
+diff --git a/packages/xo-web/src/common/intl/locales/he.js b/packages/xo-web/src/common/intl/locales/he.js
+index c6cf9ec..9d10adf 100644
+--- a/packages/xo-web/src/common/intl/locales/he.js
++++ b/packages/xo-web/src/common/intl/locales/he.js
+@@ -8,6 +8,15 @@ addLocaleData(reactIntlData)
+ // ===================================================================
+ 
+ export default {
++  xhlAppearance: "Appearance",
++  xhlTheme: "Theme",
++  xhlColorMode: "Color mode",
++  xhlSystem: "System",
++  xhlLight: "Light",
++  xhlDark: "Dark",
++  xhlAppearanceHelp: "System follows your device appearance. Changes are saved to your account.",
++  xhlAppearanceSaveError: "Could not save appearance",
++
+   // Original text: 'Connecting'
+   statusConnecting: undefined,
+ 
+diff --git a/packages/xo-web/src/common/intl/locales/hu.js b/packages/xo-web/src/common/intl/locales/hu.js
+index 73d2897..b2f3f1e 100644
+--- a/packages/xo-web/src/common/intl/locales/hu.js
++++ b/packages/xo-web/src/common/intl/locales/hu.js
+@@ -8,6 +8,15 @@ addLocaleData(reactIntlData)
+ // ===================================================================
+ 
+ export default {
++  xhlAppearance: "Appearance",
++  xhlTheme: "Theme",
++  xhlColorMode: "Color mode",
++  xhlSystem: "System",
++  xhlLight: "Light",
++  xhlDark: "Dark",
++  xhlAppearanceHelp: "System follows your device appearance. Changes are saved to your account.",
++  xhlAppearanceSaveError: "Could not save appearance",
++
+   // Original text: "Connecting"
+   statusConnecting: 'Kapcsolódás',
+ 
+diff --git a/packages/xo-web/src/common/intl/locales/it.js b/packages/xo-web/src/common/intl/locales/it.js
+index 0821f9c..ddda959 100644
+--- a/packages/xo-web/src/common/intl/locales/it.js
++++ b/packages/xo-web/src/common/intl/locales/it.js
+@@ -8,6 +8,15 @@ addLocaleData(reactIntlData)
+ // ===================================================================
+ 
+ export default {
++  xhlAppearance: "Appearance",
++  xhlTheme: "Theme",
++  xhlColorMode: "Color mode",
++  xhlSystem: "System",
++  xhlLight: "Light",
++  xhlDark: "Dark",
++  xhlAppearanceHelp: "System follows your device appearance. Changes are saved to your account.",
++  xhlAppearanceSaveError: "Could not save appearance",
++
+   // Original text: '{key}: {value}'
+   keyValue: '{key}: {value}',
+ 
+diff --git a/packages/xo-web/src/common/intl/locales/ja.js b/packages/xo-web/src/common/intl/locales/ja.js
+index 2202c6d..12d8a8c 100644
+--- a/packages/xo-web/src/common/intl/locales/ja.js
++++ b/packages/xo-web/src/common/intl/locales/ja.js
+@@ -8,6 +8,15 @@ addLocaleData(reactIntlData)
+ // ===================================================================
+ 
+ export default {
++  xhlAppearance: "外観",
++  xhlTheme: "テーマ",
++  xhlColorMode: "カラーモード",
++  xhlSystem: "システム設定",
++  xhlLight: "ライト",
++  xhlDark: "ダーク",
++  xhlAppearanceHelp: "システム設定では端末の外観に合わせます。変更はアカウントに保存されます。",
++  xhlAppearanceSaveError: "外観を保存できませんでした",
++
+   // Original text: 'Alpha'
+   alpha: 'アルファ版',
+ 
+diff --git a/packages/xo-web/src/common/intl/locales/pl.js b/packages/xo-web/src/common/intl/locales/pl.js
+index 91cf48c..4b03b4d 100644
+--- a/packages/xo-web/src/common/intl/locales/pl.js
++++ b/packages/xo-web/src/common/intl/locales/pl.js
+@@ -8,6 +8,15 @@ addLocaleData(reactIntlData)
+ // ===================================================================
+ 
+ export default {
++  xhlAppearance: "Appearance",
++  xhlTheme: "Theme",
++  xhlColorMode: "Color mode",
++  xhlSystem: "System",
++  xhlLight: "Light",
++  xhlDark: "Dark",
++  xhlAppearanceHelp: "System follows your device appearance. Changes are saved to your account.",
++  xhlAppearanceSaveError: "Could not save appearance",
++
+   // Original text: "Connecting"
+   statusConnecting: 'Trwa łączenie…',
+ 
+diff --git a/packages/xo-web/src/common/intl/locales/pt.js b/packages/xo-web/src/common/intl/locales/pt.js
+index 7d35771..53487d8 100644
+--- a/packages/xo-web/src/common/intl/locales/pt.js
++++ b/packages/xo-web/src/common/intl/locales/pt.js
+@@ -8,6 +8,15 @@ addLocaleData(reactIntlData)
+ // ===================================================================
+ 
+ export default {
++  xhlAppearance: "Appearance",
++  xhlTheme: "Theme",
++  xhlColorMode: "Color mode",
++  xhlSystem: "System",
++  xhlLight: "Light",
++  xhlDark: "Dark",
++  xhlAppearanceHelp: "System follows your device appearance. Changes are saved to your account.",
++  xhlAppearanceSaveError: "Could not save appearance",
++
+   // Original text: 'Connecting'
+   statusConnecting: undefined,
+ 
+diff --git a/packages/xo-web/src/common/intl/locales/ru.js b/packages/xo-web/src/common/intl/locales/ru.js
+index 33511c3..c02978c 100644
+--- a/packages/xo-web/src/common/intl/locales/ru.js
++++ b/packages/xo-web/src/common/intl/locales/ru.js
+@@ -8,6 +8,15 @@ addLocaleData(reactIntlData)
+ // ===================================================================
+ 
+ export default {
++  xhlAppearance: "Appearance",
++  xhlTheme: "Theme",
++  xhlColorMode: "Color mode",
++  xhlSystem: "System",
++  xhlLight: "Light",
++  xhlDark: "Dark",
++  xhlAppearanceHelp: "System follows your device appearance. Changes are saved to your account.",
++  xhlAppearanceSaveError: "Could not save appearance",
++
+   // Original text: 'Alpha'
+   alpha: 'Альфа',
+ 
+diff --git a/packages/xo-web/src/common/intl/locales/sv.js b/packages/xo-web/src/common/intl/locales/sv.js
+index 88c3f48..a7f2703 100644
+--- a/packages/xo-web/src/common/intl/locales/sv.js
++++ b/packages/xo-web/src/common/intl/locales/sv.js
+@@ -8,6 +8,15 @@ addLocaleData(reactIntlData)
+ // ===================================================================
+ 
+ export default {
++  xhlAppearance: "Appearance",
++  xhlTheme: "Theme",
++  xhlColorMode: "Color mode",
++  xhlSystem: "System",
++  xhlLight: "Light",
++  xhlDark: "Dark",
++  xhlAppearanceHelp: "System follows your device appearance. Changes are saved to your account.",
++  xhlAppearanceSaveError: "Could not save appearance",
++
+   // Original text: 'Connecting'
+   statusConnecting: 'Ansluter',
+ 
+diff --git a/packages/xo-web/src/common/intl/locales/tr.js b/packages/xo-web/src/common/intl/locales/tr.js
+index 41010ec..664ab55 100644
+--- a/packages/xo-web/src/common/intl/locales/tr.js
++++ b/packages/xo-web/src/common/intl/locales/tr.js
+@@ -8,6 +8,15 @@ addLocaleData(reactIntlData)
+ // ===================================================================
+ 
+ export default {
++  xhlAppearance: "Appearance",
++  xhlTheme: "Theme",
++  xhlColorMode: "Color mode",
++  xhlSystem: "System",
++  xhlLight: "Light",
++  xhlDark: "Dark",
++  xhlAppearanceHelp: "System follows your device appearance. Changes are saved to your account.",
++  xhlAppearanceSaveError: "Could not save appearance",
++
+   // Original text: "{key}: {value}"
+   keyValue: '{key}: {value}',
+ 
+diff --git a/packages/xo-web/src/common/intl/locales/zh.js b/packages/xo-web/src/common/intl/locales/zh.js
+index ab6c8e2..7a23346 100644
+--- a/packages/xo-web/src/common/intl/locales/zh.js
++++ b/packages/xo-web/src/common/intl/locales/zh.js
+@@ -8,6 +8,15 @@ addLocaleData(reactIntlData)
+ // ===================================================================
+ 
+ export default {
++  xhlAppearance: "Appearance",
++  xhlTheme: "Theme",
++  xhlColorMode: "Color mode",
++  xhlSystem: "System",
++  xhlLight: "Light",
++  xhlDark: "Dark",
++  xhlAppearanceHelp: "System follows your device appearance. Changes are saved to your account.",
++  xhlAppearanceSaveError: "Could not save appearance",
++
+   // Original text: "Long click to edit"
+   editableLongClickPlaceholder: '长按编辑',
+ 
+diff --git a/packages/xo-web/src/common/intl/messages.js b/packages/xo-web/src/common/intl/messages.js
+index 0688d36..91e8a23 100644
+--- a/packages/xo-web/src/common/intl/messages.js
++++ b/packages/xo-web/src/common/intl/messages.js
+@@ -4,6 +4,15 @@
+ const forEach = require('lodash/forEach')
+ 
+ const messages = {
++  xhlAppearance: "Appearance",
++  xhlTheme: "Theme",
++  xhlColorMode: "Color mode",
++  xhlSystem: "System",
++  xhlLight: "Light",
++  xhlDark: "Dark",
++  xhlAppearanceHelp: "System follows your device appearance. Changes are saved to your account.",
++  xhlAppearanceSaveError: "Could not save appearance",
++
+   alpha: 'Alpha',
+   alerts: 'Alerts',
+   connected: 'Connected',
+diff --git a/packages/xo-web/src/common/themes/base.js b/packages/xo-web/src/common/themes/base.js
+index 34f7bcb..a1f2372 100644
+--- a/packages/xo-web/src/common/themes/base.js
++++ b/packages/xo-web/src/common/themes/base.js
+@@ -1,6 +1,6 @@
+ export default {
+-  disabledStateBg: '#fff',
+-  disabledStateColor: '#c0392b',
+-  enabledStateBg: '#fff',
+-  enabledStateColor: '#27ae60',
++  disabledStateBg: 'var(--xhl-panel)',
++  disabledStateColor: 'var(--xhl-danger)',
++  enabledStateBg: 'var(--xhl-panel)',
++  enabledStateColor: 'var(--xhl-success)',
+ }
+diff --git a/packages/xo-web/src/common/xo/index.js b/packages/xo-web/src/common/xo/index.js
+index a5bc822..93a8ba3 100644
+--- a/packages/xo-web/src/common/xo/index.js
++++ b/packages/xo-web/src/common/xo/index.js
+@@ -3665,6 +3665,9 @@ const _setUserPreferences = (preferences, userId) =>
+     preferences,
+   })::tap(subscribeCurrentUser.forceRefresh)
+ 
++// user.set merges preference keys; do not replace language, filters or other settings.
++export const setXoaHlAppearance = appearance => _setUserPreferences({ xoaHlAppearance: appearance })
++
+ import NewSshKeyModalBody from './new-ssh-key-modal' // eslint-disable-line import/first
+ export const addSshKey = async key => {
+   const { preferences } = xo.user
+diff --git a/packages/xo-web/src/common/xoa-hl-appearance/index.js b/packages/xo-web/src/common/xoa-hl-appearance/index.js
+new file mode 100644
+index 0000000..1e3379b
+--- /dev/null
++++ b/packages/xo-web/src/common/xoa-hl-appearance/index.js
+@@ -0,0 +1,55 @@
++// Keep normalization identical to the small pre-paint bootstrap in index.pug.
++export const THEMES = ['arctic', 'graphite', 'alpine', 'horizon']
++export const MODES = ['system', 'light', 'dark']
++export const STORAGE_NAME = 'xoa-hl.appearance.v1'
++export const normalize = (value = {}) => ({
++  theme: THEMES.includes(value && value.theme) ? value.theme : 'arctic',
++  mode: MODES.includes(value && value.mode) ? value.mode : 'system',
++})
++
++// Storage is optional (private browsing / browser policy may disable it).
++export function applyAppearance(value, win = window) {
++  const settings = normalize(value)
++  const root = win.document.documentElement
++  const dark = settings.mode === 'dark' ||
++    (settings.mode === 'system' && win.matchMedia('(prefers-color-scheme: dark)').matches)
++  root.setAttribute('data-xhl-theme', settings.theme)
++  root.setAttribute('data-xhl-mode', settings.mode)
++  root.setAttribute('data-xhl-scheme', dark ? 'dark' : 'light')
++  root.style.colorScheme = dark ? 'dark' : 'light'
++  try { win.localStorage.setItem(STORAGE_NAME, JSON.stringify(settings)) } catch (_) {}
++  return settings
++}
++
++export function startAppearance(store, win = window) {
++  let settings
++  try { settings = JSON.parse(win.localStorage.getItem(STORAGE_NAME)) } catch (_) {}
++  settings = applyAppearance(settings, win)
++  let previousUser
++  let previousPreferences
++  const sync = () => {
++    const user = store.getState().user
++    if (user) {
++      const preferences = user.preferences && user.preferences.xoaHlAppearance
++      if (user.id !== previousUser || preferences !== previousPreferences) {
++        previousUser = user.id
++        previousPreferences = preferences
++        settings = applyAppearance(preferences, win)
++      }
++    } else if (previousUser !== undefined) {
++      previousUser = previousPreferences = undefined
++      settings = applyAppearance(undefined, win)
++    }
++  }
++  sync()
++  const unsubscribe = store.subscribe(sync)
++  const media = win.matchMedia('(prefers-color-scheme: dark)')
++  const changed = () => { if (settings.mode === 'system') applyAppearance(settings, win) }
++  if (media.addEventListener) media.addEventListener('change', changed)
++  else media.addListener(changed)
++  return () => {
++    unsubscribe()
++    if (media.removeEventListener) media.removeEventListener('change', changed)
++    else media.removeListener(changed)
++  }
++}
+diff --git a/packages/xo-web/src/common/xoa-hl-appearance/profile.js b/packages/xo-web/src/common/xoa-hl-appearance/profile.js
+new file mode 100644
+index 0000000..097f2bb
+--- /dev/null
++++ b/packages/xo-web/src/common/xoa-hl-appearance/profile.js
+@@ -0,0 +1,54 @@
++import React from 'react'
++import Component from 'base-component'
++import _ from 'intl'
++import { Card, CardBlock, CardHeader } from 'card'
++import { error } from 'notification'
++import { setXoaHlAppearance } from 'xo'
++import { normalize } from './index'
++
++export default class AppearancePreferences extends Component {
++  state = { saving: false }
++
++  _change = async event => {
++    const settings = normalize(this.props.user.preferences && this.props.user.preferences.xoaHlAppearance)
++    settings[event.target.name] = event.target.value
++    this.setState({ saving: true })
++    try {
++      // The store subscription applies only acknowledged server preferences.
++      await setXoaHlAppearance(settings)
++    } catch (err) {
++      error(_('xhlAppearanceSaveError'), err.message)
++    } finally {
++      this.setState({ saving: false })
++    }
++  }
++
++  render() {
++    const settings = normalize(this.props.user.preferences && this.props.user.preferences.xoaHlAppearance)
++    return (
++      <Card>
++        <CardHeader>{_('xhlAppearance')}</CardHeader>
++        <CardBlock>
++          <div className='xhl-appearance-fields' aria-busy={this.state.saving}>
++            <label htmlFor='xhl-theme'>{_('xhlTheme')}
++              <select id='xhl-theme' name='theme' className='form-control' value={settings.theme} disabled={this.state.saving} onChange={this._change}>
++                <option value='arctic'>Arctic</option>
++                <option value='graphite'>Graphite</option>
++                <option value='alpine'>Alpine</option>
++                <option value='horizon'>Horizon</option>
++              </select>
++            </label>
++            <label htmlFor='xhl-mode'>{_('xhlColorMode')}
++              <select id='xhl-mode' name='mode' className='form-control' value={settings.mode} disabled={this.state.saving} onChange={this._change}>
++                <option value='system'>{_('xhlSystem')}</option>
++                <option value='light'>{_('xhlLight')}</option>
++                <option value='dark'>{_('xhlDark')}</option>
++              </select>
++            </label>
++          </div>
++          <p className='text-muted'>{_('xhlAppearanceHelp')}</p>
++        </CardBlock>
++      </Card>
++    )
++  }
++}
+diff --git a/packages/xo-web/src/index.js b/packages/xo-web/src/index.js
+index 0a78911..d68e451 100644
+--- a/packages/xo-web/src/index.js
++++ b/packages/xo-web/src/index.js
+@@ -8,6 +8,9 @@ import { Provider } from 'react-redux'
+ import { render } from 'react-dom'
+ 
+ import XoApp from './xo-app'
++import { startAppearance } from './common/xoa-hl-appearance'
++
++startAppearance(store)
+ 
+ render(
+   <Provider store={store}>
+diff --git a/packages/xo-web/src/index.pug b/packages/xo-web/src/index.pug
+index 3c1706c..bb49f64 100644
+--- a/packages/xo-web/src/index.pug
++++ b/packages/xo-web/src/index.pug
+@@ -34,6 +34,20 @@ html.no-js(
+ 
+     title Xen Orchestra
+ 
++    //- Apply the validated last appearance before CSS loads; storage may be blocked.
++    script.
++      (function () {
++        var value = {}, root = document.documentElement;
++        try { value = JSON.parse(localStorage.getItem('xoa-hl.appearance.v1')) || {}; } catch (_) {}
++        var theme = ['arctic', 'graphite', 'alpine', 'horizon'].indexOf(value.theme) >= 0 ? value.theme : 'arctic';
++        var mode = ['system', 'light', 'dark'].indexOf(value.mode) >= 0 ? value.mode : 'system';
++        var scheme = mode === 'dark' || (mode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
++        root.setAttribute('data-xhl-theme', theme);
++        root.setAttribute('data-xhl-mode', mode);
++        root.setAttribute('data-xhl-scheme', scheme);
++        root.style.colorScheme = scheme;
++      })();
++
+     link(
+       rel = 'stylesheet'
+       href = 'index.css'
+diff --git a/packages/xo-web/src/index.scss b/packages/xo-web/src/index.scss
+index 8ebe1e5..e518201 100644
+--- a/packages/xo-web/src/index.scss
++++ b/packages/xo-web/src/index.scss
+@@ -309,3 +309,6 @@ $select-input-height: 40px; // Bootstrap input height
+     }
+   }
+ }
++
++// Loaded after Bootstrap and component defaults.
++@import './xoa-hl-themes';
+diff --git a/packages/xo-web/src/xo-app/home/index.css b/packages/xo-web/src/xo-app/home/index.css
+index 0f0f10b..b93c012 100644
+--- a/packages/xo-web/src/xo-app/home/index.css
++++ b/packages/xo-web/src/xo-app/home/index.css
+@@ -3,25 +3,27 @@
+ }
+ 
+ .itemContainer {
+-  border: 1px solid #eee;
++  border: 1px solid var(--xhl-border);
+   border-radius: 0.3em;
+ }
+ 
+ .itemContainerHeader {
+   padding: 0.5em;
+-  background: #ededed;
+-  border-bottom: 1px solid #eee;
++  background: var(--xhl-soft);
++  border-bottom: 1px solid var(--xhl-border);
+   margin: 0px;
+ }
+ 
+ .item {
+-  padding: 0.5em;
+-  border-bottom: 1px solid #eee;
++  background: var(--xhl-panel);
++  border-color: var(--xhl-border);
++  padding: var(--xhl-row-padding);
++  border-bottom: 1px solid var(--xhl-border);
+   white-space: nowrap;
+ }
+ 
+ .item:hover {
+-  background: #f4f4f4;
++  background: var(--xhl-soft);
+ }
+ 
+ .item:hover .itemActionButons {
+@@ -30,16 +32,16 @@
+ 
+ .itemActionButons {
+   margin-right: 0.6em;
+-  color: #999;
++  color: var(--xhl-muted);
+   opacity: 0;
+ }
+ 
+ .itemActionButons:hover {
+-  color: #111;
++  color: var(--xhl-ink);
+ }
+ 
+ .itemExpanded {
+-  color: #999;
++  color: var(--xhl-muted);
+   font-size: 1em;
+   text-overflow: ellipsis;
+   white-space: nowrap;
+@@ -59,5 +61,5 @@
+ }
+ 
+ .highlight {
+-  outline: 2px solid #366e98;
++  outline: 2px solid var(--xhl-accent);
+ }
+diff --git a/packages/xo-web/src/xo-app/home/index.js b/packages/xo-web/src/xo-app/home/index.js
+index 2fccd5f..20c382d 100644
+--- a/packages/xo-web/src/xo-app/home/index.js
++++ b/packages/xo-web/src/xo-app/home/index.js
+@@ -1286,7 +1286,7 @@ export default class Home extends Component {
+         <Shortcuts handler={this._getShortcutsHandler()} isolate name='Home' targetNodeSelector='body' />
+         <div>
+           {backup !== undefined && <h5>{backup === 'true' ? _('backedUpVms') : _('notBackedUpVms')}</h5>}
+-          <div className={styles.itemContainer}>
++          <div className={`${styles.itemContainer} xhl-home-list`}>
+             {isEmpty(filteredItems) ? (
+               <p className='text-xs-center mt-1'>
+                 <a className='btn btn-link' onClick={this._clearFilter}>
+diff --git a/packages/xo-web/src/xo-app/user/index.js b/packages/xo-web/src/xo-app/user/index.js
+index fd02aff..fba8cbf 100644
+--- a/packages/xo-web/src/xo-app/user/index.js
++++ b/packages/xo-web/src/xo-app/user/index.js
+@@ -40,6 +40,7 @@ import {
+ 
+ import Page from '../page'
+ import Otp from './otp'
++import AppearancePreferences from '../../common/xoa-hl-appearance/profile'
+ 
+ // ===================================================================
+ 
+@@ -610,6 +611,8 @@ export default class User extends Component {
+           <Otp user={user} key='otp' />,
+           <hr key='hr' />,
+         ]}
++        <AppearancePreferences user={user} />
++        <hr />
+         <XsClientId user={user} />
+         <hr />
+         <SshKeys />
+diff --git a/packages/xo-web/src/xoa-hl-themes.scss b/packages/xo-web/src/xoa-hl-themes.scss
+new file mode 100644
+index 0000000..1e5ec1f
+--- /dev/null
++++ b/packages/xo-web/src/xoa-hl-themes.scss
+@@ -0,0 +1,256 @@
++// XOA-HL appearance: scoped overrides for the pinned XO 5 UI.
++:root[data-xhl-theme="arctic"][data-xhl-scheme="light"] {
++  --xhl-bg: #f4f7fb;
++  --xhl-panel: #ffffff;
++  --xhl-soft: #f7f9fc;
++  --xhl-ink: #1c2b3e;
++  --xhl-muted: #56657a;
++  --xhl-border: #dce4ef;
++  --xhl-accent: #245fce;
++  --xhl-tint: #eaf1ff;
++  --xhl-on-accent: #ffffff;
++  --xhl-side: #eaf0f8;
++  --xhl-side-ink: #435571;
++  --xhl-side-muted: #536680;
++  --xhl-active: #ffffff;
++  --xhl-active-ink: #234fa8;
++  --xhl-ok: #137346;
++  --xhl-ok-bg: #eaf8f0;
++  --xhl-off: #657185;
++  --xhl-off-bg: #eef1f5;
++}
++:root[data-xhl-theme="arctic"][data-xhl-scheme="dark"] {
++  --xhl-bg: #111923;
++  --xhl-panel: #1a2532;
++  --xhl-soft: #202d3c;
++  --xhl-ink: #e7edf5;
++  --xhl-muted: #a3b3c6;
++  --xhl-border: #334357;
++  --xhl-accent: #89b6ff;
++  --xhl-tint: #233d60;
++  --xhl-on-accent: #0c2243;
++  --xhl-side: #15202d;
++  --xhl-side-ink: #c1cee0;
++  --xhl-side-muted: #99aac2;
++  --xhl-active: #293e58;
++  --xhl-active-ink: #bdd7ff;
++  --xhl-ok: #82d9ad;
++  --xhl-ok-bg: #173e30;
++  --xhl-off: #adbacb;
++  --xhl-off-bg: #303c4b;
++}
++:root[data-xhl-theme="graphite"][data-xhl-scheme="light"] {
++  --xhl-bg: #f8f8fa;
++  --xhl-panel: #ffffff;
++  --xhl-soft: #f0f0f4;
++  --xhl-ink: #24242c;
++  --xhl-muted: #62626f;
++  --xhl-border: #dcdce4;
++  --xhl-accent: #6550c1;
++  --xhl-tint: #f0ecfb;
++  --xhl-on-accent: #ffffff;
++  --xhl-side: #ebebf0;
++  --xhl-side-ink: #50505e;
++  --xhl-side-muted: #60606e;
++  --xhl-active: #dddce8;
++  --xhl-active-ink: #493876;
++  --xhl-ok: #276c4e;
++  --xhl-ok-bg: #edf5f0;
++  --xhl-off: #696974;
++  --xhl-off-bg: #eeeeF2;
++}
++:root[data-xhl-theme="graphite"][data-xhl-scheme="dark"] {
++  --xhl-bg: #111114;
++  --xhl-panel: #1b1b20;
++  --xhl-soft: #222228;
++  --xhl-ink: #eeeeF4;
++  --xhl-muted: #ababbb;
++  --xhl-border: #393941;
++  --xhl-accent: #b7a5fa;
++  --xhl-tint: #302841;
++  --xhl-on-accent: #221734;
++  --xhl-side: #18181d;
++  --xhl-side-ink: #bdbdcb;
++  --xhl-side-muted: #aaaaba;
++  --xhl-active: #302d3b;
++  --xhl-active-ink: #d2c4ff;
++  --xhl-ok: #8dd2ad;
++  --xhl-ok-bg: #20382c;
++  --xhl-off: #b0b0be;
++  --xhl-off-bg: #30303b;
++}
++:root[data-xhl-theme="alpine"][data-xhl-scheme="light"] {
++  --xhl-bg: #f4f3ed;
++  --xhl-panel: #fffefa;
++  --xhl-soft: #f6f6f0;
++  --xhl-ink: #27392f;
++  --xhl-muted: #5c6c60;
++  --xhl-border: #dce1d5;
++  --xhl-accent: #276c50;
++  --xhl-tint: #edf4e9;
++  --xhl-on-accent: #ffffff;
++  --xhl-side: #e9eee3;
++  --xhl-side-ink: #49604e;
++  --xhl-side-muted: #5c705f;
++  --xhl-active: #d6e6d4;
++  --xhl-active-ink: #28583d;
++  --xhl-ok: #2e6f43;
++  --xhl-ok-bg: #e8f1e1;
++  --xhl-off: #6a7065;
++  --xhl-off-bg: #efeee6;
++}
++:root[data-xhl-theme="alpine"][data-xhl-scheme="dark"] {
++  --xhl-bg: #131d19;
++  --xhl-panel: #1d2b24;
++  --xhl-soft: #23332a;
++  --xhl-ink: #e5eee7;
++  --xhl-muted: #a7b9aa;
++  --xhl-border: #3c4e41;
++  --xhl-accent: #9bd4ae;
++  --xhl-tint: #2c4234;
++  --xhl-on-accent: #152e20;
++  --xhl-side: #18271f;
++  --xhl-side-ink: #bbcebd;
++  --xhl-side-muted: #a4bca7;
++  --xhl-active: #304c38;
++  --xhl-active-ink: #bbdfbd;
++  --xhl-ok: #a4d6a8;
++  --xhl-ok-bg: #30442e;
++  --xhl-off: #adb9a9;
++  --xhl-off-bg: #374237;
++}
++:root[data-xhl-theme="horizon"][data-xhl-scheme="light"] {
++  --xhl-bg: #f0f0fa;
++  --xhl-panel: #ffffff;
++  --xhl-soft: #f7f7fc;
++  --xhl-ink: #282747;
++  --xhl-muted: #62617e;
++  --xhl-border: #deddf0;
++  --xhl-accent: #6854d6;
++  --xhl-tint: #f0edff;
++  --xhl-on-accent: #ffffff;
++  --xhl-side: #20213d;
++  --xhl-side-ink: #d2d2e6;
++  --xhl-side-muted: #b1b0cc;
++  --xhl-active: #3b365d;
++  --xhl-active-ink: #eee8ff;
++  --xhl-ok: #22734f;
++  --xhl-ok-bg: #eaf8f0;
++  --xhl-off: #6a6788;
++  --xhl-off-bg: #eeedf6;
++}
++:root[data-xhl-theme="horizon"][data-xhl-scheme="dark"] {
++  --xhl-bg: #101022;
++  --xhl-panel: #1b1b32;
++  --xhl-soft: #23233e;
++  --xhl-ink: #eeecff;
++  --xhl-muted: #b0accd;
++  --xhl-border: #3c3a59;
++  --xhl-accent: #beaaff;
++  --xhl-tint: #342951;
++  --xhl-on-accent: #26194b;
++  --xhl-side: #15152b;
++  --xhl-side-ink: #cdcae7;
++  --xhl-side-muted: #a9a3c8;
++  --xhl-active: #393057;
++  --xhl-active-ink: #e2d7ff;
++  --xhl-ok: #89d6b0;
++  --xhl-ok-bg: #203f36;
++  --xhl-off: #b5aecf;
++  --xhl-off-bg: #36314c;
++}
++
++:root[data-xhl-theme] {
++  --xhl-radius: 8px;
++  --xhl-row-padding: .75em;
++  --xhl-success: #137346;
++  --xhl-warning: #865000;
++  --xhl-danger: #b4233b;
++  --xhl-info: #245fce;
++  --xhl-success-bg: #eaf8f0;
++  --xhl-warning-bg: #fff3d6;
++  --xhl-danger-bg: #ffedf0;
++  --xhl-info-bg: #eaf1ff;
++  background: var(--xhl-bg);
++  color: var(--xhl-ink);
++}
++:root[data-xhl-scheme="dark"] {
++  --xhl-success: #82d9ad;
++  --xhl-warning: #f0c36b;
++  --xhl-danger: #ff9fb1;
++  --xhl-info: #89b6ff;
++  --xhl-success-bg: #173e30;
++  --xhl-warning-bg: #45351c;
++  --xhl-danger-bg: #4b2430;
++  --xhl-info-bg: #233d60;
++}
++:root[data-xhl-theme="graphite"] { --xhl-radius: 3px; --xhl-row-padding: .4em; }
++:root[data-xhl-theme="alpine"] { --xhl-radius: 12px; --xhl-row-padding: .9em; }
++:root[data-xhl-theme] {
++  body, .page-header { background: var(--xhl-bg); color: var(--xhl-ink); }
++  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
++  a, .btn-link, .text-primary { color: var(--xhl-accent); }
++  .text-muted, .text-secondary { color: var(--xhl-muted) !important; }
++  .bg-faded, .bg-white { background: var(--xhl-soft) !important; }
++  hr, .table th, .table td, .table, .nav-tabs { border-color: var(--xhl-border); }
++  .card, .modal-content, .popover, .dropdown-menu, .list-group-item {
++    background: var(--xhl-panel); color: var(--xhl-ink); border-color: var(--xhl-border); border-radius: var(--xhl-radius);
++  }
++  .card-header, .card-footer, .modal-header, .modal-footer, .popover-title, .table-striped tbody tr:nth-of-type(odd) {
++    background: var(--xhl-soft); color: var(--xhl-ink); border-color: var(--xhl-border);
++  }
++  .dropdown-item, .popover-content { color: var(--xhl-ink); }
++  .dropdown-item:hover, .dropdown-item:focus, .table-hover tbody tr:hover { background: var(--xhl-tint); color: var(--xhl-ink); }
++  .dropdown-divider { border-color: var(--xhl-border); }
++  .form-control, .input-group-addon, .custom-select, .Select-control, .Select-menu-outer, .Select-option {
++    background: var(--xhl-panel); color: var(--xhl-ink); border-color: var(--xhl-border); border-radius: var(--xhl-radius);
++  }
++  .form-control::placeholder, .Select-placeholder { color: var(--xhl-muted); opacity: 1; }
++  .form-control:disabled, .form-control[readonly], .Select.is-disabled > .Select-control { background: var(--xhl-soft); color: var(--xhl-muted); }
++  .Select-input > input, .Select-value-label, .Select--single > .Select-control .Select-value { color: var(--xhl-ink) !important; }
++  .Select-option.is-focused, .Select-option.is-selected { background: var(--xhl-tint); color: var(--xhl-ink); }
++  .Select--multi .Select-value { background: var(--xhl-tint); color: var(--xhl-ink); border-color: var(--xhl-border); }
++  input[type="checkbox"], input[type="radio"] { accent-color: var(--xhl-accent); }
++  .btn { border-radius: var(--xhl-radius); }
++  .btn-secondary, .btn-default { background: var(--xhl-panel); color: var(--xhl-ink); border-color: var(--xhl-border); }
++  .btn-primary, .tag-primary, .page-item.active .page-link { background: var(--xhl-accent); color: var(--xhl-on-accent); border-color: var(--xhl-accent); }
++  .btn-primary:hover, .btn-primary:focus { background: var(--xhl-accent); color: var(--xhl-on-accent); filter: brightness(.92); }
++  .page-link { background: var(--xhl-panel); color: var(--xhl-accent); border-color: var(--xhl-border); }
++  .nav-tabs .nav-link { color: var(--xhl-muted); }
++  .nav-tabs .nav-link.active { background: var(--xhl-panel); color: var(--xhl-ink); border-color: var(--xhl-border); }
++  .nav-pills .nav-link.active { background: var(--xhl-tint); color: var(--xhl-accent); }
++  .xo-menu, .xo-sub-menu { background: var(--xhl-side); color: var(--xhl-side-ink); }
++  .xo-menu { padding: .6rem; border-right: 1px solid var(--xhl-border); }
++  .xo-menu .nav-link { border-radius: var(--xhl-radius); margin-bottom: 2px; }
++  .xo-menu-item:hover { background: var(--xhl-active); color: var(--xhl-active-ink); border-radius: var(--xhl-radius); }
++  .xo-menu .nav-link.active { background: var(--xhl-active); color: var(--xhl-active-ink); box-shadow: inset 3px 0 var(--xhl-accent); }
++  .xo-menu button { color: inherit; }
++  .xhl-home-list { background: var(--xhl-panel); border-radius: var(--xhl-radius); }
++  .xhl-appearance-fields { display: flex; flex-wrap: wrap; gap: 1.5rem; margin-bottom: 1rem; }
++  .xhl-appearance-fields label { flex: 1 1 12em; max-width: 24em; }
++  .xhl-appearance-fields select { margin-top: .5rem; }
++  pre, code { background: var(--xhl-soft); color: var(--xhl-ink); border-color: var(--xhl-border); }
++  :focus-visible { outline: 2px solid var(--xhl-accent); outline-offset: 2px; }
++  .ct-label { fill: var(--xhl-muted); color: var(--xhl-muted); }
++  .ct-grid { stroke: var(--xhl-border); }
++  .ct-series-a .ct-line, .ct-series-a .ct-point { stroke: var(--xhl-accent); }
++  .ct-series-a .ct-area { fill: var(--xhl-accent); }
++  .ct-chart .chartist-tooltip { background: var(--xhl-panel); color: var(--xhl-ink); }
++  @each $state in success, warning, danger, info {
++    .text-#{$state} { color: var(--xhl-#{$state}) !important; }
++    .alert-#{$state}, .tag-#{$state}, .bg-#{$state}, .btn-#{$state} {
++      background: var(--xhl-#{$state}-bg) !important; color: var(--xhl-#{$state}) !important; border-color: var(--xhl-#{$state}) !important;
++    }
++    .notify-item.#{$state} { background: var(--xhl-#{$state}-bg); color: var(--xhl-#{$state}); border-color: var(--xhl-#{$state}); }
++  }
++  .notify-item.error { background: var(--xhl-danger-bg); color: var(--xhl-danger); border-color: var(--xhl-danger); }
++}
++:root[data-xhl-theme="alpine"] .xhl-home-list {
++  background: transparent; border: 0;
++  > div { background: var(--xhl-panel); border: 1px solid var(--xhl-border); border-radius: var(--xhl-radius); margin-bottom: .6rem; }
++}
++:root[data-xhl-theme="alpine"] .xo-menu .nav-link { border-radius: 1.5rem; }
++:root[data-xhl-theme="horizon"] .page-header { border-top: 3px solid var(--xhl-accent); }
++@media (prefers-reduced-motion: reduce) {
++  :root[data-xhl-theme] .xo-sub-menu { transition: none; }
++}
