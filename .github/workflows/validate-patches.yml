@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - 'patches/**'
+      - 'tests/test-appearance.mjs'
       - 'UPSTREAM_XO'
       - 'scripts/audit-ui-translations.py'
       - 'scripts/core-ui-keys.txt'
@@ -19,6 +20,7 @@ on:
       - main
     paths:
       - 'patches/**'
+      - 'tests/test-appearance.mjs'
       - 'UPSTREAM_XO'
       - 'scripts/audit-ui-translations.py'
       - 'scripts/core-ui-keys.txt'
@@ -56,6 +58,8 @@ jobs:
             git -C "${XO_DIR}" apply --check "${GITHUB_WORKSPACE}/${patch}"
             git -C "${XO_DIR}" apply "${GITHUB_WORKSPACE}/${patch}"
           done
+      - name: Test appearance preferences and pre-paint bootstrap
+        run: node tests/test-appearance.mjs "${XO_DIR}"
       - name: Check server module syntax
         run: node --check "${XO_DIR}/packages/xo-server/src/api/xoaHl.mjs"
       - name: Audit UI translations
