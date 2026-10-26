@@ -482,7 +482,7 @@ diff --git a/packages/xo-web/src/common/sorted-table/index.css b/packages/xo-web
 index 349913a..22b7e0b 100644
 --- a/packages/xo-web/src/common/sorted-table/index.css
 +++ b/packages/xo-web/src/common/sorted-table/index.css
-@@ -3,13 +3,13 @@
+@@ -3,14 +3,14 @@
  }
  
  .clickableColumn:hover {
