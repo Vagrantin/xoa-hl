@@ -21,7 +21,10 @@ The controller is not an authorization boundary or an implementation of that
 server. It does not select #83's transport or bypass goose's approval exchange.
 
 Every send first awaits server cancellation/invalidation of the previous turn.
-Local abort alone cannot satisfy this barrier. Failed cancellation locks input
+Local abort alone cannot satisfy this barrier. The proposal store’s persistent
+`begin_turn`/`revoke_turn` lifecycle supplies this barrier for proposal workers;
+the server must commit revocation before acknowledging and pass the private turn
+ID only through trusted worker context (see `assistant-create-mcp.md`). Failed cancellation locks input
 until Stop receives an acknowledgement. Replaced/cancelled/destroyed streams
 cannot append late text or replace a newer proposal. Approval is unavailable
 while a stream is incomplete, and a missing terminal event is an error. Replies

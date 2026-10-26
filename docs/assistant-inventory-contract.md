@@ -34,11 +34,15 @@ placement, capacity, collisions and IDs. Recreating an SR/network/template under
 the same name invalidates the proposal. Upgraded databases acquire a nullable ID
 column; an older pending proposal has no bindings and cannot pass approval.
 
-The trusted conversation owner calls `invalidate_pending(owner, session, reason)`
-before a new request, cancellation, disconnect or disable action. This prevents an
-old approval remaining actionable while a correction is being processed. The
-method only invalidates pending proposals belonging to that authenticated owner
-and session. It does not revoke or change another conversation.
+The trusted conversation supervisor calls `begin_turn(owner, session, request)`
+before each new request, and `revoke_turn(owner, session, turn_id, reason)` on
+cancellation, disconnect or disable. Revocation is committed before acknowledging
+cancellation or starting process cleanup. Every proposal carries the private
+turn ID and checks it again when committing, so a late inventory read cannot
+create a pending proposal after cancellation. Cleanup for a superseded turn cannot
+revoke the new turn. These operations affect only that authenticated conversation.
+The private token never comes from the browser or model. See
+[the MCP lifecycle contract](assistant-create-mcp.md).
 
 An adapter against the actual pinned XO, the goose approval exchange and the
 human-approved live acceptance remain requirements of xcp-hl#86. Unit fixtures

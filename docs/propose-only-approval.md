@@ -17,14 +17,12 @@ Never take those identities from model output, request JSON supplied by a browse
 or the approval text. A model supplies only an untrusted proposed specification;
 it does not supply authoritative platform facts, timestamps, quotas or approval.
 
-The caller must obtain a fresh, user-authorized normalized snapshot from live XO
-reads. The module accepts the envelope `{"observed_at": <server epoch seconds>,
-"data": <normalized platform>}`. Its current normalized fields match the frozen
-QA task contract: hosts (name, cpus, memory_free_mb), SRs (name, host, shared,
-free_gb), networks/templates (name), recent VMs (name). Duplicate resource names
-fail closed. This is not an implementation of the live XO adapter: production
-must use unambiguous authorized identifiers, active/reachable resources, actual
-network/storage relationships and the target version's quota/capacity semantics.
+The caller must obtain a fresh, user-authorized normalized version-2 snapshot
+from live XO reads. The [authoritative inventory contract](assistant-inventory-contract.md)
+requires a completeness flag, observation time, stable resource IDs, explicit host
+reachability, finite capacities and all VM names. History alone cannot establish
+name uniqueness. Duplicate resource names fail closed. The live XO adapter must
+still implement and verify the pinned version’s capacity and placement semantics.
 
 The database directory and file must be private and owned by the process user.
 SQLite serializes state/quota changes with `BEGIN IMMEDIATE`, WAL and full sync.
@@ -33,7 +31,13 @@ as private operational data. Restart does not clear approvals or quotas.
 
 ## State contract
 
-`propose(owner, session, request, spec, snapshot)`:
+The trusted supervisor first calls `begin_turn(owner, session, request)`. This
+atomically invalidates the conversation’s older pending proposals and returns a
+random private turn ID bound to the request, identity and deadline. A turn expires
+after the configured TTL (default five minutes); a later request needs a new ID.
+It cannot be refreshed by a worker or reused after cancellation.
+
+`propose(owner, session, request, spec, snapshot, turn_id=turn_id)`:
 
 - Checks the frozen VM schema with strict JSON integer types, field bounds,
   required/extra fields and tags, plus snapshot freshness, existence, collisions,
@@ -42,10 +46,13 @@ as private operational data. Restart does not clear approvals or quotas.
 - Issues a random opaque ID, SHA-256 specification digest, server expiry and a
   private audit record tying the request to the resolved plan.
 - Rejects invalid proposals before an approval can be displayed.
+- Checks the current turn both before validation and in the committing transaction.
+  Cancellation during inventory/validation cannot publish a late proposal.
 
 `decide(owner, session, id, decision, snapshot)`:
 
-- Accepts only an existing pending plan owned by that exact actor/session.
+- Accepts only an existing pending plan owned by that exact actor/session and
+  bound to its current active turn. Older unscoped plans cannot be approved.
 - Uses the stored specification; there is no argument to replace it during approval.
 - Rejects replay, expiry, changed capacity, stale facts or exhausted per-user/day
   quota. Approval validation uses a new trusted snapshot at decision time.
@@ -58,6 +65,14 @@ as private operational data. Restart does not clear approvals or quotas.
 for a valid correction. Even an invalid correction invalidates the old pending
 plan. A stale client cannot approve the superseded ID. No previous approval is
 silently reused for a changed specification.
+
+`revoke_turn(owner, session, turn_id, reason)` marks the matching turn inactive
+and invalidates its pending proposals in one transaction. Valid reasons are
+`cancelled`, `disconnected`, and `disabled`. Repeated or superseded cleanup is an
+idempotent no-op. A stale worker’s `invalidate_pending(..., turn_id=old_id)` is
+rejected before it can affect another turn. A trusted supervisor must revoke
+before acknowledging cancellation, then stop processes and release resources.
+The store alone does not stop a model or establish XO authentication.
 
 `get(owner, session, id)` returns only the public proposal state for that identity.
 Cross-user/session lookups and decisions use the same unavailable response, without
@@ -78,7 +93,8 @@ power, backup or host-configuration capability should be added to this component
 
 ## Validation
 
-`python3 tests/test-assistant-proposals.py`: 12 tests passed locally. They cover
+`python3 tests/test-assistant-proposals.py` covers the proposal store and durable
+turn lifecycle. They cover
 preflight/schema/grounding rejection and audit, ambiguous names, immutable host
 resolution, identity/session mismatch, replay, expiry, changed capacity, valid and
 invalid corrections, durable audit/state, private files and concurrent quota use
