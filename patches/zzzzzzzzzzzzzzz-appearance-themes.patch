@@ -478,6 +478,44 @@ index 8ebe1e5..e518201 100644
 +
 +// Loaded after Bootstrap and component defaults.
 +@import './xoa-hl-themes';
+diff --git a/packages/xo-web/src/common/sorted-table/index.css b/packages/xo-web/src/common/sorted-table/index.css
+index 349913a..22b7e0b 100644
+--- a/packages/xo-web/src/common/sorted-table/index.css
++++ b/packages/xo-web/src/common/sorted-table/index.css
+@@ -3,13 +3,13 @@
+ }
+ 
+ .clickableColumn:hover {
+-  color: #fff;
+-  background-color: #96b8d1;
++  color: var(--xhl-ink);
++  background-color: var(--xhl-tint);
+ }
+ 
+ .clickableRow {
+   cursor: pointer;
+ }
+ 
+ .highlight {
+-  outline: 2px solid #366e98;
++  outline: 2px solid var(--xhl-accent);
+   outline-offset: -2px;
+ }
+diff --git a/packages/xo-web/src/common/xo-sparklines.js b/packages/xo-web/src/common/xo-sparklines.js
+index d56bbd8..fb871d6 100644
+--- a/packages/xo-web/src/common/xo-sparklines.js
++++ b/packages/xo-web/src/common/xo-sparklines.js
+@@ -27,8 +27,8 @@ export const CpuSparkLines = ({ data, width = WIDTH, height = HEIGHT, strokeWidth
+       <SparklinesLine
+         style={{
+           strokeWidth,
+-          stroke: '#366e98',
+-          fill: '#366e98',
++          stroke: 'var(--xhl-accent)',
++          fill: 'var(--xhl-accent)',
+           fillOpacity: 0.5,
+         }}
+         color='#2598d9'
 diff --git a/packages/xo-web/src/xo-app/home/index.css b/packages/xo-web/src/xo-app/home/index.css
 index 0f0f10b..b93c012 100644
 --- a/packages/xo-web/src/xo-app/home/index.css
@@ -582,7 +620,7 @@ new file mode 100644
 index 0000000..1e5ec1f
 --- /dev/null
 +++ b/packages/xo-web/src/xoa-hl-themes.scss
-@@ -0,0 +1,256 @@
+@@ -0,0 +1,266 @@
 +// XOA-HL appearance: scoped overrides for the pinned XO 5 UI.
 +:root[data-xhl-theme="arctic"][data-xhl-scheme="light"] {
 +  --xhl-bg: #f4f7fb;
@@ -778,9 +816,11 @@ index 0000000..1e5ec1f
 +  .text-muted, .text-secondary { color: var(--xhl-muted) !important; }
 +  .bg-faded, .bg-white { background: var(--xhl-soft) !important; }
 +  hr, .table th, .table td, .table, .nav-tabs { border-color: var(--xhl-border); }
++  .thead-default th { background: var(--xhl-soft); color: var(--xhl-ink); border-color: var(--xhl-border); }
 +  .card, .modal-content, .popover, .dropdown-menu, .list-group-item {
 +    background: var(--xhl-panel); color: var(--xhl-ink); border-color: var(--xhl-border); border-radius: var(--xhl-radius);
 +  }
++  .close { color: var(--xhl-ink); opacity: .65; text-shadow: none; }
 +  .card-header, .card-footer, .modal-header, .modal-footer, .popover-title, .table-striped tbody tr:nth-of-type(odd) {
 +    background: var(--xhl-soft); color: var(--xhl-ink); border-color: var(--xhl-border);
 +  }
@@ -809,7 +849,7 @@ index 0000000..1e5ec1f
 +  .xo-menu .nav-link { border-radius: var(--xhl-radius); margin-bottom: 2px; }
 +  .xo-menu-item:hover { background: var(--xhl-active); color: var(--xhl-active-ink); border-radius: var(--xhl-radius); }
 +  .xo-menu .nav-link.active { background: var(--xhl-active); color: var(--xhl-active-ink); box-shadow: inset 3px 0 var(--xhl-accent); }
-+  .xo-menu button { color: inherit; }
++  .xo-menu a, .xo-menu button { color: inherit; }
 +  .xhl-home-list { background: var(--xhl-panel); border-radius: var(--xhl-radius); }
 +  .xhl-appearance-fields { display: flex; flex-wrap: wrap; gap: 1.5rem; margin-bottom: 1rem; }
 +  .xhl-appearance-fields label { flex: 1 1 12em; max-width: 24em; }
@@ -820,12 +860,15 @@ index 0000000..1e5ec1f
 +  .ct-grid { stroke: var(--xhl-border); }
 +  .ct-series-a .ct-line, .ct-series-a .ct-point { stroke: var(--xhl-accent); }
 +  .ct-series-a .ct-area { fill: var(--xhl-accent); }
-+  .ct-chart .chartist-tooltip { background: var(--xhl-panel); color: var(--xhl-ink); }
++  .ct-chart .ct-tooltip { background: var(--xhl-panel); color: var(--xhl-ink); }
 +  @each $state in success, warning, danger, info {
 +    .text-#{$state} { color: var(--xhl-#{$state}) !important; }
 +    .alert-#{$state}, .tag-#{$state}, .bg-#{$state}, .btn-#{$state} {
 +      background: var(--xhl-#{$state}-bg) !important; color: var(--xhl-#{$state}) !important; border-color: var(--xhl-#{$state}) !important;
 +    }
++    .btn-#{$state}:hover, .btn-#{$state}:focus { filter: brightness(.92); }
++    .btn-#{$state}:active, .btn-#{$state}.active { filter: brightness(.84); }
++    .btn-#{$state}:focus { box-shadow: 0 0 0 2px var(--xhl-panel), 0 0 0 4px var(--xhl-#{$state}); }
 +    .notify-item.#{$state} { background: var(--xhl-#{$state}-bg); color: var(--xhl-#{$state}); border-color: var(--xhl-#{$state}); }
 +  }
 +  .notify-item.error { background: var(--xhl-danger-bg); color: var(--xhl-danger); border-color: var(--xhl-danger); }
@@ -836,6 +879,8 @@ index 0000000..1e5ec1f
 +}
 +:root[data-xhl-theme="alpine"] .xo-menu .nav-link { border-radius: 1.5rem; }
 +:root[data-xhl-theme="horizon"] .page-header { border-top: 3px solid var(--xhl-accent); }
++:root[data-xhl-theme="horizon"][data-xhl-scheme="light"] .xo-menu .text-success { color: #8fe0b7 !important; }
++:root[data-xhl-theme="horizon"][data-xhl-scheme="light"] .xo-menu .text-warning { color: #ffd27a !important; }
 +@media (prefers-reduced-motion: reduce) {
 +  :root[data-xhl-theme] .xo-sub-menu { transition: none; }
 +}
