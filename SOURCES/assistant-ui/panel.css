@@ -19,4 +19,9 @@
 .xoa-assistant__reject { color: #203442; background: #fff; border: 1px solid #879eac; }
 .xoa-assistant__actions button:focus-visible { outline: 3px solid #d99934; outline-offset: 3px; }
 .xoa-assistant__actions button:disabled { opacity: .55; cursor: default; }
+.xoa-assistant__compose { padding: 0 1.4rem 1.4rem; }
+.xoa-assistant__compose label { display: block; font-weight: 600; }
+.xoa-assistant__input { display: block; box-sizing: border-box; width: 100%; margin: .5rem 0 .75rem; padding: .75rem; resize: vertical; border: 1px solid #879eac; border-radius: .35rem; color: inherit; background: inherit; font: inherit; }
+.xoa-assistant__input:focus-visible { outline: 3px solid #d99934; outline-offset: 2px; }
+.xoa-assistant__connection-status { overflow-wrap: anywhere; line-height: 1.5; }
 @media (max-width: 480px) { .xoa-assistant__fields { grid-template-columns: 1fr; gap: .25rem; } .xoa-assistant__fields dd { margin-bottom: .65rem; } }

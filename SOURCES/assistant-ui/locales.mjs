@@ -9,6 +9,11 @@ export const messages = {
     busy: 'Recording your decision…', error: 'The request failed. Try again.', unavailable: 'This proposal is unavailable. Request a new one.',
     name: 'Name', template: 'Template', vcpus: 'vCPU', memory_mb: 'Memory (MiB)', disk_gb: 'Disk (GiB)',
     host: 'Host', sr: 'Storage (SR)', network: 'Network', tags: 'Tags',
+    requestLabel: 'Your request', requestPlaceholder: 'Describe the VM you need or ask about your platform.',
+    send: 'Send', stop: 'Stop', answering: 'Preparing a reply…', cancelling: 'Stopping the request…',
+    cancelFailed: 'Could not confirm cancellation. Retry Stop before sending another request.',
+    connectionFailed: 'The connection ended before the reply completed. Please try again.',
+    invalidRequest: 'Enter a request of up to 16,384 characters.',
   },
   fr: {
     title: 'Assistant de la plateforme', subtitle: 'Posez vos questions et examinez les propositions de VM.',
@@ -20,6 +25,11 @@ export const messages = {
     busy: 'Enregistrement de votre décision…', error: 'La demande a échoué. Réessayez.', unavailable: 'Cette proposition est indisponible. Demandez-en une nouvelle.',
     name: 'Nom', template: 'Modèle', vcpus: 'vCPU', memory_mb: 'Mémoire (MiB)', disk_gb: 'Disque (GiB)',
     host: 'Hôte', sr: 'Stockage (SR)', network: 'Réseau', tags: 'Étiquettes',
+    requestLabel: 'Votre demande', requestPlaceholder: 'Décrivez la VM souhaitée ou posez une question sur votre plateforme.',
+    send: 'Envoyer', stop: 'Arrêter', answering: 'Préparation de la réponse…', cancelling: 'Arrêt de la demande…',
+    cancelFailed: 'L’annulation n’a pas été confirmée. Cliquez à nouveau sur Arrêter avant une nouvelle demande.',
+    connectionFailed: 'La connexion a été interrompue avant la fin de la réponse. Réessayez.',
+    invalidRequest: 'Saisissez une demande de 16 384 caractères maximum.',
   },
   ja: {
     title: 'プラットフォーム アシスタント', subtitle: '環境について質問し、VM の提案を確認できます。',
@@ -31,6 +41,11 @@ export const messages = {
     busy: '判断を記録しています…', error: '処理に失敗しました。もう一度お試しください。', unavailable: 'この提案は利用できません。新しい提案を依頼してください。',
     name: '名前', template: 'テンプレート', vcpus: 'vCPU', memory_mb: 'メモリ (MiB)', disk_gb: 'ディスク (GiB)',
     host: 'ホスト', sr: 'ストレージ (SR)', network: 'ネットワーク', tags: 'タグ',
+    requestLabel: 'リクエスト', requestPlaceholder: '必要な VM を説明するか、環境について質問してください。',
+    send: '送信', stop: '停止', answering: '回答を準備しています…', cancelling: 'リクエストを停止しています…',
+    cancelFailed: 'キャンセルを確認できませんでした。次の送信前に、もう一度「停止」を押してください。',
+    connectionFailed: '回答が完了する前に接続が切れました。もう一度お試しください。',
+    invalidRequest: '16,384 文字以内でリクエストを入力してください。',
   },
 }
 

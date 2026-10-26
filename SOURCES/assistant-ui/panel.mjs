@@ -45,11 +45,11 @@ export function createAssistantPanel({ document, locale = 'en', enabled = false,
   approve.type = reject.type = 'button'
   approve.disabled = reject.disabled = true
   actions.append(approve, reject); card.append(fields, status, actions); element.append(header, log, card)
-  let proposal = null, busy = false, generation = 0, destroyed = false, response = null
+  let proposal = null, busy = false, decisionEnabled = true, generation = 0, destroyed = false, response = null
   const refresh = () => {
     if (destroyed || !proposal) return
     if (proposal.status === 'pending' && clock() >= proposal.expires_at * 1000) proposal.status = 'expired'
-    const available = proposal.status === 'pending' && !busy
+    const available = proposal.status === 'pending' && !busy && decisionEnabled
     approve.disabled = reject.disabled = !available
     if (busy) status.textContent = text.busy
     else status.textContent = text[proposal.status] ?? text.unavailable
@@ -74,7 +74,7 @@ export function createAssistantPanel({ document, locale = 'en', enabled = false,
   }
   const decide = async decision => {
     refresh()
-    if (destroyed || busy || !proposal || proposal.status !== 'pending') return
+    if (destroyed || busy || !decisionEnabled || !proposal || proposal.status !== 'pending') return
     const current = proposal.id, version = generation
     busy = true; refresh()
     try {
@@ -97,6 +97,7 @@ export function createAssistantPanel({ document, locale = 'en', enabled = false,
   timer?.unref?.()
   return {
     element, showProposal, clearProposal, refresh,
+    setDecisionEnabled(value) { decisionEnabled = value === true; refresh() },
     appendAssistantText(chunk) {
       if (destroyed) return
       if (!response) { response = node('p', 'xoa-assistant__message'); log.append(response) }

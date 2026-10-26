@@ -2,7 +2,7 @@ const {chromium}=require(process.env.PLAYWRIGHT_MODULE || 'playwright');
 const http=require('http'),fs=require('fs/promises'),path=require('path');
 const root=path.resolve(__dirname,'..');
 const output=process.env.ASSISTANT_SCREENSHOT_DIR || path.join(root,'out','assistant-ui');
-const files=new Map([['/docs/assistant-preview.html','text/html'],['/SOURCES/assistant-ui/panel.mjs','text/javascript'],['/SOURCES/assistant-ui/locales.mjs','text/javascript'],['/SOURCES/assistant-ui/panel.css','text/css']]);
+const files=new Map([['/docs/assistant-preview.html','text/html'],['/SOURCES/assistant-ui/chat.mjs','text/javascript'],['/SOURCES/assistant-ui/panel.mjs','text/javascript'],['/SOURCES/assistant-ui/locales.mjs','text/javascript'],['/SOURCES/assistant-ui/panel.css','text/css']]);
 (async()=>{
  await fs.mkdir(output,{recursive:true});
  const server=http.createServer(async(req,res)=>{const p=new URL(req.url,'http://localhost').pathname;if(!files.has(p)){res.writeHead(404);res.end();return;}res.setHeader('Content-Type',files.get(p)+'; charset=utf-8');res.end(await fs.readFile(path.join(root,p)));});
@@ -17,6 +17,10 @@ const files=new Map([['/docs/assistant-preview.html','text/html'],['/SOURCES/ass
    await page.screenshot({path:path.join(output,`assistant-preview-${lang}.png`),fullPage:true});
    await page.locator('.xoa-assistant__approve').click();
    await page.waitForFunction(()=>/approved|approuvée|承認しました/.test(document.querySelector('[role=status]').textContent));
+   await page.locator('.xoa-assistant__input').fill('A second synthetic request');
+   await page.locator('.xoa-assistant__send').click();
+   await page.waitForFunction(()=>document.querySelectorAll('.xoa-assistant__message--user').length===2);
+   await page.waitForFunction(()=>!document.querySelector('.xoa-assistant__approve').disabled);
   }
   await page.setViewportSize({width:375,height:1000});
   await page.goto(`http://127.0.0.1:${server.address().port}/docs/assistant-preview.html?lang=ja`);

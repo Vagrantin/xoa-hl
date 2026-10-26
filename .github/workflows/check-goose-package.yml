@@ -43,6 +43,7 @@ jobs:
         run: |
           npm install --prefix "$RUNNER_TEMP/xoa-ui-tests" --ignore-scripts --no-audit --no-fund linkedom@0.18.12
           ASSISTANT_DOM_MODULE="$RUNNER_TEMP/xoa-ui-tests/node_modules/linkedom" node --test tests/test-assistant-ui.mjs
+          ASSISTANT_DOM_MODULE="$RUNNER_TEMP/xoa-ui-tests/node_modules/linkedom" node --test tests/test-assistant-chat.mjs
       - name: Fetch checksum-verified released binary
         run: |
           mkdir -p out/goose
@@ -64,6 +65,7 @@ jobs:
             cp /repo/SOURCES/xoa-hl-proposals.py /repo/SOURCES/xoa-hl-create-vm.schema.json /root/rpmbuild/SOURCES/
             cp /repo/SOURCES/xoa-hl-create-mcp.py /root/rpmbuild/SOURCES/
             cp /repo/SOURCES/assistant-ui/panel.mjs /root/rpmbuild/SOURCES/assistant-panel.mjs
+            cp /repo/SOURCES/assistant-ui/chat.mjs /root/rpmbuild/SOURCES/assistant-chat.mjs
             cp /repo/SOURCES/assistant-ui/locales.mjs /root/rpmbuild/SOURCES/assistant-locales.mjs
             cp /repo/SOURCES/assistant-ui/panel.css /root/rpmbuild/SOURCES/assistant-panel.css
             cp /repo/LICENSE /root/rpmbuild/SOURCES/xoa-hl-LICENSE
