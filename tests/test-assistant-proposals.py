@@ -11,9 +11,9 @@ ROOT = Path(__file__).resolve().parents[1]
 spec = importlib.util.spec_from_file_location('proposals', ROOT / 'SOURCES/xoa-hl-proposals.py')
 m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
 SPEC = dict(name='proposal-a', template='alma', vcpus=2, memory_mb=2048, disk_gb=20, sr='local', network='lan', host='host-a')
-DATA = dict(hosts=[dict(name='host-a', cpus=4, memory_free_mb=4096), dict(name='host-b', cpus=4, memory_free_mb=1024)],
-            srs=[dict(name='local', host='host-a', shared=False, free_gb=100)],
-            networks=[dict(name='lan')], templates=[dict(name='alma')], recent_vms=[])
+DATA = dict(hosts=[dict(id='h-a', name='host-a', cpus=4, memory_free_mb=4096, enabled=True, running=True), dict(id='h-b', name='host-b', cpus=4, memory_free_mb=1024, enabled=True, running=True)],
+            srs=[dict(id='sr-a', name='local', eligible_hosts=['h-a'], free_gb=100)],
+            networks=[dict(id='net-a', name='lan', eligible_hosts=['h-a', 'h-b'])], templates=[dict(id='tpl-a', name='alma', eligible_hosts=['h-a', 'h-b'])], vms=[])
 
 
 class ProposalTests(unittest.TestCase):
@@ -25,7 +25,7 @@ class ProposalTests(unittest.TestCase):
         self.addCleanup(self.store.close)
 
     def snapshot(self):
-        return dict(observed_at=self.now[0], data=copy.deepcopy(DATA))
+        return dict(version=2, complete=True, observed_at=self.now[0], data=copy.deepcopy(DATA))
 
     def plan(self, **kwargs):
         return self.store.propose('user-a', 'session-a', 'Test request', {**SPEC, **kwargs}, self.snapshot())
@@ -48,12 +48,12 @@ class ProposalTests(unittest.TestCase):
         self.assertEqual(self.store.db.execute('SELECT count(*) FROM audit').fetchone()[0], 11)
 
     def test_name_collision(self):
-        snapshot = self.snapshot(); snapshot['data']['recent_vms'] = [dict(name=SPEC['name'])]
+        snapshot = self.snapshot(); snapshot['data']['vms'] = [dict(name=SPEC['name'])]
         with self.assertRaisesRegex(m.Rejected, 'name_collision'):
             self.store.propose('user-a', 'session-a', 'test', SPEC, snapshot)
 
     def test_ambiguous_resource_names_fail_closed(self):
-        snapshot = self.snapshot(); snapshot['data']['networks'].append(dict(name='lan'))
+        snapshot = self.snapshot(); snapshot['data']['networks'].append(dict(id='net-b', name='lan', eligible_hosts=['h-a', 'h-b']))
         with self.assertRaisesRegex(m.Rejected, 'ambiguous_snapshot'):
             self.store.propose('user-a', 'session-a', 'test', SPEC, snapshot)
 
@@ -130,6 +130,61 @@ class ProposalTests(unittest.TestCase):
             os.chmod(other, 0o755)
             with self.assertRaises(ValueError):
                 m.Proposals(Path(other) / 'db')
+
+    def test_incomplete_inventory_cannot_use_history_as_collision_check(self):
+        for change in [dict(complete=False), dict(version=1)]:
+            snapshot = {**self.snapshot(), **change}
+            with self.assertRaisesRegex(m.Rejected, 'incomplete_snapshot'):
+                self.store.propose('user-a', 'session-a', 'test', SPEC, snapshot)
+        snapshot = self.snapshot(); snapshot['data'].pop('vms')
+        snapshot['data']['recent_vms'] = []
+        with self.assertRaisesRegex(m.Rejected, 'invalid_snapshot'):
+            self.store.propose('user-a', 'session-a', 'test', SPEC, snapshot)
+
+    def test_invalid_numeric_inventory_cannot_bypass_capacity(self):
+        for bad in [float('nan'), float('inf'), -1, True, '4096', None]:
+            for collection, field in [('hosts', 'memory_free_mb'), ('srs', 'free_gb')]:
+                snapshot = self.snapshot(); snapshot['data'][collection][0][field] = bad
+                with self.subTest(bad=bad, field=field), self.assertRaises(m.Rejected):
+                    self.store.propose('user-a', 'session-a', 'test', SPEC, snapshot)
+
+    def test_placement_requires_all_resources_on_enabled_running_host(self):
+        for collection in ('srs', 'networks', 'templates'):
+            snapshot = self.snapshot(); snapshot['data'][collection][0]['eligible_hosts'] = ['h-b']
+            with self.subTest(collection=collection), self.assertRaisesRegex(m.Rejected, 'no_feasible_host'):
+                self.store.propose('user-a', 'session-a', 'test', SPEC, snapshot)
+        for flag in ('running', 'enabled'):
+            snapshot = self.snapshot(); snapshot['data']['hosts'][0][flag] = False
+            with self.assertRaisesRegex(m.Rejected, 'no_feasible_host'):
+                self.store.propose('user-a', 'session-a', 'test', SPEC, snapshot)
+
+    def test_same_name_cannot_rebind_to_a_replacement_resource(self):
+        for collection in ('srs', 'networks', 'templates'):
+            proposal = self.plan(name='replacement-' + collection)
+            snapshot = self.snapshot(); snapshot['data'][collection][0]['id'] += '-replacement'
+            with self.subTest(collection=collection), self.assertRaisesRegex(m.Rejected, 'resource_replaced'):
+                self.store.decide('user-a', 'session-a', proposal['id'], 'approve', snapshot)
+            self.assertEqual(self.store.get('user-a', 'session-a', proposal['id'])['status'], 'invalidated')
+
+    def test_resource_reachability_is_rechecked_at_approval(self):
+        proposal = self.plan(); snapshot = self.snapshot()
+        snapshot['data']['networks'][0]['eligible_hosts'] = []
+        with self.assertRaisesRegex(m.Rejected, 'no_feasible_host'):
+            self.store.decide('user-a', 'session-a', proposal['id'], 'approve', snapshot)
+
+    def test_cancellation_invalidates_only_the_authenticated_conversation(self):
+        mine = self.plan()
+        other = self.store.propose('user-a', 'other-session', 'test', {**SPEC, 'name': 'other'}, self.snapshot())
+        self.assertEqual(self.store.invalidate_pending('user-a', 'session-a', 'cancelled'), 1)
+        self.assertEqual(self.store.get('user-a', 'other-session', other['id'])['status'], 'pending')
+        with self.assertRaisesRegex(m.Rejected, 'unavailable'):
+            self.store.decide('user-a', 'session-a', mine['id'], 'approve', self.snapshot())
+
+    def test_bounded_tags_and_resource_names(self):
+        for change in [dict(tags=['same', 'same']), dict(tags=['']), dict(tags=['x' * 129]),
+                       dict(tags=[str(i) for i in range(33)]), dict(network=''), dict(template='x' * 257)]:
+            with self.subTest(change=change), self.assertRaisesRegex(m.Rejected, 'invalid_schema'):
+                self.plan(**change)
 
 
 if __name__ == '__main__':
