@@ -11,6 +11,7 @@ on:
       - 'SOURCES/xoa-hl-run-read-chat.py'
       - 'SOURCES/xoa-hl-read-chat.recipe.json'
       - 'SOURCES/xoa-hl-proposals.py'
+      - 'SOURCES/xoa-hl-xo-inventory.mjs'
       - 'SOURCES/xoa-hl-create-mcp.py'
       - 'SOURCES/xoa-hl-create-vm.schema.json'
       - 'SOURCES/assistant-ui/**'
@@ -37,6 +38,7 @@ jobs:
           python3 tests/test-goose-package.py
           python3 tests/test-assistant-config.py
           python3 tests/test-assistant-proposals.py
+          node --test tests/test-assistant-inventory.mjs
           ASSISTANT_REQUIRE_SOCKET_TEST=1 python3 tests/test-assistant-create-mcp.py
           node --test tests/test-assistant-read.mjs
       - name: Test localized approval component
@@ -64,6 +66,7 @@ jobs:
             cp /repo/SOURCES/xoa-hl-mcp-*.mjs /repo/SOURCES/xoa-hl-run-read-chat.py /repo/SOURCES/xoa-hl-read-chat.recipe.json /root/rpmbuild/SOURCES/
             cp /repo/SOURCES/xoa-hl-proposals.py /repo/SOURCES/xoa-hl-create-vm.schema.json /root/rpmbuild/SOURCES/
             cp /repo/SOURCES/xoa-hl-create-mcp.py /root/rpmbuild/SOURCES/
+            cp /repo/SOURCES/xoa-hl-xo-inventory.mjs /root/rpmbuild/SOURCES/
             cp /repo/SOURCES/assistant-ui/panel.mjs /root/rpmbuild/SOURCES/assistant-panel.mjs
             cp /repo/SOURCES/assistant-ui/chat.mjs /root/rpmbuild/SOURCES/assistant-chat.mjs
             cp /repo/SOURCES/assistant-ui/locales.mjs /root/rpmbuild/SOURCES/assistant-locales.mjs
