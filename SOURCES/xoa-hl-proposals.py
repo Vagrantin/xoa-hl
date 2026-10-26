@@ -135,12 +135,21 @@ class Proposals:
             request TEXT NOT NULL, spec TEXT NOT NULL, digest TEXT NOT NULL,
             snapshot_digest TEXT NOT NULL, created REAL NOT NULL, expires REAL NOT NULL,
             status TEXT NOT NULL);
+          CREATE TABLE IF NOT EXISTS turns(
+            owner TEXT NOT NULL, session TEXT NOT NULL, id TEXT NOT NULL,
+            request TEXT NOT NULL, expires REAL NOT NULL, active INTEGER NOT NULL,
+            PRIMARY KEY(owner, session));
           CREATE TABLE IF NOT EXISTS audit(
             seq INTEGER PRIMARY KEY, at REAL NOT NULL, owner TEXT NOT NULL,
             session TEXT NOT NULL, proposal_id TEXT, event TEXT NOT NULL, detail TEXT NOT NULL);
         ''')
-        if 'resource_ids' not in {row['name'] for row in self.db.execute('PRAGMA table_info(proposals)')}:
-            self.db.execute('ALTER TABLE proposals ADD COLUMN resource_ids TEXT')
+        # Multiple newly started workers may open the same older database.
+        # Serialize column discovery and migration with their state changes.
+        with self.transaction():
+            columns = {row['name'] for row in self.db.execute('PRAGMA table_info(proposals)')}
+            for column in ('resource_ids', 'turn_id'):
+                if column not in columns:
+                    self.db.execute('ALTER TABLE proposals ADD COLUMN ' + column + ' TEXT')
         self.quota, self.ttl, self.clock = daily_quota, ttl, clock
 
     def close(self):
@@ -173,15 +182,17 @@ class Proposals:
                 'expires_at': row['expires'], 'status': row['status'], 'mode': 'propose_only',
                 'created': False, 'live_execution_available': False}
 
-    def propose(self, owner, session, request, spec, snapshot, *, replaces=None):
+    def propose(self, owner, session, request, spec, snapshot, *, turn_id, replaces=None):
         self.actor(owner, session)
         if not isinstance(request, str) or not 0 < len(request) <= 16384:
             raise Rejected('invalid_request')
         now = self.clock()
+        self.assert_turn(owner, session, turn_id, request)
         try:
             resolved = validate(spec, snapshot, now)
         except Rejected as error:
             with self.transaction():
+                self.assert_turn(owner, session, turn_id, request)
                 if replaces:
                     self.db.execute("UPDATE proposals SET status='invalidated' WHERE id=? AND owner=? AND session=? AND status='pending'", (replaces, owner, session))
                 self.event(owner, session, None, 'preflight_rejected', {'reason': str(error), 'request': request})
@@ -192,6 +203,9 @@ class Proposals:
         ident = secrets.token_urlsafe(32)
         failure = None
         with self.transaction():
+            # Inventory is read before this transaction. Cancellation may have
+            # committed while that read/validation was in flight.
+            self.assert_turn(owner, session, turn_id, request)
             if self.used(owner, now) >= self.quota:
                 failure = 'daily_quota'
             pending = self.db.execute("SELECT count(*) FROM proposals WHERE owner=? AND status='pending' AND expires>?", (owner, now)).fetchone()[0]
@@ -210,8 +224,9 @@ class Proposals:
                 self.event(owner, session, None, 'preflight_rejected', {'reason': failure, 'request': request})
             else:
                 bindings = resource_ids(resolved, snapshot)
-                self.db.execute('INSERT INTO proposals VALUES(?,?,?,?,?,?,?,?,?,?,?)',
-                                (ident, owner, session, request, encoded, digest, snapshot_digest, now, now + self.ttl, 'pending', canonical(bindings)))
+                deadline = self.db.execute('SELECT expires FROM turns WHERE owner=? AND session=?', (owner, session)).fetchone()[0]
+                self.db.execute('INSERT INTO proposals(id,owner,session,request,spec,digest,snapshot_digest,created,expires,status,resource_ids,turn_id) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)',
+                                (ident, owner, session, request, encoded, digest, snapshot_digest, now, min(now + self.ttl, deadline), 'pending', canonical(bindings), turn_id))
                 self.event(owner, session, ident, 'proposed', {'request': request, 'spec': resolved, 'digest': digest, 'snapshot_digest': snapshot_digest, 'resource_ids': bindings})
         if failure:
             raise Rejected(failure)
@@ -236,6 +251,9 @@ class Proposals:
             elif now >= row['expires']:
                 failure = 'proposal_expired'
                 self.db.execute("UPDATE proposals SET status='expired' WHERE id=?", (ident,))
+            elif not self.turn_current(owner, session, row['turn_id']):
+                failure = 'turn_unavailable'
+                self.db.execute("UPDATE proposals SET status='invalidated' WHERE id=?", (ident,))
             elif decision == 'reject':
                 self.db.execute("UPDATE proposals SET status='rejected' WHERE id=?", (ident,))
                 self.event(owner, session, ident, 'rejected', {'digest': row['digest']})
@@ -266,14 +284,57 @@ class Proposals:
             raise Rejected(failure)
         return result
 
-    def invalidate_pending(self, owner, session, reason='new_request'):
-        """Called by the trusted bridge before a correction/cancellation starts."""
+    def turn_current(self, owner, session, turn_id):
+        if not isinstance(turn_id, str) or not 1 <= len(turn_id) <= 256:
+            return False
+        row = self.db.execute('SELECT * FROM turns WHERE owner=? AND session=?', (owner, session)).fetchone()
+        return row is not None and row['id'] == turn_id and row['active'] == 1 and self.clock() < row['expires']
+
+    def assert_turn(self, owner, session, turn_id, request=None):
         self.actor(owner, session)
-        if reason not in ('new_request', 'cancelled', 'disconnected', 'disabled'):
+        if not self.turn_current(owner, session, turn_id):
+            raise Rejected('turn_unavailable')
+        if request is not None:
+            row = self.db.execute('SELECT request FROM turns WHERE owner=? AND session=?', (owner, session)).fetchone()
+            if row['request'] != request:
+                raise Rejected('turn_unavailable')
+
+    def begin_turn(self, owner, session, request):
+        """Trusted supervisor only: replace this conversation's active turn."""
+        self.actor(owner, session)
+        if not isinstance(request, str) or not 0 < len(request) <= 16384:
+            raise Rejected('invalid_request')
+        turn_id = secrets.token_urlsafe(32)
+        with self.transaction():
+            self._invalidate(owner, session, 'new_request')
+            self.db.execute('INSERT INTO turns VALUES(?,?,?,?,?,1) ON CONFLICT(owner,session) DO UPDATE SET id=excluded.id,request=excluded.request,expires=excluded.expires,active=1',
+                            (owner, session, turn_id, request, self.clock() + self.ttl))
+            self.event(owner, session, None, 'turn_started', {'turn_id': turn_id})
+        return turn_id
+
+    def revoke_turn(self, owner, session, turn_id, reason='cancelled'):
+        """Revocation survives restart; late cleanup cannot revoke a newer turn."""
+        self.actor(owner, session)
+        if reason not in ('cancelled', 'disconnected', 'disabled'):
             raise Rejected('invalid_invalidation')
         with self.transaction():
-            pending = self.db.execute("SELECT id FROM proposals WHERE owner=? AND session=? AND status='pending'", (owner, session)).fetchall()
-            for row in pending:
-                self.db.execute("UPDATE proposals SET status='invalidated' WHERE id=?", (row['id'],))
-                self.event(owner, session, row['id'], 'invalidated', {'reason': reason})
+            row = self.db.execute('SELECT id,active FROM turns WHERE owner=? AND session=?', (owner, session)).fetchone()
+            if row is None or row['id'] != turn_id or row['active'] != 1:
+                return False
+            self.db.execute('UPDATE turns SET active=0 WHERE owner=? AND session=?', (owner, session))
+            self._invalidate(owner, session, reason)
+            self.event(owner, session, None, 'turn_revoked', {'turn_id': turn_id, 'reason': reason})
+        return True
+
+    def _invalidate(self, owner, session, reason):
+        pending = self.db.execute("SELECT id FROM proposals WHERE owner=? AND session=? AND status='pending'", (owner, session)).fetchall()
+        for row in pending:
+            self.db.execute("UPDATE proposals SET status='invalidated' WHERE id=?", (row['id'],))
+            self.event(owner, session, row['id'], 'invalidated', {'reason': reason})
         return len(pending)
+
+    def invalidate_pending(self, owner, session, *, turn_id):
+        """A retry clears its prior plans only while its turn is still active."""
+        with self.transaction():
+            self.assert_turn(owner, session, turn_id)
+            return self._invalidate(owner, session, 'new_request')

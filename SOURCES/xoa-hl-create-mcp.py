@@ -63,7 +63,7 @@ def context_from_fd(fd):
     if len(raw) > MAX_MESSAGE:
         raise ValueError('context too large')
     result = decode(raw)
-    if not isinstance(result, dict) or set(result) != {'owner', 'session', 'request', 'database', 'inventory_socket'}:
+    if not isinstance(result, dict) or set(result) != {'owner', 'session', 'request', 'database', 'inventory_socket', 'turn_id'}:
         raise ValueError('invalid context')
     if not all(isinstance(value, str) and value for value in result.values()) or not Path(result['database']).is_absolute():
         raise ValueError('invalid context fields')
@@ -72,17 +72,17 @@ def context_from_fd(fd):
 
 
 class Extension:
-    def __init__(self, store, *, owner, session, request, read_inventory):
+    def __init__(self, store, *, owner, session, request, turn_id, read_inventory):
         store.actor(owner, session)
         if not isinstance(request, str) or not 0 < len(request) <= 16384:
             raise ValueError('invalid request')
         self.store, self.owner, self.session = store, owner, session
-        self.request, self.read_inventory = request, read_inventory
+        self.request, self.read_inventory, self.turn_id = request, read_inventory, turn_id
+        store.assert_turn(owner, session, turn_id, request)
         self.initialized = False
         self.calls = 0
-        # A new authenticated turn invalidates an older proposal even if its
-        # replacement never reaches a valid tool call.
-        store.invalidate_pending(owner, session, 'new_request')
+        # Only the trusted supervisor may start a turn. A stale worker cannot
+        # mint a replacement turn or revoke a newer conversation's proposal.
 
     def handle(self, message):
         ident = message.get('id') if isinstance(message, dict) else None
@@ -119,11 +119,11 @@ class Extension:
         if set(params) != {'name', 'arguments'} or params.get('name') != 'create_vm':
             return reply(error={'code': -32602, 'message': 'Only create_vm is available'})
         self.calls += 1
-        self.store.invalidate_pending(self.owner, self.session, 'new_request')
         try:
+            self.store.invalidate_pending(self.owner, self.session, turn_id=self.turn_id)
             if self.calls > 6:
                 raise proposals.Rejected('tool_call_limit')
-            plan = self.store.propose(self.owner, self.session, self.request, params['arguments'], self.read_inventory())
+            plan = self.store.propose(self.owner, self.session, self.request, params['arguments'], self.read_inventory(), turn_id=self.turn_id)
             result = {'content': [{'type': 'text', 'text': proposals.canonical(plan)}], 'isError': False}
         except proposals.Rejected as error:
             result = {'content': [{'type': 'text', 'text': proposals.canonical({'rejected': str(error), 'created': False})}], 'isError': True}
@@ -159,7 +159,7 @@ if __name__ == '__main__':
         context = context_from_fd(args.context_fd)
         store = proposals.Proposals(context['database'])
         try:
-            extension = Extension(store, owner=context['owner'], session=context['session'], request=context['request'],
+            extension = Extension(store, owner=context['owner'], session=context['session'], request=context['request'], turn_id=context['turn_id'],
                                   read_inventory=lambda: inventory(context['inventory_socket']))
             serve(extension, sys.stdin.buffer, sys.stdout.buffer)
         finally:

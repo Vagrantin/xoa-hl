@@ -32,7 +32,8 @@ class McpTests(unittest.TestCase):
         def read():
             self.reads += 1
             return self.snapshot
-        self.extension = m.Extension(self.store, owner='trusted-user', session='trusted-session', request='trusted request', read_inventory=read)
+        self.turn = self.store.begin_turn('trusted-user', 'trusted-session', 'trusted request')
+        self.extension = m.Extension(self.store, owner='trusted-user', session='trusted-session', request='trusted request', turn_id=self.turn, read_inventory=read)
         self.call('initialize', {'protocolVersion': '2025-03-26'})
 
     def call(self, method, params=None):
@@ -55,7 +56,7 @@ class McpTests(unittest.TestCase):
         self.assertFalse(plan['created']); self.assertEqual(plan['mode'], 'propose_only')
         row = self.store.db.execute('SELECT * FROM proposals').fetchone()
         self.assertEqual(row['owner'], 'trusted-user'); self.assertEqual(row['request'], 'trusted request')
-        for key in ('owner', 'session', 'request', 'snapshot', 'approve', 'mode'):
+        for key in ('owner', 'session', 'request', 'snapshot', 'approve', 'mode', 'turn_id'):
             self.assertTrue(self.propose({**fixture.SPEC, key: 'forged'})['isError'])
 
     def test_every_attempt_reads_fresh_inventory_and_changed_capacity_rejects(self):
@@ -82,8 +83,40 @@ class McpTests(unittest.TestCase):
 
     def test_new_authenticated_turn_invalidates_old_pending_plan(self):
         plan = json.loads(self.propose()['content'][0]['text'])
-        m.Extension(self.store, owner='trusted-user', session='trusted-session', request='cancel that', read_inventory=lambda: self.snapshot)
+        new_turn = self.store.begin_turn('trusted-user', 'trusted-session', 'cancel that')
+        m.Extension(self.store, owner='trusted-user', session='trusted-session', request='cancel that', turn_id=new_turn, read_inventory=lambda: self.snapshot)
         self.assertEqual(self.store.get('trusted-user', 'trusted-session', plan['id'])['status'], 'invalidated')
+
+    def test_cancellation_while_inventory_is_in_flight_prevents_late_plan(self):
+        def cancelled_read():
+            other = m.proposals.Proposals(self.path / 'state.sqlite')
+            try:
+                other.revoke_turn('trusted-user', 'trusted-session', self.turn)
+            finally:
+                other.close()
+            return self.snapshot
+        self.extension.read_inventory = cancelled_read
+        result = self.propose()
+        self.assertTrue(result['isError'])
+        self.assertIn('turn_unavailable', result['content'][0]['text'])
+        self.assertEqual(self.store.db.execute('SELECT count(*) FROM proposals').fetchone()[0], 0)
+        with self.assertRaisesRegex(m.proposals.Rejected, 'turn_unavailable'):
+            m.Extension(self.store, owner='trusted-user', session='trusted-session', request='trusted request', turn_id=self.turn, read_inventory=lambda: self.snapshot)
+
+    def test_old_worker_does_not_invalidate_replacement_plan(self):
+        plans = []
+        def replaced_read():
+            other = m.proposals.Proposals(self.path / 'state.sqlite')
+            try:
+                turn = other.begin_turn('trusted-user', 'trusted-session', 'new request')
+                plans.append(other.propose('trusted-user', 'trusted-session', 'new request', fixture.SPEC, self.snapshot, turn_id=turn))
+            finally:
+                other.close()
+            return self.snapshot
+        self.extension.read_inventory = replaced_read
+        self.assertTrue(self.propose()['isError'])
+        self.assertTrue(self.propose()['isError'])
+        self.assertEqual(self.store.get('trusted-user', 'trusted-session', plans[0]['id'])['status'], 'pending')
 
     def test_framing_duplicate_keys_and_initialize_boundary(self):
         source = io.BytesIO(b'{"jsonrpc":"2.0","id":1,"method":"ping","method":"tools/list"}\n')
@@ -95,6 +128,12 @@ class McpTests(unittest.TestCase):
         self.assertIsNone(self.extension.handle(dict(jsonrpc='2.0', method='notifications/initialized')))
 
     def test_actual_stdio_process_and_private_inventory_socket(self):
+        self.run_process_case()
+
+    def test_actual_process_cancellation_during_socket_read(self):
+        self.run_process_case(cancel=True)
+
+    def run_process_case(self, cancel=False):
         path = self.path / 'inventory.sock'
         try:
             server = socket.socket(socket.AF_UNIX)
@@ -113,11 +152,22 @@ class McpTests(unittest.TestCase):
                 with peer, peer.makefile('rb') as stream:
                     request = json.loads(stream.readline())
                     self.assertEqual(request, {'method': 'inventory', 'version': 2})
+                    if cancel:
+                        other = m.proposals.Proposals(self.path / 'subprocess.sqlite')
+                        try:
+                            other.revoke_turn('process-user', 'process-session', process_turn)
+                        finally:
+                            other.close()
                     peer.sendall((json.dumps(self.snapshot) + '\n').encode())
             except BaseException as error:
                 errors.append(error)
         thread = threading.Thread(target=serve_inventory, daemon=True); thread.start()
-        context = dict(owner='process-user', session='process-session', request='process request',
+        process_store = m.proposals.Proposals(self.path / 'subprocess.sqlite')
+        try:
+            process_turn = process_store.begin_turn('process-user', 'process-session', 'process request')
+        finally:
+            process_store.close()
+        context = dict(turn_id=process_turn, owner='process-user', session='process-session', request='process request',
                        database=str(self.path / 'subprocess.sqlite'), inventory_socket=str(path))
         with tempfile.TemporaryFile() as fd:
             fd.write(json.dumps(context).encode()); fd.seek(0)
@@ -133,7 +183,11 @@ class McpTests(unittest.TestCase):
         records = [json.loads(line) for line in result.stdout.splitlines()]
         self.assertEqual(len(records), 3)
         plan = json.loads(records[2]['result']['content'][0]['text'])
-        self.assertFalse(plan['created']); self.assertEqual(plan['status'], 'pending')
+        if cancel:
+            self.assertTrue(records[2]['result']['isError'])
+            self.assertEqual(plan['rejected'], 'turn_unavailable')
+        else:
+            self.assertFalse(plan['created']); self.assertEqual(plan['status'], 'pending')
         os.chmod(path, 0o666)
         with self.assertRaises(ValueError):
             m.private_socket(path)
