@@ -14,19 +14,30 @@
   <div id="panel"></div>
 </main>
 <script type="module">
-  import { createAssistantPanel } from '../SOURCES/assistant-ui/panel.mjs'
+  import { createAssistantChat } from '../SOURCES/assistant-ui/chat.mjs'
   const locale = new URL(location.href).searchParams.get('lang') ?? 'en'
+  document.documentElement.lang = ['en', 'fr', 'ja'].includes(locale) ? locale : 'en'
   const proposal = { id: 'preview-proposal-123456789012345', digest: 'a'.repeat(64), expires_at: Date.now() / 1000 + 300,
     status: 'pending', mode: 'propose_only', created: false, live_execution_available: false,
     spec: { name: 'rpm-build-test', template: 'AlmaLinux 9 build', vcpus: 4, memory_mb: 8192, disk_gb: 60,
       host: 'xcp-hl-02', sr: 'Local storage xcp-hl-02', network: 'LAN on eth0', tags: ['lab', 'build'] } }
-  const panel = createAssistantPanel({ document, locale, enabled: true,
-    onDecision: async ({ decision }) => ({ ...proposal, status: decision === 'approve' ? 'approved_dry_run' : 'rejected' }) })
+  const chat = createAssistantChat({ document, locale, enabled: true, bridge: {
+    cancel: async () => {},
+    decide: async ({ decision }) => ({ ...proposal, status: decision === 'approve' ? 'approved_dry_run' : 'rejected' }),
+    send: async (request, { signal, onEvent }) => {
+      for (const chunk of (reply[locale] ?? reply.en).match(/.{1,8}/gu)) {
+        if (signal.aborted) return
+        onEvent({ type: 'text', text: chunk })
+        await new Promise(resolve => setTimeout(resolve, 30))
+      }
+      if (signal.aborted) return
+      onEvent({ type: 'proposal', proposal }); onEvent({ type: 'done' })
+    },
+  } })
+  const panel = chat.panel
   document.querySelector('#panel').append(panel.element)
   const user = { en: 'I need a small VM for building RPMs.', fr: 'Il me faut une petite VM pour compiler des RPM.', ja: 'RPM のビルド用に小さな VM が必要です。' }
   const reply = { en: 'Here is a proposal to review before proceeding.', fr: 'Voici une proposition à vérifier avant de poursuivre.', ja: '続行する前に、以下の提案を確認してください。' }
-  panel.appendUserText(user[locale] ?? user.en)
-  panel.appendAssistantText(reply[locale] ?? reply.en)
-  panel.showProposal(proposal)
+  await chat.submit(user[locale] ?? user.en)
 </script>
 </html>
