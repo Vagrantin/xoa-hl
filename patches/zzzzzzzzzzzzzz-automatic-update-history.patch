@@ -10,7 +10,7 @@ diff --git a/packages/xo-server/src/api/xoaHl.mjs b/packages/xo-server/src/api/x
 +    const stored = JSON.parse(await readFile('/var/lib/xoa-hl/auto-update-history.json', 'utf8'))
 +    if (Array.isArray(stored)) history = stored.slice(0, 5)
 +  } catch (error) {
-+    if (error.code !== 'ENOENT') throw error
++    history = [] // missing or corrupt history must not break the settings page
 +  }
    const channel = CHANNELS.has(raw.CHANNEL) ? raw.CHANNEL : 'stable'
    const mode = MODES.has(raw.MODE) ? raw.MODE : 'manual'
