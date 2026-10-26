@@ -29,6 +29,8 @@ Source13:       assistant-panel.css
 Source14:       xoa-hl-create-mcp.py
 Source15:       assistant-chat.mjs
 Source16:       xoa-hl-xo-inventory.mjs
+Source17:       xoa-hl-proposal-command.py
+Source18:       xoa-hl-xo-bridge.mjs
 
 %description
 Pinned upstream goose CLI for experimental local XOA-HL assistant work.
@@ -74,6 +76,8 @@ install -D -m 644 %{SOURCE13} %{buildroot}/usr/share/xoa-hl/assistant-ui/panel.c
 install -D -m 644 %{SOURCE14} %{buildroot}/usr/libexec/xoa-hl/assistant/xoa-hl-create-mcp.py
 install -D -m 644 %{SOURCE15} %{buildroot}/usr/share/xoa-hl/assistant-ui/chat.mjs
 install -D -m 644 %{SOURCE16} %{buildroot}/usr/libexec/xoa-hl/assistant/xoa-hl-xo-inventory.mjs
+install -D -m 644 %{SOURCE17} %{buildroot}/usr/libexec/xoa-hl/assistant/xoa-hl-proposal-command.py
+install -D -m 644 %{SOURCE18} %{buildroot}/usr/libexec/xoa-hl/assistant/xoa-hl-xo-bridge.mjs
 
 %files
 %license LICENSE
