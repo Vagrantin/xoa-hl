@@ -108,7 +108,13 @@ export async function readInventory(xo, { clock = () => Date.now() / 1000, timeo
       const servers = await xo.getAllXenServers()
       // A disconnected registered pool could hide old VMs/name collisions.
       // Multiple registered endpoints for a pool are allowed if one is healthy.
-      if (!Array.isArray(servers) || servers.some(server => server.status !== 'connected' && !poolIds.includes(server.poolId))) fail()
+      const serverState = items => {
+        if (!Array.isArray(items) || items.some(server => !poolIds.includes(server.poolId) ||
+            (server.status === 'connected' && server.error !== undefined)) ||
+            poolIds.some(poolId => !items.some(server => server.status === 'connected' && server.poolId === poolId))) fail()
+        return JSON.stringify(items.map(server => [server.id ?? null, server.poolId, server.status]).sort((a, b) => JSON.stringify(a).localeCompare(JSON.stringify(b))))
+      }
+      const initialServers = serverState(servers)
       for (const pool of pools) {
         const xapi = xo.getXapi(pool)
         if (!xapi || xapi.status !== 'connected') fail()
@@ -127,6 +133,7 @@ export async function readInventory(xo, { clock = () => Date.now() / 1000, timeo
       }
       const current = Object.values(xo.getObjects()).filter(object => object.type === 'pool').map(pool => pool.id).sort()
       if (JSON.stringify(current) !== JSON.stringify(poolIds)) fail()
+      if (serverState(await xo.getAllXenServers()) !== initialServers) fail()
       checkDeadline()
       requireAdmin(xo)
       const snapshot = { version: 2, complete: true, observed_at, data }

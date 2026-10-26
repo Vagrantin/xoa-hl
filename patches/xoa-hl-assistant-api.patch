@@ -1,0 +1,42 @@
+diff --git a/packages/xo-server/src/api/xoaAssistant.mjs b/packages/xo-server/src/api/xoaAssistant.mjs
+new file mode 100644
+--- /dev/null
++++ b/packages/xo-server/src/api/xoaAssistant.mjs
+@@ -0,0 +1,37 @@
++// Optional assistant RPM. Lazy loading keeps ordinary XO startup independent
++// of the experimental runtime. The existing XO WebSocket authenticates callers.
++const load = () => import('file:///usr/libexec/xoa-hl/assistant/xoa-hl-xo-bridge.mjs')
++const unavailable = () => { throw new Error('assistant_unavailable') }
++
++export async function getState() {
++  const disabled = { enabled: false, chat_available: false, live_execution_available: false }
++  if (this.apiContext?.permission !== 'admin') return disabled
++  try {
++    const bridge = await load()
++    await bridge.conversation(this)
++    return { enabled: true, chat_available: false, mode: 'propose_only', live_execution_available: false }
++  } catch { return disabled }
++}
++getState.description = 'Get optional assistant availability; chat integration is pending'
++getState.params = {}
++
++export async function getProposal({ id }) {
++  try { return await (await (await load()).conversation(this)).get(id) } catch { unavailable() }
++}
++getProposal.permission = 'admin'
++getProposal.params = { id: { type: 'string' } }
++getProposal.description = 'Read a proposal owned by this authenticated XO connection'
++
++export async function decideProposal({ id, decision }) {
++  try { return await (await (await load()).conversation(this)).decide(id, decision) } catch { unavailable() }
++}
++decideProposal.permission = 'admin'
++decideProposal.params = { id: { type: 'string' }, decision: { type: 'string', enum: ['approve', 'reject'] } }
++decideProposal.description = 'Record a human decision on a propose-only plan; never create a VM'
++
++export async function cancel() {
++  try { return await (await (await load()).conversation(this)).cancel() } catch { unavailable() }
++}
++cancel.permission = 'admin'
++cancel.params = {}
++cancel.description = 'Revoke the current assistant turn before stopping its worker'

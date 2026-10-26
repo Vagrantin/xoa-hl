@@ -57,7 +57,9 @@ jobs:
             git -C "${XO_DIR}" apply "${GITHUB_WORKSPACE}/${patch}"
           done
       - name: Check server module syntax
-        run: node --check "${XO_DIR}/packages/xo-server/src/api/xoaHl.mjs"
+        run: |
+          node --check "${XO_DIR}/packages/xo-server/src/api/xoaHl.mjs"
+          node --check "${XO_DIR}/packages/xo-server/src/api/xoaAssistant.mjs"
       - name: Audit UI translations
         run: python3 scripts/audit-ui-translations.py "${XO_DIR}"
       - name: Test shared glossary consumer

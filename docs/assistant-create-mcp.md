@@ -6,7 +6,8 @@ against fresh, complete inventory and records an immutable **propose-only** plan
 It cannot approve, create, boot, delete or modify a VM. This delivers the narrow
 extension boundary for xcp-hl#86 Phase 3; it does not complete live Phase 4.
 
-The future authenticated bridge starts it with `--context-fd N`. The inherited
+The authenticated [XO lifecycle bridge](assistant-xo-bridge.md) supplies turn
+context for the future engine supervisor, which starts it with `--context-fd N`. The inherited
 private descriptor carries one JSON object: `owner`, `session`, original `request`,
 absolute private `database` path, absolute `inventory_socket` path and opaque
 `turn_id` returned by the store’s `begin_turn(owner, session, request)`. This is
@@ -51,6 +52,8 @@ Any UI wording must continue to explain that approving only records a proposal.
 
 This RPM includes the module without enabling it or adding it to the read-only
 launcher. Unit and actual subprocess/socket tests exercise protocol, schema,
-redaction and state isolation using synthetic trusted inventory. The live XO
-inventory/creation adapters, full goose approval exchange, selected transport and
-appliance acceptance remain pending. No appliance/model result is claimed.
+redaction and state isolation using synthetic trusted inventory. The XO inventory
+adapter and authenticated proposal lifecycle are now implemented separately;
+the private socket/engine supervisor, creation adapter, full goose approval
+exchange, selected transport and appliance acceptance remain pending.
+No appliance/model result is claimed.

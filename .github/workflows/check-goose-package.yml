@@ -12,6 +12,9 @@ on:
       - 'SOURCES/xoa-hl-read-chat.recipe.json'
       - 'SOURCES/xoa-hl-proposals.py'
       - 'SOURCES/xoa-hl-xo-inventory.mjs'
+      - 'SOURCES/xoa-hl-xo-bridge.mjs'
+      - 'SOURCES/xoa-hl-proposal-command.py'
+      - 'patches/xoa-hl-assistant-api.patch'
       - 'SOURCES/xoa-hl-create-mcp.py'
       - 'SOURCES/xoa-hl-create-vm.schema.json'
       - 'SOURCES/assistant-ui/**'
@@ -39,6 +42,8 @@ jobs:
           python3 tests/test-assistant-config.py
           python3 tests/test-assistant-proposals.py
           node --test tests/test-assistant-inventory.mjs
+          node --test tests/test-assistant-bridge.mjs
+          python3 tests/test-assistant-proposal-command.py
           ASSISTANT_REQUIRE_SOCKET_TEST=1 python3 tests/test-assistant-create-mcp.py
           node --test tests/test-assistant-read.mjs
       - name: Test localized approval component
@@ -67,6 +72,7 @@ jobs:
             cp /repo/SOURCES/xoa-hl-proposals.py /repo/SOURCES/xoa-hl-create-vm.schema.json /root/rpmbuild/SOURCES/
             cp /repo/SOURCES/xoa-hl-create-mcp.py /root/rpmbuild/SOURCES/
             cp /repo/SOURCES/xoa-hl-xo-inventory.mjs /root/rpmbuild/SOURCES/
+            cp /repo/SOURCES/xoa-hl-xo-bridge.mjs /repo/SOURCES/xoa-hl-proposal-command.py /root/rpmbuild/SOURCES/
             cp /repo/SOURCES/assistant-ui/panel.mjs /root/rpmbuild/SOURCES/assistant-panel.mjs
             cp /repo/SOURCES/assistant-ui/chat.mjs /root/rpmbuild/SOURCES/assistant-chat.mjs
             cp /repo/SOURCES/assistant-ui/locales.mjs /root/rpmbuild/SOURCES/assistant-locales.mjs
@@ -88,6 +94,7 @@ jobs:
             python3 -c "import json; assert json.load(open(\"/etc/xoa-hl/assistant.json\"))[\"enabled\"] is False"
             if python3 /usr/libexec/xoa-hl/assistant/xoa-hl-run-read-chat.py --request-file /missing --state-dir /tmp/disabled-state; then exit 1; else test "$?" = 3; fi
             test ! -e /tmp/disabled-state
+            printf "%s" "{}" | python3 /usr/libexec/xoa-hl/assistant/xoa-hl-proposal-command.py | python3 -c "import json,sys; assert json.load(sys.stdin)[\"ok\"] is False"
             cp "$pkg" "$assistant" /out/
           '
       - uses: actions/upload-artifact@v4

@@ -19,6 +19,17 @@
 # 3. The build script will validate and apply it in dependency order
 
 [[patches]]
+id = "xoa-hl-assistant-api"
+description = "Authenticated, optional propose-only assistant decisions and cancellation"
+target = "packages/xo-server/src/api/xoaAssistant.mjs"
+upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
+applies_to = ["5.113.2"]
+maintainer = "vagrantin"
+status = "active"
+dependencies = []
+notes = "Lazy-load optional RPM; administrator and XO connection binding; no chat worker or live creation enabled"
+
+[[patches]]
 id = "xcp-hl-updates"
 description = "Enable XCP-HL package repositories in XOA's Patches tab"
 target = "packages/xo-server/src/xapi/mixins/patching.mjs"

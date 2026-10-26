@@ -103,6 +103,14 @@ test('timeout never returns a partial complete snapshot', async () => {
   const { xo } = context(); xo.getXapi = () => ({ status: 'connected', call: () => new Promise(() => {}) })
   await assert.rejects(readInventory(xo, { timeoutMs: 10 }), { message: 'inventory_unavailable' })
 })
+test('registration changes or stale connection errors cannot claim complete inventory', async () => {
+  const { xo } = context(); let reads = 0
+  xo.getAllXenServers = async () => ++reads === 1 ? [{ status: 'connected', poolId: 'pool' }] : [{ status: 'connected', poolId: 'pool' }, { status: 'disconnected' }]
+  await assert.rejects(readInventory(xo), /inventory_unavailable/)
+  const c = context()
+  c.xo.getAllXenServers = async () => [{ status: 'connected', poolId: 'pool', error: 'stale events' }]
+  await assert.rejects(readInventory(c.xo), /inventory_unavailable/)
+})
 test('changed pool set, elapsed freshness and lost privilege cannot pass completeness', async () => {
   const { xo } = context(); let count = 0
   const get = xo.getObjects
