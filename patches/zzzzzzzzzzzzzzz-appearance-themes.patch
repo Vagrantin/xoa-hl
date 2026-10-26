@@ -620,7 +620,7 @@ new file mode 100644
 index 0000000..1e5ec1f
 --- /dev/null
 +++ b/packages/xo-web/src/xoa-hl-themes.scss
-@@ -0,0 +1,266 @@
+@@ -0,0 +1,263 @@
 +// XOA-HL appearance: scoped overrides for the pinned XO 5 UI.
 +:root[data-xhl-theme="arctic"][data-xhl-scheme="light"] {
 +  --xhl-bg: #f4f7fb;
