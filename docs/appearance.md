@@ -41,5 +41,14 @@ required or supported.
 Before release, validate an appliance in all eight theme/scheme combinations:
 Home VM/host lists, a VM detail page, Dashboard, Backup, Profile, Settings > XOA-HL
 Updates, React Select menus, a confirmation dialog and error notifications.
+Specifically verify the Horizon/light sidebar links and success/warning labels, plus a
+SortedTable header and dialog close button in every dark palette. Check state-button
+hover, focus and active feedback, table row/column highlighting and sparklines.
 Verify French/Japanese labels, keyboard focus, sidebar collapse, system switching,
 reload, a second account, logout and server preference save failure.
+
+## Upgrade note
+
+This release intentionally replaces the fixed classic XOA-HL appearance for existing
+users. Accounts without an appearance preference start with Arctic/System; users can
+select Graphite, Alpine or Horizon and override System with Light or Dark in Profile.
