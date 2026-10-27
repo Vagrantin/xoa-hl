@@ -23,6 +23,8 @@ echo "[OK] Patch metadata found"
 # Grep-only checks can miss fields accidentally split into anonymous tables.
 python3 - "$PATCH_METADATA" <<'PY'
 import sys
+import re
+from pathlib import Path
 import tomllib
 
 path = sys.argv[1]
@@ -56,10 +58,21 @@ for index, entry in enumerate(entries, 1):
         ids.append(entry["id"])
 
 known = set(ids)
+if len(known) != len(ids):
+    errors.append("duplicate patch IDs")
+files = sorted(Path(path).parent.glob("*.patch"))
+order = {patch.stem: index for index, patch in enumerate(files)}
+for patch in files:
+    if not re.fullmatch(r"[0-9]{3}-[a-z0-9]+(?:-[a-z0-9]+)*\.patch", patch.name):
+        errors.append(f"invalid patch filename {patch.name!r}; use NNN-descriptive-name.patch")
+if len({patch.name[:3] for patch in files}) != len(files):
+    errors.append("patch numeric prefixes must be unique")
 for index, entry in enumerate(entries, 1):
     for dependency in entry.get("dependencies", []):
         if dependency not in known:
             errors.append(f"entry {index}: unknown dependency {dependency!r}")
+        elif dependency in order and entry.get("id") in order and order[dependency] >= order[entry["id"]]:
+            errors.append(f"entry {index}: dependency {dependency!r} must apply first")
 
 if errors:
     for error in errors:

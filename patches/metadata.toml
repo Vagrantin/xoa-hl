@@ -1,13 +1,13 @@
 # XOA-HL Patch Metadata
 [[patches]]
-id = "zzzzzzzzzzzzzzzz-appliance-theme-feedback"
+id = "240-appliance-theme-feedback"
 description = "Address appliance feedback for theme controls, charts, server forms, branding and About"
 target = "packages/xo-web/src"
 upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
 applies_to = ["5.113.2"]
 maintainer = "vagrantin"
 status = "active"
-dependencies = ["zzzzzzzzzzzzzzz-appearance-themes"]
+dependencies = ["230-appearance-themes"]
 # =====================
 # This file describes all patches applied to the upstream xen-orchestra
 # source to create XOA-HL (HomeLab Edition).
@@ -23,12 +23,13 @@ dependencies = ["zzzzzzzzzzzzzzz-appearance-themes"]
 # - `dependencies` lists other patch IDs this patch requires
 #
 # When adding a new patch:
-# 1. Add the .patch file to this directory
+# 1. Add a NNN-descriptive-name.patch file (three digits, gaps of ten)
 # 2. Add its metadata entry below
-# 3. The build script will validate and apply it in dependency order
+# 3. Files apply in numeric filename order; dependencies must precede consumers.
+#    Do not encode ordering with repeated letters. CI rejects invalid names/order.
 
 [[patches]]
-id = "xcp-hl-updates"
+id = "020-xcp-hl-updates"
 description = "Enable XCP-HL package repositories in XOA's Patches tab"
 target = "packages/xo-server/src/xapi/mixins/patching.mjs"
 upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
@@ -39,7 +40,7 @@ dependencies = []
 notes = "Adds XCP_HL_REPOS constant and passes it to updater.py plugin calls"
 
 [[patches]]
-id = "menu-hide-items"
+id = "010-menu-hide-items"
 description = "Hide non-relevant menu items for XOA-HL"
 target = "packages/xo-web/src/xo-app/menu/index.js"
 upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
@@ -50,7 +51,7 @@ dependencies = []
 notes = "Hides hub, xoa, proxies, xostor, and noSupport menu items"
 
 [[patches]]
-id = "xoa-hl-update-api"
+id = "030-xoa-hl-update-api"
 description = "Add XOA-HL update management API and UI"
 target = "packages/xo-server/src/api/xoaHl.mjs"
 upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
@@ -61,161 +62,161 @@ dependencies = []
 notes = "Adds new API endpoints: getVersion, checkForUpdate, getUpdateStatus, startUpdate, getUpdateProgress. Also adds XOA-HL Updates settings tab to the UI. startUpdate uses systemctl --no-block and getUpdateProgress serves incremental lines of /var/lib/xoa-hl/update.log, so the page streams the transaction as it runs; it pairs with SOURCES/xoa-hl-update.sh and SOURCES/xoa-hl.sudoers, which have to move together. Also patches connect() in packages/xo-web/src/common/xo/index.js to start a new reconnection backoff when one is exhausted (upstream gives up after 10 attempts, about 2.5 minutes, and never retries), and remembers the update a tab started in sessionStorage so a reload recovers it. It also adds admin-only getUpdateConfiguration and setUpdateConfiguration endpoints plus the Settings controls for validated manual, automatic-check, and automatic-install modes; these move together with the packaged timers, configuration helper, and sudoers rule."
 
 [[patches]]
-id = "zz-xoa-hl-translations"
+id = "040-xoa-hl-translations"
 description = "Translate XOA-HL update settings in all shipped UI locales and localize weekday and delay controls"
 target = "packages/xo-web/src/common/intl and packages/xo-web/src/xo-app/settings/xoa-hl-updates/index.js"
 upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
 applies_to = ["5.113.2"]
 maintainer = "vagrantin"
 status = "active"
-dependencies = ["xoa-hl-update-api"]
-notes = "Applied after xoa-hl-update-api; the translation audit requires all 49 XOA-HL strings in every shipped locale. Existing upstream XO translation gaps are reported separately."
+dependencies = ["030-xoa-hl-update-api"]
+notes = "Applied after 030-xoa-hl-update-api; the translation audit requires all 49 XOA-HL strings in every shipped locale. Existing upstream XO translation gaps are reported separately."
 
 [[patches]]
-id = "zzz-xo-core-ui-translations"
+id = "050-xo-core-ui-translations"
 description = "Translate 46 inherited XO core UI labels in all shipped locales"
 target = "packages/xo-web/src/common/intl/locales/*.js"
 upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
 applies_to = ["5.113.2"]
 maintainer = "vagrantin"
 status = "active"
-dependencies = ["zz-xoa-hl-translations"]
+dependencies = ["040-xoa-hl-translations"]
 notes = "Adds missing values or replaces undefined entries for common actions, status, navigation, VM, and storage labels. The audit enforces these 46 keys in all 13 locales while reporting other inherited gaps."
 
 [[patches]]
-id = "zzzz-xo-core-ui-translations-batch2"
+id = "060-xo-core-ui-translations-batch2"
 description = "Translate inherited XO network, state, licensing, and certificate labels"
 target = "packages/xo-web/src/common/intl/locales/*.js"
 upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
 applies_to = ["5.113.2"]
 maintainer = "vagrantin"
 status = "active"
-dependencies = ["zzz-xo-core-ui-translations"]
+dependencies = ["050-xo-core-ui-translations"]
 notes = "Adds 20 high-frequency inherited keys in all 13 shipped locales; the audit enforces 66 core keys in total."
 
 [[patches]]
-id = "zzzzz-xo-core-ui-translations-batch3"
+id = "070-xo-core-ui-translations-batch3"
 description = "Translate inherited XO certificate, tag, custom-field, and licensing labels"
 target = "packages/xo-web/src/common/intl/locales/*.js"
 upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
 applies_to = ["5.113.2"]
 maintainer = "vagrantin"
 status = "active"
-dependencies = ["zzzz-xo-core-ui-translations-batch2"]
+dependencies = ["060-xo-core-ui-translations-batch2"]
 notes = "Adds 17 high-frequency inherited keys in all 13 shipped locales; the audit enforces 83 core keys in total."
 
 [[patches]]
-id = "zzzzzz-xoa-hl-links-and-labels"
+id = "080-xoa-hl-links-and-labels"
 description = "Correct XOA-HL home help labels and documentation links"
 target = "packages/xo-web/src/xo-app/home/index.js and packages/xo-web/src/common/intl"
 upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
 applies_to = ["5.113.2"]
 maintainer = "vagrantin"
 status = "active"
-dependencies = ["zzzzz-xo-core-ui-translations-batch3"]
+dependencies = ["070-xo-core-ui-translations-batch3"]
 notes = "Uses Xen Orchestra documentation at https://docs.xen-orchestra.com/ and XCP-HL documentation at https://xcp-hl.net."
 
 [[patches]]
-id = "zzzzzzz-xoa-hl-source-banner"
+id = "090-xoa-hl-source-banner"
 description = "Restore and localize the XOA-HL source banner"
 target = "packages/xo-web/src/xo-app/index.js and packages/xo-web/src/common/intl"
 upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
 applies_to = ["5.113.2"]
 maintainer = "vagrantin"
 status = "active"
-dependencies = ["zzzzzz-xoa-hl-links-and-labels"]
+dependencies = ["080-xoa-hl-links-and-labels"]
 notes = "Uses dedicated source-banner messages in all 13 locales, links the banner to https://xcp-hl.net, and changes the Japanese documentation labels to マニュアル."
 
 [[patches]]
-id = "zzzzzzzz-xoa-hl-remove-source-modal"
+id = "100-xoa-hl-remove-source-modal"
 description = "Remove the 'Xen Orchestra from the sources' welcome modal"
 target = "packages/xo-web/src/xo-app/index.js"
 upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
 applies_to = ["5.113.2"]
 maintainer = "vagrantin"
 status = "active"
-dependencies = ["zzzzzzz-xoa-hl-source-banner"]
+dependencies = ["090-xoa-hl-source-banner"]
 notes = "Stops calling displayOpenSourceDisclaimer on mount, so no modal implying Vates support is shown."
 
 [[patches]]
-id = "zzzzzzzz-xoa-hl-update-channel"
+id = "110-xoa-hl-update-channel"
 description = "Add a stable or testing update channel choice to the XOA-HL Updates page"
 target = "packages/xo-server/src/api/xoaHl.mjs, packages/xo-web/src/xo-app/settings/xoa-hl-updates and packages/xo-web/src/common/intl"
 upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
 applies_to = ["5.113.2"]
 maintainer = "vagrantin"
 status = "active"
-dependencies = ["zzzzzzz-xoa-hl-source-banner"]
+dependencies = ["090-xoa-hl-source-banner"]
 notes = "Adds xoaHl.setUpdateChannel and a select in the Appliance card; four messages translated in all 13 locales."
 
 [[patches]]
-id = "zzzzzzzzz-xoa-hl-hide-vmware-and-support-alert"
+id = "120-xoa-hl-hide-vmware-and-support-alert"
 description = "Hide the Import > From VMware menu entry and the Vates pro support alert on hosts and pools"
 target = "packages/xo-web/src/xo-app/menu/index.js, home/host-item.js and home/pool-item.js"
 upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
 applies_to = ["5.113.2"]
 maintainer = "vagrantin"
 status = "active"
-dependencies = ["zzzzzzzz-xoa-hl-update-channel"]
-notes = "Reuses HIDDEN_MENU_ITEMS from menu-hide-items; other host and pool alerts are kept."
+dependencies = ["110-xoa-hl-update-channel"]
+notes = "Reuses HIDDEN_MENU_ITEMS from 010-menu-hide-items; other host and pool alerts are kept."
 
 [[patches]]
-id = "zzzzzzzzzz-xoa-hl-about-page"
+id = "130-xoa-hl-about-page"
 description = "Rework the About page for XOA-HL: bug tracker, XOA-HL versions, upstream section"
 target = "packages/xo-web/src/xo-app/about/index.js, xo-server/src/api/xoaHl.mjs and packages/xo-web/src/common/intl"
 upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
 applies_to = ["5.113.2"]
 maintainer = "vagrantin"
 status = "active"
-dependencies = ["zzzzzzzzz-xoa-hl-hide-vmware-and-support-alert"]
+dependencies = ["120-xoa-hl-hide-vmware-and-support-alert"]
 notes = "Adds xoaHl.getVmVersion, which reads /etc/xoa-hl-vm-release; the image build must stamp it. Five messages translated in all 13 locales."
 
 [[patches]]
-id = "zzzzzzzzzzz-xoa-hl-update-page-layout"
+id = "140-xoa-hl-update-page-layout"
 description = "Put Appliance and its update log on the left, Automatic updates on the right"
 target = "packages/xo-web/src/xo-app/settings/xoa-hl-updates/index.js"
 upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
 applies_to = ["5.113.2"]
 maintainer = "vagrantin"
 status = "active"
-dependencies = ["zzzzzzzzzz-xoa-hl-about-page"]
+dependencies = ["130-xoa-hl-about-page"]
 notes = "Two columns so the update log no longer pushes the Automatic updates card down."
 
 [[patches]]
-id = "zzzzzzzzzzzz-xoa-hl-update-check-status-on-load"
+id = "150-xoa-hl-update-check-status-on-load"
 description = "Show the stored update check result when the XOA-HL Updates page opens"
 target = "packages/xo-web/src/xo-app/settings/xoa-hl-updates/index.js"
 upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
 applies_to = ["5.113.2"]
 maintainer = "vagrantin"
 status = "active"
-dependencies = ["zzzzzzzzzzz-xoa-hl-update-page-layout"]
+dependencies = ["140-xoa-hl-update-page-layout"]
 notes = "Calls xoaHl.getUpdateStatus on mount so a timer-driven check shows as Up to date, Available or Error with its time, not Never checked."
 
 [[patches]]
-id = "zzzzzzzzzzzzz-xoa-hl-auto-update-ui-fixes"
+id = "160-xoa-hl-auto-update-ui-fixes"
 description = "Remove the random delay setting and show a failed automatic run as a red banner"
 target = "packages/xo-web/src/xo-app/settings/xoa-hl-updates/index.js and packages/xo-server/src/api/xoaHl.mjs"
 upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
 applies_to = ["5.113.2"]
 maintainer = "vagrantin"
 status = "active"
-dependencies = ["zzzzzzzzzzzz-xoa-hl-update-check-status-on-load"]
+dependencies = ["150-xoa-hl-update-check-status-on-load"]
 notes = "setUpdateConfiguration no longer takes randomDelayMinutes; it moves together with SOURCES/xoa-hl-configure-updates.sh, which now takes four arguments."
 
 [[patches]]
-id = "zzzzzzzzzzzzzz-xo-docs-pages-translations"
+id = "210-xo-docs-pages-translations"
 description = "Translate the inherited XO strings on the documented beginner pages in French and Japanese"
 target = "packages/xo-web/src/common/intl/locales/fr.js and packages/xo-web/src/common/intl/locales/ja.js"
 upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
 applies_to = ["5.113.2"]
 maintainer = "vagrantin"
 status = "active"
-dependencies = ["zzzzzzzzzz-xoa-hl-about-page"]
+dependencies = ["130-xoa-hl-about-page"]
 notes = "Covers user, settings/servers, about, SR disks, new VM, VM console and VM disks (xcp-hl#285); scripts/docs-pages-ui-keys.txt lists the keys the audit enforces for fr and ja. Japanese new-VM name and description labels become neutral because the disk section reuses them."
 
 [[patches]]
-id = "zzzzzzzzzzzzzz-host-component-versions"
+id = "190-host-component-versions"
 description = "host-component-versions"
 target = "packages/xo-server/src/api/xoaHl.mjs"
 upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
@@ -225,7 +226,7 @@ status = "active"
 dependencies = []
 
 [[patches]]
-id = "zzzzzzzzzzzzzz-visible-unresolved-acls"
+id = "200-visible-unresolved-acls"
 description = "visible-unresolved-acls"
 target = "packages/xo-web/src/xo-app/settings/acls/index.js"
 upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
@@ -235,7 +236,7 @@ status = "active"
 dependencies = []
 
 [[patches]]
-id = "zzzzzzzzzzzzzz-explicit-host-reboot-status"
+id = "180-explicit-host-reboot-status"
 description = "explicit-host-reboot-status"
 target = "packages/xo-web/src/xo-app/host/tab-patches.js"
 upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
@@ -245,7 +246,7 @@ status = "active"
 dependencies = []
 
 [[patches]]
-id = "zzzzzzzzzzzzzz-automatic-update-history"
+id = "170-automatic-update-history"
 description = "automatic-update-history"
 target = "packages/xo-server/src/api/xoaHl.mjs"
 upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
@@ -255,23 +256,23 @@ status = "active"
 dependencies = []
 
 [[patches]]
-id = "zzzzzzzzzzzzzzz-appearance-themes"
+id = "230-appearance-themes"
 description = "Four XO 5 themes with per-user appearance and Arctic/System defaults (xcp-hl#288)"
 target = "packages/xo-web/src/index.js and shared XO 5 UI components"
 upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
 applies_to = ["5.113.2"]
 maintainer = "vagrantin"
 status = "active"
-dependencies = ["zzzzzzzzzzzzzzz-user-profile-menu"]
+dependencies = ["220-user-profile-menu"]
 notes = "Adds Arctic, Graphite, Alpine and Horizon with Light/Dark/System modes and per-user preferences."
 
 [[patches]]
-id = "zzzzzzzzzzzzzzz-user-profile-menu"
+id = "220-user-profile-menu"
 description = "Show a localized Profile label beside the sidebar user settings icon"
 target = "packages/xo-web/src/xo-app/menu/index.js and packages/xo-web/src/common/intl"
 upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
 applies_to = ["5.113.2"]
 maintainer = "vagrantin"
 status = "active"
-dependencies = ["menu-hide-items"]
+dependencies = ["010-menu-hide-items"]
 notes = "Tracks xcp-hl#287. Aligns the expanded entry with other menu links, retains the /user route and username tooltip, and hides the label when collapsed. Profile is translated in all 13 shipped locales."

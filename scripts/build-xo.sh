@@ -73,9 +73,13 @@ else
     echo "  Consider adding metadata.toml to document patches"
 fi
 
-echo "==> Applying patches"
+echo "==> Applying patches in numeric filename order"
+export LC_ALL=C
 for p in "$PATCH_DIR"/*.patch; do
     [ -f "$p" ] || continue
+    [[ $(basename "$p") =~ ^[0-9]{3}-[a-z0-9]+(-[a-z0-9]+)*\.patch$ ]] || {
+        echo "ERROR: use NNN-descriptive-name.patch: $p" >&2; exit 1;
+    }
     echo "  - $(basename "$p")"
     git apply --verbose "$p"
 done
