@@ -30,6 +30,10 @@
 <h1>XCP-HL yum repository: <code>xoa-hl</code></h1>
 <p class="sub">Signed RPM repository for XOA-HL, Xen Orchestra HomeLab Edition. Built for AlmaLinux 9.</p>
 
+<div class="note"><strong>Moved.</strong> This repository is now served from
+<a href="https://rpm.xcp-hl.org/">rpm.xcp-hl.org</a>. This address stays online during the
+transition; the next <code>xoa-hl</code> update moves an appliance to the new one.</div>
+
 <p>XOA-HL is a self-hosted Xen Orchestra appliance VM. This site serves a
 <code>yum</code>-resolvable repository containing recent released builds of the
 <code>xoa-hl</code> package, so an installed XOA-HL appliance can update itself
@@ -42,12 +46,21 @@ in place instead of reinstalling from scratch.</p>
   as a manual bootstrap if that file is ever missing.
 </div>
 
+<div class="note"><strong>Stable and testing.</strong> This URL is the <em>stable</em>
+channel: only versions that passed QA and were approved (and the versions already
+offered before that gate existed). New builds go first to the <em>testing</em> channel,
+<code>https://rpm.xcp-hl.org/xoa-hl/testing/8.3/x86_64/</code>
+(<a href="xoa-hl-testing.repo">xoa-hl-testing.repo</a>, disabled by default),
+meant for disposable test appliances. A build found broken after release is replaced
+by a newer one; <code>yum updateinfo list</code> shows the advisory.
+On an appliance, pick the channel under Settings, XOA-HL Updates, Update channel.</div>
+
 <h2>Add the repository</h2>
 <p>On an XOA-HL appliance, as root:</p>
 <pre><code>curl -o /etc/yum.repos.d/xoa-hl.repo \
-  https://vagrantin.github.io/xoa-hl/xoa-hl.repo
+  https://rpm.xcp-hl.org/xoa-hl.repo
 
-rpm --import https://vagrantin.github.io/xoa-hl/xcp-ng-ce-public.asc
+rpm --import https://rpm.xcp-hl.org/xcp-ng-ce-public.asc
 
 yum clean all
 yum check-update xoa-hl</code></pre>
@@ -55,8 +68,8 @@ yum check-update xoa-hl</code></pre>
 <h2>Update</h2>
 <pre><code>yum update xoa-hl</code></pre>
 
-<p>A handful of recent releases are kept, so you can list what is available
-and roll back within that window:</p>
+<p>The promoted releases are kept, so you can list what is available
+and roll back to one of them:</p>
 <pre><code>yum --showduplicates list xoa-hl
 yum downgrade xoa-hl-&lt;version&gt;</code></pre>
 

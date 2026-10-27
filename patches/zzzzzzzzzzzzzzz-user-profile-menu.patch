@@ -1,0 +1,190 @@
+diff --git a/packages/xo-web/src/common/intl/locales/es.js b/packages/xo-web/src/common/intl/locales/es.js
+index 0c9687a..6a82081 100644
+--- a/packages/xo-web/src/common/intl/locales/es.js
++++ b/packages/xo-web/src/common/intl/locales/es.js
+@@ -220,6 +220,7 @@ export default {
+ 
+   // Original text: 'User'
+   userPage: undefined,
++  xoaHlProfile: 'Perfil',
+ 
+   // Original text: 'No support'
+   noSupport: undefined,
+diff --git a/packages/xo-web/src/common/intl/locales/fa.js b/packages/xo-web/src/common/intl/locales/fa.js
+index c78476c..509e87f 100644
+--- a/packages/xo-web/src/common/intl/locales/fa.js
++++ b/packages/xo-web/src/common/intl/locales/fa.js
+@@ -273,6 +273,7 @@ export default {
+ 
+   // Original text: 'User'
+   userPage: 'کاربر',
++  xoaHlProfile: 'نمایه',
+ 
+   // Original text: 'XOA'
+   xoa: 'XOA',
+diff --git a/packages/xo-web/src/common/intl/locales/fr.js b/packages/xo-web/src/common/intl/locales/fr.js
+index 80e7eb2..c154565 100644
+--- a/packages/xo-web/src/common/intl/locales/fr.js
++++ b/packages/xo-web/src/common/intl/locales/fr.js
+@@ -223,6 +223,7 @@ export default {
+ 
+   // Original text: "User"
+   userPage: 'Utilisateur',
++  xoaHlProfile: 'Profil',
+ 
+   // Original text: "No support"
+   noSupport: 'Pas de support professionnel',
+diff --git a/packages/xo-web/src/common/intl/locales/he.js b/packages/xo-web/src/common/intl/locales/he.js
+index c6cf9ec..147a221 100644
+--- a/packages/xo-web/src/common/intl/locales/he.js
++++ b/packages/xo-web/src/common/intl/locales/he.js
+@@ -190,6 +190,7 @@ export default {
+ 
+   // Original text: 'User'
+   userPage: undefined,
++  xoaHlProfile: 'פרופיל',
+ 
+   // Original text: 'No support'
+   noSupport: undefined,
+diff --git a/packages/xo-web/src/common/intl/locales/hu.js b/packages/xo-web/src/common/intl/locales/hu.js
+index 73d2897..e433004 100644
+--- a/packages/xo-web/src/common/intl/locales/hu.js
++++ b/packages/xo-web/src/common/intl/locales/hu.js
+@@ -205,6 +205,7 @@ export default {
+ 
+   // Original text: "User"
+   userPage: 'Felhasználó',
++  xoaHlProfile: 'Profil',
+ 
+   // Original text: "No support"
+   noSupport: 'Nincs szupport',
+diff --git a/packages/xo-web/src/common/intl/locales/it.js b/packages/xo-web/src/common/intl/locales/it.js
+index 0821f9c..d4536e7 100644
+--- a/packages/xo-web/src/common/intl/locales/it.js
++++ b/packages/xo-web/src/common/intl/locales/it.js
+@@ -466,6 +466,7 @@ export default {
+ 
+   // Original text: 'User'
+   userPage: 'Utente',
++  xoaHlProfile: 'Profilo',
+ 
+   // Original text: 'XOA'
+   xoa: 'XOA',
+diff --git a/packages/xo-web/src/common/intl/locales/ja.js b/packages/xo-web/src/common/intl/locales/ja.js
+index 2202c6d..797a3c2 100644
+--- a/packages/xo-web/src/common/intl/locales/ja.js
++++ b/packages/xo-web/src/common/intl/locales/ja.js
+@@ -709,6 +709,7 @@ export default {
+ 
+   // Original text: "User"
+   userPage: 'ユーザー',
++  xoaHlProfile: 'プロフィール',
+ 
+   // Original text: 'XOA'
+   xoa: undefined,
+diff --git a/packages/xo-web/src/common/intl/locales/pl.js b/packages/xo-web/src/common/intl/locales/pl.js
+index 91cf48c..0fdae92 100644
+--- a/packages/xo-web/src/common/intl/locales/pl.js
++++ b/packages/xo-web/src/common/intl/locales/pl.js
+@@ -193,6 +193,7 @@ export default {
+ 
+   // Original text: "User"
+   userPage: 'Użytkownik',
++  xoaHlProfile: 'Profil',
+ 
+   // Original text: "No support"
+   noSupport: 'Brak wsparcia',
+diff --git a/packages/xo-web/src/common/intl/locales/pt.js b/packages/xo-web/src/common/intl/locales/pt.js
+index 7d35771..f16507f 100644
+--- a/packages/xo-web/src/common/intl/locales/pt.js
++++ b/packages/xo-web/src/common/intl/locales/pt.js
+@@ -190,6 +190,7 @@ export default {
+ 
+   // Original text: 'User'
+   userPage: undefined,
++  xoaHlProfile: 'Perfil',
+ 
+   // Original text: 'No support'
+   noSupport: undefined,
+diff --git a/packages/xo-web/src/common/intl/locales/ru.js b/packages/xo-web/src/common/intl/locales/ru.js
+index 33511c3..a0437de 100644
+--- a/packages/xo-web/src/common/intl/locales/ru.js
++++ b/packages/xo-web/src/common/intl/locales/ru.js
+@@ -700,6 +700,7 @@ export default {
+ 
+   // Original text: "User"
+   userPage: 'Пользователь',
++  xoaHlProfile: 'Профиль',
+ 
+   // Original text: 'XOA'
+   xoa: undefined,
+diff --git a/packages/xo-web/src/common/intl/locales/sv.js b/packages/xo-web/src/common/intl/locales/sv.js
+index 88c3f48..751ef31 100644
+--- a/packages/xo-web/src/common/intl/locales/sv.js
++++ b/packages/xo-web/src/common/intl/locales/sv.js
+@@ -220,6 +220,7 @@ export default {
+ 
+   // Original text: 'User'
+   userPage: undefined,
++  xoaHlProfile: 'Profil',
+ 
+   // Original text: 'No support'
+   noSupport: 'Ingen support',
+diff --git a/packages/xo-web/src/common/intl/locales/tr.js b/packages/xo-web/src/common/intl/locales/tr.js
+index 41010ec..aa62ceb 100644
+--- a/packages/xo-web/src/common/intl/locales/tr.js
++++ b/packages/xo-web/src/common/intl/locales/tr.js
+@@ -271,6 +271,7 @@ export default {
+ 
+   // Original text: "User"
+   userPage: 'Kullanıcı',
++  xoaHlProfile: 'Profil',
+ 
+   // Original text: "XOA"
+   xoa: 'XOA',
+diff --git a/packages/xo-web/src/common/intl/locales/zh.js b/packages/xo-web/src/common/intl/locales/zh.js
+index ab6c8e2..51569af 100644
+--- a/packages/xo-web/src/common/intl/locales/zh.js
++++ b/packages/xo-web/src/common/intl/locales/zh.js
+@@ -157,6 +157,7 @@ export default {
+ 
+   // Original text: "User"
+   userPage: '用户',
++  xoaHlProfile: '个人资料',
+ 
+   // Original text: "Sign out"
+   signOut: '注销',
+diff --git a/packages/xo-web/src/common/intl/messages.js b/packages/xo-web/src/common/intl/messages.js
+index 0688d36..07c3999 100644
+--- a/packages/xo-web/src/common/intl/messages.js
++++ b/packages/xo-web/src/common/intl/messages.js
+@@ -343,6 +343,7 @@ const messages = {
+   jobsSchedulingPage: 'Scheduling',
+   customJob: 'Custom Job',
+   userPage: 'User',
++  xoaHlProfile: 'Profile',
+   xoa: 'XOA',
+   restApiDoc: 'REST API doc',
+   tryXo6: 'Try XO 6',
+diff --git a/packages/xo-web/src/xo-app/menu/index.js b/packages/xo-web/src/xo-app/menu/index.js
+index 5077d22..546e9a0 100644
+--- a/packages/xo-web/src/xo-app/menu/index.js
++++ b/packages/xo-web/src/xo-app/menu/index.js
+@@ -667,14 +667,15 @@ export default class Menu extends Component {
+             </a>
+           </li>
+           <li className='nav-item xo-menu-item'>
+-            <Link className='nav-link text-xs-center' to='/user'>
++            <Link className={classNames('nav-link', styles.centerCollapsed)} to='/user'>
+               <Tooltip
+                 content={_('editUserProfile', {
+                   username: user ? user.email : '',
+                 })}
+               >
+-                <Icon icon='user' size='lg' />
++                <Icon icon='user' size='lg' fixedWidth />
+               </Tooltip>
++              <span className={styles.hiddenCollapsed}> {_('xoaHlProfile')}</span>
+             </Link>
+           </li>
+           <li>&nbsp;</li>

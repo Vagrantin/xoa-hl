@@ -1,0 +1,127 @@
+diff --git a/packages/xo-server/src/api/xoaHl.mjs b/packages/xo-server/src/api/xoaHl.mjs
+index aed2679d3..3aa0234f9 100644
+--- a/packages/xo-server/src/api/xoaHl.mjs
++++ b/packages/xo-server/src/api/xoaHl.mjs
+@@ -19,7 +19,6 @@ const CONFIGURE_HELPER = '/usr/libexec/xoa-hl/configure-updates.sh'
+ const MODES = new Set(['manual', 'check', 'install'])
+ const FREQUENCIES = new Set(['daily', 'weekly'])
+ const DAYS = new Set(['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'])
+-const RANDOM_DELAYS = new Set([0, 5, 10, 15, 30, 60])
+ const CHANNELS = new Set(['stable', 'testing'])
+ 
+ // -------------------------------------------------------------------
+@@ -229,7 +228,6 @@ export async function getUpdateConfiguration() {
+   const frequency = FREQUENCIES.has(raw.FREQUENCY) ? raw.FREQUENCY : 'daily'
+   const day = DAYS.has(raw.DAY) ? raw.DAY : 'Sun'
+   const time = /^([01][0-9]|2[0-3]):[0-5][0-9]$/.test(raw.TIME) ? raw.TIME : '03:00'
+-  const randomDelayMinutes = Number.parseInt(raw.RANDOM_DELAY, 10)
+ 
+   let timezone = 'UTC'
+   try {
+@@ -257,7 +255,6 @@ export async function getUpdateConfiguration() {
+     lastRun,
+     mode,
+     nextRun,
+-    randomDelayMinutes: RANDOM_DELAYS.has(randomDelayMinutes) ? randomDelayMinutes : 15,
+     time,
+     timezone,
+   }
+@@ -265,7 +262,7 @@ export async function getUpdateConfiguration() {
+ getUpdateConfiguration.permission = 'admin'
+ getUpdateConfiguration.description = 'get the XOA-HL automatic update configuration and last unattended result'
+ 
+-export async function setUpdateConfiguration({ day, frequency, mode, randomDelayMinutes, time }) {
++export async function setUpdateConfiguration({ day, frequency, mode, time }) {
+   if (!MODES.has(mode)) {
+     throw new Error('invalid automatic update mode')
+   }
+@@ -278,11 +275,8 @@ export async function setUpdateConfiguration({ day, frequency, mode, randomDelay
+   if (!/^([01][0-9]|2[0-3]):[0-5][0-9]$/.test(time)) {
+     throw new Error('invalid automatic update time')
+   }
+-  if (!RANDOM_DELAYS.has(randomDelayMinutes)) {
+-    throw new Error('invalid automatic update random delay')
+-  }
+ 
+-  await execa('sudo', [CONFIGURE_HELPER, mode, frequency, day, time, String(randomDelayMinutes)])
++  await execa('sudo', [CONFIGURE_HELPER, mode, frequency, day, time])
+   return getUpdateConfiguration()
+ }
+ setUpdateConfiguration.permission = 'admin'
+@@ -291,7 +285,6 @@ setUpdateConfiguration.params = {
+   day: { type: 'string' },
+   frequency: { type: 'string' },
+   mode: { type: 'string' },
+-  randomDelayMinutes: { type: 'number' },
+   time: { type: 'string' },
+ }
+ 
+diff --git a/packages/xo-web/src/xo-app/settings/xoa-hl-updates/index.js b/packages/xo-web/src/xo-app/settings/xoa-hl-updates/index.js
+index ce3439d10..a0c17beea 100644
+--- a/packages/xo-web/src/xo-app/settings/xoa-hl-updates/index.js
++++ b/packages/xo-web/src/xo-app/settings/xoa-hl-updates/index.js
+@@ -236,7 +236,7 @@ export default class XoaHlUpdates extends Component {
+ 
+ 
+   _setConfigurationField = field => event => {
+-    const value = field === 'randomDelayMinutes' ? Number(event.target.value) : event.target.value
++    const value = event.target.value
+     this.setState(({ automaticInstallConfirmed, configuration }) => ({
+       automaticInstallConfirmed: field === 'mode' && value !== 'install' ? false : automaticInstallConfirmed,
+       configuration: { ...configuration, [field]: value },
+@@ -272,7 +272,6 @@ export default class XoaHlUpdates extends Component {
+         day: configuration.day,
+         frequency: configuration.frequency,
+         mode: configuration.mode,
+-        randomDelayMinutes: configuration.randomDelayMinutes,
+         time: configuration.time,
+       })
+       if (this._mounted) {
+@@ -606,6 +605,7 @@ export default class XoaHlUpdates extends Component {
+ 
+     const installationSelected = configuration.mode === 'install'
+     const lastResult = configuration.lastRun.result
++    const lastRunFailed = lastResult === 'failed' || lastResult === 'check_failed'
+ 
+     return (
+       <div>
+@@ -628,7 +628,7 @@ export default class XoaHlUpdates extends Component {
+           </Col>
+         </Row>
+         <Row className='mt-1'>
+-          <Col mediumSize={4}>
++          <Col mediumSize={6}>
+             <label>{_('xoaHlDay')}</label>
+             <select className='form-control' disabled={configurationSaving || configuration.mode === 'manual' || configuration.frequency !== 'weekly'} onChange={this._setConfigurationField('day')} value={configuration.day}>
+               {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day, index) => (
+@@ -636,16 +636,10 @@ export default class XoaHlUpdates extends Component {
+               ))}
+             </select>
+           </Col>
+-          <Col mediumSize={4}>
++          <Col mediumSize={6}>
+             <label>{_('xoaHlTime')}</label>
+             <input className='form-control' disabled={configurationSaving || configuration.mode === 'manual'} onChange={this._setConfigurationField('time')} type='time' value={configuration.time} />
+           </Col>
+-          <Col mediumSize={4}>
+-            <label>{_('xoaHlRandomDelay')}</label>
+-            <select className='form-control' disabled={configurationSaving || configuration.mode === 'manual'} onChange={this._setConfigurationField('randomDelayMinutes')} value={configuration.randomDelayMinutes}>
+-              {[0, 5, 10, 15, 30, 60].map(minutes => <option key={minutes} value={minutes}>{_('xoaHlMinutes', { n: minutes })}</option>)}
+-            </select>
+-          </Col>
+         </Row>
+         <p className='mt-1 mb-1 text-muted'>
+           {_('xoaHlTimezone')}: {configuration.timezone}
+@@ -654,10 +648,10 @@ export default class XoaHlUpdates extends Component {
+         {lastResult === undefined ? (
+           <p className='text-muted'>{_('xoaHlNoAutomaticRun')}</p>
+         ) : (
+-          <p className='text-muted'>
++          <Banner icon={lastRunFailed ? 'error' : 'info'} level={lastRunFailed ? 'danger' : lastResult === 'running' ? 'info' : 'success'}>
+             {_('xoaHlLastAutomaticResult')}: {lastResult}
+             {configuration.lastRun.finishedAt !== undefined && <span> · <FormattedDate value={new Date(configuration.lastRun.finishedAt)} /> <FormattedTime value={new Date(configuration.lastRun.finishedAt)} /></span>}
+-          </p>
++          </Banner>
+         )}
+         {installationSelected && (
+           <div>

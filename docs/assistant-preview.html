@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Assistant panel preview</title>
+<link rel="stylesheet" href="../SOURCES/assistant-ui/panel.css">
+<style>
+  body { margin: 0; padding: 2rem; background: #eaf0f4; font: 16px system-ui, sans-serif; }
+  main { max-width: 48rem; margin: auto; }
+  .preview-note { margin: 0 0 1rem; color: #526876; font-size: .9rem; }
+</style>
+<main>
+  <p class="preview-note">Component preview · synthetic proposal · no XO, model or VM connection</p>
+  <div id="panel"></div>
+</main>
+<script type="module">
+  import { createAssistantPanel } from '../SOURCES/assistant-ui/panel.mjs'
+  const locale = new URL(location.href).searchParams.get('lang') ?? 'en'
+  const proposal = { id: 'preview-proposal-123456789012345', digest: 'a'.repeat(64), expires_at: Date.now() / 1000 + 300,
+    status: 'pending', mode: 'propose_only', created: false, live_execution_available: false,
+    spec: { name: 'rpm-build-test', template: 'AlmaLinux 9 build', vcpus: 4, memory_mb: 8192, disk_gb: 60,
+      host: 'xcp-hl-02', sr: 'Local storage xcp-hl-02', network: 'LAN on eth0', tags: ['lab', 'build'] } }
+  const panel = createAssistantPanel({ document, locale, enabled: true,
+    onDecision: async ({ decision }) => ({ ...proposal, status: decision === 'approve' ? 'approved_dry_run' : 'rejected' }) })
+  document.querySelector('#panel').append(panel.element)
+  const user = { en: 'I need a small VM for building RPMs.', fr: 'Il me faut une petite VM pour compiler des RPM.', ja: 'RPM のビルド用に小さな VM が必要です。' }
+  const reply = { en: 'Here is a proposal to review before proceeding.', fr: 'Voici une proposition à vérifier avant de poursuivre.', ja: '続行する前に、以下の提案を確認してください。' }
+  panel.appendUserText(user[locale] ?? user.en)
+  panel.appendAssistantText(reply[locale] ?? reply.en)
+  panel.showProposal(proposal)
+</script>
+</html>

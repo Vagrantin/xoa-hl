@@ -1,0 +1,80 @@
+diff --git a/packages/xo-web/src/xo-app/settings/xoa-hl-updates/index.js b/packages/xo-web/src/xo-app/settings/xoa-hl-updates/index.js
+index 70108a9a6..9231ad5d3 100644
+--- a/packages/xo-web/src/xo-app/settings/xoa-hl-updates/index.js
++++ b/packages/xo-web/src/xo-app/settings/xoa-hl-updates/index.js
+@@ -521,30 +521,28 @@ export default class XoaHlUpdates extends Component {
+     }
+ 
+     return (
+-      <Row className='mt-1'>
+-        <Col>
+-          <Card>
+-            <CardHeader>
+-              <Icon icon='logs' /> {_('xoaHlUpdateLog')}
+-            </CardHeader>
+-            <CardBlock>
+-              {updating && (
+-                <Banner icon='loading' level='info'>
+-                  {started ? _('xoaHlUpdateRunning') : _('xoaHlUpdateStarting')}
+-                  {reconnecting && this._renderReconnecting()}
+-                </Banner>
+-              )}
+-              {log.length === 0 ? (
+-                <p className='mb-0 text-muted'>{_('xoaHlWaitingForOutput')}</p>
+-              ) : (
+-                <pre className='mb-0' onScroll={this._onLogScroll} ref={this._setLogNode} style={LOG_STYLE}>
+-                  {log.join('\n')}
+-                </pre>
+-              )}
+-            </CardBlock>
+-          </Card>
+-        </Col>
+-      </Row>
++      <div className='mt-1'>
++        <Card>
++          <CardHeader>
++            <Icon icon='logs' /> {_('xoaHlUpdateLog')}
++          </CardHeader>
++          <CardBlock>
++            {updating && (
++              <Banner icon='loading' level='info'>
++                {started ? _('xoaHlUpdateRunning') : _('xoaHlUpdateStarting')}
++                {reconnecting && this._renderReconnecting()}
++              </Banner>
++            )}
++            {log.length === 0 ? (
++              <p className='mb-0 text-muted'>{_('xoaHlWaitingForOutput')}</p>
++            ) : (
++              <pre className='mb-0' onScroll={this._onLogScroll} ref={this._setLogNode} style={LOG_STYLE}>
++                {log.join('\n')}
++              </pre>
++            )}
++          </CardBlock>
++        </Card>
++      </div>
+     )
+   }
+ 
+@@ -671,7 +669,7 @@ export default class XoaHlUpdates extends Component {
+     return (
+       <Container>
+         <Row>
+-          <Col>
++          <Col mediumSize={6}>
+             <Card>
+               <CardHeader>
+                 <Icon icon='upgrade' /> {_('xoaHlAppliance')}
+@@ -706,11 +704,9 @@ export default class XoaHlUpdates extends Component {
+                 </ActionButton>
+               </CardBlock>
+             </Card>
++            {this._renderLog()}
+           </Col>
+-        </Row>
+-        {this._renderLog()}
+-        <Row className='mt-1'>
+-          <Col>
++          <Col mediumSize={6}>
+             <Card>
+               <CardHeader>
+                 <Icon icon='calendar' /> {_('xoaHlAutomaticUpdates')}

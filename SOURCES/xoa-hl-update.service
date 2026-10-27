@@ -4,6 +4,14 @@ Description=Update xoa-hl and every AlmaLinux package with a pending update
 [Service]
 Type=oneshot
 ExecStart=/usr/libexec/xoa-hl/update.sh
+# The UI starts this with --no-block and tails the log the script writes, so the
+# run has to outlive DefaultTimeoutStartSec (90s) -- a full dnf update routinely
+# does. Not "infinity": a wedged transaction should still be reaped eventually.
+TimeoutStartSec=3600
+# /var/lib/xoa-hl, where update.sh writes the log the UI reads. StateDirectory
+# rather than RuntimeDirectory on purpose: systemd deletes a RuntimeDirectory
+# when the unit stops, which for a oneshot is the instant the update ends.
+StateDirectory=xoa-hl
 # No filesystem sandboxing: a system-wide dnf update writes to /usr, /etc,
 # /boot and more, incompatible with ProtectSystem/ProtectHome. This unit
 # already runs as root with full package-management intent.

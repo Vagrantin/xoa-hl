@@ -1,0 +1,10 @@
+{
+  "version": "1.56.0",
+  "source_commit": "9949cf926cd42f1d128b9991ed23a496ecace896",
+  "repository": "https://github.com/aaif-goose/goose",
+  "platform": "x86_64-unknown-linux-musl",
+  "archive": "goose-x86_64-unknown-linux-musl.tar.bz2",
+  "url": "https://github.com/aaif-goose/goose/releases/download/v1.56.0/goose-x86_64-unknown-linux-musl.tar.bz2",
+  "sha256": "d924d0b9e5b2e113e928358995805182168c26cfbcedbe7042e00ea4c7ca5e49",
+  "enabled_by_default": false
+}

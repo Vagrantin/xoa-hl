@@ -1,0 +1,11 @@
+[Unit]
+Description=Install XOA-HL appliance updates automatically
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/libexec/xoa-hl/auto-update.sh
+TimeoutStartSec=3600
+StateDirectory=xoa-hl
+PrivateTmp=yes

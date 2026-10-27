@@ -1,0 +1,822 @@
+diff --git a/packages/xo-web/src/common/intl/locales/es.js b/packages/xo-web/src/common/intl/locales/es.js
+index e102602..44dad25 100644
+--- a/packages/xo-web/src/common/intl/locales/es.js
++++ b/packages/xo-web/src/common/intl/locales/es.js
+@@ -3946,4 +3946,55 @@ export default {
+ 
+   // Core network, state, licensing, and certificate labels
+   expiry: 'Vencimiento',
++
++  // Certificate, tag, and licensing labels
++  fingerprint: 'Huella digital',
++
++  // Certificate, tag, and licensing labels
++  certificate: 'Certificado (PEM)',
++
++  // Certificate, tag, and licensing labels
++  certificateChain: 'Cadena de certificados (PEM)',
++
++  // Certificate, tag, and licensing labels
++  privateKey: 'Clave privada (PKCS#8)',
++
++  // Certificate, tag, and licensing labels
++  installNewCertificate: 'Instalar un certificado nuevo',
++
++  // Certificate, tag, and licensing labels
++  replaceExistingCertificate: 'Reemplazar el certificado existente',
++
++  // Certificate, tag, and licensing labels
++  customFields: 'Campos personalizados',
++
++  // Certificate, tag, and licensing labels
++  addColor: 'Añadir color',
++
++  // Certificate, tag, and licensing labels
++  addCustomField: 'Añadir campo personalizado',
++
++  // Certificate, tag, and licensing labels
++  advancedTagCreation: 'Creación avanzada de etiquetas',
++
++  // Certificate, tag, and licensing labels
++  availableXoaPremium: 'Disponible en XOA Premium',
++
++  // Certificate, tag, and licensing labels
++  availableXoaPlan: 'Disponible en XOA {plan}',
++
++  // Certificate, tag, and licensing labels
++  detach: 'Desconectar',
++
++  // Certificate, tag, and licensing labels
++  editCustomField: 'Editar campo personalizado',
++
++  // Certificate, tag, and licensing labels
++  deleteCustomField: 'Eliminar campo personalizado',
++
++  // Certificate, tag, and licensing labels
++  onlyAvailableXoaUsers: 'Solo disponible para usuarios de XOA',
++
++  // Certificate, tag, and licensing labels
++  removeColor: 'Eliminar color',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/fa.js b/packages/xo-web/src/common/intl/locales/fa.js
+index d5a3e46..fcf7f78 100644
+--- a/packages/xo-web/src/common/intl/locales/fa.js
++++ b/packages/xo-web/src/common/intl/locales/fa.js
+@@ -5271,4 +5271,55 @@ export default {
+ 
+   // Core network, state, licensing, and certificate labels
+   expiry: 'انقضا',
++
++  // Certificate, tag, and licensing labels
++  fingerprint: 'اثر انگشت',
++
++  // Certificate, tag, and licensing labels
++  certificate: 'گواهی (PEM)',
++
++  // Certificate, tag, and licensing labels
++  certificateChain: 'زنجیره گواهی (PEM)',
++
++  // Certificate, tag, and licensing labels
++  privateKey: 'کلید خصوصی (PKCS#8)',
++
++  // Certificate, tag, and licensing labels
++  installNewCertificate: 'نصب گواهی جدید',
++
++  // Certificate, tag, and licensing labels
++  replaceExistingCertificate: 'جایگزینی گواهی موجود',
++
++  // Certificate, tag, and licensing labels
++  customFields: 'فیلدهای سفارشی',
++
++  // Certificate, tag, and licensing labels
++  addColor: 'افزودن رنگ',
++
++  // Certificate, tag, and licensing labels
++  addCustomField: 'افزودن فیلد سفارشی',
++
++  // Certificate, tag, and licensing labels
++  advancedTagCreation: 'ایجاد برچسب پیشرفته',
++
++  // Certificate, tag, and licensing labels
++  availableXoaPremium: 'در XOA Premium در دسترس است',
++
++  // Certificate, tag, and licensing labels
++  availableXoaPlan: 'در XOA {plan} در دسترس است',
++
++  // Certificate, tag, and licensing labels
++  detach: 'جدا کردن',
++
++  // Certificate, tag, and licensing labels
++  editCustomField: 'ویرایش فیلد سفارشی',
++
++  // Certificate, tag, and licensing labels
++  deleteCustomField: 'حذف فیلد سفارشی',
++
++  // Certificate, tag, and licensing labels
++  onlyAvailableXoaUsers: 'فقط برای کاربران XOA در دسترس است',
++
++  // Certificate, tag, and licensing labels
++  removeColor: 'حذف رنگ',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/fr.js b/packages/xo-web/src/common/intl/locales/fr.js
+index 9cb9d72..dcdeb3b 100644
+--- a/packages/xo-web/src/common/intl/locales/fr.js
++++ b/packages/xo-web/src/common/intl/locales/fr.js
+@@ -4031,4 +4031,55 @@ export default {
+ 
+   // Core network, state, licensing, and certificate labels
+   expiry: 'Expiration',
++
++  // Certificate, tag, and licensing labels
++  fingerprint: 'Empreinte',
++
++  // Certificate, tag, and licensing labels
++  certificate: 'Certificat (PEM)',
++
++  // Certificate, tag, and licensing labels
++  certificateChain: 'Chaîne de certificats (PEM)',
++
++  // Certificate, tag, and licensing labels
++  privateKey: 'Clé privée (PKCS#8)',
++
++  // Certificate, tag, and licensing labels
++  installNewCertificate: 'Installer un nouveau certificat',
++
++  // Certificate, tag, and licensing labels
++  replaceExistingCertificate: 'Remplacer le certificat existant',
++
++  // Certificate, tag, and licensing labels
++  customFields: 'Champs personnalisés',
++
++  // Certificate, tag, and licensing labels
++  addColor: 'Ajouter une couleur',
++
++  // Certificate, tag, and licensing labels
++  addCustomField: 'Ajouter un champ personnalisé',
++
++  // Certificate, tag, and licensing labels
++  advancedTagCreation: 'Création avancée d\'étiquettes',
++
++  // Certificate, tag, and licensing labels
++  availableXoaPremium: 'Disponible dans XOA Premium',
++
++  // Certificate, tag, and licensing labels
++  availableXoaPlan: 'Disponible dans XOA {plan}',
++
++  // Certificate, tag, and licensing labels
++  detach: 'Détacher',
++
++  // Certificate, tag, and licensing labels
++  editCustomField: 'Modifier le champ personnalisé',
++
++  // Certificate, tag, and licensing labels
++  deleteCustomField: 'Supprimer le champ personnalisé',
++
++  // Certificate, tag, and licensing labels
++  onlyAvailableXoaUsers: 'Disponible uniquement pour les utilisateurs XOA',
++
++  // Certificate, tag, and licensing labels
++  removeColor: 'Supprimer la couleur',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/he.js b/packages/xo-web/src/common/intl/locales/he.js
+index e26dc60..c570da7 100644
+--- a/packages/xo-web/src/common/intl/locales/he.js
++++ b/packages/xo-web/src/common/intl/locales/he.js
+@@ -3277,4 +3277,55 @@ export default {
+ 
+   // Core network, state, licensing, and certificate labels
+   expiry: 'תפוגה',
++
++  // Certificate, tag, and licensing labels
++  fingerprint: 'טביעת אצבע',
++
++  // Certificate, tag, and licensing labels
++  certificate: 'אישור (PEM)',
++
++  // Certificate, tag, and licensing labels
++  certificateChain: 'שרשרת אישורים (PEM)',
++
++  // Certificate, tag, and licensing labels
++  privateKey: 'מפתח פרטי (PKCS#8)',
++
++  // Certificate, tag, and licensing labels
++  installNewCertificate: 'התקנת אישור חדש',
++
++  // Certificate, tag, and licensing labels
++  replaceExistingCertificate: 'החלפת אישור קיים',
++
++  // Certificate, tag, and licensing labels
++  customFields: 'שדות מותאמים אישית',
++
++  // Certificate, tag, and licensing labels
++  addColor: 'הוספת צבע',
++
++  // Certificate, tag, and licensing labels
++  addCustomField: 'הוספת שדה מותאם אישית',
++
++  // Certificate, tag, and licensing labels
++  advancedTagCreation: 'יצירת תגיות מתקדמת',
++
++  // Certificate, tag, and licensing labels
++  availableXoaPremium: 'זמין ב־XOA Premium',
++
++  // Certificate, tag, and licensing labels
++  availableXoaPlan: 'זמין ב־XOA {plan}',
++
++  // Certificate, tag, and licensing labels
++  detach: 'ניתוק',
++
++  // Certificate, tag, and licensing labels
++  editCustomField: 'עריכת שדה מותאם אישית',
++
++  // Certificate, tag, and licensing labels
++  deleteCustomField: 'מחיקת שדה מותאם אישית',
++
++  // Certificate, tag, and licensing labels
++  onlyAvailableXoaUsers: 'זמין רק למשתמשי XOA',
++
++  // Certificate, tag, and licensing labels
++  removeColor: 'הסרת צבע',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/hu.js b/packages/xo-web/src/common/intl/locales/hu.js
+index c01804f..d9dea5d 100644
+--- a/packages/xo-web/src/common/intl/locales/hu.js
++++ b/packages/xo-web/src/common/intl/locales/hu.js
+@@ -3739,4 +3739,55 @@ export default {
+ 
+   // Core network, state, licensing, and certificate labels
+   expiry: 'Lejárat',
++
++  // Certificate, tag, and licensing labels
++  fingerprint: 'Ujjlenyomat',
++
++  // Certificate, tag, and licensing labels
++  certificate: 'Tanúsítvány (PEM)',
++
++  // Certificate, tag, and licensing labels
++  certificateChain: 'Tanúsítványlánc (PEM)',
++
++  // Certificate, tag, and licensing labels
++  privateKey: 'Privát kulcs (PKCS#8)',
++
++  // Certificate, tag, and licensing labels
++  installNewCertificate: 'Új tanúsítvány telepítése',
++
++  // Certificate, tag, and licensing labels
++  replaceExistingCertificate: 'Meglévő tanúsítvány cseréje',
++
++  // Certificate, tag, and licensing labels
++  customFields: 'Egyéni mezők',
++
++  // Certificate, tag, and licensing labels
++  addColor: 'Szín hozzáadása',
++
++  // Certificate, tag, and licensing labels
++  addCustomField: 'Egyéni mező hozzáadása',
++
++  // Certificate, tag, and licensing labels
++  advancedTagCreation: 'Speciális címkelétrehozás',
++
++  // Certificate, tag, and licensing labels
++  availableXoaPremium: 'XOA Premiumban érhető el',
++
++  // Certificate, tag, and licensing labels
++  availableXoaPlan: 'XOA {plan} csomagban érhető el',
++
++  // Certificate, tag, and licensing labels
++  detach: 'Leválasztás',
++
++  // Certificate, tag, and licensing labels
++  editCustomField: 'Egyéni mező szerkesztése',
++
++  // Certificate, tag, and licensing labels
++  deleteCustomField: 'Egyéni mező törlése',
++
++  // Certificate, tag, and licensing labels
++  onlyAvailableXoaUsers: 'Csak XOA-felhasználók számára érhető el',
++
++  // Certificate, tag, and licensing labels
++  removeColor: 'Szín eltávolítása',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/it.js b/packages/xo-web/src/common/intl/locales/it.js
+index c61b6f7..1b46a58 100644
+--- a/packages/xo-web/src/common/intl/locales/it.js
++++ b/packages/xo-web/src/common/intl/locales/it.js
+@@ -6014,4 +6014,55 @@ export default {
+ 
+   // Core network, state, licensing, and certificate labels
+   expiry: 'Scadenza',
++
++  // Certificate, tag, and licensing labels
++  fingerprint: 'Impronta digitale',
++
++  // Certificate, tag, and licensing labels
++  certificate: 'Certificato (PEM)',
++
++  // Certificate, tag, and licensing labels
++  certificateChain: 'Catena di certificati (PEM)',
++
++  // Certificate, tag, and licensing labels
++  privateKey: 'Chiave privata (PKCS#8)',
++
++  // Certificate, tag, and licensing labels
++  installNewCertificate: 'Installa nuovo certificato',
++
++  // Certificate, tag, and licensing labels
++  replaceExistingCertificate: 'Sostituisci il certificato esistente',
++
++  // Certificate, tag, and licensing labels
++  customFields: 'Campi personalizzati',
++
++  // Certificate, tag, and licensing labels
++  addColor: 'Aggiungi colore',
++
++  // Certificate, tag, and licensing labels
++  addCustomField: 'Aggiungi campo personalizzato',
++
++  // Certificate, tag, and licensing labels
++  advancedTagCreation: 'Creazione avanzata dei tag',
++
++  // Certificate, tag, and licensing labels
++  availableXoaPremium: 'Disponibile in XOA Premium',
++
++  // Certificate, tag, and licensing labels
++  availableXoaPlan: 'Disponibile in XOA {plan}',
++
++  // Certificate, tag, and licensing labels
++  detach: 'Scollega',
++
++  // Certificate, tag, and licensing labels
++  editCustomField: 'Modifica campo personalizzato',
++
++  // Certificate, tag, and licensing labels
++  deleteCustomField: 'Elimina campo personalizzato',
++
++  // Certificate, tag, and licensing labels
++  onlyAvailableXoaUsers: 'Disponibile solo per utenti XOA',
++
++  // Certificate, tag, and licensing labels
++  removeColor: 'Rimuovi colore',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/ja.js b/packages/xo-web/src/common/intl/locales/ja.js
+index d0db139..8cc2c19 100644
+--- a/packages/xo-web/src/common/intl/locales/ja.js
++++ b/packages/xo-web/src/common/intl/locales/ja.js
+@@ -384,52 +384,52 @@ export default {
+   expiry: '有効期限',
+ 
+   // Original text: 'Fingerprint'
+-  fingerprint: undefined,
++  fingerprint: 'フィンガープリント',
+ 
+   // Original text: 'Certificate (PEM)'
+-  certificate: undefined,
++  certificate: '証明書（PEM）',
+ 
+   // Original text: 'Certificate chain (PEM)'
+-  certificateChain: undefined,
++  certificateChain: '証明書チェーン（PEM）',
+ 
+   // Original text: 'Private key (PKCS#8)'
+-  privateKey: undefined,
++  privateKey: '秘密鍵（PKCS#8）',
+ 
+   // Original text: 'Install new certificate'
+-  installNewCertificate: undefined,
++  installNewCertificate: '新しい証明書をインストール',
+ 
+   // Original text: 'Replace existing certificate'
+-  replaceExistingCertificate: undefined,
++  replaceExistingCertificate: '既存の証明書を置き換え',
+ 
+   // Original text: 'Custom fields'
+-  customFields: undefined,
++  customFields: 'カスタムフィールド',
+ 
+   // Original text: 'Add color'
+-  addColor: undefined,
++  addColor: '色を追加',
+ 
+   // Original text: 'Add custom field'
+-  addCustomField: undefined,
++  addCustomField: 'カスタムフィールドを追加',
+ 
+   // Original text: 'Advanced tag creation'
+-  advancedTagCreation: undefined,
++  advancedTagCreation: '高度なタグ作成',
+ 
+   // Original text: 'Available in XOA Premium'
+-  availableXoaPremium: undefined,
++  availableXoaPremium: 'XOA Premium で利用可能',
+ 
+   // Original text: 'Detach'
+-  detach: undefined,
++  detach: '切り離す',
+ 
+   // Original text: 'Edit custom field'
+-  editCustomField: undefined,
++  editCustomField: 'カスタムフィールドを編集',
+ 
+   // Original text: 'Delete custom field'
+-  deleteCustomField: undefined,
++  deleteCustomField: 'カスタムフィールドを削除',
+ 
+   // Original text: 'Only available to XOA users'
+-  onlyAvailableXoaUsers: undefined,
++  onlyAvailableXoaUsers: 'XOA ユーザーのみ利用可能',
+ 
+   // Original text: 'Remove color'
+-  removeColor: undefined,
++  removeColor: '色を削除',
+ 
+   // Original text: 'XCP-ng'
+   xcpNg: undefined,
+@@ -7652,4 +7652,7 @@ export default {
+   xoaHlUpToDate: '最新の状態です',
+   xoaHlWaitingForOutput: 'ログの最初の行を待機中…',
+   xoaHlMinutes: '{n, number} 分',
++
++  // Certificate, tag, and licensing labels
++  availableXoaPlan: 'XOA {plan} で利用可能',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/pl.js b/packages/xo-web/src/common/intl/locales/pl.js
+index ce84a68..f8b01db 100644
+--- a/packages/xo-web/src/common/intl/locales/pl.js
++++ b/packages/xo-web/src/common/intl/locales/pl.js
+@@ -3293,4 +3293,55 @@ export default {
+ 
+   // Core network, state, licensing, and certificate labels
+   expiry: 'Wygaśnięcie',
++
++  // Certificate, tag, and licensing labels
++  fingerprint: 'Odcisk palca',
++
++  // Certificate, tag, and licensing labels
++  certificate: 'Certyfikat (PEM)',
++
++  // Certificate, tag, and licensing labels
++  certificateChain: 'Łańcuch certyfikatów (PEM)',
++
++  // Certificate, tag, and licensing labels
++  privateKey: 'Klucz prywatny (PKCS#8)',
++
++  // Certificate, tag, and licensing labels
++  installNewCertificate: 'Zainstaluj nowy certyfikat',
++
++  // Certificate, tag, and licensing labels
++  replaceExistingCertificate: 'Zastąp istniejący certyfikat',
++
++  // Certificate, tag, and licensing labels
++  customFields: 'Pola niestandardowe',
++
++  // Certificate, tag, and licensing labels
++  addColor: 'Dodaj kolor',
++
++  // Certificate, tag, and licensing labels
++  addCustomField: 'Dodaj pole niestandardowe',
++
++  // Certificate, tag, and licensing labels
++  advancedTagCreation: 'Zaawansowane tworzenie tagów',
++
++  // Certificate, tag, and licensing labels
++  availableXoaPremium: 'Dostępne w XOA Premium',
++
++  // Certificate, tag, and licensing labels
++  availableXoaPlan: 'Dostępne w XOA {plan}',
++
++  // Certificate, tag, and licensing labels
++  detach: 'Odłącz',
++
++  // Certificate, tag, and licensing labels
++  editCustomField: 'Edytuj pole niestandardowe',
++
++  // Certificate, tag, and licensing labels
++  deleteCustomField: 'Usuń pole niestandardowe',
++
++  // Certificate, tag, and licensing labels
++  onlyAvailableXoaUsers: 'Dostępne tylko dla użytkowników XOA',
++
++  // Certificate, tag, and licensing labels
++  removeColor: 'Usuń kolor',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/pt.js b/packages/xo-web/src/common/intl/locales/pt.js
+index 0dbb11f..5d6ebe7 100644
+--- a/packages/xo-web/src/common/intl/locales/pt.js
++++ b/packages/xo-web/src/common/intl/locales/pt.js
+@@ -3290,4 +3290,55 @@ export default {
+ 
+   // Core network, state, licensing, and certificate labels
+   expiry: 'Validade',
++
++  // Certificate, tag, and licensing labels
++  fingerprint: 'Impressão digital',
++
++  // Certificate, tag, and licensing labels
++  certificate: 'Certificado (PEM)',
++
++  // Certificate, tag, and licensing labels
++  certificateChain: 'Cadeia de certificados (PEM)',
++
++  // Certificate, tag, and licensing labels
++  privateKey: 'Chave privada (PKCS#8)',
++
++  // Certificate, tag, and licensing labels
++  installNewCertificate: 'Instalar novo certificado',
++
++  // Certificate, tag, and licensing labels
++  replaceExistingCertificate: 'Substituir o certificado existente',
++
++  // Certificate, tag, and licensing labels
++  customFields: 'Campos personalizados',
++
++  // Certificate, tag, and licensing labels
++  addColor: 'Adicionar cor',
++
++  // Certificate, tag, and licensing labels
++  addCustomField: 'Adicionar campo personalizado',
++
++  // Certificate, tag, and licensing labels
++  advancedTagCreation: 'Criação avançada de etiquetas',
++
++  // Certificate, tag, and licensing labels
++  availableXoaPremium: 'Disponível no XOA Premium',
++
++  // Certificate, tag, and licensing labels
++  availableXoaPlan: 'Disponível no XOA {plan}',
++
++  // Certificate, tag, and licensing labels
++  detach: 'Desanexar',
++
++  // Certificate, tag, and licensing labels
++  editCustomField: 'Editar campo personalizado',
++
++  // Certificate, tag, and licensing labels
++  deleteCustomField: 'Eliminar campo personalizado',
++
++  // Certificate, tag, and licensing labels
++  onlyAvailableXoaUsers: 'Disponível apenas para utilizadores XOA',
++
++  // Certificate, tag, and licensing labels
++  removeColor: 'Remover cor',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/ru.js b/packages/xo-web/src/common/intl/locales/ru.js
+index a3741f0..0afcbc8 100644
+--- a/packages/xo-web/src/common/intl/locales/ru.js
++++ b/packages/xo-web/src/common/intl/locales/ru.js
+@@ -381,52 +381,52 @@ export default {
+   expiry: 'Срок действия',
+ 
+   // Original text: 'Fingerprint'
+-  fingerprint: undefined,
++  fingerprint: 'Отпечаток',
+ 
+   // Original text: 'Certificate (PEM)'
+-  certificate: undefined,
++  certificate: 'Сертификат (PEM)',
+ 
+   // Original text: 'Certificate chain (PEM)'
+-  certificateChain: undefined,
++  certificateChain: 'Цепочка сертификатов (PEM)',
+ 
+   // Original text: 'Private key (PKCS#8)'
+-  privateKey: undefined,
++  privateKey: 'Закрытый ключ (PKCS#8)',
+ 
+   // Original text: 'Install new certificate'
+-  installNewCertificate: undefined,
++  installNewCertificate: 'Установить новый сертификат',
+ 
+   // Original text: 'Replace existing certificate'
+-  replaceExistingCertificate: undefined,
++  replaceExistingCertificate: 'Заменить существующий сертификат',
+ 
+   // Original text: 'Custom fields'
+-  customFields: undefined,
++  customFields: 'Пользовательские поля',
+ 
+   // Original text: 'Add color'
+-  addColor: undefined,
++  addColor: 'Добавить цвет',
+ 
+   // Original text: 'Add custom field'
+-  addCustomField: undefined,
++  addCustomField: 'Добавить пользовательское поле',
+ 
+   // Original text: 'Advanced tag creation'
+-  advancedTagCreation: undefined,
++  advancedTagCreation: 'Расширенное создание тегов',
+ 
+   // Original text: 'Available in XOA Premium'
+-  availableXoaPremium: undefined,
++  availableXoaPremium: 'Доступно в XOA Premium',
+ 
+   // Original text: 'Detach'
+-  detach: undefined,
++  detach: 'Отсоединить',
+ 
+   // Original text: 'Edit custom field'
+-  editCustomField: undefined,
++  editCustomField: 'Изменить пользовательское поле',
+ 
+   // Original text: 'Delete custom field'
+-  deleteCustomField: undefined,
++  deleteCustomField: 'Удалить пользовательское поле',
+ 
+   // Original text: 'Only available to XOA users'
+-  onlyAvailableXoaUsers: undefined,
++  onlyAvailableXoaUsers: 'Доступно только пользователям XOA',
+ 
+   // Original text: 'Remove color'
+-  removeColor: undefined,
++  removeColor: 'Удалить цвет',
+ 
+   // Original text: 'XCP-ng'
+   xcpNg: undefined,
+@@ -7537,4 +7537,7 @@ export default {
+   xoaHlUpToDate: 'Обновления не требуются',
+   xoaHlWaitingForOutput: 'Ожидание первой строки журнала…',
+   xoaHlMinutes: '{n, number} мин',
++
++  // Certificate, tag, and licensing labels
++  availableXoaPlan: 'Доступно в XOA {plan}',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/sv.js b/packages/xo-web/src/common/intl/locales/sv.js
+index 1e24e2e..93f2828 100644
+--- a/packages/xo-web/src/common/intl/locales/sv.js
++++ b/packages/xo-web/src/common/intl/locales/sv.js
+@@ -3957,4 +3957,55 @@ export default {
+ 
+   // Core network, state, licensing, and certificate labels
+   expiry: 'Utgångsdatum',
++
++  // Certificate, tag, and licensing labels
++  fingerprint: 'Fingeravtryck',
++
++  // Certificate, tag, and licensing labels
++  certificate: 'Certifikat (PEM)',
++
++  // Certificate, tag, and licensing labels
++  certificateChain: 'Certifikatkedja (PEM)',
++
++  // Certificate, tag, and licensing labels
++  privateKey: 'Privatnyckel (PKCS#8)',
++
++  // Certificate, tag, and licensing labels
++  installNewCertificate: 'Installera nytt certifikat',
++
++  // Certificate, tag, and licensing labels
++  replaceExistingCertificate: 'Ersätt befintligt certifikat',
++
++  // Certificate, tag, and licensing labels
++  customFields: 'Anpassade fält',
++
++  // Certificate, tag, and licensing labels
++  addColor: 'Lägg till färg',
++
++  // Certificate, tag, and licensing labels
++  addCustomField: 'Lägg till anpassat fält',
++
++  // Certificate, tag, and licensing labels
++  advancedTagCreation: 'Avancerat skapande av etiketter',
++
++  // Certificate, tag, and licensing labels
++  availableXoaPremium: 'Tillgängligt i XOA Premium',
++
++  // Certificate, tag, and licensing labels
++  availableXoaPlan: 'Tillgängligt i XOA {plan}',
++
++  // Certificate, tag, and licensing labels
++  detach: 'Koppla från',
++
++  // Certificate, tag, and licensing labels
++  editCustomField: 'Redigera anpassat fält',
++
++  // Certificate, tag, and licensing labels
++  deleteCustomField: 'Ta bort anpassat fält',
++
++  // Certificate, tag, and licensing labels
++  onlyAvailableXoaUsers: 'Endast tillgängligt för XOA-användare',
++
++  // Certificate, tag, and licensing labels
++  removeColor: 'Ta bort färg',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/tr.js b/packages/xo-web/src/common/intl/locales/tr.js
+index 27f4f63..c439597 100644
+--- a/packages/xo-web/src/common/intl/locales/tr.js
++++ b/packages/xo-web/src/common/intl/locales/tr.js
+@@ -5165,4 +5165,55 @@ export default {
+ 
+   // Core network, state, licensing, and certificate labels
+   expiry: 'Son kullanma tarihi',
++
++  // Certificate, tag, and licensing labels
++  fingerprint: 'Parmak izi',
++
++  // Certificate, tag, and licensing labels
++  certificate: 'Sertifika (PEM)',
++
++  // Certificate, tag, and licensing labels
++  certificateChain: 'Sertifika zinciri (PEM)',
++
++  // Certificate, tag, and licensing labels
++  privateKey: 'Özel anahtar (PKCS#8)',
++
++  // Certificate, tag, and licensing labels
++  installNewCertificate: 'Yeni sertifika yükle',
++
++  // Certificate, tag, and licensing labels
++  replaceExistingCertificate: 'Mevcut sertifikayı değiştir',
++
++  // Certificate, tag, and licensing labels
++  customFields: 'Özel alanlar',
++
++  // Certificate, tag, and licensing labels
++  addColor: 'Renk ekle',
++
++  // Certificate, tag, and licensing labels
++  addCustomField: 'Özel alan ekle',
++
++  // Certificate, tag, and licensing labels
++  advancedTagCreation: 'Gelişmiş etiket oluşturma',
++
++  // Certificate, tag, and licensing labels
++  availableXoaPremium: 'XOA Premium\'da kullanılabilir',
++
++  // Certificate, tag, and licensing labels
++  availableXoaPlan: 'XOA {plan}\'de kullanılabilir',
++
++  // Certificate, tag, and licensing labels
++  detach: 'Ayır',
++
++  // Certificate, tag, and licensing labels
++  editCustomField: 'Özel alanı düzenle',
++
++  // Certificate, tag, and licensing labels
++  deleteCustomField: 'Özel alanı sil',
++
++  // Certificate, tag, and licensing labels
++  onlyAvailableXoaUsers: 'Yalnızca XOA kullanıcıları kullanılabilir',
++
++  // Certificate, tag, and licensing labels
++  removeColor: 'Rengi kaldır',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/zh.js b/packages/xo-web/src/common/intl/locales/zh.js
+index 3c8ff4c..1343c40 100644
+--- a/packages/xo-web/src/common/intl/locales/zh.js
++++ b/packages/xo-web/src/common/intl/locales/zh.js
+@@ -2432,4 +2432,55 @@ export default {
+ 
+   // Core network, state, licensing, and certificate labels
+   expiry: '到期时间',
++
++  // Certificate, tag, and licensing labels
++  fingerprint: '指纹',
++
++  // Certificate, tag, and licensing labels
++  certificate: '证书（PEM）',
++
++  // Certificate, tag, and licensing labels
++  certificateChain: '证书链（PEM）',
++
++  // Certificate, tag, and licensing labels
++  privateKey: '私钥（PKCS#8）',
++
++  // Certificate, tag, and licensing labels
++  installNewCertificate: '安装新证书',
++
++  // Certificate, tag, and licensing labels
++  replaceExistingCertificate: '替换现有证书',
++
++  // Certificate, tag, and licensing labels
++  customFields: '自定义字段',
++
++  // Certificate, tag, and licensing labels
++  addColor: '添加颜色',
++
++  // Certificate, tag, and licensing labels
++  addCustomField: '添加自定义字段',
++
++  // Certificate, tag, and licensing labels
++  advancedTagCreation: '高级标签创建',
++
++  // Certificate, tag, and licensing labels
++  availableXoaPremium: 'XOA Premium 中可用',
++
++  // Certificate, tag, and licensing labels
++  availableXoaPlan: 'XOA {plan} 中可用',
++
++  // Certificate, tag, and licensing labels
++  detach: '分离',
++
++  // Certificate, tag, and licensing labels
++  editCustomField: '编辑自定义字段',
++
++  // Certificate, tag, and licensing labels
++  deleteCustomField: '删除自定义字段',
++
++  // Certificate, tag, and licensing labels
++  onlyAvailableXoaUsers: '仅 XOA 用户可用',
++
++  // Certificate, tag, and licensing labels
++  removeColor: '删除颜色',
+ }

@@ -1,0 +1,111 @@
+#!/bin/sh
+set -eu
+
+usage() {
+    echo "usage: $0 {manual|check|install} {daily|weekly} {Mon|Tue|Wed|Thu|Fri|Sat|Sun} HH:MM" >&2
+    echo "       $0 channel {stable|testing}" >&2
+    exit 2
+}
+
+CONFIG_DIR=${XOA_HL_CONFIG_DIR:-/etc/xoa-hl}
+CONFIG_FILE="$CONFIG_DIR/update.conf"
+LOCK_FILE=${XOA_HL_CONFIG_LOCK:-/run/xoa-hl-configure-updates.lock}
+
+# Rewrite only the CHANNEL line, leaving the schedule and timers untouched.
+if [ "${1:-}" = channel ]; then
+    [ "$#" -eq 2 ] || usage
+    case "$2" in stable|testing) ;; *) usage ;; esac
+    exec 9>"$LOCK_FILE"
+    flock -x 9
+    mkdir -p "$CONFIG_DIR"
+    channel_tmp=$(mktemp "$CONFIG_DIR/.update.conf.XXXXXX")
+    trap 'rm -f "$channel_tmp"' EXIT HUP INT TERM
+    { grep -v '^CHANNEL=' "$CONFIG_FILE" 2>/dev/null || true; printf 'CHANNEL=%s\n' "$2"; } > "$channel_tmp"
+    chmod 0644 "$channel_tmp"
+    mv -f "$channel_tmp" "$CONFIG_FILE"
+    trap - EXIT HUP INT TERM
+    exit 0
+fi
+
+[ "$#" -eq 4 ] || usage
+mode=$1
+frequency=$2
+day=$3
+run_time=$4
+
+case "$mode" in manual|check|install) ;; *) usage ;; esac
+case "$frequency" in daily|weekly) ;; *) usage ;; esac
+case "$day" in Mon|Tue|Wed|Thu|Fri|Sat|Sun) ;; *) usage ;; esac
+
+case "$run_time" in
+    [0-1][0-9]:[0-5][0-9]|2[0-3]:[0-5][0-9]) ;;
+    *) usage ;;
+esac
+
+if [ "$frequency" = daily ]; then
+    calendar="*-*-* $run_time:00"
+else
+    calendar="$day *-*-* $run_time:00"
+fi
+
+# Validate with systemd before changing any persistent file or enabled unit.
+systemd-analyze calendar "$calendar" >/dev/null
+
+SYSTEMD_DIR=${XOA_HL_SYSTEMD_DIR:-/etc/systemd/system}
+CHECK_DROPIN_DIR="$SYSTEMD_DIR/xoa-hl-check-update.timer.d"
+AUTO_DROPIN_DIR="$SYSTEMD_DIR/xoa-hl-auto-update.timer.d"
+
+exec 9>"$LOCK_FILE"
+flock -x 9
+
+# A schedule change keeps the channel chosen earlier.
+channel=$(sed -n 's/^CHANNEL=//p' "$CONFIG_FILE" 2>/dev/null | head -n 1)
+[ "$channel" = testing ] || channel=stable
+
+mkdir -p "$CONFIG_DIR" "$CHECK_DROPIN_DIR" "$AUTO_DROPIN_DIR"
+config_tmp=$(mktemp "$CONFIG_DIR/.update.conf.XXXXXX")
+check_tmp=$(mktemp "$CHECK_DROPIN_DIR/.schedule.conf.XXXXXX")
+auto_tmp=$(mktemp "$AUTO_DROPIN_DIR/.schedule.conf.XXXXXX")
+trap 'rm -f "$config_tmp" "$check_tmp" "$auto_tmp"' EXIT HUP INT TERM
+
+{
+    printf 'MODE=%s\n' "$mode"
+    printf 'FREQUENCY=%s\n' "$frequency"
+    printf 'DAY=%s\n' "$day"
+    printf 'TIME=%s\n' "$run_time"
+    printf 'AUTO_REBOOT=no\n'
+    printf 'CHANNEL=%s\n' "$channel"
+} > "$config_tmp"
+
+write_dropin() {
+    target=$1
+    {
+        echo '[Timer]'
+        echo 'OnCalendar='
+        printf 'OnCalendar=%s\n' "$calendar"
+        echo 'RandomizedDelaySec=0'
+    } > "$target"
+}
+
+write_dropin "$check_tmp"
+write_dropin "$auto_tmp"
+chmod 0644 "$config_tmp" "$check_tmp" "$auto_tmp"
+mv -f "$config_tmp" "$CONFIG_FILE"
+mv -f "$check_tmp" "$CHECK_DROPIN_DIR/schedule.conf"
+mv -f "$auto_tmp" "$AUTO_DROPIN_DIR/schedule.conf"
+trap - EXIT HUP INT TERM
+
+systemctl daemon-reload
+case "$mode" in
+    manual)
+        systemctl disable --now xoa-hl-check-update.timer xoa-hl-auto-update.timer
+        ;;
+    check)
+        systemctl disable --now xoa-hl-auto-update.timer
+        systemctl enable --now xoa-hl-check-update.timer
+        ;;
+    install)
+        systemctl disable --now xoa-hl-check-update.timer
+        systemctl enable --now xoa-hl-auto-update.timer
+        ;;
+esac

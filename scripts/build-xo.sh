@@ -29,12 +29,59 @@ XO_SHORT_SHA="${XO_COMMIT:0:8}"
 VERSION="${XO_VERSION}_${XO_SHORT_SHA}"
 echo "$VERSION" > "$OUT_DIR/VERSION"
 
+echo "==> Validating patch metadata"
+PATCH_METADATA="$PATCH_DIR/metadata.toml"
+if [ -f "$PATCH_METADATA" ]; then
+    echo "  Found patch metadata: $PATCH_METADATA"
+    echo "  Validating patches against metadata..."
+    
+    # Count patches in metadata
+    # grep -c already prints 0 on no match; `|| true` only absorbs its exit 1
+    # (`|| echo 0` would append a second line and break the -ne test below).
+    METADATA_PATCH_COUNT=$(grep -c '^\[\[patches\]\]' "$PATCH_METADATA" || true)
+    ACTUAL_PATCH_COUNT=$(find "$PATCH_DIR" -maxdepth 1 -name '*.patch' | wc -l)
+    
+    echo "  Metadata entries: $METADATA_PATCH_COUNT, Actual patch files: $ACTUAL_PATCH_COUNT"
+    
+    if [ "$METADATA_PATCH_COUNT" -ne "$ACTUAL_PATCH_COUNT" ]; then
+        echo "::warning:: Patch count mismatch: metadata has $METADATA_PATCH_COUNT entries but $ACTUAL_PATCH_COUNT .patch files exist"
+    fi
+    
+    # Validate each patch file has a corresponding metadata entry
+    for p in "$PATCH_DIR"/*.patch; do
+        [ -f "$p" ] || continue
+        PATCH_ID=$(basename "$p" .patch)
+        if ! grep -q "^id = \"$PATCH_ID\"" "$PATCH_METADATA"; then
+            echo "::warning:: Patch file $(basename "$p") has no corresponding metadata entry"
+        fi
+    done
+    
+    # Validate each metadata entry has a corresponding patch file
+    # Regex kept in a variable: inline quoting inside [[ =~ ]] breaks on the
+    # quotes in the character class and makes the pattern literal.
+    METADATA_ID_RE='^id[[:space:]]*=[[:space:]]*"([^"]+)"'
+    while IFS= read -r line; do
+        if [[ "$line" =~ $METADATA_ID_RE ]]; then
+            PATCH_ID="${BASH_REMATCH[1]}"
+            if [ ! -f "$PATCH_DIR/${PATCH_ID}.patch" ]; then
+                echo "::warning:: Metadata entry for '$PATCH_ID' has no corresponding .patch file"
+            fi
+        fi
+    done < "$PATCH_METADATA"
+else
+    echo "::warning:: No patch metadata found at $PATCH_METADATA"
+    echo "  Consider adding metadata.toml to document patches"
+fi
+
 echo "==> Applying patches"
 for p in "$PATCH_DIR"/*.patch; do
     [ -f "$p" ] || continue
     echo "  - $(basename "$p")"
     git apply --verbose "$p"
 done
+
+echo "==> Compacting untranslated locale entries for the initial UI bundle"
+python3 /build/scripts/compact-xo-locales.py --minimum-entries 1000 "$XO_SRC"
 
 echo "==> Configuring sample.config.toml (XO5 UI + Redis)"
 # Target sample.config.toml, this is what %post copies to the user config
@@ -56,15 +103,6 @@ cat > packages/xo-server/xoahl.config.toml << 'EOF'
 uri = 'redis://127.0.0.1:6379/0'
 EOF
 
-echo "==> Generating self-signed TLS certificate"
-openssl req -x509 -newkey rsa:4096 \
-  -keyout packages/xo-server/xoahl.key \
-  -out packages/xo-server/xoahl.crt \
-  -days 3650 -nodes \
-  -subj '/CN=xoa.local'
-chmod 600 packages/xo-server/xoahl.key
-chmod 644 packages/xo-server/xoahl.crt
-
 # Hard verification, sed exits 0 even on no-match, so confirm the lines
 # actually changed. CI must fail loudly rather than ship a broken tarball.
 #grep -q "^'/' = '../xo-web/dist/'" packages/xo-server/sample.config.toml || \
@@ -74,6 +112,12 @@ echo "==> Install + build (all workspaces)"
 yarn --network-timeout 300000
 yarn --network-timeout 300000 build
 
+# The pinned root build filters out @xen-orchestra/web. Its /v6 mount and
+# Try XO 6 link already exist, so explicitly build the bundled preview too.
+# Use the upstream asset build used by prepublishOnly, without changing the pin.
+yarn --network-timeout 300000 workspace @xen-orchestra/web run build-only
+python3 /build/scripts/check-gui-assets.py "$XO_SRC"
+
 echo "==> Pruning: drop test/dev/cloud packages, keep everything else"
 rm -rf .git .github .changesets docs
 rm -rf packages/xo-server-test*
@@ -82,6 +126,9 @@ rm -rf packages/xo-server-cloud
 echo "==> Stripping devDependencies (workspace symlinks preserved)"
 yarn workspaces focus --production 2>/dev/null || \
   yarn install --production --ignore-scripts --prefer-offline
+
+echo "==> Verify both GUI payloads survived pruning"
+python3 /build/scripts/check-gui-assets.py "$XO_SRC"
 
 echo "==> Packaging tarball (whole pruned monorepo)"
 tar czf "$OUT_DIR/xoa-hl-${VERSION}.tar.gz" \

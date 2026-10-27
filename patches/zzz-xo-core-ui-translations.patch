@@ -1,0 +1,1181 @@
+diff --git a/packages/xo-web/src/common/intl/locales/es.js b/packages/xo-web/src/common/intl/locales/es.js
+index 10a6fd7..f80842f 100644
+--- a/packages/xo-web/src/common/intl/locales/es.js
++++ b/packages/xo-web/src/common/intl/locales/es.js
+@@ -3838,4 +3838,52 @@ export default {
+   xoaHlUpToDate: 'Actualizado',
+   xoaHlWaitingForOutput: 'Esperando la primera línea del registro…',
+   xoaHlMinutes: '{n, number} min',
++
++  // Core UI labels inherited from XO 5.113.2
++  alpha: 'Alfa',
++  alerts: 'Alertas',
++  connected: 'Conectado',
++  description: 'Descripción',
++  disable: 'Desactivar',
++  diskState: 'Estado del disco',
++  download: 'Descargar',
++  enable: 'Activar',
++  expiration: 'Vencimiento',
++  hostIp: 'IP del host',
++  interfaces: 'Interfaces',
++  inUse: 'En uso',
++  node: 'Nodo',
++  stopOnError: 'Detenerse al producirse un error',
++  new: 'Nuevo',
++  nodeStatus: 'Estado del nodo',
++  notDefined: 'Sin definir',
++  status: 'Estado',
++  configured: 'Configurado',
++  notConfigured: 'Sin configurar',
++  notifications: 'Notificaciones',
++  noNotifications: 'Todavía no hay notificaciones.',
++  moreDetails: 'Más detalles',
++  notInstalled: 'No instalado',
++  noValue: 'Ninguno',
++  noExpiration: 'Sin vencimiento',
++  compression: 'Compresión',
++  core: 'Núcleo',
++  paths: 'Rutas',
++  pools: 'Pools',
++  remotes: 'Almacenamientos remotos',
++  type: 'Tipo',
++  restore: 'Restaurar',
++  delete: 'Eliminar',
++  vms: 'VM',
++  metadata: 'Metadatos',
++  backupJobs: 'Trabajos de copia de seguridad',
++  name: 'Nombre',
++  value: 'Valor',
++  address: 'Dirección',
++  user: 'Usuario',
++  unknown: 'Desconocido',
++  advancedSettings: 'Configuración avanzada',
++  thick: 'Grueso',
++  thin: 'Fino',
++  noFileSelected: 'No se ha seleccionado ningún archivo',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/fa.js b/packages/xo-web/src/common/intl/locales/fa.js
+index 8d06463..93c31ea 100644
+--- a/packages/xo-web/src/common/intl/locales/fa.js
++++ b/packages/xo-web/src/common/intl/locales/fa.js
+@@ -5163,4 +5163,52 @@ export default {
+   xoaHlUpToDate: 'به‌روز است',
+   xoaHlWaitingForOutput: 'در انتظار نخستین خط گزارش…',
+   xoaHlMinutes: '{n, number} دقیقه',
++
++  // Core UI labels inherited from XO 5.113.2
++  alpha: 'آلفا',
++  alerts: 'هشدارها',
++  connected: 'متصل',
++  description: 'توضیحات',
++  disable: 'غیرفعال کردن',
++  diskState: 'وضعیت دیسک',
++  download: 'دریافت',
++  enable: 'فعال کردن',
++  expiration: 'تاریخ انقضا',
++  hostIp: 'نشانی IP میزبان',
++  interfaces: 'رابط‌ها',
++  inUse: 'در حال استفاده',
++  node: 'گره',
++  stopOnError: 'توقف هنگام خطا',
++  new: 'جدید',
++  nodeStatus: 'وضعیت گره',
++  notDefined: 'تعریف‌نشده',
++  status: 'وضعیت',
++  configured: 'پیکربندی‌شده',
++  notConfigured: 'پیکربندی‌نشده',
++  notifications: 'اعلان‌ها',
++  noNotifications: 'هنوز اعلانی وجود ندارد.',
++  moreDetails: 'جزئیات بیشتر',
++  notInstalled: 'نصب نشده',
++  noValue: 'هیچ‌کدام',
++  noExpiration: 'بدون تاریخ انقضا',
++  compression: 'فشرده‌سازی',
++  core: 'هسته',
++  paths: 'مسیرها',
++  pools: 'استخرها',
++  remotes: 'ذخیره‌گاه‌های راه دور',
++  type: 'نوع',
++  restore: 'بازیابی',
++  delete: 'حذف',
++  vms: 'ماشین‌های مجازی',
++  metadata: 'فراداده',
++  backupJobs: 'وظایف پشتیبان‌گیری',
++  name: 'نام',
++  value: 'مقدار',
++  address: 'نشانی',
++  user: 'کاربر',
++  unknown: 'نامشخص',
++  advancedSettings: 'تنظیمات پیشرفته',
++  thick: 'ضخیم',
++  thin: 'نازک',
++  noFileSelected: 'فایلی انتخاب نشده است',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/fr.js b/packages/xo-web/src/common/intl/locales/fr.js
+index c5054e5..eab6d47 100644
+--- a/packages/xo-web/src/common/intl/locales/fr.js
++++ b/packages/xo-web/src/common/intl/locales/fr.js
+@@ -3923,4 +3923,52 @@ export default {
+   xoaHlUpToDate: 'À jour',
+   xoaHlWaitingForOutput: 'En attente de la première ligne du journal…',
+   xoaHlMinutes: '{n, number} min',
++
++  // Core UI labels inherited from XO 5.113.2
++  alpha: 'Alpha',
++  alerts: 'Alertes',
++  connected: 'Connecté',
++  description: 'Description',
++  disable: 'Désactiver',
++  diskState: 'État du disque',
++  download: 'Télécharger',
++  enable: 'Activer',
++  expiration: 'Expiration',
++  hostIp: 'IP de l\'hôte',
++  interfaces: 'Interfaces',
++  inUse: 'Utilisé',
++  node: 'Nœud',
++  stopOnError: 'Arrêter à la première erreur',
++  new: 'Nouveau',
++  nodeStatus: 'État du nœud',
++  notDefined: 'Non défini',
++  status: 'État',
++  configured: 'Configuré',
++  notConfigured: 'Non configuré',
++  notifications: 'Notifications',
++  noNotifications: 'Aucune notification pour le moment.',
++  moreDetails: 'Plus de détails',
++  notInstalled: 'Non installé',
++  noValue: 'Aucun',
++  noExpiration: 'Sans expiration',
++  compression: 'Compression',
++  core: 'Cœur',
++  paths: 'Chemins',
++  pools: 'Pools',
++  remotes: 'Stockages distants',
++  type: 'Type',
++  restore: 'Restaurer',
++  delete: 'Supprimer',
++  vms: 'VM',
++  metadata: 'Métadonnées',
++  backupJobs: 'Tâches de sauvegarde',
++  name: 'Nom',
++  value: 'Valeur',
++  address: 'Adresse',
++  user: 'Utilisateur',
++  unknown: 'Inconnu',
++  advancedSettings: 'Paramètres avancés',
++  thick: 'Épais',
++  thin: 'Fin',
++  noFileSelected: 'Aucun fichier sélectionné',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/he.js b/packages/xo-web/src/common/intl/locales/he.js
+index 8d043e8..31b5656 100644
+--- a/packages/xo-web/src/common/intl/locales/he.js
++++ b/packages/xo-web/src/common/intl/locales/he.js
+@@ -3169,4 +3169,52 @@ export default {
+   xoaHlUpToDate: 'מעודכן',
+   xoaHlWaitingForOutput: 'ממתינים לשורה הראשונה ביומן…',
+   xoaHlMinutes: '{n, number} דקות',
++
++  // Core UI labels inherited from XO 5.113.2
++  alpha: 'אלפא',
++  alerts: 'התראות',
++  connected: 'מחובר',
++  description: 'תיאור',
++  disable: 'השבתה',
++  diskState: 'מצב הדיסק',
++  download: 'הורדה',
++  enable: 'הפעלה',
++  expiration: 'תאריך תפוגה',
++  hostIp: 'כתובת ה־IP של המארח',
++  interfaces: 'ממשקים',
++  inUse: 'בשימוש',
++  node: 'צומת',
++  stopOnError: 'עצירה במקרה של שגיאה',
++  new: 'חדש',
++  nodeStatus: 'מצב הצומת',
++  notDefined: 'לא הוגדר',
++  status: 'מצב',
++  configured: 'הוגדר',
++  notConfigured: 'לא הוגדר',
++  notifications: 'הודעות',
++  noNotifications: 'אין עדיין הודעות.',
++  moreDetails: 'פרטים נוספים',
++  notInstalled: 'לא מותקן',
++  noValue: 'ללא',
++  noExpiration: 'ללא תאריך תפוגה',
++  compression: 'דחיסה',
++  core: 'ליבה',
++  paths: 'נתיבים',
++  pools: 'מאגרים',
++  remotes: 'אחסון מרוחק',
++  type: 'סוג',
++  restore: 'שחזור',
++  delete: 'מחיקה',
++  vms: 'מכונות וירטואליות',
++  metadata: 'מטא־נתונים',
++  backupJobs: 'משימות גיבוי',
++  name: 'שם',
++  value: 'ערך',
++  address: 'כתובת',
++  user: 'משתמש',
++  unknown: 'לא ידוע',
++  advancedSettings: 'הגדרות מתקדמות',
++  thick: 'עבה',
++  thin: 'דק',
++  noFileSelected: 'לא נבחר קובץ',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/hu.js b/packages/xo-web/src/common/intl/locales/hu.js
+index f6ab2b5..fa43bf7 100644
+--- a/packages/xo-web/src/common/intl/locales/hu.js
++++ b/packages/xo-web/src/common/intl/locales/hu.js
+@@ -3631,4 +3631,52 @@ export default {
+   xoaHlUpToDate: 'Naprakész',
+   xoaHlWaitingForOutput: 'Várakozás a napló első sorára…',
+   xoaHlMinutes: '{n, number} perc',
++
++  // Core UI labels inherited from XO 5.113.2
++  alpha: 'Alfa',
++  alerts: 'Riasztások',
++  connected: 'Csatlakoztatva',
++  description: 'Leírás',
++  disable: 'Letiltás',
++  diskState: 'Lemez állapota',
++  download: 'Letöltés',
++  enable: 'Engedélyezés',
++  expiration: 'Lejárat',
++  hostIp: 'Gazdagép IP-címe',
++  interfaces: 'Hálózati csatolók',
++  inUse: 'Használatban',
++  node: 'Csomópont',
++  stopOnError: 'Leállítás hiba esetén',
++  new: 'Új',
++  nodeStatus: 'Csomópont állapota',
++  notDefined: 'Nincs megadva',
++  status: 'Állapot',
++  configured: 'Beállítva',
++  notConfigured: 'Nincs beállítva',
++  notifications: 'Értesítések',
++  noNotifications: 'Még nincsenek értesítések.',
++  moreDetails: 'További részletek',
++  notInstalled: 'Nincs telepítve',
++  noValue: 'Nincs',
++  noExpiration: 'Nem jár le',
++  compression: 'Tömörítés',
++  core: 'Mag',
++  paths: 'Elérési utak',
++  pools: 'Készletek',
++  remotes: 'Távoli tárolók',
++  type: 'Típus',
++  restore: 'Visszaállítás',
++  delete: 'Törlés',
++  vms: 'Virtuális gépek',
++  metadata: 'Metaadatok',
++  backupJobs: 'Biztonsági mentési feladatok',
++  name: 'Név',
++  value: 'Érték',
++  address: 'Cím',
++  user: 'Felhasználó',
++  unknown: 'Ismeretlen',
++  advancedSettings: 'Speciális beállítások',
++  thick: 'Vastag',
++  thin: 'Vékony',
++  noFileSelected: 'Nincs kiválasztva fájl',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/it.js b/packages/xo-web/src/common/intl/locales/it.js
+index b3a5fcd..33bef1c 100644
+--- a/packages/xo-web/src/common/intl/locales/it.js
++++ b/packages/xo-web/src/common/intl/locales/it.js
+@@ -5969,4 +5969,34 @@ export default {
+   xoaHlUpToDate: 'Aggiornato',
+   xoaHlWaitingForOutput: 'In attesa della prima riga del registro…',
+   xoaHlMinutes: '{n, number} min',
++
++  // Core UI labels inherited from XO 5.113.2
++  alpha: 'Alfa',
++  alerts: 'Avvisi',
++  connected: 'Connesso',
++  description: 'Descrizione',
++  disable: 'Disattiva',
++  diskState: 'Stato del disco',
++  download: 'Scarica',
++  enable: 'Attiva',
++  expiration: 'Scadenza',
++  hostIp: 'IP dell\'host',
++  interfaces: 'Interfacce',
++  inUse: 'In uso',
++  node: 'Nodo',
++  stopOnError: 'Interrompi in caso di errore',
++  new: 'Nuovo',
++  nodeStatus: 'Stato del nodo',
++  notDefined: 'Non definito',
++  status: 'Stato',
++  configured: 'Configurato',
++  notConfigured: 'Non configurato',
++  noExpiration: 'Nessuna scadenza',
++  core: 'Core',
++  value: 'Valore',
++  unknown: 'Sconosciuto',
++  advancedSettings: 'Impostazioni avanzate',
++  thick: 'Thick',
++  thin: 'Thin',
++  noFileSelected: 'Nessun file selezionato',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/ja.js b/packages/xo-web/src/common/intl/locales/ja.js
+index 602e393..6251db8 100644
+--- a/packages/xo-web/src/common/intl/locales/ja.js
++++ b/packages/xo-web/src/common/intl/locales/ja.js
+@@ -9,40 +9,40 @@ addLocaleData(reactIntlData)
+ 
+ export default {
+   // Original text: 'Alpha'
+-  alpha: undefined,
++  alpha: 'アルファ版',
+ 
+   // Original text: 'Alerts'
+-  alerts: undefined,
++  alerts: 'アラート',
+ 
+   // Original text: 'Connected'
+-  connected: undefined,
++  connected: '接続済み',
+ 
+   // Original text: 'Description'
+-  description: undefined,
++  description: '説明',
+ 
+   // Original text: 'Delete source VM'
+   deleteSourceVm: undefined,
+ 
+   // Original text: 'Disable'
+-  disable: undefined,
++  disable: '無効にする',
+ 
+   // Original text: 'Disk state'
+-  diskState: undefined,
++  diskState: 'ディスクの状態',
+ 
+   // Original text: 'Download'
+-  download: undefined,
++  download: 'ダウンロード',
+ 
+   // Original text: 'Enable'
+-  enable: undefined,
++  enable: '有効にする',
+ 
+   // Original text: 'Expiration'
+-  expiration: undefined,
++  expiration: '有効期限',
+ 
+   // Original text: 'Host IP'
+-  hostIp: undefined,
++  hostIp: 'ホスト IP',
+ 
+   // Original text: 'Interfaces'
+-  interfaces: undefined,
++  interfaces: 'インターフェース',
+ 
+   // Original text: "{key}: {value}"
+   keyValue: '{key} : {value}',
+@@ -66,19 +66,19 @@ export default {
+   esxiImportStopOnErrorDescription: undefined,
+ 
+   // Original text: 'In use'
+-  inUse: undefined,
++  inUse: '使用中',
+ 
+   // Original text: 'Number of VMs to import in parallel'
+   nImportVmsInParallel: undefined,
+ 
+   // Original text: 'Node'
+-  node: undefined,
++  node: 'ノード',
+ 
+   // Original text: 'PIFs'
+   pifs: undefined,
+ 
+   // Original text: 'Stop on error'
+-  stopOnError: undefined,
++  stopOnError: 'エラー発生時に停止',
+ 
+   // Original text: "UUID"
+   uuid: 'UUID',
+@@ -90,16 +90,16 @@ export default {
+   vmSrUsage: undefined,
+ 
+   // Original text: 'New'
+-  new: undefined,
++  new: '新規',
+ 
+   // Original text: 'Node status'
+-  nodeStatus: undefined,
++  nodeStatus: 'ノードの状態',
+ 
+   // Original text: 'Not defined'
+-  notDefined: undefined,
++  notDefined: '未定義',
+ 
+   // Original text: 'Status'
+-  status: undefined,
++  status: '状態',
+ 
+   // Original text: "Connecting"
+   statusConnecting: '接続中……',
+@@ -126,10 +126,10 @@ export default {
+   memoryFree: undefined,
+ 
+   // Original text: 'Configured'
+-  configured: undefined,
++  configured: '設定済み',
+ 
+   // Original text: 'Not configured'
+-  notConfigured: undefined,
++  notConfigured: '未設定',
+ 
+   // Original text: 'UTC date'
+   utcDate: undefined,
+@@ -141,16 +141,16 @@ export default {
+   date: undefined,
+ 
+   // Original text: 'Notifications'
+-  notifications: undefined,
++  notifications: '通知',
+ 
+   // Original text: 'No notifications so far.'
+-  noNotifications: undefined,
++  noNotifications: '通知はまだありません。',
+ 
+   // Original text: 'NEW!'
+   notificationNew: undefined,
+ 
+   // Original text: 'More details'
+-  moreDetails: undefined,
++  moreDetails: '詳細',
+ 
+   // Original text: 'Subject'
+   messageSubject: undefined,
+@@ -171,7 +171,7 @@ export default {
+   tryXoa: undefined,
+ 
+   // Original text: 'Not installed'
+-  notInstalled: undefined,
++  notInstalled: '未インストール',
+ 
+   // Original text: "Long click to edit"
+   editableLongClickPlaceholder: '押し続けることで編集',
+@@ -186,16 +186,16 @@ export default {
+   showLogs: undefined,
+ 
+   // Original text: 'None'
+-  noValue: undefined,
++  noValue: 'なし',
+ 
+   // Original text: 'No expiration'
+-  noExpiration: undefined,
++  noExpiration: '有効期限なし',
+ 
+   // Original text: 'Compression'
+-  compression: undefined,
++  compression: '圧縮',
+ 
+   // Original text: 'Core'
+-  core: undefined,
++  core: 'コア',
+ 
+   // Original text: 'CPU'
+   cpu: undefined,
+@@ -219,7 +219,7 @@ export default {
+   disableAllHostsMultipathing: undefined,
+ 
+   // Original text: 'Paths'
+-  paths: undefined,
++  paths: 'パス',
+ 
+   // Original text: 'PBD disconnected'
+   pbdDisconnected: undefined,
+@@ -228,10 +228,10 @@ export default {
+   hasInactivePath: undefined,
+ 
+   // Original text: 'Pools'
+-  pools: undefined,
++  pools: 'プール',
+ 
+   // Original text: 'Remotes'
+-  remotes: undefined,
++  remotes: 'リモート',
+ 
+   // Original text: 'Scheduler granularity'
+   schedulerGranularity: undefined,
+@@ -243,22 +243,22 @@ export default {
+   socket: undefined,
+ 
+   // Original text: 'Type'
+-  type: undefined,
++  type: '種類',
+ 
+   // Original text: 'Restore'
+-  restore: undefined,
++  restore: '復元',
+ 
+   // Original text: 'Delete'
+-  delete: undefined,
++  delete: '削除',
+ 
+   // Original text: 'VMs'
+-  vms: undefined,
++  vms: 'VM',
+ 
+   // Original text: 'Max vCPUs'
+   cpusMax: undefined,
+ 
+   // Original text: 'Metadata'
+-  metadata: undefined,
++  metadata: 'メタデータ',
+ 
+   // Original text: 'Choose a backup'
+   chooseBackup: undefined,
+@@ -270,7 +270,7 @@ export default {
+   clickToShowError: undefined,
+ 
+   // Original text: 'Backup jobs'
+-  backupJobs: undefined,
++  backupJobs: 'バックアップジョブ',
+ 
+   // Original text: '({ nSessions, number }) iSCSI session{nSessions, plural, one {} other {s}}'
+   iscsiSessions: undefined,
+@@ -285,13 +285,13 @@ export default {
+   proxies: undefined,
+ 
+   // Original text: 'Name'
+-  name: undefined,
++  name: '名前',
+ 
+   // Original text: 'Value'
+-  value: undefined,
++  value: '値',
+ 
+   // Original text: 'Address'
+-  address: undefined,
++  address: 'アドレス',
+ 
+   // Original text: 'VM'
+   vm: undefined,
+@@ -315,7 +315,7 @@ export default {
+   static: undefined,
+ 
+   // Original text: 'User'
+-  user: undefined,
++  user: 'ユーザー',
+ 
+   // Original text: 'deleted ({ name })'
+   deletedUser: undefined,
+@@ -354,13 +354,13 @@ export default {
+   emailPlaceholderExample: undefined,
+ 
+   // Original text: 'Unknown'
+-  unknown: undefined,
++  unknown: '不明',
+ 
+   // Original text: 'Upgrades available'
+   upgradesAvailable: undefined,
+ 
+   // Original text: 'Advanced settings'
+-  advancedSettings: undefined,
++  advancedSettings: '詳細設定',
+ 
+   // Original text: 'Force upgrade'
+   forceUpgrade: undefined,
+@@ -369,10 +369,10 @@ export default {
+   txChecksumming: undefined,
+ 
+   // Original text: 'Thick'
+-  thick: undefined,
++  thick: 'シック',
+ 
+   // Original text: 'Thin'
+-  thin: undefined,
++  thin: 'シン',
+ 
+   // Original text: 'Unknown size'
+   unknownSize: undefined,
+@@ -435,7 +435,7 @@ export default {
+   xcpNg: undefined,
+ 
+   // Original text: 'No file selected'
+-  noFileSelected: undefined,
++  noFileSelected: 'ファイルが選択されていません',
+ 
+   // Original text: 'Number of retries if VM backup fails'
+   nRetriesVmBackupFailures: undefined,
+diff --git a/packages/xo-web/src/common/intl/locales/pl.js b/packages/xo-web/src/common/intl/locales/pl.js
+index b410adc..f26a0ae 100644
+--- a/packages/xo-web/src/common/intl/locales/pl.js
++++ b/packages/xo-web/src/common/intl/locales/pl.js
+@@ -3185,4 +3185,52 @@ export default {
+   xoaHlUpToDate: 'Aktualne',
+   xoaHlWaitingForOutput: 'Oczekiwanie na pierwszy wiersz dziennika…',
+   xoaHlMinutes: '{n, number} min',
++
++  // Core UI labels inherited from XO 5.113.2
++  alpha: 'Alfa',
++  alerts: 'Alerty',
++  connected: 'Połączono',
++  description: 'Opis',
++  disable: 'Wyłącz',
++  diskState: 'Stan dysku',
++  download: 'Pobierz',
++  enable: 'Włącz',
++  expiration: 'Data wygaśnięcia',
++  hostIp: 'Adres IP hosta',
++  interfaces: 'Interfejsy',
++  inUse: 'W użyciu',
++  node: 'Węzeł',
++  stopOnError: 'Zatrzymaj przy błędzie',
++  new: 'Nowy',
++  nodeStatus: 'Stan węzła',
++  notDefined: 'Nie zdefiniowano',
++  status: 'Stan',
++  configured: 'Skonfigurowano',
++  notConfigured: 'Nie skonfigurowano',
++  notifications: 'Powiadomienia',
++  noNotifications: 'Nie ma jeszcze powiadomień.',
++  moreDetails: 'Więcej szczegółów',
++  notInstalled: 'Nie zainstalowano',
++  noValue: 'Brak',
++  noExpiration: 'Bez daty wygaśnięcia',
++  compression: 'Kompresja',
++  core: 'Rdzeń',
++  paths: 'Ścieżki',
++  pools: 'Pule',
++  remotes: 'Zdalne magazyny',
++  type: 'Typ',
++  restore: 'Przywróć',
++  delete: 'Usuń',
++  vms: 'Maszyny wirtualne',
++  metadata: 'Metadane',
++  backupJobs: 'Zadania kopii zapasowej',
++  name: 'Nazwa',
++  value: 'Wartość',
++  address: 'Adres',
++  user: 'Użytkownik',
++  unknown: 'Nieznane',
++  advancedSettings: 'Ustawienia zaawansowane',
++  thick: 'Gruby',
++  thin: 'Cienki',
++  noFileSelected: 'Nie wybrano pliku',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/pt.js b/packages/xo-web/src/common/intl/locales/pt.js
+index 6ca5d79..988fd0b 100644
+--- a/packages/xo-web/src/common/intl/locales/pt.js
++++ b/packages/xo-web/src/common/intl/locales/pt.js
+@@ -3182,4 +3182,52 @@ export default {
+   xoaHlUpToDate: 'Atualizado',
+   xoaHlWaitingForOutput: 'À espera da primeira linha do registo…',
+   xoaHlMinutes: '{n, number} min',
++
++  // Core UI labels inherited from XO 5.113.2
++  alpha: 'Alfa',
++  alerts: 'Alertas',
++  connected: 'Ligado',
++  description: 'Descrição',
++  disable: 'Desativar',
++  diskState: 'Estado do disco',
++  download: 'Transferir',
++  enable: 'Ativar',
++  expiration: 'Validade',
++  hostIp: 'IP do anfitrião',
++  interfaces: 'Interfaces',
++  inUse: 'Em utilização',
++  node: 'Nó',
++  stopOnError: 'Parar em caso de erro',
++  new: 'Novo',
++  nodeStatus: 'Estado do nó',
++  notDefined: 'Não definido',
++  status: 'Estado',
++  configured: 'Configurado',
++  notConfigured: 'Não configurado',
++  notifications: 'Notificações',
++  noNotifications: 'Ainda não há notificações.',
++  moreDetails: 'Mais detalhes',
++  notInstalled: 'Não instalado',
++  noValue: 'Nenhum',
++  noExpiration: 'Sem prazo de validade',
++  compression: 'Compressão',
++  core: 'Núcleo',
++  paths: 'Caminhos',
++  pools: 'Pools',
++  remotes: 'Armazenamentos remotos',
++  type: 'Tipo',
++  restore: 'Restaurar',
++  delete: 'Eliminar',
++  vms: 'VM',
++  metadata: 'Metadados',
++  backupJobs: 'Tarefas de cópia de segurança',
++  name: 'Nome',
++  value: 'Valor',
++  address: 'Endereço',
++  user: 'Utilizador',
++  unknown: 'Desconhecido',
++  advancedSettings: 'Definições avançadas',
++  thick: 'Espesso',
++  thin: 'Fino',
++  noFileSelected: 'Nenhum ficheiro selecionado',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/ru.js b/packages/xo-web/src/common/intl/locales/ru.js
+index e441413..03f6fdc 100644
+--- a/packages/xo-web/src/common/intl/locales/ru.js
++++ b/packages/xo-web/src/common/intl/locales/ru.js
+@@ -9,40 +9,40 @@ addLocaleData(reactIntlData)
+ 
+ export default {
+   // Original text: 'Alpha'
+-  alpha: undefined,
++  alpha: 'Альфа',
+ 
+   // Original text: 'Alerts'
+-  alerts: undefined,
++  alerts: 'Оповещения',
+ 
+   // Original text: 'Connected'
+-  connected: undefined,
++  connected: 'Подключено',
+ 
+   // Original text: 'Description'
+-  description: undefined,
++  description: 'Описание',
+ 
+   // Original text: 'Delete source VM'
+   deleteSourceVm: undefined,
+ 
+   // Original text: 'Disable'
+-  disable: undefined,
++  disable: 'Отключить',
+ 
+   // Original text: 'Disk state'
+-  diskState: undefined,
++  diskState: 'Состояние диска',
+ 
+   // Original text: 'Download'
+-  download: undefined,
++  download: 'Скачать',
+ 
+   // Original text: 'Enable'
+-  enable: undefined,
++  enable: 'Включить',
+ 
+   // Original text: 'Expiration'
+-  expiration: undefined,
++  expiration: 'Срок действия',
+ 
+   // Original text: 'Host IP'
+-  hostIp: undefined,
++  hostIp: 'IP-адрес хоста',
+ 
+   // Original text: 'Interfaces'
+-  interfaces: undefined,
++  interfaces: 'Интерфейсы',
+ 
+   // Original text: '{key}: {value}'
+   keyValue: undefined,
+@@ -66,19 +66,19 @@ export default {
+   esxiImportStopOnErrorDescription: undefined,
+ 
+   // Original text: 'In use'
+-  inUse: undefined,
++  inUse: 'Используется',
+ 
+   // Original text: 'Number of VMs to import in parallel'
+   nImportVmsInParallel: undefined,
+ 
+   // Original text: 'Node'
+-  node: undefined,
++  node: 'Узел',
+ 
+   // Original text: 'PIFs'
+   pifs: undefined,
+ 
+   // Original text: 'Stop on error'
+-  stopOnError: undefined,
++  stopOnError: 'Остановить при ошибке',
+ 
+   // Original text: 'UUID'
+   uuid: undefined,
+@@ -90,16 +90,16 @@ export default {
+   vmSrUsage: undefined,
+ 
+   // Original text: 'New'
+-  new: undefined,
++  new: 'Создать',
+ 
+   // Original text: 'Node status'
+-  nodeStatus: undefined,
++  nodeStatus: 'Состояние узла',
+ 
+   // Original text: 'Not defined'
+-  notDefined: undefined,
++  notDefined: 'Не определено',
+ 
+   // Original text: 'Status'
+-  status: undefined,
++  status: 'Состояние',
+ 
+   // Original text: "Connecting"
+   statusConnecting: 'Подключение',
+@@ -126,10 +126,10 @@ export default {
+   memoryFree: undefined,
+ 
+   // Original text: 'Configured'
+-  configured: undefined,
++  configured: 'Настроено',
+ 
+   // Original text: 'Not configured'
+-  notConfigured: undefined,
++  notConfigured: 'Не настроено',
+ 
+   // Original text: 'UTC date'
+   utcDate: undefined,
+@@ -141,16 +141,16 @@ export default {
+   date: undefined,
+ 
+   // Original text: 'Notifications'
+-  notifications: undefined,
++  notifications: 'Уведомления',
+ 
+   // Original text: 'No notifications so far.'
+-  noNotifications: undefined,
++  noNotifications: 'Уведомлений пока нет.',
+ 
+   // Original text: 'NEW!'
+   notificationNew: undefined,
+ 
+   // Original text: 'More details'
+-  moreDetails: undefined,
++  moreDetails: 'Подробнее',
+ 
+   // Original text: 'Subject'
+   messageSubject: undefined,
+@@ -171,7 +171,7 @@ export default {
+   tryXoa: undefined,
+ 
+   // Original text: 'Not installed'
+-  notInstalled: undefined,
++  notInstalled: 'Не установлено',
+ 
+   // Original text: "Long click to edit"
+   editableLongClickPlaceholder: 'Долгое нажатие для редактирования',
+@@ -186,16 +186,16 @@ export default {
+   showLogs: undefined,
+ 
+   // Original text: 'None'
+-  noValue: undefined,
++  noValue: 'Нет',
+ 
+   // Original text: 'No expiration'
+-  noExpiration: undefined,
++  noExpiration: 'Без срока действия',
+ 
+   // Original text: 'Compression'
+-  compression: undefined,
++  compression: 'Сжатие',
+ 
+   // Original text: 'Core'
+-  core: undefined,
++  core: 'Ядро',
+ 
+   // Original text: 'CPU'
+   cpu: undefined,
+@@ -219,7 +219,7 @@ export default {
+   disableAllHostsMultipathing: undefined,
+ 
+   // Original text: 'Paths'
+-  paths: undefined,
++  paths: 'Пути',
+ 
+   // Original text: 'PBD disconnected'
+   pbdDisconnected: undefined,
+@@ -228,10 +228,10 @@ export default {
+   hasInactivePath: undefined,
+ 
+   // Original text: 'Pools'
+-  pools: undefined,
++  pools: 'Пулы',
+ 
+   // Original text: 'Remotes'
+-  remotes: undefined,
++  remotes: 'Удалённые хранилища',
+ 
+   // Original text: 'Scheduler granularity'
+   schedulerGranularity: undefined,
+@@ -240,22 +240,22 @@ export default {
+   socket: undefined,
+ 
+   // Original text: 'Type'
+-  type: undefined,
++  type: 'Тип',
+ 
+   // Original text: 'Restore'
+-  restore: undefined,
++  restore: 'Восстановить',
+ 
+   // Original text: 'Delete'
+-  delete: undefined,
++  delete: 'Удалить',
+ 
+   // Original text: 'VMs'
+-  vms: undefined,
++  vms: 'Виртуальные машины',
+ 
+   // Original text: 'Max vCPUs'
+   cpusMax: undefined,
+ 
+   // Original text: 'Metadata'
+-  metadata: undefined,
++  metadata: 'Метаданные',
+ 
+   // Original text: 'Choose a backup'
+   chooseBackup: undefined,
+@@ -267,7 +267,7 @@ export default {
+   clickToShowError: undefined,
+ 
+   // Original text: 'Backup jobs'
+-  backupJobs: undefined,
++  backupJobs: 'Задания резервного копирования',
+ 
+   // Original text: '({ nSessions, number }) iSCSI session{nSessions, plural, one {} other {s}}'
+   iscsiSessions: undefined,
+@@ -282,13 +282,13 @@ export default {
+   proxies: undefined,
+ 
+   // Original text: 'Name'
+-  name: undefined,
++  name: 'Имя',
+ 
+   // Original text: 'Value'
+-  value: undefined,
++  value: 'Значение',
+ 
+   // Original text: 'Address'
+-  address: undefined,
++  address: 'Адрес',
+ 
+   // Original text: 'VM'
+   vm: undefined,
+@@ -312,7 +312,7 @@ export default {
+   static: undefined,
+ 
+   // Original text: 'User'
+-  user: undefined,
++  user: 'Пользователь',
+ 
+   // Original text: 'deleted ({ name })'
+   deletedUser: undefined,
+@@ -351,13 +351,13 @@ export default {
+   emailPlaceholderExample: undefined,
+ 
+   // Original text: 'Unknown'
+-  unknown: undefined,
++  unknown: 'Неизвестно',
+ 
+   // Original text: 'Upgrades available'
+   upgradesAvailable: undefined,
+ 
+   // Original text: 'Advanced settings'
+-  advancedSettings: undefined,
++  advancedSettings: 'Расширенные настройки',
+ 
+   // Original text: 'Force upgrade'
+   forceUpgrade: undefined,
+@@ -366,10 +366,10 @@ export default {
+   txChecksumming: undefined,
+ 
+   // Original text: 'Thick'
+-  thick: undefined,
++  thick: 'Толстый',
+ 
+   // Original text: 'Thin'
+-  thin: undefined,
++  thin: 'Тонкий',
+ 
+   // Original text: 'Unknown size'
+   unknownSize: undefined,
+@@ -432,7 +432,7 @@ export default {
+   xcpNg: undefined,
+ 
+   // Original text: 'No file selected'
+-  noFileSelected: undefined,
++  noFileSelected: 'Файл не выбран',
+ 
+   // Original text: 'Number of retries if VM backup fails'
+   nRetriesVmBackupFailures: undefined,
+diff --git a/packages/xo-web/src/common/intl/locales/sv.js b/packages/xo-web/src/common/intl/locales/sv.js
+index 46ab68f..fade5e3 100644
+--- a/packages/xo-web/src/common/intl/locales/sv.js
++++ b/packages/xo-web/src/common/intl/locales/sv.js
+@@ -3849,4 +3849,52 @@ export default {
+   xoaHlUpToDate: 'Uppdaterad',
+   xoaHlWaitingForOutput: 'Väntar på första raden i loggen…',
+   xoaHlMinutes: '{n, number} min',
++
++  // Core UI labels inherited from XO 5.113.2
++  alpha: 'Alfa',
++  alerts: 'Aviseringar',
++  connected: 'Ansluten',
++  description: 'Beskrivning',
++  disable: 'Inaktivera',
++  diskState: 'Diskstatus',
++  download: 'Ladda ned',
++  enable: 'Aktivera',
++  expiration: 'Utgångsdatum',
++  hostIp: 'Värdens IP-adress',
++  interfaces: 'Gränssnitt',
++  inUse: 'Används',
++  node: 'Nod',
++  stopOnError: 'Stoppa vid fel',
++  new: 'Ny',
++  nodeStatus: 'Nodstatus',
++  notDefined: 'Inte definierad',
++  status: 'Status',
++  configured: 'Konfigurerad',
++  notConfigured: 'Inte konfigurerad',
++  notifications: 'Meddelanden',
++  noNotifications: 'Inga meddelanden ännu.',
++  moreDetails: 'Mer information',
++  notInstalled: 'Inte installerad',
++  noValue: 'Ingen',
++  noExpiration: 'Inget utgångsdatum',
++  compression: 'Komprimering',
++  core: 'Kärna',
++  paths: 'Sökvägar',
++  pools: 'Pooler',
++  remotes: 'Fjärrlagring',
++  type: 'Typ',
++  restore: 'Återställ',
++  delete: 'Ta bort',
++  vms: 'Virtuella maskiner',
++  metadata: 'Metadata',
++  backupJobs: 'Säkerhetskopieringsjobb',
++  name: 'Namn',
++  value: 'Värde',
++  address: 'Adress',
++  user: 'Användare',
++  unknown: 'Okänd',
++  advancedSettings: 'Avancerade inställningar',
++  thick: 'Tjock',
++  thin: 'Tunn',
++  noFileSelected: 'Ingen fil har valts',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/tr.js b/packages/xo-web/src/common/intl/locales/tr.js
+index 3e3070e..1174f84 100644
+--- a/packages/xo-web/src/common/intl/locales/tr.js
++++ b/packages/xo-web/src/common/intl/locales/tr.js
+@@ -5057,4 +5057,52 @@ export default {
+   xoaHlUpToDate: 'Güncel',
+   xoaHlWaitingForOutput: 'Günlüğün ilk satırı bekleniyor…',
+   xoaHlMinutes: '{n, number} dk',
++
++  // Core UI labels inherited from XO 5.113.2
++  alpha: 'Alfa',
++  alerts: 'Uyarılar',
++  connected: 'Bağlı',
++  description: 'Açıklama',
++  disable: 'Devre dışı bırak',
++  diskState: 'Disk durumu',
++  download: 'İndir',
++  enable: 'Etkinleştir',
++  expiration: 'Son kullanma tarihi',
++  hostIp: 'Ana makine IP adresi',
++  interfaces: 'Arayüzler',
++  inUse: 'Kullanımda',
++  node: 'Düğüm',
++  stopOnError: 'Hata durumunda durdur',
++  new: 'Yeni',
++  nodeStatus: 'Düğüm durumu',
++  notDefined: 'Tanımlanmamış',
++  status: 'Durum',
++  configured: 'Yapılandırıldı',
++  notConfigured: 'Yapılandırılmadı',
++  notifications: 'Bildirimler',
++  noNotifications: 'Henüz bildirim yok.',
++  moreDetails: 'Daha fazla ayrıntı',
++  notInstalled: 'Yüklenmedi',
++  noValue: 'Yok',
++  noExpiration: 'Son kullanma tarihi yok',
++  compression: 'Sıkıştırma',
++  core: 'Çekirdek',
++  paths: 'Yollar',
++  pools: 'Havuzlar',
++  remotes: 'Uzak depolama alanları',
++  type: 'Tür',
++  restore: 'Geri yükle',
++  delete: 'Sil',
++  vms: 'Sanal makineler',
++  metadata: 'Meta veriler',
++  backupJobs: 'Yedekleme işleri',
++  name: 'Ad',
++  value: 'Değer',
++  address: 'Adres',
++  user: 'Kullanıcı',
++  unknown: 'Bilinmiyor',
++  advancedSettings: 'Gelişmiş ayarlar',
++  thick: 'Kalın',
++  thin: 'İnce',
++  noFileSelected: 'Dosya seçilmedi',
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/zh.js b/packages/xo-web/src/common/intl/locales/zh.js
+index dc962dd..fbbba54 100644
+--- a/packages/xo-web/src/common/intl/locales/zh.js
++++ b/packages/xo-web/src/common/intl/locales/zh.js
+@@ -2324,4 +2324,52 @@ export default {
+   xoaHlUpToDate: '已是最新版本',
+   xoaHlWaitingForOutput: '正在等待第一行日志…',
+   xoaHlMinutes: '{n, number} 分钟',
++
++  // Core UI labels inherited from XO 5.113.2
++  alpha: '测试版',
++  alerts: '警报',
++  connected: '已连接',
++  description: '描述',
++  disable: '禁用',
++  diskState: '磁盘状态',
++  download: '下载',
++  enable: '启用',
++  expiration: '到期时间',
++  hostIp: '主机 IP',
++  interfaces: '接口',
++  inUse: '使用中',
++  node: '节点',
++  stopOnError: '遇到错误时停止',
++  new: '新建',
++  nodeStatus: '节点状态',
++  notDefined: '未定义',
++  status: '状态',
++  configured: '已配置',
++  notConfigured: '未配置',
++  notifications: '通知',
++  noNotifications: '暂无通知。',
++  moreDetails: '更多详情',
++  notInstalled: '未安装',
++  noValue: '无',
++  noExpiration: '永不过期',
++  compression: '压缩',
++  core: '核心',
++  paths: '路径',
++  pools: '资源池',
++  remotes: '远程存储',
++  type: '类型',
++  restore: '恢复',
++  delete: '删除',
++  vms: '虚拟机',
++  metadata: '元数据',
++  backupJobs: '备份任务',
++  name: '名称',
++  value: '值',
++  address: '地址',
++  user: '用户',
++  unknown: '未知',
++  advancedSettings: '高级设置',
++  thick: '厚置备',
++  thin: '精简置备',
++  noFileSelected: '未选择文件',
+ }

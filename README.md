@@ -8,7 +8,7 @@ Builds **Xen Orchestra HomeLab Edition** (`xoa-hl`): the full open-source [xen-o
 - `UPSTREAM_XO`: the upstream pin, shell-sourceable (`XO_COMMIT`, `XO_VERSION`). Builds only move when this file is deliberately bumped.
 - `scripts/build-xo.sh`: shallow-fetches xen-orchestra at the pinned commit (currently `e281c536` = **5.113.2**, the last XO 5.x release), applies the patches, builds with yarn, and produces a versioned tarball (`xoa-hl-<version>.tar.gz`) plus a `VERSION` file in `/build/out`. The tarball is a build input for `rpmbuild`, it is not published.
 - `patches/menu-hide-items.patch` — hides menu items that only make sense with a Vates subscription.
-- `SPECS/xoa-hl.spec`: fat `x86_64` RPM (the shipped tree contains native node addons, so it is not `noarch`), the whole built Xen Orchestra tree ships inside the package and is installed at `/opt/xo`, together with the TLS key/cert, the `xo-cli` symlinks, the systemd units, the sudoers drop-in and the yum repo config (`xoa-hl.repo`). `%post` only bootstraps `/root/.config/xo-server/config.toml` on first install (left untouched on upgrade to preserve operator changes) and enables/restarts the services. Every other file under `/opt/xo` is replaced outright on upgrade, this is an appliance, not a host package. Runtime deps: nodejs ≥ 24, redis, plus mount helpers (nfs-utils, cifs-utils, ntfs-3g, lvm2).
+- `SPECS/xoa-hl.spec`: fat `x86_64` RPM (the shipped tree contains native node addons, so it is not `noarch`), the whole built Xen Orchestra tree ships inside the package and is installed at `/opt/xo`, together with the TLS key/cert, the `xo-cli` symlinks, the systemd units, the sudoers drop-in and the yum repo config (`xoa-hl.repo`). `%post` only bootstraps `/root/.config/xo-server/config.toml` on first install (left untouched on upgrade to preserve operator changes) and enables the services; `%posttrans` restarts `xo-server` once the whole transaction is done. Every other file under `/opt/xo` is replaced outright on upgrade, this is an appliance, not a host package. Runtime deps: nodejs ≥ 24, redis, plus mount helpers (nfs-utils, cifs-utils, ntfs-3g, lvm2).
 - `SOURCES/xo-server.service` — systemd unit running xo-server from `/opt/xo`.
 - `SOURCES/xoa-hl.repo` — yum repo config installed at `/etc/yum.repos.d/xoa-hl.repo`, pointing at the repo below. This is what makes `dnf update` on the appliance pick up new xoa-hl releases.
 
@@ -32,13 +32,15 @@ of the same upstream pin, so every build has a distinct, upgradeable NEVRA.
 ## Updating
 
 Once installed, the RPM is upgradable in place: the package payload replaces
-`/opt/xo`, then `%post` restarts `xo-server`. Operator config at
+`/opt/xo`, then `%posttrans` restarts `xo-server` after the rest of the
+transaction has finished. Operator config at
 `/root/.config/xo-server/config.toml` is left alone.
 
-`.github/workflows/pages-repo.yml` republishes the RPMs from the most recent
-releases as a signed yum repository at
-[vagrantin.github.io/xoa-hl/8.3/x86_64/](https://vagrantin.github.io/xoa-hl/8.3/x86_64/)
-after every successful build, so an appliance with `xoa-hl.repo` installed can
+Promoted releases are published as a signed yum repository at
+[rpm.xcp-hl.org/xoa-hl/8.3/x86_64/](https://rpm.xcp-hl.org/xoa-hl/8.3/x86_64/)
+by [xcp-hl-rpm](https://github.com/Vagrantin/xcp-hl-rpm) (xcp-hl#190). The legacy
+tree that `.github/workflows/pages-repo.yml` publishes at `vagrantin.github.io/xoa-hl/`
+stays online until appliances have moved. An appliance with `xoa-hl.repo` installed can
 just run:
 
 ```bash
@@ -51,6 +53,9 @@ with a pending update and applies all of them via `dnf -y --refresh update`,
 not a package-scoped update.
 
 ## Related
+
+- [Natural-language VM creation: Phase 0 MCP probe](docs/mcp-phase0.md) —
+  compatibility findings and the repeatable lab check for xcp-hl#80.
 
 - `../build-xoa-hl-vm` — packs this into the deployable XVA appliance.
 - `../xolite-ce` — the XO Lite build whose deploy button installs that appliance.

@@ -1,0 +1,50 @@
+diff --git a/packages/xo-server/src/api/xoaHl.mjs b/packages/xo-server/src/api/xoaHl.mjs
+--- a/packages/xo-server/src/api/xoaHl.mjs
++++ b/packages/xo-server/src/api/xoaHl.mjs
+@@ -223,6 +223,13 @@
+ 
+ export async function getUpdateConfiguration() {
+   const [raw, lastRun] = await Promise.all([readKeyValueFile(CONFIG_FILE), readKeyValueFile(AUTO_STATUS_FILE)])
++  let history = []
++  try {
++    const stored = JSON.parse(await readFile('/var/lib/xoa-hl/auto-update-history.json', 'utf8'))
++    if (Array.isArray(stored)) history = stored.slice(0, 5)
++  } catch (error) {
++    history = [] // missing or corrupt history must not break the settings page
++  }
+   const channel = CHANNELS.has(raw.CHANNEL) ? raw.CHANNEL : 'stable'
+   const mode = MODES.has(raw.MODE) ? raw.MODE : 'manual'
+   const frequency = FREQUENCIES.has(raw.FREQUENCY) ? raw.FREQUENCY : 'daily'
+@@ -253,6 +260,7 @@
+     day,
+     frequency,
+     lastRun,
++    history,
+     mode,
+     nextRun,
+     time,
+diff --git a/packages/xo-web/src/xo-app/settings/xoa-hl-updates/index.js b/packages/xo-web/src/xo-app/settings/xoa-hl-updates/index.js
+--- a/packages/xo-web/src/xo-app/settings/xoa-hl-updates/index.js
++++ b/packages/xo-web/src/xo-app/settings/xoa-hl-updates/index.js
+@@ -653,6 +653,21 @@
+             {configuration.lastRun.finishedAt !== undefined && <span> · <FormattedDate value={new Date(configuration.lastRun.finishedAt)} /> <FormattedTime value={new Date(configuration.lastRun.finishedAt)} /></span>}
+           </Banner>
+         )}
++        <h4>{_('xoaHlAutomaticUpdates')} · {_('xoaHlUpdateLog')}</h4>
++        {(configuration.history || []).map((run, index) => (
++          <details className='mb-1' key={`${run.startedAt}-${index}`}>
++            <summary>
++              <FormattedDate value={new Date(run.finishedAt)} />{' '}
++              <FormattedTime value={new Date(run.finishedAt)} /> · {run.result}
++            </summary>
++            <ul>
++              {run.packages.map(pkg => (
++                <li key={pkg.name}>{pkg.name}: {pkg.previousVersion || '—'} → {pkg.version || '—'}</li>
++              ))}
++            </ul>
++            {!run.packagesKnown && <p className='text-muted'>{_('unknown')}</p>}
++          </details>
++        ))}
+         {installationSelected && (
+           <div>
+             <Banner icon='alarm' level='warning'>{_('xoaHlUpdateScope')}</Banner>

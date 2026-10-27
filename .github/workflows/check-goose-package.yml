@@ -1,0 +1,110 @@
+name: Check optional goose runtime RPM
+
+on:
+  pull_request:
+    paths:
+      - 'GOOSE_RUNTIME.json'
+      - 'SPECS/xoa-hl-goose.spec'
+      - 'SOURCES/goose-LICENSE'
+      - 'SOURCES/xoa-hl-assistant.json'
+      - 'SOURCES/xoa-hl-mcp-*.mjs'
+      - 'SOURCES/xoa-hl-run-read-chat.py'
+      - 'SOURCES/xoa-hl-read-chat.recipe.json'
+      - 'SOURCES/xoa-hl-proposals.py'
+      - 'SOURCES/xoa-hl-create-vm.schema.json'
+      - 'SOURCES/assistant-ui/**'
+      - 'docs/assistant-preview.html'
+      - 'scripts/fetch-goose-runtime.py'
+      - 'tests/test-goose-package.py'
+      - 'tests/test-assistant-*'
+      - 'tests/smoke-assistant-read.py'
+      - 'tests/browser-assistant-preview.cjs'
+      - '.github/workflows/check-goose-package.yml'
+permissions:
+  contents: read
+jobs:
+  rpm:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Check pin and archive validator
+        run: |
+          python3 tests/test-goose-package.py
+          python3 tests/test-assistant-config.py
+          python3 tests/test-assistant-proposals.py
+          node --test tests/test-assistant-read.mjs
+      - name: Test localized approval component
+        run: |
+          npm install --prefix "$RUNNER_TEMP/xoa-ui-tests" --ignore-scripts --no-audit --no-fund linkedom@0.18.12
+          ASSISTANT_DOM_MODULE="$RUNNER_TEMP/xoa-ui-tests/node_modules/linkedom" node --test tests/test-assistant-ui.mjs
+      - name: Fetch checksum-verified released binary
+        run: |
+          mkdir -p out/goose
+          python3 scripts/fetch-goose-runtime.py --output out/goose/goose-x86_64-unknown-linux-musl.tar.bz2
+      - name: Test actual goose and upstream MCP with a local protocol fixture
+        run: |
+          npm install --prefix "$RUNNER_TEMP/xoa-read-mcp" --ignore-scripts --no-audit --no-fund @xen-orchestra/mcp@1.1.0
+          mkdir -p "$RUNNER_TEMP/xoa-goose"
+          tar --no-same-owner -xjf out/goose/goose-x86_64-unknown-linux-musl.tar.bz2 -C "$RUNNER_TEMP/xoa-goose"
+          GOOSE_BIN="$RUNNER_TEMP/xoa-goose/goose" MCP_PACKAGE="$RUNNER_TEMP/xoa-read-mcp/node_modules/@xen-orchestra/mcp" python3 tests/smoke-assistant-read.py
+      - name: Build and inspect the optional package in AlmaLinux 9
+        run: |
+          docker run --rm -v "$GITHUB_WORKSPACE:/repo:ro" -v "$GITHUB_WORKSPACE/out/goose:/out" almalinux:9 bash -euc '
+            dnf -qy install rpm-build tar bzip2 binutils python3
+            mkdir -p /root/rpmbuild/{BUILD,BUILDROOT,RPMS,SOURCES,SPECS,SRPMS}
+            cp /out/goose-x86_64-unknown-linux-musl.tar.bz2 /root/rpmbuild/SOURCES/
+            cp /repo/SOURCES/goose-LICENSE /repo/SOURCES/xoa-hl-assistant.json /root/rpmbuild/SOURCES/
+            cp /repo/SOURCES/xoa-hl-mcp-*.mjs /repo/SOURCES/xoa-hl-run-read-chat.py /repo/SOURCES/xoa-hl-read-chat.recipe.json /root/rpmbuild/SOURCES/
+            cp /repo/SOURCES/xoa-hl-proposals.py /repo/SOURCES/xoa-hl-create-vm.schema.json /root/rpmbuild/SOURCES/
+            cp /repo/SOURCES/assistant-ui/panel.mjs /root/rpmbuild/SOURCES/assistant-panel.mjs
+            cp /repo/SOURCES/assistant-ui/locales.mjs /root/rpmbuild/SOURCES/assistant-locales.mjs
+            cp /repo/SOURCES/assistant-ui/panel.css /root/rpmbuild/SOURCES/assistant-panel.css
+            cp /repo/LICENSE /root/rpmbuild/SOURCES/xoa-hl-LICENSE
+            cp /repo/GOOSE_RUNTIME.json /root/rpmbuild/SOURCES/
+            rpmbuild -bb /repo/SPECS/xoa-hl-goose.spec
+            pkg=$(find /root/rpmbuild/RPMS -name "xoa-hl-goose-*.rpm")
+            assistant=$(find /root/rpmbuild/RPMS -name "xoa-hl-assistant-*.rpm")
+            test "$(rpm -qp --qf "%{PAYLOADCOMPRESSOR}" "$pkg")" = xz
+            test -z "$(rpm -qp --scripts "$pkg")"
+            test -z "$(rpm -qp --scripts "$assistant")"
+            ! rpm -qlp "$pkg" | grep -E "systemd|node_modules|models/"
+            # Payload-only installation in a fresh container. XOA-HL is not
+            # installed here; this is not an appliance integration test.
+            rpm -i --nodeps "$pkg" "$assistant"
+            test "$(/usr/libexec/xoa-hl/goose --version | xargs)" = 1.56.0
+            ! readelf -l /usr/libexec/xoa-hl/goose | grep INTERP
+            python3 -c "import json; assert json.load(open(\"/etc/xoa-hl/assistant.json\"))[\"enabled\"] is False"
+            if python3 /usr/libexec/xoa-hl/assistant/xoa-hl-run-read-chat.py --request-file /missing --state-dir /tmp/disabled-state; then exit 1; else test "$?" = 3; fi
+            test ! -e /tmp/disabled-state
+            cp "$pkg" "$assistant" /out/
+          '
+      - uses: actions/upload-artifact@v4
+        with:
+          name: optional-goose-rpm-test
+          path: out/goose/*.rpm
+  ui-browser:
+    # Match the supported distribution for the pinned browser test runtime.
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Install test-only Chromium and Japanese fonts
+        run: |
+          npm install --prefix "$RUNNER_TEMP/ui-browser" --ignore-scripts --no-audit --no-fund playwright@1.56.1
+          node "$RUNNER_TEMP/ui-browser/node_modules/playwright/cli.js" install --with-deps chromium --only-shell
+          sudo apt-get install -y fonts-noto-cjk
+      - name: Check component preview in Chromium
+        env:
+          PLAYWRIGHT_MODULE: ${{ runner.temp }}/ui-browser/node_modules/playwright
+        run: node tests/browser-assistant-preview.cjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: assistant-panel-preview
+          path: out/assistant-ui/*.png

@@ -1,434 +1,337 @@
 diff --git a/packages/xo-server/src/api/containers.mjs b/packages/xo-server/src/api/containers.mjs
 new file mode 100644
-index 000000000..8c9e5f1e2
+index 000000000..9d665bd0c
 --- /dev/null
 +++ b/packages/xo-server/src/api/containers.mjs
-@@ -0,0 +1,283 @@
-+import { execa } from 'execa'
-+import { readFile, writeFile, unlink } from 'fs/promises'
-+import { join } from 'path'
+@@ -0,0 +1,123 @@
++import { rm } from 'node:fs/promises'
++import { create as createVm } from './vm.mjs'
++import {
++  availableCredentialIds,
++  credentialId,
++  HOST_TAG,
++  prepareCredentials,
++  remote,
++  TEMPLATE_TAG,
++  validateDeployment,
++} from '../containers.mjs'
 +
-+const DOCKER_SOCKET = '/var/run/docker.sock'
-+const CONTAINER_CONFIG_DIR = '/etc/xoa-hl/containers'
-+
-+// -------------------------------------------------------------------
-+
-+export async function listContainers() {
-+  try {
-+    const { stdout } = await execa('docker', ['ps', '--all', '--format', '{{json .}}'])
-+    const containers = stdout
-+      .trim()
-+      .split('\n')
-+      .filter(line => line)
-+      .map(line => {
-+        try {
-+          return JSON.parse(line)
-+        } catch {
-+          return null
-+        }
-+      })
-+      .filter(Boolean)
-+
-+    // Get resource usage for running containers
-+    const stats = await getContainerStats()
-+
-+    return containers.map(container => {
-+      const stat = stats.find(s => s.Id === container.ID) || {}
-+      return {
-+        ...container,
-+        Status: container.State,
-+        CPU: stat.CPU || '0%',
-+        Memory: stat.Memory || '0B',
-+        MemoryUsage: stat.MemoryUsage || 0,
-+        MemoryLimit: stat.MemoryLimit || 0,
-+      }
++export async function getHosts() {
++  const keys = new Set(await availableCredentialIds())
++  return Object.values(this.getObjects())
++    .filter(vm => vm.type === 'VM' && vm.tags?.includes(HOST_TAG))
++    .map(vm => {
++      let hasCredentials = false
++      try {
++        hasCredentials = keys.has(credentialId(vm))
++      } catch (_) {}
++      return { id: vm.id, name: vm.name_label, powerState: vm.power_state, hasCredentials }
 +    })
++}
++getHosts.permission = 'admin'
++getHosts.params = {}
++
++let deploying = false
++export async function deploy({ template, sr, network, name, cpus, memoryMiB }) {
++  validateDeployment({ name, cpus, memoryMiB })
++  if (!template.tags?.includes(TEMPLATE_TAG))
++    throw new Error('Select the Docker host v1 template built by build-xoa-hl CI')
++  if (template.$pool !== sr.$pool || template.$pool !== network.$pool || sr.content_type === 'iso')
++    throw new Error('Template, writable SR and network must be in the same pool')
++  if (deploying) throw new Error('Another Docker VM deployment is in progress')
++  deploying = true
++  let credentials, vmId
++  try {
++    credentials = await prepareCredentials()
++    const xapi = this.getXapi(template)
++    const disks = {}
++    for (const vbd of xapi.getObject(template._xapiId).$VBDs) {
++      if (vbd.type === 'Disk' && vbd.$VDI) disks[vbd.userdevice] = { $SR: sr.id }
++    }
++    if (Object.keys(disks).length === 0) throw new Error('Docker template has no installed system disk')
++    // Reuse XO's create path: permissions, full disk copy, VIFs and cloud-init seed.
++    vmId = await createVm.call(this, {
++      template,
++      name_label: name,
++      name_description: 'Dedicated XOA-HL Docker host (protocol v1)',
++      CPUs: cpus,
++      cpusMax: cpus,
++      memory: memoryMiB * 1048576,
++      memoryStaticMax: memoryMiB * 1048576,
++      memoryMin: memoryMiB * 1048576,
++      memoryMax: memoryMiB * 1048576,
++      clone: false,
++      existingDisks: disks,
++      VIFs: [{ network: network.id }],
++      cloudConfig: credentials.cloudConfig,
++      bootAfterCreate: true,
++      destroyCloudConfigVdiAfterBoot: true,
++      tags: [HOST_TAG, credentials.tag],
++    })
++    return { id: vmId }
 +  } catch (error) {
-+    // Docker not available
-+    return []
++    if (credentials !== undefined && vmId === undefined)
++      await rm(credentials.directory, { recursive: true, force: true })
++    throw error
++  } finally {
++    deploying = false
 +  }
 +}
-+listContainers.permission = 'admin'
-+listContainers.description = 'List all containers on the system'
++deploy.permission = 'admin'
++deploy.params = {
++  template: { type: 'string' },
++  sr: { type: 'string' },
++  network: { type: 'string' },
++  name: { type: 'string' },
++  cpus: { type: 'integer' },
++  memoryMiB: { type: 'integer' },
++}
++deploy.resolve = {
++  template: ['template', 'VM-template', 'administrate'],
++  sr: ['sr', 'SR', 'administrate'],
++  network: ['network', 'network', 'administrate'],
++}
 +
-+// -------------------------------------------------------------------
++export function overview({ vm }) {
++  return remote(vm, { operation: 'overview' })
++}
++export function create({ vm, config }) {
++  return remote(vm, { operation: 'create', config })
++}
++export function start({ vm, id }) {
++  return remote(vm, { operation: 'start', id })
++}
++export function stop({ vm, id }) {
++  return remote(vm, { operation: 'stop', id })
++}
++export function restart({ vm, id }) {
++  return remote(vm, { operation: 'restart', id })
++}
++export function remove({ vm, id }) {
++  return remote(vm, { operation: 'remove', id })
++}
++export function logs({ vm, id }) {
++  return remote(vm, { operation: 'logs', id })
++}
++export function pull({ vm, image }) {
++  return remote(vm, { operation: 'pull', image })
++}
++export function removeImage({ vm, image }) {
++  return remote(vm, { operation: 'removeImage', image })
++}
++for (const fn of [overview, create, start, stop, restart, remove, logs, pull, removeImage]) {
++  fn.permission = 'admin'
++  fn.resolve = { vm: ['vm', 'VM', 'administrate'] }
++  fn.params = { vm: { type: 'string' } }
++}
++create.params.config = { type: 'object', additionalProperties: true }
++for (const fn of [start, stop, restart, remove, logs]) fn.params.id = { type: 'string' }
++for (const fn of [pull, removeImage]) fn.params.image = { type: 'string' }
+diff --git a/packages/xo-server/src/containers.mjs b/packages/xo-server/src/containers.mjs
+new file mode 100644
+index 000000000..a1c5b63f7
+--- /dev/null
++++ b/packages/xo-server/src/containers.mjs
+@@ -0,0 +1,202 @@
++// Dedicated Docker VM protocol v1. The appliance never executes Docker locally.
++import { execFile, spawn } from 'node:child_process'
++import { mkdir, mkdtemp, readFile, readdir, rm, writeFile } from 'node:fs/promises'
++import { isIP } from 'node:net'
++import { join } from 'node:path'
++import { promisify } from 'node:util'
 +
-+export async function getContainerStats() {
++const exec = promisify(execFile)
++export const TEMPLATE_TAG = 'xcp-hl-docker-template-v1'
++export const HOST_TAG = 'xcp-hl-docker-v1'
++export const ROOT = '/var/lib/xoa-hl/docker-hosts'
++const KEY_TAG = 'xcp-hl-docker-key:'
++
++export function validateDeployment({ name, cpus, memoryMiB }) {
++  if (typeof name !== 'string' || !/^[\w .-]{1,63}$/.test(name)) throw new Error('Invalid VM name')
++  if (!Number.isInteger(cpus) || cpus < 1 || cpus > 32) throw new Error('Choose 1–32 vCPUs')
++  if (!Number.isInteger(memoryMiB) || memoryMiB < 1024 || memoryMiB > 131072)
++    throw new Error('Choose 1024–131072 MiB RAM')
++}
++
++export function credentialId(vm) {
++  if (!vm.tags?.includes(HOST_TAG)) throw new Error('Not an XOA-HL Docker VM')
++  const id = vm.tags.find(tag => tag.startsWith(KEY_TAG))?.slice(KEY_TAG.length)
++  if (id === undefined || !/^host-[a-zA-Z0-9]{6}$/.test(id)) throw new Error('Missing Docker VM credentials')
++  return id
++}
++
++export async function prepareCredentials(root = ROOT) {
++  await mkdir(root, { recursive: true, mode: 0o700 })
++  const directory = await mkdtemp(join(root, 'host-'))
 +  try {
-+    const { stdout } = await execa('docker', ['stats', '--no-stream', '--format', '{{json .}}'])
-+    return stdout
-+      .trim()
-+      .split('\n')
-+      .filter(line => line)
-+      .map(line => {
-+        try {
-+          const data = JSON.parse(line)
-+          return {
-+            Id: data.Container,
-+            Name: data.Name,
-+            CPU: data.CPUPerc,
-+            Memory: data.MemUsage,
-+            MemoryUsage: parseMemory(data.MemUsage),
-+            MemoryLimit: parseMemory(data.MemLimit),
-+          }
-+        } catch {
-+          return null
++    for (const key of ['client', 'host']) {
++      await exec(
++        '/usr/bin/ssh-keygen',
++        ['-q', '-t', 'ed25519', '-N', '', '-C', 'xoa-hl-docker', '-f', join(directory, key)],
++        { timeout: 10000 }
++      )
++    }
++    const client = (await readFile(join(directory, 'client.pub'), 'utf8')).trim()
++    const hostPublic = (await readFile(join(directory, 'host.pub'), 'utf8')).trim()
++    const hostPrivate = await readFile(join(directory, 'host'), 'utf8')
++    const cloudConfig =
++      '#cloud-config\n' +
++      JSON.stringify({
++        disable_root: false,
++        ssh_pwauth: false,
++        ssh_deletekeys: false,
++        ssh_keys: { ed25519_private: hostPrivate, ed25519_public: hostPublic },
++        users: [
++          {
++            name: 'root',
++            lock_passwd: true,
++            ssh_authorized_keys: ['restrict,command="/usr/local/libexec/xoa-hl-docker-command" ' + client],
++          },
++        ],
++        write_files: [
++          {
++            path: '/etc/ssh/sshd_config.d/01-xoa-hl-docker.conf',
++            permissions: '0600',
++            content:
++              'PermitRootLogin forced-commands-only\nPasswordAuthentication no\nKbdInteractiveAuthentication no\n',
++          },
++        ],
++        runcmd: [
++          ['systemctl', 'restart', 'sshd'],
++          ['systemctl', 'start', 'docker'],
++        ],
++      })
++    // Pin the identity, independent of DHCP changes; no TOFU and no global known_hosts.
++    await writeFile(join(directory, 'known_hosts'), 'docker-host ' + hostPublic + '\n', { mode: 0o600 })
++    await rm(join(directory, 'host')) // Private host key now exists only in the temporary cloud-init seed.
++    return { directory, tag: KEY_TAG + directory.split('/').pop(), cloudConfig }
++  } catch (error) {
++    await rm(directory, { recursive: true, force: true })
++    throw error
++  }
++}
++
++export function sshArguments(directory, address) {
++  if (
++    isIP(address) === 0 ||
++    address.startsWith('127.') ||
++    address === '::1' ||
++    address === '0.0.0.0' ||
++    address.startsWith('169.254.')
++  ) {
++    throw new Error('Invalid guest management address')
++  }
++  return [
++    '-F',
++    '/dev/null',
++    '-T',
++    '-i',
++    join(directory, 'client'),
++    '-o',
++    'BatchMode=yes',
++    '-o',
++    'IdentitiesOnly=yes',
++    '-o',
++    'StrictHostKeyChecking=yes',
++    '-o',
++    'GlobalKnownHostsFile=/dev/null',
++    '-o',
++    'UserKnownHostsFile=' + join(directory, 'known_hosts'),
++    '-o',
++    'HostKeyAlias=docker-host',
++    '-o',
++    'ConnectTimeout=5',
++    '-o',
++    'ConnectionAttempts=1',
++    '-o',
++    'ServerAliveInterval=10',
++    '-o',
++    'ServerAliveCountMax=2',
++    '-o',
++    'ClearAllForwardings=yes',
++    '-o',
++    'LogLevel=ERROR',
++    '--',
++    'root@' + address,
++    '/usr/local/libexec/xoa-hl-docker-command',
++  ]
++}
++
++export function guestAddress(vm) {
++  const addresses = Object.values(vm.addresses ?? {}).flat()
++  const address = addresses.find(address => isIP(address) === 4 && !/^(127\.|169\.254\.|0\.)/.test(address))
++  if (address === undefined)
++    throw new Error('Waiting for guest tools and a DHCP IPv4 address. Check the VM console and network.')
++  return address
++}
++
++const busy = new Set()
++export async function remote(vm, request, { root = ROOT, spawnProcess = spawn } = {}) {
++  if (vm.power_state !== 'Running') throw new Error('Docker VM is not running. Start it from its VM page.')
++  const id = credentialId(vm)
++  if (busy.has(id)) throw new Error('A Docker operation is already running on this VM. Wait and retry.')
++  busy.add(id)
++  try {
++    const directory = join(root, id)
++    try {
++      await readFile(join(directory, 'client'))
++    } catch (_) {
++      throw new Error('Docker VM access keys are missing. Restore the docker-hosts directory from the XOA-HL backup.')
++    }
++    const input = JSON.stringify({ ...request, version: 1 })
++    if (Buffer.byteLength(input) > 65536) throw new Error('Request too large')
++    const args = sshArguments(directory, guestAddress(vm))
++    return await new Promise((resolve, reject) => {
++      const child = spawnProcess('/usr/bin/ssh', args, { stdio: ['pipe', 'pipe', 'ignore'] })
++      let output = Buffer.alloc(0)
++      let failure
++      const timer = setTimeout(() => {
++        failure = new Error('Docker operation timed out')
++        child.kill('SIGKILL')
++      }, 270000)
++      child.stdout.on('data', chunk => {
++        if (failure !== undefined) return
++        output = Buffer.concat([output, chunk])
++        if (output.length > 4 * 1024 * 1024) {
++          failure = new Error('Docker response too large')
++          child.kill('SIGKILL')
 +        }
 +      })
-+      .filter(Boolean)
-+  } catch {
-+    return []
-+  }
-+}
-+getContainerStats.permission = 'admin'
-+getContainerStats.description = 'Get resource usage statistics for all containers'
-+
-+// -------------------------------------------------------------------
-+
-+export async function getContainer(id) {
-+  try {
-+    const { stdout } = await execa('docker', ['inspect', '--format', '{{json .}}', id])
-+    const data = JSON.parse(stdout)
-+    
-+    // Get resource usage
-+    const stats = await getContainerStats()
-+    const stat = stats.find(s => s.Id === id || s.Id === data.Id) || {}
-+
-+    return {
-+      ...data,
-+      CPU: stat.CPU || '0%',
-+      Memory: stat.Memory || '0B',
-+      MemoryUsage: stat.MemoryUsage || 0,
-+      MemoryLimit: stat.MemoryLimit || 0,
-+    }
-+  } catch (error) {
-+    throw new Error(`Container not found: ${id}`)
-+  }
-+}
-+getContainer.permission = 'admin'
-+getContainer.description = 'Get detailed information about a specific container'
-+
-+// -------------------------------------------------------------------
-+
-+export async function createContainer(config) {
-+  const {
-+    name,
-+    image,
-+    cpuLimit,
-+    memoryLimit,
-+    memoryReservation,
-+    ports,
-+    volumes,
-+    environment,
-+    restartPolicy,
-+    privileged,
-+    networkMode,
-+  } = config
-+
-+  const args = ['run', '-d', '--name', name]
-+
-+  // CPU limit (in shares, 1024 = 1 CPU)
-+  if (cpuLimit) {
-+    args.push('--cpu-shares', String(cpuLimit * 1024))
-+  }
-+
-+  // Memory limits
-+  if (memoryLimit) {
-+    args.push('--memory', formatMemory(memoryLimit))
-+  }
-+  if (memoryReservation) {
-+    args.push('--memory-reservation', formatMemory(memoryReservation))
-+  }
-+
-+  // Port mappings
-+  if (ports && ports.length > 0) {
-+    for (const port of ports) {
-+      if (port.hostPort && port.containerPort) {
-+        args.push('-p', `${port.hostPort}:${port.containerPort}`)
-+      }
-+    }
-+  }
-+
-+  // Volume mappings
-+  if (volumes && volumes.length > 0) {
-+    for (const volume of volumes) {
-+      if (volume.hostPath && volume.containerPath) {
-+        args.push('-v', `${volume.hostPath}:${volume.containerPath}`)
-+      }
-+    }
-+  }
-+
-+  // Environment variables
-+  if (environment && Object.keys(environment).length > 0) {
-+    for (const [key, value] of Object.entries(environment)) {
-+      args.push('-e', `${key}=${value}`)
-+    }
-+  }
-+
-+  // Restart policy
-+  if (restartPolicy) {
-+    args.push('--restart', restartPolicy)
-+  }
-+
-+  // Privileged mode
-+  if (privileged) {
-+    args.push('--privileged')
-+  }
-+
-+  // Network mode
-+  if (networkMode) {
-+    args.push('--network', networkMode)
-+  }
-+
-+  args.push(image)
-+
-+  try {
-+    const { stdout } = await execa('docker', args)
-+    const containerId = stdout.trim()
-+    
-+    // Save configuration for persistence
-+    await saveContainerConfig(name, config)
-+    
-+    return { id: containerId, name, status: 'created' }
-+  } catch (error) {
-+    throw new Error(`Failed to create container: ${error.stderr || error.message}`)
-+  }
-+}
-+createContainer.permission = 'admin'
-+createContainer.description = 'Create a new container'
-+
-+// -------------------------------------------------------------------
-+
-+export async function startContainer(id) {
-+  try {
-+    await execa('docker', ['start', id])
-+    return { success: true }
-+  } catch (error) {
-+    throw new Error(`Failed to start container: ${id}`)
-+  }
-+}
-+startContainer.permission = 'admin'
-+startContainer.description = 'Start a container'
-+
-+// -------------------------------------------------------------------
-+
-+export async function stopContainer(id, force = false) {
-+  try {
-+    const args = ['stop']
-+    if (force) {
-+      args.push('--time', '0')
-+    }
-+    args.push(id)
-+    await execa('docker', args)
-+    return { success: true }
-+  } catch (error) {
-+    throw new Error(`Failed to stop container: ${id}`)
-+  }
-+}
-+stopContainer.permission = 'admin'
-+stopContainer.description = 'Stop a container'
-+
-+// -------------------------------------------------------------------
-+
-+export async function restartContainer(id, force = false) {
-+  try {
-+    const args = ['restart']
-+    if (force) {
-+      args.push('--time', '0')
-+    }
-+    args.push(id)
-+    await execa('docker', args)
-+    return { success: true }
-+  } catch (error) {
-+    throw new Error(`Failed to restart container: ${id}`)
-+  }
-+}
-+restartContainer.permission = 'admin'
-+restartContainer.description = 'Restart a container'
-+
-+// -------------------------------------------------------------------
-+
-+export async function removeContainer(id, force = false, removeVolumes = false) {
-+  try {
-+    const args = ['rm']
-+    if (force) {
-+      args.push('-f')
-+    }
-+    if (removeVolumes) {
-+      args.push('-v')
-+    }
-+    args.push(id)
-+    await execa('docker', args)
-+    
-+    // Remove saved configuration
-+    const containers = await listContainers()
-+    const container = containers.find(c => c.ID === id || c.Id === id)
-+    if (container) {
-+      await removeContainerConfig(container.Name || container.Names)
-+    }
-+    
-+    return { success: true }
-+  } catch (error) {
-+    throw new Error(`Failed to remove container: ${id}`)
-+  }
-+}
-+removeContainer.permission = 'admin'
-+removeContainer.description = 'Remove a container'
-+
-+// -------------------------------------------------------------------
-+
-+export async function getContainerLogs(id, options = {}) {
-+  const { tail = 100, follow = false, timestamps = false } = options
-+
-+  try {
-+    const args = ['logs']
-+    if (tail) {
-+      args.push('--tail', String(tail))
-+    }
-+    if (timestamps) {
-+      args.push('--timestamps')
-+    }
-+    if (follow) {
-+      args.push('--follow')
-+    }
-+    args.push(id)
-+
-+    const { stdout } = await execa('docker', args)
-+    return { logs: stdout }
-+  } catch (error) {
-+    throw new Error(`Failed to get logs for container: ${id}`)
-+  }
-+}
-+getContainerLogs.permission = 'admin'
-+getContainerLogs.description = 'Get logs for a container'
-+
-+// -------------------------------------------------------------------
-+
-+export async function listImages() {
-+  try {
-+    const { stdout } = await execa('docker', ['images', '--format', '{{json .}}'])
-+    return stdout
-+      .trim()
-+      .split('\n')
-+      .filter(line => line)
-+      .map(line => {
++      child.on('error', error => {
++        clearTimeout(timer)
++        reject(error)
++      })
++      child.stdin.on('error', () => {})
++      child.on('close', code => {
++        clearTimeout(timer)
++        if (failure !== undefined) return reject(failure)
 +        try {
-+          return JSON.parse(line)
-+        } catch {
-+          return null
++          const response = JSON.parse(output.toString())
++          if (response.error !== undefined) throw new Error(response.error)
++          if (code !== 0 || response.result === undefined) throw new Error('Invalid Docker host response')
++          resolve(response.result)
++        } catch (error) {
++          reject(
++            code === 255 || output.length === 0
++              ? new Error(
++                  'Docker VM is not ready or SSH identity verification failed. Check cloud-init, network and the VM console; retry when ready.'
++                )
++              : error
++          )
 +        }
 +      })
-+      .filter(Boolean)
-+  } catch {
-+    return []
++      child.stdin.end(input)
++    })
++  } finally {
++    busy.delete(id)
 +  }
 +}
-+listImages.permission = 'admin'
-+listImages.description = 'List all Docker images'
 +
-+// -------------------------------------------------------------------
-+
-+export async function pullImage(image) {
++export async function availableCredentialIds(root = ROOT) {
 +  try {
-+    await execa('docker', ['pull', image])
-+    return { success: true }
++    return await readdir(root)
 +  } catch (error) {
-+    throw new Error(`Failed to pull image: ${image}`)
-+  }
-+}
-+pullImage.permission = 'admin'
-+pullImage.description = 'Pull a Docker image'
-+
-+// -------------------------------------------------------------------
-+
-+export async function removeImage(id, force = false) {
-+  try {
-+    const args = ['rmi']
-+    if (force) {
-+      args.push('-f')
-+    }
-+    args.push(id)
-+    await execa('docker', args)
-+    return { success: true }
-+  } catch (error) {
-+    throw new Error(`Failed to remove image: ${id}`)
-+  }
-+}
-+removeImage.permission = 'admin'
-+removeImage.description = 'Remove a Docker image'
-+
-+// -------------------------------------------------------------------
-+
-+export async function getDockerInfo() {
-+  try {
-+    const { stdout } = await execa('docker', ['info', '--format', '{{json .}}'])
-+    return JSON.parse(stdout)
-+  } catch {
-+    return { error: 'Docker not available' }
-+  }
-+}
-+getDockerInfo.permission = 'admin'
-+getDockerInfo.description = 'Get Docker system information'
-+
-+// -------------------------------------------------------------------
-+
-+export async function checkDockerAvailable() {
-+  try {
-+    await execa('docker', ['--version'])
-+    return { available: true }
-+  } catch {
-+    return { available: false }
-+  }
-+}
-+checkDockerAvailable.permission = 'admin'
-+checkDockerAvailable.description = 'Check if Docker is available on the system'
-+
-+// -------------------------------------------------------------------
-+// Helper functions
-+// -------------------------------------------------------------------
-+
-+function parseMemory(memString) {
-+  if (!memString) return 0
-+  const match = memString.match(/^([\d.]+)(B|KB|MB|GB|TB)/i)
-+  if (!match) return 0
-+  
-+  const value = parseFloat(match[1])
-+  const unit = match[2].toUpperCase()
-+  
-+  const units = { B: 1, KB: 1024, MB: 1024 * 1024, GB: 1024 * 1024 * 1024, TB: 1024 * 1024 * 1024 * 1024 }
-+  return value * (units[unit] || 1)
-+}
-+
-+function formatMemory(bytes) {
-+  if (bytes === 0) return '0'
-+  
-+  const units = ['B', 'KB', 'MB', 'GB', 'TB']
-+  let value = bytes
-+  let unitIndex = 0
-+  
-+  while (value >= 1024 && unitIndex < units.length - 1) {
-+    value /= 1024
-+    unitIndex++
-+  }
-+  
-+  return `${Math.round(value)}${units[unitIndex]}`
-+}
-+
-+async function saveContainerConfig(name, config) {
-+  try {
-+    await execa('mkdir', ['-p', CONTAINER_CONFIG_DIR])
-+    const configPath = join(CONTAINER_CONFIG_DIR, `${name}.json`)
-+    await writeFile(configPath, JSON.stringify(config, null, 2))
-+  } catch {
-+    // Non-fatal
-+  }
-+}
-+
-+async function removeContainerConfig(name) {
-+  try {
-+    const configPath = join(CONTAINER_CONFIG_DIR, `${name}.json`)
-+    await unlink(configPath)
-+  } catch {
-+    // Non-fatal
++    if (error.code === 'ENOENT') return []
++    throw error
 +  }
 +}

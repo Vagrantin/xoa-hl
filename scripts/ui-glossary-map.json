@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "terms": {
+    "appliance": {"keys": ["xoaHlAppliance"], "context": "XOA-HL appliance label"},
+    "backup": {"keys": ["backupPage", "backup"], "context": "Backup navigation and action; noun/action wording may differ"},
+    "host": {"keys": ["homeTypeHost", "homeHostPage"], "context": "Host object type and navigation"},
+    "pool": {"keys": ["homeTypePool", "homePoolPage"], "context": "Pool object type and navigation"},
+    "snapshot": {"keys": ["snapshotVmLabel", "snapshotsTabName"], "context": "VM snapshot action and tab"},
+    "sr": {"keys": ["sr", "homeTypeSr"], "context": "Storage repository abbreviation and object type"},
+    "vm": {"keys": ["vm", "homeTypeVm"], "context": "Virtual machine abbreviation and object type"},
+    "xo-lite": {"keys": [], "context": "Separate host-served product; no corresponding XO5 catalog message is mapped"}
+  }
+}

@@ -1,3 +1,5 @@
-# xo-server already runs as root (no User= in xo-server.service), so this is a no-op today; it fixes the command shape ahead of a future de-rooting.
-xo-server ALL=(root) NOPASSWD: /usr/bin/systemctl start xoa-hl-update.service
+# xo-server currently runs as root. These exact commands preserve the least-
+# privilege boundary if it is de-rooted later.
+xo-server ALL=(root) NOPASSWD: /usr/bin/systemctl start --no-block xoa-hl-update.service
 xo-server ALL=(root) NOPASSWD: /usr/bin/systemctl start xoa-hl-check-update.service
+xo-server ALL=(root) NOPASSWD: /usr/libexec/xoa-hl/configure-updates.sh *

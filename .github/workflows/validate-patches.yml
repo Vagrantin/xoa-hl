@@ -1,0 +1,117 @@
+name: Validate XO patches
+
+on:
+  pull_request:
+    paths:
+      - 'patches/**'
+      - 'tests/test-appearance.mjs'
+      - 'UPSTREAM_XO'
+      - 'scripts/audit-ui-translations.py'
+      - 'scripts/core-ui-keys.txt'
+      - 'scripts/compact-xo-locales.py'
+      - 'tests/test-compact-xo-locales.py'
+      - 'scripts/audit-shared-glossary.py'
+      - 'scripts/ui-glossary-*.json'
+      - 'tests/test-shared-glossary.py'
+      - 'docs/shared-glossary-review.md'
+      - '.github/workflows/validate-patches.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'patches/**'
+      - 'tests/test-appearance.mjs'
+      - 'UPSTREAM_XO'
+      - 'scripts/audit-ui-translations.py'
+      - 'scripts/core-ui-keys.txt'
+      - 'scripts/compact-xo-locales.py'
+      - 'tests/test-compact-xo-locales.py'
+      - 'scripts/audit-shared-glossary.py'
+      - 'scripts/ui-glossary-*.json'
+      - 'tests/test-shared-glossary.py'
+      - 'docs/shared-glossary-review.md'
+      - '.github/workflows/validate-patches.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate patch metadata
+        run: bash scripts/validate-patches.sh
+      - name: Fetch pinned Xen Orchestra source
+        run: |
+          set -euo pipefail
+          . ./UPSTREAM_XO
+          xo_dir="${RUNNER_TEMP}/xen-orchestra"
+          git -C "${RUNNER_TEMP}" init xen-orchestra
+          git -C "${xo_dir}" remote add origin https://github.com/vatesfr/xen-orchestra.git
+          git -C "${xo_dir}" fetch --depth 1 origin "${XO_COMMIT}"
+          git -C "${xo_dir}" checkout FETCH_HEAD
+          echo "XO_DIR=${xo_dir}" >> "${GITHUB_ENV}"
+      - name: Apply patch series
+        run: |
+          set -euo pipefail
+          for patch in patches/*.patch; do
+            echo "checking ${patch}"
+            git -C "${XO_DIR}" apply --check "${GITHUB_WORKSPACE}/${patch}"
+            git -C "${XO_DIR}" apply "${GITHUB_WORKSPACE}/${patch}"
+          done
+      - name: Test appearance preferences and pre-paint bootstrap
+        run: node tests/test-appearance.mjs "${XO_DIR}"
+      - name: Check server module syntax
+        run: node --check "${XO_DIR}/packages/xo-server/src/api/xoaHl.mjs"
+      - name: Audit UI translations
+        run: python3 scripts/audit-ui-translations.py "${XO_DIR}"
+      - name: Test shared glossary consumer
+        run: python3 -m unittest tests/test-shared-glossary.py
+      - name: Read immutable documentation source pin
+        id: glossary-source
+        run: |
+          set -euo pipefail
+          docs_commit="$(python3 scripts/audit-shared-glossary.py --print-docs-commit)"
+          echo "commit=${docs_commit}" >> "${GITHUB_OUTPUT}"
+      - name: Fetch shared documentation glossary
+        uses: actions/checkout@v4
+        with:
+          repository: Vagrantin/xcp-hl
+          ref: ${{ steps.glossary-source.outputs.commit }}
+          path: .shared-docs
+          persist-credentials: false
+      - name: Export and compare shared terminology
+        run: |
+          set -euo pipefail
+          . ./UPSTREAM_XO
+          review_dir="${RUNNER_TEMP}/ui-glossary-review"
+          test "$(git -C "${XO_DIR}" rev-parse HEAD)" = "${XO_COMMIT}"
+          python3 .shared-docs/site/scripts/export_xoa_glossary.py --output "${review_dir}/glossary.json"
+          python3 scripts/audit-shared-glossary.py \
+            --export "${review_dir}/glossary.json" \
+            --xo-source "${XO_DIR}" \
+            --docs-commit "$(git -C .shared-docs rev-parse HEAD)" \
+            --xoa-commit "$(git rev-parse HEAD)" \
+            --xo-commit "$(git -C "${XO_DIR}" rev-parse HEAD)" \
+            --output "${review_dir}/comparison.json"
+          cp scripts/ui-glossary-source.json scripts/ui-glossary-map.json "${review_dir}/"
+      - name: Upload glossary review evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: xoa-ui-glossary-review
+          path: ${{ runner.temp }}/ui-glossary-review/
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Test locale compaction
+        run: python3 -m unittest tests/test-compact-xo-locales.py
+      - name: Compact the production locale catalogs
+        run: python3 scripts/compact-xo-locales.py --minimum-entries 1000 "${XO_DIR}"
+      - name: Verify combined update contracts
+        run: |
+          set -euo pipefail
+          grep -q 'RECONNECT_RETRY_DELAY' "${XO_DIR}/packages/xo-web/src/common/xo/index.js"
+          grep -q 'ACTIVE_UPDATE_KEY' "${XO_DIR}/packages/xo-web/src/xo-app/settings/xoa-hl-updates/index.js"
+          grep -q 'getUpdateConfiguration' "${XO_DIR}/packages/xo-server/src/api/xoaHl.mjs"
+          grep -q '_renderAutomaticUpdates' "${XO_DIR}/packages/xo-web/src/xo-app/settings/xoa-hl-updates/index.js"

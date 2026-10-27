@@ -34,6 +34,23 @@ jobs:
           echo "RELEASE_TAG=${TAG}" >> $GITHUB_ENV
           echo "Target release tag established as: ${TAG}"
 
+      # A parse error in a build script aborts the whole job after the
+      # container and upstream checkout are already done. Catch it up front.
+      - name: Check shell script syntax
+        run: |
+          set -euo pipefail
+          for s in scripts/*.sh; do
+            echo "  bash -n $s"
+            bash -n "$s"
+          done
+          # SOURCES/*.sh are #!/bin/sh and ship inside the RPM, so a syntax
+          # error in one of them only shows up on an appliance. sh is dash on
+          # the runner, which also rejects the bashisms they must not use.
+          for s in SOURCES/*.sh; do
+            echo "  sh -n $s"
+            sh -n "$s"
+          done
+
       - name: Build in AlmaLinux 9 container
         run: |
           docker build -t xoa-hl-builder -f container/Containerfile container/
@@ -52,6 +69,7 @@ jobs:
         run: |
           set -euo pipefail
           VERSION="${{ steps.ver.outputs.version }}"
+          cp LICENSE SOURCES/xoa-hl-LICENSE
           # The tarball is now a build input, it is not published any more.
           cp "out/xoa-hl-${VERSION}.tar.gz" "SOURCES/xoa-hl-${VERSION}.tar.gz"
 
@@ -87,9 +105,62 @@ jobs:
           echo "new_rpm=${NEW_RPM}" >> $GITHUB_ENV
           ls -lh "${NEW_RPM}"
 
+      - name: Check scriptlets and prepare signing
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y rpm
+          # The builder container writes out/ as root. The runner must own the
+          # RPM for rpmsign and the directory for release-notes.sh.
+          sudo chown -R "$(id -u):$(id -g)" out
+          scripts=$(rpm -qp --scripts "${new_rpm}")
+          echo "${scripts}"
+          if grep -qE '^[[:space:]]*%' <<<"${scripts}"; then
+            echo "Unexpanded RPM macro in scriptlets"; exit 1
+          fi
+
+      - name: Sign RPM
+        env:
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+        run: |
+          set -euo pipefail
+          echo "${GPG_PRIVATE_KEY}" | gpg --batch --pinentry-mode loopback \
+            --passphrase "${GPG_PASSPHRASE}" --import
+          mkdir -p ~/.gnupg && chmod 700 ~/.gnupg
+          echo "allow-loopback-pinentry" >> ~/.gnupg/gpg-agent.conf
+          gpgconf --kill gpg-agent
+          gpgconf --launch gpg-agent
+          echo "${GPG_PASSPHRASE}" | gpg --batch --pinentry-mode loopback \
+            --passphrase-fd 0 --quiet --no-tty \
+            -u "XCP-ng Community Edition" \
+            --sign --output /dev/null /dev/null
+          # rpm 6 (ubuntu-26.04 runner) rejects the old argv0-style sign command; its default uses the cached passphrase.
+          echo "%_gpg_name XCP-ng Community Edition" > ~/.rpmmacros
+          rpmsign --addsign "${new_rpm}"
+
+      - name: Verify RPM signature
+        run: |
+          set -euo pipefail
+          # The runner user cannot write the system rpmdb; verify against a private one.
+          rpmdb_dir=$(mktemp -d)
+          rpm --dbpath "${rpmdb_dir}" --import "$GITHUB_WORKSPACE/xcp-ng-ce-public.asc"
+          result=$(rpm --dbpath "${rpmdb_dir}" --checksig "${new_rpm}")
+          echo "${result}"
+          grep -Fq "digests signatures OK" <<<"${result}" || {
+            echo "RPM signature verification failed"; exit 1;
+          }
+
+      - name: Prepare release notes
+        run: scripts/release-notes.sh "$RELEASE_TAG" '${{ steps.ver.outputs.version }}' "$new_rpm" out/release-notes.md
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ env.RELEASE_TAG }}
           draft: false
+          # A candidate (xcp-hl#179): only the testing channel serves it until prod/promote moves it to stable.
+          prerelease: true
+          generate_release_notes: true
+          body_path: out/release-notes.md
           files: ${{ env.new_rpm }}
