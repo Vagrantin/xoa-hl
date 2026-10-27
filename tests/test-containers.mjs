@@ -107,3 +107,42 @@ test('per-host serialization covers credential reads and releases after failure'
     await assert.rejects(remote(vm, { operation: 'overview' }, { root, spawnProcess }), /backup/)
   } finally { await rm(root, { recursive: true, force: true }) }
 })
+
+test('deployment reuses XO full-copy creation, carries private seed, and cleans failed credentials', async () => {
+  const root = await mkdtemp(join(tmpdir(), 'containers-deploy-test-'))
+  try {
+    const file = pathToFileURL(join(source, 'packages/xo-server/src/containers.mjs')).href
+    const wrapper = `export * from ${JSON.stringify(file)}; import { prepareCredentials as prepare } from ${JSON.stringify(file)}; export const prepareCredentials = () => prepare(${JSON.stringify(root)})`
+    const wrapped = 'data:text/javascript;base64,' + Buffer.from(wrapper).toString('base64')
+    let code = await readFile(join(source, 'packages/xo-server/src/api/containers.mjs'), 'utf8')
+    code = code.replace("import { create as createVm } from './vm.mjs'", 'const createVm = function (params) { return globalThis.__dockerCreate(this, params) }')
+    code = code.replace("'../containers.mjs'", JSON.stringify(wrapped))
+    const api = await import('data:text/javascript;base64,' + Buffer.from(code).toString('base64'))
+    const xapi = { getObject: () => ({ $VBDs: [{ type: 'Disk', userdevice: '0', $VDI: {} }] }) }
+    const context = { getXapi: () => xapi }
+    const params = { template: { id: 'template', _xapiId: 'template', tags: ['xcp-hl-docker-template-v1'], $pool: 'pool' },
+      sr: { id: 'storage', $pool: 'pool' }, network: { id: 'network', $pool: 'pool' }, name: 'Docker', cpus: 2, memoryMiB: 2048 }
+    globalThis.__dockerCreate = (ctx, p) => {
+      assert.equal(ctx, context)
+      assert.equal(p.clone, false)
+      assert.equal(p.existingDisks['0'].$SR, 'storage')
+      assert.equal(p.VIFs[0].network, 'network')
+      assert.equal(p.CPUs, 2)
+      assert.equal(p.memoryMin, 2048 * 1048576)
+      assert.equal(p.destroyCloudConfigVdiAfterBoot, true)
+      assert.equal(p.bootAfterCreate, true)
+      assert.match(p.cloudConfig, /OPENSSH PRIVATE KEY/)
+      assert.ok(p.tags.includes('xcp-hl-docker-v1'))
+      return 'new-vm'
+    }
+    assert.deepEqual(await api.deploy.call(context, params), { id: 'new-vm' })
+    const before = await core.availableCredentialIds(root)
+    assert.equal(before.length, 1)
+    globalThis.__dockerCreate = () => { throw new Error('copy failed') }
+    await assert.rejects(api.deploy.call(context, params), /copy failed/)
+    assert.deepEqual(await core.availableCredentialIds(root), before)
+  } finally {
+    delete globalThis.__dockerCreate
+    await rm(root, { recursive: true, force: true })
+  }
+})

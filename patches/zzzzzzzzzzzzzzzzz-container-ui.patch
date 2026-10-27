@@ -1,8 +1,8 @@
 diff --git a/packages/xo-web/src/common/intl/locales/es.js b/packages/xo-web/src/common/intl/locales/es.js
-index 6d7dea7c6..ba9ce89f6 100644
+index 6d7dea7c6..3a0c418b7 100644
 --- a/packages/xo-web/src/common/intl/locales/es.js
 +++ b/packages/xo-web/src/common/intl/locales/es.js
-@@ -8,6 +8,51 @@ addLocaleData(reactIntlData)
+@@ -8,6 +8,52 @@ addLocaleData(reactIntlData)
  // ===================================================================
  
  export default {
@@ -27,6 +27,7 @@ index 6d7dea7c6..ba9ce89f6 100644
 +  containersCreate: "Create container",
 +  containersImage: "Image",
 +  containersAdvanced: "Advanced options",
++  containersPorts: "Published ports",
 +  containersPortsHelp: "Ports: one HOST:CONTAINER/tcp or /udp per line. Published ports are reachable on the VM network.",
 +  containersVolumesHelp: "Persistent volumes: one NAME:/container/path per line. Names are shared within this VM.",
 +  containersEnvironmentHelp: "Environment: one KEY=value per line. Avoid secrets; administrators and API logs may expose these values.",
@@ -54,7 +55,7 @@ index 6d7dea7c6..ba9ce89f6 100644
    xhlAppearance: "Appearance",
    xhlTheme: "Theme",
    xhlColorMode: "Color mode",
-@@ -1681,7 +1726,6 @@ export default {
+@@ -1681,7 +1727,6 @@ export default {
    consoleTabName: 'Consola',
  
    // Original text: 'Container'
@@ -63,10 +64,10 @@ index 6d7dea7c6..ba9ce89f6 100644
    // Original text: "Snapshots"
    snapshotsTabName: 'Snapshots',
 diff --git a/packages/xo-web/src/common/intl/locales/fa.js b/packages/xo-web/src/common/intl/locales/fa.js
-index 964b48717..45dcc5626 100644
+index 964b48717..e8d328afa 100644
 --- a/packages/xo-web/src/common/intl/locales/fa.js
 +++ b/packages/xo-web/src/common/intl/locales/fa.js
-@@ -7,6 +7,51 @@ addLocaleData(reactIntlData)
+@@ -7,6 +7,52 @@ addLocaleData(reactIntlData)
  // ===================================================================
  
  export default {
@@ -91,6 +92,7 @@ index 964b48717..45dcc5626 100644
 +  containersCreate: "Create container",
 +  containersImage: "Image",
 +  containersAdvanced: "Advanced options",
++  containersPorts: "Published ports",
 +  containersPortsHelp: "Ports: one HOST:CONTAINER/tcp or /udp per line. Published ports are reachable on the VM network.",
 +  containersVolumesHelp: "Persistent volumes: one NAME:/container/path per line. Names are shared within this VM.",
 +  containersEnvironmentHelp: "Environment: one KEY=value per line. Avoid secrets; administrators and API logs may expose these values.",
@@ -118,7 +120,7 @@ index 964b48717..45dcc5626 100644
    xhlAppearance: "Appearance",
    xhlTheme: "Theme",
    xhlColorMode: "Color mode",
-@@ -2171,7 +2216,6 @@ export default {
+@@ -2171,7 +2217,6 @@ export default {
    consoleTabName: 'کنسول',
  
    // Original text: 'Container'
@@ -127,10 +129,10 @@ index 964b48717..45dcc5626 100644
    // Original text: 'Snapshots'
    snapshotsTabName: 'اسنپ شات ها',
 diff --git a/packages/xo-web/src/common/intl/locales/fr.js b/packages/xo-web/src/common/intl/locales/fr.js
-index 7dc7289df..47bcf72d8 100644
+index 7dc7289df..009ec95d9 100644
 --- a/packages/xo-web/src/common/intl/locales/fr.js
 +++ b/packages/xo-web/src/common/intl/locales/fr.js
-@@ -8,6 +8,51 @@ addLocaleData(reactIntlData)
+@@ -8,6 +8,52 @@ addLocaleData(reactIntlData)
  // ===================================================================
  
  export default {
@@ -155,6 +157,7 @@ index 7dc7289df..47bcf72d8 100644
 +  containersCreate: "Créer un conteneur",
 +  containersImage: "Image",
 +  containersAdvanced: "Options avancées",
++  containersPorts: "Ports publiés",
 +  containersPortsHelp: "Ports : HÔTE:CONTENEUR/tcp ou /udp, une ligne par port. Ils sont accessibles sur le réseau de la VM.",
 +  containersVolumesHelp: "Volumes persistants : NOM:/chemin/conteneur par ligne. Les noms sont partagés dans cette VM.",
 +  containersEnvironmentHelp: "Environnement : CLÉ=valeur par ligne. Évitez les secrets : administrateurs et journaux API peuvent exposer ces valeurs.",
@@ -182,7 +185,7 @@ index 7dc7289df..47bcf72d8 100644
    xhlAppearance: "Apparence",
    xhlTheme: "Thème",
    xhlColorMode: "Mode de couleur",
-@@ -1737,7 +1782,6 @@ export default {
+@@ -1737,7 +1783,6 @@ export default {
    consoleTabName: 'Console',
  
    // Original text: "Container"
@@ -191,10 +194,10 @@ index 7dc7289df..47bcf72d8 100644
    // Original text: "Snapshots"
    snapshotsTabName: 'Instantanés',
 diff --git a/packages/xo-web/src/common/intl/locales/he.js b/packages/xo-web/src/common/intl/locales/he.js
-index 0428bce3b..2b06393ab 100644
+index 0428bce3b..7ae268d20 100644
 --- a/packages/xo-web/src/common/intl/locales/he.js
 +++ b/packages/xo-web/src/common/intl/locales/he.js
-@@ -8,6 +8,51 @@ addLocaleData(reactIntlData)
+@@ -8,6 +8,52 @@ addLocaleData(reactIntlData)
  // ===================================================================
  
  export default {
@@ -219,6 +222,7 @@ index 0428bce3b..2b06393ab 100644
 +  containersCreate: "Create container",
 +  containersImage: "Image",
 +  containersAdvanced: "Advanced options",
++  containersPorts: "Published ports",
 +  containersPortsHelp: "Ports: one HOST:CONTAINER/tcp or /udp per line. Published ports are reachable on the VM network.",
 +  containersVolumesHelp: "Persistent volumes: one NAME:/container/path per line. Names are shared within this VM.",
 +  containersEnvironmentHelp: "Environment: one KEY=value per line. Avoid secrets; administrators and API logs may expose these values.",
@@ -246,7 +250,7 @@ index 0428bce3b..2b06393ab 100644
    xhlAppearance: "Appearance",
    xhlTheme: "Theme",
    xhlColorMode: "Color mode",
-@@ -1420,7 +1465,6 @@ export default {
+@@ -1420,7 +1466,6 @@ export default {
    consoleTabName: undefined,
  
    // Original text: 'Container'
@@ -255,10 +259,10 @@ index 0428bce3b..2b06393ab 100644
    // Original text: 'Snapshots'
    snapshotsTabName: undefined,
 diff --git a/packages/xo-web/src/common/intl/locales/hu.js b/packages/xo-web/src/common/intl/locales/hu.js
-index 39cfb6e40..ab8f80b33 100644
+index 39cfb6e40..54ec7385d 100644
 --- a/packages/xo-web/src/common/intl/locales/hu.js
 +++ b/packages/xo-web/src/common/intl/locales/hu.js
-@@ -8,6 +8,51 @@ addLocaleData(reactIntlData)
+@@ -8,6 +8,52 @@ addLocaleData(reactIntlData)
  // ===================================================================
  
  export default {
@@ -283,6 +287,7 @@ index 39cfb6e40..ab8f80b33 100644
 +  containersCreate: "Create container",
 +  containersImage: "Image",
 +  containersAdvanced: "Advanced options",
++  containersPorts: "Published ports",
 +  containersPortsHelp: "Ports: one HOST:CONTAINER/tcp or /udp per line. Published ports are reachable on the VM network.",
 +  containersVolumesHelp: "Persistent volumes: one NAME:/container/path per line. Names are shared within this VM.",
 +  containersEnvironmentHelp: "Environment: one KEY=value per line. Avoid secrets; administrators and API logs may expose these values.",
@@ -310,7 +315,7 @@ index 39cfb6e40..ab8f80b33 100644
    xhlAppearance: "Appearance",
    xhlTheme: "Theme",
    xhlColorMode: "Color mode",
-@@ -1619,7 +1664,6 @@ export default {
+@@ -1619,7 +1665,6 @@ export default {
    consoleTabName: 'Konzol',
  
    // Original text: "Container"
@@ -319,10 +324,10 @@ index 39cfb6e40..ab8f80b33 100644
    // Original text: "Snapshots"
    snapshotsTabName: 'Pillanatképek',
 diff --git a/packages/xo-web/src/common/intl/locales/it.js b/packages/xo-web/src/common/intl/locales/it.js
-index f14749a10..0f172bb60 100644
+index f14749a10..1084c308c 100644
 --- a/packages/xo-web/src/common/intl/locales/it.js
 +++ b/packages/xo-web/src/common/intl/locales/it.js
-@@ -8,6 +8,51 @@ addLocaleData(reactIntlData)
+@@ -8,6 +8,52 @@ addLocaleData(reactIntlData)
  // ===================================================================
  
  export default {
@@ -347,6 +352,7 @@ index f14749a10..0f172bb60 100644
 +  containersCreate: "Create container",
 +  containersImage: "Image",
 +  containersAdvanced: "Advanced options",
++  containersPorts: "Published ports",
 +  containersPortsHelp: "Ports: one HOST:CONTAINER/tcp or /udp per line. Published ports are reachable on the VM network.",
 +  containersVolumesHelp: "Persistent volumes: one NAME:/container/path per line. Names are shared within this VM.",
 +  containersEnvironmentHelp: "Environment: one KEY=value per line. Avoid secrets; administrators and API logs may expose these values.",
@@ -374,7 +380,7 @@ index f14749a10..0f172bb60 100644
    xhlAppearance: "Appearance",
    xhlTheme: "Theme",
    xhlColorMode: "Color mode",
-@@ -2559,7 +2604,6 @@ export default {
+@@ -2559,7 +2605,6 @@ export default {
    consoleTabName: 'Consolle',
  
    // Original text: 'Container'
@@ -383,10 +389,10 @@ index f14749a10..0f172bb60 100644
    // Original text: 'Snapshots'
    snapshotsTabName: 'Istantanei',
 diff --git a/packages/xo-web/src/common/intl/locales/ja.js b/packages/xo-web/src/common/intl/locales/ja.js
-index 243145bd6..c3fe8291e 100644
+index 243145bd6..90f3aae12 100644
 --- a/packages/xo-web/src/common/intl/locales/ja.js
 +++ b/packages/xo-web/src/common/intl/locales/ja.js
-@@ -8,6 +8,51 @@ addLocaleData(reactIntlData)
+@@ -8,6 +8,52 @@ addLocaleData(reactIntlData)
  // ===================================================================
  
  export default {
@@ -411,6 +417,7 @@ index 243145bd6..c3fe8291e 100644
 +  containersCreate: "コンテナーを作成",
 +  containersImage: "イメージ",
 +  containersAdvanced: "詳細設定",
++  containersPorts: "公開ポート",
 +  containersPortsHelp: "ポート：1行に ホスト:コンテナー/tcp または /udp。公開ポートはVMネットワークから到達可能です。",
 +  containersVolumesHelp: "永続ボリューム：1行に 名前:/コンテナー内パス。名前はVM内で共有されます。",
 +  containersEnvironmentHelp: "環境変数：1行に KEY=value。管理者やAPIログに表示される可能性があるため秘密情報を入力しないでください。",
@@ -438,7 +445,7 @@ index 243145bd6..c3fe8291e 100644
    xhlAppearance: "外観",
    xhlTheme: "テーマ",
    xhlColorMode: "カラーモード",
-@@ -3237,7 +3282,6 @@ export default {
+@@ -3237,7 +3283,6 @@ export default {
    consoleTabName: 'コンソール',
  
    // Original text: "Container"
@@ -447,10 +454,10 @@ index 243145bd6..c3fe8291e 100644
    // Original text: "Snapshots"
    snapshotsTabName: 'スナップショット',
 diff --git a/packages/xo-web/src/common/intl/locales/pl.js b/packages/xo-web/src/common/intl/locales/pl.js
-index 22c20631b..b3ee88176 100644
+index 22c20631b..abd066489 100644
 --- a/packages/xo-web/src/common/intl/locales/pl.js
 +++ b/packages/xo-web/src/common/intl/locales/pl.js
-@@ -8,6 +8,51 @@ addLocaleData(reactIntlData)
+@@ -8,6 +8,52 @@ addLocaleData(reactIntlData)
  // ===================================================================
  
  export default {
@@ -475,6 +482,7 @@ index 22c20631b..b3ee88176 100644
 +  containersCreate: "Create container",
 +  containersImage: "Image",
 +  containersAdvanced: "Advanced options",
++  containersPorts: "Published ports",
 +  containersPortsHelp: "Ports: one HOST:CONTAINER/tcp or /udp per line. Published ports are reachable on the VM network.",
 +  containersVolumesHelp: "Persistent volumes: one NAME:/container/path per line. Names are shared within this VM.",
 +  containersEnvironmentHelp: "Environment: one KEY=value per line. Avoid secrets; administrators and API logs may expose these values.",
@@ -502,7 +510,7 @@ index 22c20631b..b3ee88176 100644
    xhlAppearance: "Appearance",
    xhlTheme: "Theme",
    xhlColorMode: "Color mode",
-@@ -1423,7 +1468,6 @@ export default {
+@@ -1423,7 +1469,6 @@ export default {
    consoleTabName: 'Konsola',
  
    // Original text: "Container"
@@ -511,10 +519,10 @@ index 22c20631b..b3ee88176 100644
    // Original text: "Snapshots"
    snapshotsTabName: 'Snapshoty',
 diff --git a/packages/xo-web/src/common/intl/locales/pt.js b/packages/xo-web/src/common/intl/locales/pt.js
-index cf1347248..ebc423c54 100644
+index cf1347248..a3d6b4b22 100644
 --- a/packages/xo-web/src/common/intl/locales/pt.js
 +++ b/packages/xo-web/src/common/intl/locales/pt.js
-@@ -8,6 +8,51 @@ addLocaleData(reactIntlData)
+@@ -8,6 +8,52 @@ addLocaleData(reactIntlData)
  // ===================================================================
  
  export default {
@@ -539,6 +547,7 @@ index cf1347248..ebc423c54 100644
 +  containersCreate: "Create container",
 +  containersImage: "Image",
 +  containersAdvanced: "Advanced options",
++  containersPorts: "Published ports",
 +  containersPortsHelp: "Ports: one HOST:CONTAINER/tcp or /udp per line. Published ports are reachable on the VM network.",
 +  containersVolumesHelp: "Persistent volumes: one NAME:/container/path per line. Names are shared within this VM.",
 +  containersEnvironmentHelp: "Environment: one KEY=value per line. Avoid secrets; administrators and API logs may expose these values.",
@@ -566,7 +575,7 @@ index cf1347248..ebc423c54 100644
    xhlAppearance: "Appearance",
    xhlTheme: "Theme",
    xhlColorMode: "Color mode",
-@@ -1421,7 +1466,6 @@ export default {
+@@ -1421,7 +1467,6 @@ export default {
    consoleTabName: 'Console',
  
    // Original text: 'Container'
@@ -575,10 +584,10 @@ index cf1347248..ebc423c54 100644
    // Original text: "Snapshots"
    snapshotsTabName: 'Snapshots',
 diff --git a/packages/xo-web/src/common/intl/locales/ru.js b/packages/xo-web/src/common/intl/locales/ru.js
-index ce9ddb6ce..f09023633 100644
+index ce9ddb6ce..ab8aa2218 100644
 --- a/packages/xo-web/src/common/intl/locales/ru.js
 +++ b/packages/xo-web/src/common/intl/locales/ru.js
-@@ -8,6 +8,51 @@ addLocaleData(reactIntlData)
+@@ -8,6 +8,52 @@ addLocaleData(reactIntlData)
  // ===================================================================
  
  export default {
@@ -603,6 +612,7 @@ index ce9ddb6ce..f09023633 100644
 +  containersCreate: "Create container",
 +  containersImage: "Image",
 +  containersAdvanced: "Advanced options",
++  containersPorts: "Published ports",
 +  containersPortsHelp: "Ports: one HOST:CONTAINER/tcp or /udp per line. Published ports are reachable on the VM network.",
 +  containersVolumesHelp: "Persistent volumes: one NAME:/container/path per line. Names are shared within this VM.",
 +  containersEnvironmentHelp: "Environment: one KEY=value per line. Avoid secrets; administrators and API logs may expose these values.",
@@ -630,7 +640,7 @@ index ce9ddb6ce..f09023633 100644
    xhlAppearance: "Appearance",
    xhlTheme: "Theme",
    xhlColorMode: "Color mode",
-@@ -3206,7 +3251,6 @@ export default {
+@@ -3206,7 +3252,6 @@ export default {
    consoleTabName: 'Консоль',
  
    // Original text: "Container"
@@ -639,10 +649,10 @@ index ce9ddb6ce..f09023633 100644
    // Original text: "Snapshots"
    snapshotsTabName: 'Снимки',
 diff --git a/packages/xo-web/src/common/intl/locales/sv.js b/packages/xo-web/src/common/intl/locales/sv.js
-index 1006f4435..b3e8231ee 100644
+index 1006f4435..8cec0acf2 100644
 --- a/packages/xo-web/src/common/intl/locales/sv.js
 +++ b/packages/xo-web/src/common/intl/locales/sv.js
-@@ -8,6 +8,51 @@ addLocaleData(reactIntlData)
+@@ -8,6 +8,52 @@ addLocaleData(reactIntlData)
  // ===================================================================
  
  export default {
@@ -667,6 +677,7 @@ index 1006f4435..b3e8231ee 100644
 +  containersCreate: "Create container",
 +  containersImage: "Image",
 +  containersAdvanced: "Advanced options",
++  containersPorts: "Published ports",
 +  containersPortsHelp: "Ports: one HOST:CONTAINER/tcp or /udp per line. Published ports are reachable on the VM network.",
 +  containersVolumesHelp: "Persistent volumes: one NAME:/container/path per line. Names are shared within this VM.",
 +  containersEnvironmentHelp: "Environment: one KEY=value per line. Avoid secrets; administrators and API logs may expose these values.",
@@ -694,7 +705,7 @@ index 1006f4435..b3e8231ee 100644
    xhlAppearance: "Appearance",
    xhlTheme: "Theme",
    xhlColorMode: "Color mode",
-@@ -1681,7 +1726,6 @@ export default {
+@@ -1681,7 +1727,6 @@ export default {
    consoleTabName: 'Konsol',
  
    // Original text: 'Container'
@@ -703,10 +714,10 @@ index 1006f4435..b3e8231ee 100644
    // Original text: "Snapshots"
    snapshotsTabName: 'Snapshots',
 diff --git a/packages/xo-web/src/common/intl/locales/tr.js b/packages/xo-web/src/common/intl/locales/tr.js
-index 99d6d1b1d..7a240b230 100644
+index 99d6d1b1d..26b162599 100644
 --- a/packages/xo-web/src/common/intl/locales/tr.js
 +++ b/packages/xo-web/src/common/intl/locales/tr.js
-@@ -8,6 +8,51 @@ addLocaleData(reactIntlData)
+@@ -8,6 +8,52 @@ addLocaleData(reactIntlData)
  // ===================================================================
  
  export default {
@@ -731,6 +742,7 @@ index 99d6d1b1d..7a240b230 100644
 +  containersCreate: "Create container",
 +  containersImage: "Image",
 +  containersAdvanced: "Advanced options",
++  containersPorts: "Published ports",
 +  containersPortsHelp: "Ports: one HOST:CONTAINER/tcp or /udp per line. Published ports are reachable on the VM network.",
 +  containersVolumesHelp: "Persistent volumes: one NAME:/container/path per line. Names are shared within this VM.",
 +  containersEnvironmentHelp: "Environment: one KEY=value per line. Avoid secrets; administrators and API logs may expose these values.",
@@ -758,7 +770,7 @@ index 99d6d1b1d..7a240b230 100644
    xhlAppearance: "Appearance",
    xhlTheme: "Theme",
    xhlColorMode: "Color mode",
-@@ -2158,7 +2203,6 @@ export default {
+@@ -2158,7 +2204,6 @@ export default {
    consoleTabName: 'Konsol',
  
    // Original text: "Container"
@@ -767,10 +779,10 @@ index 99d6d1b1d..7a240b230 100644
    // Original text: "Snapshots"
    snapshotsTabName: "Snapshot'lar",
 diff --git a/packages/xo-web/src/common/intl/locales/zh.js b/packages/xo-web/src/common/intl/locales/zh.js
-index b15e15733..1e070786c 100644
+index b15e15733..7f19b0b62 100644
 --- a/packages/xo-web/src/common/intl/locales/zh.js
 +++ b/packages/xo-web/src/common/intl/locales/zh.js
-@@ -8,6 +8,51 @@ addLocaleData(reactIntlData)
+@@ -8,6 +8,52 @@ addLocaleData(reactIntlData)
  // ===================================================================
  
  export default {
@@ -795,6 +807,7 @@ index b15e15733..1e070786c 100644
 +  containersCreate: "Create container",
 +  containersImage: "Image",
 +  containersAdvanced: "Advanced options",
++  containersPorts: "Published ports",
 +  containersPortsHelp: "Ports: one HOST:CONTAINER/tcp or /udp per line. Published ports are reachable on the VM network.",
 +  containersVolumesHelp: "Persistent volumes: one NAME:/container/path per line. Names are shared within this VM.",
 +  containersEnvironmentHelp: "Environment: one KEY=value per line. Avoid secrets; administrators and API logs may expose these values.",
@@ -823,10 +836,10 @@ index b15e15733..1e070786c 100644
    xhlTheme: "Theme",
    xhlColorMode: "Color mode",
 diff --git a/packages/xo-web/src/common/intl/messages.js b/packages/xo-web/src/common/intl/messages.js
-index 4050659f9..043d0366a 100644
+index 4050659f9..1a8662794 100644
 --- a/packages/xo-web/src/common/intl/messages.js
 +++ b/packages/xo-web/src/common/intl/messages.js
-@@ -4,6 +4,51 @@
+@@ -4,6 +4,52 @@
  const forEach = require('lodash/forEach')
  
  const messages = {
@@ -851,6 +864,7 @@ index 4050659f9..043d0366a 100644
 +  containersCreate: "Create container",
 +  containersImage: "Image",
 +  containersAdvanced: "Advanced options",
++  containersPorts: "Published ports",
 +  containersPortsHelp: "Ports: one HOST:CONTAINER/tcp or /udp per line. Published ports are reachable on the VM network.",
 +  containersVolumesHelp: "Persistent volumes: one NAME:/container/path per line. Names are shared within this VM.",
 +  containersEnvironmentHelp: "Environment: one KEY=value per line. Avoid secrets; administrators and API logs may expose these values.",
@@ -878,7 +892,7 @@ index 4050659f9..043d0366a 100644
    xhlAppearance: "Appearance",
    xhlTheme: "Theme",
    xhlColorMode: "Color mode",
-@@ -1363,7 +1408,6 @@ const messages = {
+@@ -1363,7 +1409,6 @@ const messages = {
    generalTabName: 'General',
    statsTabName: 'Stats',
    consoleTabName: 'Console',
@@ -899,10 +913,10 @@ index 93a8ba38e..39aa71197 100644
 +export const containerCall = (operation, params) => _call('containers.' + operation, params)
 diff --git a/packages/xo-web/src/xo-app/containers/index.js b/packages/xo-web/src/xo-app/containers/index.js
 new file mode 100644
-index 000000000..98aaa5fe8
+index 000000000..0e579d45b
 --- /dev/null
 +++ b/packages/xo-web/src/xo-app/containers/index.js
-@@ -0,0 +1,416 @@
+@@ -0,0 +1,420 @@
 +import _ from 'intl'
 +import Component from 'base-component'
 +import React from 'react'
@@ -1176,6 +1190,9 @@ index 000000000..98aaa5fe8
 +          <section aria-label={_('containersResources')}>
 +            <h3>{_('containersResources')}</h3>
 +            <p>
++              {_('containersHost')}: {data.address}
++            </p>
++            <p>
 +              {_('containersCpu')}: {s.cpu} / {data.host.cpus} vCPU · {_('containersMemory')}:{' '}
 +              {mib(data.host.memoryUsed)} / {mib(data.host.memoryTotal)} MiB (
 +              {percent(data.host.memoryUsed, data.host.memoryTotal)}) · {_('containersDisk')}: {mib(data.host.diskUsed)}{' '}
@@ -1226,7 +1243,7 @@ index 000000000..98aaa5fe8
 +              <table className='table'>
 +                <thead>
 +                  <tr>
-+                    {['Name', 'Image', 'Status', 'Cpu', 'Memory', 'Actions'].map(k => (
++                    {['Name', 'Image', 'Status', 'Ports', 'Cpu', 'Memory', 'Actions'].map(k => (
 +                      <th key={k}>{_('containers' + k)}</th>
 +                    ))}
 +                  </tr>
@@ -1239,6 +1256,7 @@ index 000000000..98aaa5fe8
 +                        <td>{c.Names}</td>
 +                        <td>{c.Image}</td>
 +                        <td>{c.Status}</td>
++                        <td>{c.Ports}</td>
 +                        <td>{stat.CPUPerc || '—'}</td>
 +                        <td>{stat.MemUsage || '—'}</td>
 +                        <td>

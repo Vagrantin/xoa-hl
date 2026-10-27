@@ -1,14 +1,15 @@
 diff --git a/packages/xo-server/src/api/containers.mjs b/packages/xo-server/src/api/containers.mjs
 new file mode 100644
-index 000000000..9d665bd0c
+index 000000000..57762b204
 --- /dev/null
 +++ b/packages/xo-server/src/api/containers.mjs
-@@ -0,0 +1,123 @@
+@@ -0,0 +1,124 @@
 +import { rm } from 'node:fs/promises'
 +import { create as createVm } from './vm.mjs'
 +import {
 +  availableCredentialIds,
 +  credentialId,
++  guestAddress,
 +  HOST_TAG,
 +  prepareCredentials,
 +  remote,
@@ -92,8 +93,8 @@ index 000000000..9d665bd0c
 +  network: ['network', 'network', 'administrate'],
 +}
 +
-+export function overview({ vm }) {
-+  return remote(vm, { operation: 'overview' })
++export async function overview({ vm }) {
++  return { ...(await remote(vm, { operation: 'overview' })), address: guestAddress(vm) }
 +}
 +export function create({ vm, config }) {
 +  return remote(vm, { operation: 'create', config })
