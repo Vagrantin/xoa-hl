@@ -1,0 +1,310 @@
+diff --git a/packages/xo-web/src/common/xo-parallel-chart.js b/packages/xo-web/src/common/xo-parallel-chart.js
+index 7828d55..08acfeb 100644
+--- a/packages/xo-web/src/common/xo-parallel-chart.js
++++ b/packages/xo-web/src/common/xo-parallel-chart.js
+@@ -49,6 +49,7 @@ const SVG_CONTENT = {
+ }
+ 
+ const COLUMN_TITLE_STYLE = {
++  fill: 'var(--xhl-ink)',
+   'font-size': '100%',
+   'font-weight': 'bold',
+   'text-anchor': 'middle',
+@@ -66,7 +67,7 @@ const LINES_CONTAINER_STYLE = {
+ }
+ 
+ const TOOLTIP_STYLE = {
+-  fill: 'white',
++  fill: 'var(--xhl-ink)',
+   'font-size': '125%',
+   'font-weight': 'bold',
+ }
+diff --git a/packages/xo-web/src/common/xo-week-charts/index.js b/packages/xo-web/src/common/xo-week-charts/index.js
+index eef5a2f..75156b4 100644
+--- a/packages/xo-web/src/common/xo-week-charts/index.js
++++ b/packages/xo-web/src/common/xo-week-charts/index.js
+@@ -18,16 +18,17 @@ import styles from './index.css'
+ const X_AXIS_STYLE = {
+   'shape-rendering': 'crispEdges',
+   fill: 'none',
+-  stroke: '#000',
++  stroke: 'var(--xhl-muted)',
+ }
+ 
+ const X_AXIS_TEXT_STYLE = {
+   'font-size': '125%',
+-  fill: 'black',
++  fill: 'var(--xhl-ink)',
+   stroke: 'transparent',
+ }
+ 
+ const LABEL_STYLE = {
++  fill: 'var(--xhl-ink)',
+   'font-size': '125%',
+ }
+ 
+@@ -44,7 +45,7 @@ const HOVER_LINE_STYLE = {
+ }
+ 
+ const HOVER_TEXT_STYLE = {
+-  fill: 'black',
++  fill: 'var(--xhl-ink)',
+ }
+ 
+ const HORIZON_AREA_N_STEPS = 4
+diff --git a/packages/xo-web/src/common/xo-week-heatmap/index.js b/packages/xo-web/src/common/xo-week-heatmap/index.js
+index fc2b8e8..b944ffb 100644
+--- a/packages/xo-web/src/common/xo-week-heatmap/index.js
++++ b/packages/xo-web/src/common/xo-week-heatmap/index.js
+@@ -39,7 +39,7 @@ const computeColorGen = days => {
+     }
+   })
+ 
+-  return scaleSequential(interpolateViridis).domain([max, min])
++  return scaleSequential(interpolateViridis).domain(max === min ? [max + 1, min] : [max, min])
+ }
+ 
+ const computeMissingDays = days => {
+@@ -96,6 +96,10 @@ export default class XoWeekHeatmap extends Component {
+   }
+ 
+   _updateDays(data) {
++    if (data.length === 0) {
++      this.setState({ days: [] })
++      return
++    }
+     const days = {}
+ 
+     // 1. Compute average per day.
+@@ -174,7 +178,7 @@ export default class XoWeekHeatmap extends Component {
+                   }
+                   key={key}
+                 >
+-                  <td className={styles.cell} style={{ background: hour ? hour.color : '#ffffff' }} />
++                  <td className={styles.cell} style={{ background: hour ? hour.color : 'var(--xhl-soft)' }} />
+                 </Tooltip>
+               ))}
+             </tr>
+diff --git a/packages/xo-web/src/xo-app/about/index.js b/packages/xo-web/src/xo-app/about/index.js
+index 044bbfc..d88add8 100644
+--- a/packages/xo-web/src/xo-app/about/index.js
++++ b/packages/xo-web/src/xo-app/about/index.js
+@@ -37,8 +37,9 @@ class HostVersions extends Component {
+     return (
+       <div className='mt-1'>
+         <h4>{this.props.host.name_label}</h4>
++        <p>{this.props.host.productBrand || 'XCP-ng'} {this.props.host.version} {this.props.host.build && `(${this.props.host.build})`}</p>
+         {versions == null ? (
+-          <p>{_(versions === undefined ? 'statusLoading' : 'unknown')}</p>
++          <p className='text-muted'>{_(versions === undefined ? 'statusLoading' : 'xoaHlAboutVersionUnknown')}</p>
+         ) : (
+           <ul className='list-unstyled'>
+             {['xcp-hl-release', 'xoa-proxy', 'xo-lite-ce', 'iso'].map(name => (
+@@ -102,7 +103,6 @@ export default class About extends Component {
+         <Container className='text-xs-center'>
+           {isAdmin && (
+             <Col>
+-              <h2>{_('xoaHlAboutTitle')}</h2>
+               <Row>
+                 <Col mediumSize={6}>
+                   <Icon icon='info' size={4} />
+@@ -119,6 +119,15 @@ export default class About extends Component {
+               </Row>
+             </Col>
+           )}
++          <Row>
++                <Col mediumSize={6}>
++                  <a href='https://github.com/Vagrantin/xcp-hl/issues' target='_blank' rel='noreferrer'>
++                    <Icon icon='bug' size={4} />
++                    <h4>{_('bugTracker')}</h4>
++                  </a>
++                  <p className='text-muted'>{_('bugTrackerText')}</p>
++                </Col>
++          </Row>
+           {isAdmin && Object.values(this.props.hosts).map(host => <HostVersions host={host} key={host.id} />)}
+           {isAdmin && [
+             process.env.XOA_PLAN > 4 && COMMIT_ID !== '' && (
+@@ -162,13 +171,7 @@ export default class About extends Component {
+           {process.env.XOA_PLAN > 4 ? (
+             <div>
+               <Row>
+-                <Col mediumSize={6}>
+-                  <a href='https://github.com/Vagrantin/xcp-hl/issues/new' target='_blank' rel='noreferrer'>
+-                    <Icon icon='bug' size={4} />
+-                    <h4>{_('bugTracker')}</h4>
+-                  </a>
+-                  <p className='text-muted'>{_('bugTrackerText')}</p>
+-                </Col>
++
+                 <Col mediumSize={6}>
+                   <a href='https://xcp-ng.org/forum/category/12/xen-orchestra' target='_blank' rel='noreferrer'>
+                     <Icon icon='group' size={4} />
+diff --git a/packages/xo-web/src/xo-app/dashboard/stats/index.js b/packages/xo-web/src/xo-app/dashboard/stats/index.js
+index 7f8e222..5958c12 100644
+--- a/packages/xo-web/src/xo-app/dashboard/stats/index.js
++++ b/packages/xo-web/src/xo-app/dashboard/stats/index.js
+@@ -182,6 +182,7 @@ class SelectMetric extends Component {
+     this.setState({
+       metricsState: undefined,
+       metrics: undefined,
++      selectedMetricIndex: '',
+       objects,
+       predicate: objects.length
+         ? object => runningObjectsPredicate(object) && object.type === objects[0].type
+@@ -264,7 +265,7 @@ class SelectMetric extends Component {
+   _handleSelectedMetric = event => {
+     const { value } = event.target
+     const { state } = this
+-
++    this.setState({ selectedMetricIndex: value })
+     this.props.onChange(value !== '' && state.metrics[value], state.objects)
+   }
+ 
+@@ -294,7 +295,7 @@ class SelectMetric extends Component {
+               </div>
+             ) : (
+               metricsState === METRICS_LOADED && (
+-                <select className='form-control' onChange={this._handleSelectedMetric}>
++                <select className='form-control' value={this.state.selectedMetricIndex || ''} onChange={this._handleSelectedMetric}>
+                   {_('noSelectedMetric', message => (
+                     <option value=''>{message}</option>
+                   ))}
+@@ -337,7 +338,7 @@ class MetricViewer extends Component {
+         <SelectMetric onChange={this._handleSelectedMetric} />
+         <hr />
+         {selectedMetric && (
+-          <Container>
++          <Container key={selectedMetric.key}>
+             <Row>
+               <Col>{map(objects, object => renderXoItem(object, { className: 'mr-1' }))}</Col>
+             </Row>
+diff --git a/packages/xo-web/src/xo-app/menu/index.js b/packages/xo-web/src/xo-app/menu/index.js
+index 546e9a0..6c3dad2 100644
+--- a/packages/xo-web/src/xo-app/menu/index.js
++++ b/packages/xo-web/src/xo-app/menu/index.js
+@@ -577,7 +577,7 @@ export default class Menu extends Component {
+             <span>
+               <a className={styles.brand} href='#'>
+                 <span className={styles.hiddenUncollapsed}>XO</span>
+-                <span className={styles.hiddenCollapsed}>Xen Orchestra</span>
++                <span className={`${styles.hiddenCollapsed} xhl-brand`}>XOA-HL<small>HomeLab Edition</small></span>
+               </a>
+             </span>
+           </li>
+diff --git a/packages/xo-web/src/xo-app/settings/servers/index.js b/packages/xo-web/src/xo-app/settings/servers/index.js
+index fded2f5..c77e448 100644
+--- a/packages/xo-web/src/xo-app/settings/servers/index.js
++++ b/packages/xo-web/src/xo-app/settings/servers/index.js
+@@ -188,15 +188,8 @@ export default class Servers extends Component {
+ 
+     return (
+       <Container>
+-        <SortedTable
+-          collection={servers}
+-          columns={COLUMNS}
+-          individualActions={INDIVIDUAL_ACTIONS}
+-          userData={formatMessage}
+-          stateUrlParam='s'
+-        />
+-        <form className='form-inline' id='form-add-server'>
+-          <div className='form-group'>
++        <form className='xhl-server-form' id='form-add-server'>
++          <div className='form-group'><label>{_('serverLabel')}
+             <input
+               className='form-control'
+               onChange={this.linkState('label')}
+@@ -204,8 +197,8 @@ export default class Servers extends Component {
+               type='text'
+               value={state.label}
+             />
+-          </div>{' '}
+-          <div className='form-group'>
++          </label></div>
++          <div className='form-group'><label>{_('serverHost')}
+             <input
+               className='form-control'
+               onChange={this.linkState('host')}
+@@ -214,8 +207,8 @@ export default class Servers extends Component {
+               type='text'
+               value={state.host}
+             />
+-          </div>{' '}
+-          <div className='form-group'>
++          </label></div>
++          <div className='form-group'><label>{_('serverUsername')}
+             <input
+               className='form-control'
+               onChange={this.linkState('username')}
+@@ -224,8 +217,8 @@ export default class Servers extends Component {
+               type='text'
+               value={state.username}
+             />
+-          </div>{' '}
+-          <div className='form-group'>
++          </label></div>
++          <div className='form-group'><label>{_('serverPassword')}
+             <Password
+               disabled={!this.state.username}
+               onChange={this.linkState('password')}
+@@ -233,13 +226,13 @@ export default class Servers extends Component {
+               required
+               value={state.password}
+             />
+-          </div>{' '}
+-          <div className='form-group'>
++          </label></div>
++          <div className='form-group'><label>{_('serverUnauthorizedCertificates')}
+             <Tooltip content={_('serverAllowUnauthorizedCertificates')}>
+               <Toggle onChange={this.linkState('allowUnauthorized')} value={state.allowUnauthorized} />
+             </Tooltip>
+-          </div>{' '}
+-          <div className='form-group'>
++          </label></div>
++          <div className='form-group'><label>{_('serverHttpProxy')}
+             <input
+               className='form-control'
+               onChange={this.linkState('httpProxy')}
+@@ -247,11 +240,18 @@ export default class Servers extends Component {
+               type='text'
+               value={state.httpProxy || ''}
+             />
+-          </div>{' '}
++          </label></div>
+           <ActionButton btnStyle='primary' form='form-add-server' handler={this._addServer} icon='save'>
+             {_('serverConnect')}
+           </ActionButton>
+         </form>
++        <SortedTable
++          collection={servers}
++          columns={COLUMNS}
++          individualActions={INDIVIDUAL_ACTIONS}
++          userData={formatMessage}
++          stateUrlParam='s'
++        />
+       </Container>
+     )
+   }
+diff --git a/packages/xo-web/src/xoa-hl-themes.scss b/packages/xo-web/src/xoa-hl-themes.scss
+index 0c23cb1..3585efd 100644
+--- a/packages/xo-web/src/xoa-hl-themes.scss
++++ b/packages/xo-web/src/xoa-hl-themes.scss
+@@ -188,6 +188,19 @@
+ :root[data-xhl-theme="alpine"] { --xhl-radius: 12px; --xhl-row-padding: .9em; }
+ :root[data-xhl-theme] {
+   body, .page-header { background: var(--xhl-bg); color: var(--xhl-ink); }
++  // Keep React Select's search input transparent (a themed native input creates a visible box).
++  .Select-input > input { background: transparent; border: 0; box-shadow: none; outline: 0; }
++  .Select-menu, .Select-noresults, .Select-option-group-label { background: var(--xhl-panel); color: var(--xhl-ink); }
++  select.form-control option, select.form-control optgroup { background: var(--xhl-panel); color: var(--xhl-ink); }
++  .input-group > .input-group-btn { width: 1%; white-space: nowrap; }
++  .input-group > .input-group-btn > .btn-group { display: inline-block; }
++  .input-group > .input-group-btn .dropdown-toggle { position: relative; float: none; }
++  .xhl-server-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); gap: 1rem; margin-bottom: 2rem; }
++  .xhl-server-form .form-group { margin: 0; }
++  .xhl-server-form .form-control { width: 100%; }
++  .xhl-server-form label { display: block; }
++  .xhl-brand { display: block; white-space: normal; line-height: 1.3; }
++  .xhl-brand small { display: block; font-size: .6em; color: var(--xhl-side-muted); }
+   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+   a, .btn-link, .text-primary { color: var(--xhl-accent); }
+   .text-muted, .text-secondary { color: var(--xhl-muted) !important; }

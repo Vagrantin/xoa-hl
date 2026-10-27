@@ -40,6 +40,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Validate patch metadata
+        run: bash scripts/validate-patches.sh
       - name: Fetch pinned Xen Orchestra source
         run: |
           set -euo pipefail
