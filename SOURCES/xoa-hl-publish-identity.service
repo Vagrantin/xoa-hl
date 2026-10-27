@@ -1,0 +1,13 @@
+[Unit]
+Description=Publish installed XOA-HL guest identity to XenStore
+ConditionVirtualization=xen
+
+[Service]
+Type=oneshot
+ExecStart=/usr/libexec/xoa-hl/publish-identity.py
+TimeoutStartSec=40
+User=root
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectHome=yes
+ProtectSystem=full

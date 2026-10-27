@@ -49,6 +49,8 @@ install -m 644 %{_sourcedir}/xoa-hl-check-update.timer %{buildroot}/usr/lib/syst
 install -m 644 %{_sourcedir}/xoa-hl-update.service %{buildroot}/usr/lib/systemd/system/
 install -m 644 %{_sourcedir}/xoa-hl-auto-update.service %{buildroot}/usr/lib/systemd/system/
 install -m 644 %{_sourcedir}/xoa-hl-auto-update.timer %{buildroot}/usr/lib/systemd/system/
+install -m 644 %{_sourcedir}/xoa-hl-publish-identity.service %{buildroot}/usr/lib/systemd/system/
+install -m 644 %{_sourcedir}/xoa-hl-publish-identity.timer %{buildroot}/usr/lib/systemd/system/
 
 mkdir -p %{buildroot}/etc/yum.repos.d
 install -m 644 %{_sourcedir}/xoa-hl.repo %{buildroot}/etc/yum.repos.d/
@@ -57,6 +59,7 @@ mkdir -p %{buildroot}/usr/libexec/xoa-hl
 install -m 755 %{_sourcedir}/xoa-hl-check-update.sh %{buildroot}/usr/libexec/xoa-hl/check-update.sh
 install -m 755 %{_sourcedir}/xoa-hl-update.sh %{buildroot}/usr/libexec/xoa-hl/update.sh
 install -m 755 %{_sourcedir}/xoa-hl-update-history.py %{buildroot}/usr/libexec/xoa-hl/update-history.py
+install -m 755 %{_sourcedir}/xoa-hl-publish-identity.py %{buildroot}/usr/libexec/xoa-hl/publish-identity.py
 install -m 755 %{_sourcedir}/xoa-hl-auto-update.sh %{buildroot}/usr/libexec/xoa-hl/auto-update.sh
 install -m 755 %{_sourcedir}/xoa-hl-configure-updates.sh %{buildroot}/usr/libexec/xoa-hl/configure-updates.sh
 
@@ -85,6 +88,8 @@ touch %{buildroot}/var/lib/xoa-hl/auto-update.status
 /usr/lib/systemd/system/xoa-hl-update.service
 /usr/lib/systemd/system/xoa-hl-auto-update.service
 /usr/lib/systemd/system/xoa-hl-auto-update.timer
+/usr/lib/systemd/system/xoa-hl-publish-identity.service
+/usr/lib/systemd/system/xoa-hl-publish-identity.timer
 /etc/yum.repos.d/xoa-hl.repo
 /etc/yum.repos.d/xoa-hl-testing.repo
 /usr/libexec/xoa-hl
@@ -127,6 +132,9 @@ systemctl enable xo-server
 # keeps the update page disconnected for longer. The new package's %%posttrans
 # is what runs on an upgrade, so this also applies to the upgrade that brings it.
 systemctl restart xo-server
+# Identity reporting is independent of the disabled update timers.
+systemctl enable --now xoa-hl-publish-identity.timer
+systemctl start --no-block xoa-hl-publish-identity.service || true
 
 %preun
 # $1 = instances remaining after this action: 0 = final removal, 1 = upgrade.
@@ -134,6 +142,8 @@ systemctl restart xo-server
 # restarts it.
 if [ "$1" -eq 0 ]; then
     systemctl disable --now xoa-hl-check-update.timer xoa-hl-auto-update.timer 2>/dev/null || true
+    systemctl disable --now xoa-hl-publish-identity.timer xoa-hl-publish-identity.service 2>/dev/null || true
+    /usr/libexec/xoa-hl/publish-identity.py --clear 2>/dev/null || true
     systemctl stop xo-server 2>/dev/null || true
     systemctl disable xo-server 2>/dev/null || true
 fi
