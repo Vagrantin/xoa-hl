@@ -1,5 +1,25 @@
 # XOA-HL Patch Metadata
 [[patches]]
+id = "xoa-hl-update-status"
+description = "Distinguish unchecked status and reject duplicate appliance update requests (#307)"
+target = "packages/xo-server/src/api/xoaHl.mjs; packages/xo-web/src/xo-app/settings/xoa-hl-updates/index.js"
+upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
+applies_to = ["5.113.2"]
+maintainer = "vagrantin"
+status = "active"
+dependencies = ["xoa-hl-update-api"]
+
+[[patches]]
+id = "xoa-hl-appliance-runtime"
+description = "Read the packaged build stamp when git metadata is pruned (#308)"
+target = "packages/xo-server/src/index.mjs"
+upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
+applies_to = ["5.113.2"]
+maintainer = "vagrantin"
+status = "active"
+dependencies = []
+
+[[patches]]
 id = "zzzzzzzzzzzzzzzz-appliance-theme-feedback"
 description = "Address appliance feedback for theme controls, charts, server forms, branding and About"
 target = "packages/xo-web/src"

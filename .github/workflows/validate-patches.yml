@@ -64,6 +64,8 @@ jobs:
         run: node tests/test-appearance.mjs "${XO_DIR}"
       - name: Check server module syntax
         run: node --check "${XO_DIR}/packages/xo-server/src/api/xoaHl.mjs"
+      - name: Test update status and duplicate start handling
+        run: node tests/test-update-api.mjs "${XO_DIR}"
       - name: Audit UI translations
         run: python3 scripts/audit-ui-translations.py "${XO_DIR}"
       - name: Test shared glossary consumer

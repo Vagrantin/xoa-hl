@@ -14,10 +14,17 @@ fake_dnf="$tmp_dir/dnf"
 cat > "$fake_dnf" <<'EOF'
 #!/bin/sh
 printf '%s\n' "$*" > "$FAKE_DNF_ARGS"
+case "$*" in 'needs-restarting -r') exit "${FAKE_REBOOT_RC:-0}" ;; esac
+case " $* " in *' check '*) exit 0 ;; esac
 printf '%s\n' "${FAKE_DNF_OUTPUT:-}"
 exit "${FAKE_DNF_RC:-0}"
 EOF
 chmod +x "$fake_dnf"
+
+fake_rpm="$tmp_dir/rpm"
+printf '#!/bin/sh\nexit 0\n' > "$fake_rpm"
+chmod +x "$fake_rpm"
+export RPM_COMMAND="$fake_rpm"
 
 status_file="$tmp_dir/run/status"
 lock_file="$tmp_dir/run/dnf.lock"
@@ -128,6 +135,18 @@ EOF
 chmod +x "$fake_bin/systemctl" "$fake_bin/systemd-analyze" "$fake_bin/needs-restarting"
 
 export PATH="$fake_bin:$PATH"
+
+# EL9 fallback when the standalone utility is absent.
+mv "$fake_bin/needs-restarting" "$tmp_dir/needs-restarting.saved"
+for pair in '0 no' '1 yes' '2 unknown'; do
+    set -- $pair
+    FAKE_REBOOT_RC=$1 FAKE_CHECK_VERDICT=AVAILABLE FAKE_UPDATE_RC=0 \
+        sh "$repo_dir/SOURCES/xoa-hl-auto-update.sh"
+    grep -Fx "rebootNeeded=$2" "$state_dir/auto-update.status" >/dev/null
+    grep -Fx 'needs-restarting -r' "$FAKE_DNF_ARGS" >/dev/null
+done
+mv "$tmp_dir/needs-restarting.saved" "$fake_bin/needs-restarting"
+
 export SYSTEMCTL_LOG="$tmp_dir/systemctl.log"
 export SYSTEMD_ANALYZE_LOG="$tmp_dir/systemd-analyze.log"
 export XOA_HL_CONFIG_DIR="$tmp_dir/etc/xoa-hl"
