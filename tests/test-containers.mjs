@@ -146,3 +146,21 @@ test('deployment reuses XO full-copy creation, carries private seed, and cleans 
     await rm(root, { recursive: true, force: true })
   }
 })
+
+test('optional guest-maintenance key is validated and isolated from the forced management identity', async () => {
+  const root = await mkdtemp(join(tmpdir(), 'containers-admin-test-'))
+  try {
+    for (const value of ['not-a-key', 'ssh-ed25519 AAAA\ncommand="bad"', 'command="bad" ssh-ed25519 AAAA']) {
+      await assert.rejects(prepareCredentials(root, value), /public key/)
+    }
+    const first = await prepareCredentials(root)
+    const publicKey = (await readFile(join(first.directory, 'client.pub'), 'utf8')).trim()
+    const second = await prepareCredentials(root, publicKey)
+    const config = JSON.parse(second.cloudConfig.slice('#cloud-config\n'.length))
+    const admin = config.users.find(user => user.name === 'docker-admin')
+    assert.deepEqual(admin.ssh_authorized_keys, [publicKey])
+    assert.equal(admin.lock_passwd, true)
+    assert.match(config.users.find(user => user.name === 'root').ssh_authorized_keys[0], /^restrict,command=/)
+    assert.notEqual(admin.ssh_authorized_keys[0], config.users[0].ssh_authorized_keys[0])
+  } finally { await rm(root, { recursive: true, force: true }) }
+})

@@ -1,8 +1,8 @@
 diff --git a/packages/xo-web/src/common/intl/locales/es.js b/packages/xo-web/src/common/intl/locales/es.js
-index 6d7dea7c6..3a0c418b7 100644
+index 6d7dea7c6..66873f15b 100644
 --- a/packages/xo-web/src/common/intl/locales/es.js
 +++ b/packages/xo-web/src/common/intl/locales/es.js
-@@ -8,6 +8,52 @@ addLocaleData(reactIntlData)
+@@ -8,6 +8,53 @@ addLocaleData(reactIntlData)
  // ===================================================================
  
  export default {
@@ -16,6 +16,7 @@ index 6d7dea7c6..3a0c418b7 100644
 +  containersName: "Name",
 +  containersCpus: "CPU limit (cores)",
 +  containersMemoryLimit: "Memory limit (MiB)",
++  containersAdministratorKey: "Guest administrator SSH public key (optional; grants sudo to docker-admin)",
 +  containersDeploymentHelp: "Creates a separate VM with a full copy of the template disk. Requires DHCP and a network reachable from XOA-HL.",
 +  containersHost: "Docker VM",
 +  containersRefresh: "Refresh",
@@ -55,7 +56,7 @@ index 6d7dea7c6..3a0c418b7 100644
    xhlAppearance: "Appearance",
    xhlTheme: "Theme",
    xhlColorMode: "Color mode",
-@@ -1681,7 +1727,6 @@ export default {
+@@ -1681,7 +1728,6 @@ export default {
    consoleTabName: 'Consola',
  
    // Original text: 'Container'
@@ -64,10 +65,10 @@ index 6d7dea7c6..3a0c418b7 100644
    // Original text: "Snapshots"
    snapshotsTabName: 'Snapshots',
 diff --git a/packages/xo-web/src/common/intl/locales/fa.js b/packages/xo-web/src/common/intl/locales/fa.js
-index 964b48717..e8d328afa 100644
+index 964b48717..3c54979c6 100644
 --- a/packages/xo-web/src/common/intl/locales/fa.js
 +++ b/packages/xo-web/src/common/intl/locales/fa.js
-@@ -7,6 +7,52 @@ addLocaleData(reactIntlData)
+@@ -7,6 +7,53 @@ addLocaleData(reactIntlData)
  // ===================================================================
  
  export default {
@@ -81,6 +82,7 @@ index 964b48717..e8d328afa 100644
 +  containersName: "Name",
 +  containersCpus: "CPU limit (cores)",
 +  containersMemoryLimit: "Memory limit (MiB)",
++  containersAdministratorKey: "Guest administrator SSH public key (optional; grants sudo to docker-admin)",
 +  containersDeploymentHelp: "Creates a separate VM with a full copy of the template disk. Requires DHCP and a network reachable from XOA-HL.",
 +  containersHost: "Docker VM",
 +  containersRefresh: "Refresh",
@@ -120,7 +122,7 @@ index 964b48717..e8d328afa 100644
    xhlAppearance: "Appearance",
    xhlTheme: "Theme",
    xhlColorMode: "Color mode",
-@@ -2171,7 +2217,6 @@ export default {
+@@ -2171,7 +2218,6 @@ export default {
    consoleTabName: 'کنسول',
  
    // Original text: 'Container'
@@ -129,10 +131,10 @@ index 964b48717..e8d328afa 100644
    // Original text: 'Snapshots'
    snapshotsTabName: 'اسنپ شات ها',
 diff --git a/packages/xo-web/src/common/intl/locales/fr.js b/packages/xo-web/src/common/intl/locales/fr.js
-index 7dc7289df..009ec95d9 100644
+index 7dc7289df..20c4b73f8 100644
 --- a/packages/xo-web/src/common/intl/locales/fr.js
 +++ b/packages/xo-web/src/common/intl/locales/fr.js
-@@ -8,6 +8,52 @@ addLocaleData(reactIntlData)
+@@ -8,6 +8,53 @@ addLocaleData(reactIntlData)
  // ===================================================================
  
  export default {
@@ -146,6 +148,7 @@ index 7dc7289df..009ec95d9 100644
 +  containersName: "Nom",
 +  containersCpus: "Limite CPU (cœurs)",
 +  containersMemoryLimit: "Limite mémoire (Mio)",
++  containersAdministratorKey: "Clé publique SSH administrateur invité (facultatif ; accès sudo pour docker-admin)",
 +  containersDeploymentHelp: "Crée une VM distincte avec une copie complète du disque du modèle. DHCP et un réseau accessible depuis XOA-HL sont requis.",
 +  containersHost: "VM Docker",
 +  containersRefresh: "Actualiser",
@@ -185,7 +188,7 @@ index 7dc7289df..009ec95d9 100644
    xhlAppearance: "Apparence",
    xhlTheme: "Thème",
    xhlColorMode: "Mode de couleur",
-@@ -1737,7 +1783,6 @@ export default {
+@@ -1737,7 +1784,6 @@ export default {
    consoleTabName: 'Console',
  
    // Original text: "Container"
@@ -194,10 +197,10 @@ index 7dc7289df..009ec95d9 100644
    // Original text: "Snapshots"
    snapshotsTabName: 'Instantanés',
 diff --git a/packages/xo-web/src/common/intl/locales/he.js b/packages/xo-web/src/common/intl/locales/he.js
-index 0428bce3b..7ae268d20 100644
+index 0428bce3b..91e5e30f8 100644
 --- a/packages/xo-web/src/common/intl/locales/he.js
 +++ b/packages/xo-web/src/common/intl/locales/he.js
-@@ -8,6 +8,52 @@ addLocaleData(reactIntlData)
+@@ -8,6 +8,53 @@ addLocaleData(reactIntlData)
  // ===================================================================
  
  export default {
@@ -211,6 +214,7 @@ index 0428bce3b..7ae268d20 100644
 +  containersName: "Name",
 +  containersCpus: "CPU limit (cores)",
 +  containersMemoryLimit: "Memory limit (MiB)",
++  containersAdministratorKey: "Guest administrator SSH public key (optional; grants sudo to docker-admin)",
 +  containersDeploymentHelp: "Creates a separate VM with a full copy of the template disk. Requires DHCP and a network reachable from XOA-HL.",
 +  containersHost: "Docker VM",
 +  containersRefresh: "Refresh",
@@ -250,7 +254,7 @@ index 0428bce3b..7ae268d20 100644
    xhlAppearance: "Appearance",
    xhlTheme: "Theme",
    xhlColorMode: "Color mode",
-@@ -1420,7 +1466,6 @@ export default {
+@@ -1420,7 +1467,6 @@ export default {
    consoleTabName: undefined,
  
    // Original text: 'Container'
@@ -259,10 +263,10 @@ index 0428bce3b..7ae268d20 100644
    // Original text: 'Snapshots'
    snapshotsTabName: undefined,
 diff --git a/packages/xo-web/src/common/intl/locales/hu.js b/packages/xo-web/src/common/intl/locales/hu.js
-index 39cfb6e40..54ec7385d 100644
+index 39cfb6e40..e2ab37b2f 100644
 --- a/packages/xo-web/src/common/intl/locales/hu.js
 +++ b/packages/xo-web/src/common/intl/locales/hu.js
-@@ -8,6 +8,52 @@ addLocaleData(reactIntlData)
+@@ -8,6 +8,53 @@ addLocaleData(reactIntlData)
  // ===================================================================
  
  export default {
@@ -276,6 +280,7 @@ index 39cfb6e40..54ec7385d 100644
 +  containersName: "Name",
 +  containersCpus: "CPU limit (cores)",
 +  containersMemoryLimit: "Memory limit (MiB)",
++  containersAdministratorKey: "Guest administrator SSH public key (optional; grants sudo to docker-admin)",
 +  containersDeploymentHelp: "Creates a separate VM with a full copy of the template disk. Requires DHCP and a network reachable from XOA-HL.",
 +  containersHost: "Docker VM",
 +  containersRefresh: "Refresh",
@@ -315,7 +320,7 @@ index 39cfb6e40..54ec7385d 100644
    xhlAppearance: "Appearance",
    xhlTheme: "Theme",
    xhlColorMode: "Color mode",
-@@ -1619,7 +1665,6 @@ export default {
+@@ -1619,7 +1666,6 @@ export default {
    consoleTabName: 'Konzol',
  
    // Original text: "Container"
@@ -324,10 +329,10 @@ index 39cfb6e40..54ec7385d 100644
    // Original text: "Snapshots"
    snapshotsTabName: 'Pillanatképek',
 diff --git a/packages/xo-web/src/common/intl/locales/it.js b/packages/xo-web/src/common/intl/locales/it.js
-index f14749a10..1084c308c 100644
+index f14749a10..87185158e 100644
 --- a/packages/xo-web/src/common/intl/locales/it.js
 +++ b/packages/xo-web/src/common/intl/locales/it.js
-@@ -8,6 +8,52 @@ addLocaleData(reactIntlData)
+@@ -8,6 +8,53 @@ addLocaleData(reactIntlData)
  // ===================================================================
  
  export default {
@@ -341,6 +346,7 @@ index f14749a10..1084c308c 100644
 +  containersName: "Name",
 +  containersCpus: "CPU limit (cores)",
 +  containersMemoryLimit: "Memory limit (MiB)",
++  containersAdministratorKey: "Guest administrator SSH public key (optional; grants sudo to docker-admin)",
 +  containersDeploymentHelp: "Creates a separate VM with a full copy of the template disk. Requires DHCP and a network reachable from XOA-HL.",
 +  containersHost: "Docker VM",
 +  containersRefresh: "Refresh",
@@ -380,7 +386,7 @@ index f14749a10..1084c308c 100644
    xhlAppearance: "Appearance",
    xhlTheme: "Theme",
    xhlColorMode: "Color mode",
-@@ -2559,7 +2605,6 @@ export default {
+@@ -2559,7 +2606,6 @@ export default {
    consoleTabName: 'Consolle',
  
    // Original text: 'Container'
@@ -389,10 +395,10 @@ index f14749a10..1084c308c 100644
    // Original text: 'Snapshots'
    snapshotsTabName: 'Istantanei',
 diff --git a/packages/xo-web/src/common/intl/locales/ja.js b/packages/xo-web/src/common/intl/locales/ja.js
-index 243145bd6..90f3aae12 100644
+index 243145bd6..6c4d23631 100644
 --- a/packages/xo-web/src/common/intl/locales/ja.js
 +++ b/packages/xo-web/src/common/intl/locales/ja.js
-@@ -8,6 +8,52 @@ addLocaleData(reactIntlData)
+@@ -8,6 +8,53 @@ addLocaleData(reactIntlData)
  // ===================================================================
  
  export default {
@@ -406,6 +412,7 @@ index 243145bd6..90f3aae12 100644
 +  containersName: "名前",
 +  containersCpus: "CPU上限（コア数）",
 +  containersMemoryLimit: "メモリ上限（MiB）",
++  containersAdministratorKey: "ゲスト管理者のSSH公開鍵（任意・docker-adminにsudo権限を付与）",
 +  containersDeploymentHelp: "テンプレートディスクを完全コピーして専用VMを作成します。DHCPとXOA-HLから到達できるネットワークが必要です。",
 +  containersHost: "Docker VM",
 +  containersRefresh: "更新",
@@ -445,7 +452,7 @@ index 243145bd6..90f3aae12 100644
    xhlAppearance: "外観",
    xhlTheme: "テーマ",
    xhlColorMode: "カラーモード",
-@@ -3237,7 +3283,6 @@ export default {
+@@ -3237,7 +3284,6 @@ export default {
    consoleTabName: 'コンソール',
  
    // Original text: "Container"
@@ -454,10 +461,10 @@ index 243145bd6..90f3aae12 100644
    // Original text: "Snapshots"
    snapshotsTabName: 'スナップショット',
 diff --git a/packages/xo-web/src/common/intl/locales/pl.js b/packages/xo-web/src/common/intl/locales/pl.js
-index 22c20631b..abd066489 100644
+index 22c20631b..b4a2e92a2 100644
 --- a/packages/xo-web/src/common/intl/locales/pl.js
 +++ b/packages/xo-web/src/common/intl/locales/pl.js
-@@ -8,6 +8,52 @@ addLocaleData(reactIntlData)
+@@ -8,6 +8,53 @@ addLocaleData(reactIntlData)
  // ===================================================================
  
  export default {
@@ -471,6 +478,7 @@ index 22c20631b..abd066489 100644
 +  containersName: "Name",
 +  containersCpus: "CPU limit (cores)",
 +  containersMemoryLimit: "Memory limit (MiB)",
++  containersAdministratorKey: "Guest administrator SSH public key (optional; grants sudo to docker-admin)",
 +  containersDeploymentHelp: "Creates a separate VM with a full copy of the template disk. Requires DHCP and a network reachable from XOA-HL.",
 +  containersHost: "Docker VM",
 +  containersRefresh: "Refresh",
@@ -510,7 +518,7 @@ index 22c20631b..abd066489 100644
    xhlAppearance: "Appearance",
    xhlTheme: "Theme",
    xhlColorMode: "Color mode",
-@@ -1423,7 +1469,6 @@ export default {
+@@ -1423,7 +1470,6 @@ export default {
    consoleTabName: 'Konsola',
  
    // Original text: "Container"
@@ -519,10 +527,10 @@ index 22c20631b..abd066489 100644
    // Original text: "Snapshots"
    snapshotsTabName: 'Snapshoty',
 diff --git a/packages/xo-web/src/common/intl/locales/pt.js b/packages/xo-web/src/common/intl/locales/pt.js
-index cf1347248..a3d6b4b22 100644
+index cf1347248..a87affafd 100644
 --- a/packages/xo-web/src/common/intl/locales/pt.js
 +++ b/packages/xo-web/src/common/intl/locales/pt.js
-@@ -8,6 +8,52 @@ addLocaleData(reactIntlData)
+@@ -8,6 +8,53 @@ addLocaleData(reactIntlData)
  // ===================================================================
  
  export default {
@@ -536,6 +544,7 @@ index cf1347248..a3d6b4b22 100644
 +  containersName: "Name",
 +  containersCpus: "CPU limit (cores)",
 +  containersMemoryLimit: "Memory limit (MiB)",
++  containersAdministratorKey: "Guest administrator SSH public key (optional; grants sudo to docker-admin)",
 +  containersDeploymentHelp: "Creates a separate VM with a full copy of the template disk. Requires DHCP and a network reachable from XOA-HL.",
 +  containersHost: "Docker VM",
 +  containersRefresh: "Refresh",
@@ -575,7 +584,7 @@ index cf1347248..a3d6b4b22 100644
    xhlAppearance: "Appearance",
    xhlTheme: "Theme",
    xhlColorMode: "Color mode",
-@@ -1421,7 +1467,6 @@ export default {
+@@ -1421,7 +1468,6 @@ export default {
    consoleTabName: 'Console',
  
    // Original text: 'Container'
@@ -584,10 +593,10 @@ index cf1347248..a3d6b4b22 100644
    // Original text: "Snapshots"
    snapshotsTabName: 'Snapshots',
 diff --git a/packages/xo-web/src/common/intl/locales/ru.js b/packages/xo-web/src/common/intl/locales/ru.js
-index ce9ddb6ce..ab8aa2218 100644
+index ce9ddb6ce..e4ff60850 100644
 --- a/packages/xo-web/src/common/intl/locales/ru.js
 +++ b/packages/xo-web/src/common/intl/locales/ru.js
-@@ -8,6 +8,52 @@ addLocaleData(reactIntlData)
+@@ -8,6 +8,53 @@ addLocaleData(reactIntlData)
  // ===================================================================
  
  export default {
@@ -601,6 +610,7 @@ index ce9ddb6ce..ab8aa2218 100644
 +  containersName: "Name",
 +  containersCpus: "CPU limit (cores)",
 +  containersMemoryLimit: "Memory limit (MiB)",
++  containersAdministratorKey: "Guest administrator SSH public key (optional; grants sudo to docker-admin)",
 +  containersDeploymentHelp: "Creates a separate VM with a full copy of the template disk. Requires DHCP and a network reachable from XOA-HL.",
 +  containersHost: "Docker VM",
 +  containersRefresh: "Refresh",
@@ -640,7 +650,7 @@ index ce9ddb6ce..ab8aa2218 100644
    xhlAppearance: "Appearance",
    xhlTheme: "Theme",
    xhlColorMode: "Color mode",
-@@ -3206,7 +3252,6 @@ export default {
+@@ -3206,7 +3253,6 @@ export default {
    consoleTabName: 'Консоль',
  
    // Original text: "Container"
@@ -649,10 +659,10 @@ index ce9ddb6ce..ab8aa2218 100644
    // Original text: "Snapshots"
    snapshotsTabName: 'Снимки',
 diff --git a/packages/xo-web/src/common/intl/locales/sv.js b/packages/xo-web/src/common/intl/locales/sv.js
-index 1006f4435..8cec0acf2 100644
+index 1006f4435..d0639bff7 100644
 --- a/packages/xo-web/src/common/intl/locales/sv.js
 +++ b/packages/xo-web/src/common/intl/locales/sv.js
-@@ -8,6 +8,52 @@ addLocaleData(reactIntlData)
+@@ -8,6 +8,53 @@ addLocaleData(reactIntlData)
  // ===================================================================
  
  export default {
@@ -666,6 +676,7 @@ index 1006f4435..8cec0acf2 100644
 +  containersName: "Name",
 +  containersCpus: "CPU limit (cores)",
 +  containersMemoryLimit: "Memory limit (MiB)",
++  containersAdministratorKey: "Guest administrator SSH public key (optional; grants sudo to docker-admin)",
 +  containersDeploymentHelp: "Creates a separate VM with a full copy of the template disk. Requires DHCP and a network reachable from XOA-HL.",
 +  containersHost: "Docker VM",
 +  containersRefresh: "Refresh",
@@ -705,7 +716,7 @@ index 1006f4435..8cec0acf2 100644
    xhlAppearance: "Appearance",
    xhlTheme: "Theme",
    xhlColorMode: "Color mode",
-@@ -1681,7 +1727,6 @@ export default {
+@@ -1681,7 +1728,6 @@ export default {
    consoleTabName: 'Konsol',
  
    // Original text: 'Container'
@@ -714,10 +725,10 @@ index 1006f4435..8cec0acf2 100644
    // Original text: "Snapshots"
    snapshotsTabName: 'Snapshots',
 diff --git a/packages/xo-web/src/common/intl/locales/tr.js b/packages/xo-web/src/common/intl/locales/tr.js
-index 99d6d1b1d..26b162599 100644
+index 99d6d1b1d..974b8b4f4 100644
 --- a/packages/xo-web/src/common/intl/locales/tr.js
 +++ b/packages/xo-web/src/common/intl/locales/tr.js
-@@ -8,6 +8,52 @@ addLocaleData(reactIntlData)
+@@ -8,6 +8,53 @@ addLocaleData(reactIntlData)
  // ===================================================================
  
  export default {
@@ -731,6 +742,7 @@ index 99d6d1b1d..26b162599 100644
 +  containersName: "Name",
 +  containersCpus: "CPU limit (cores)",
 +  containersMemoryLimit: "Memory limit (MiB)",
++  containersAdministratorKey: "Guest administrator SSH public key (optional; grants sudo to docker-admin)",
 +  containersDeploymentHelp: "Creates a separate VM with a full copy of the template disk. Requires DHCP and a network reachable from XOA-HL.",
 +  containersHost: "Docker VM",
 +  containersRefresh: "Refresh",
@@ -770,7 +782,7 @@ index 99d6d1b1d..26b162599 100644
    xhlAppearance: "Appearance",
    xhlTheme: "Theme",
    xhlColorMode: "Color mode",
-@@ -2158,7 +2204,6 @@ export default {
+@@ -2158,7 +2205,6 @@ export default {
    consoleTabName: 'Konsol',
  
    // Original text: "Container"
@@ -779,10 +791,10 @@ index 99d6d1b1d..26b162599 100644
    // Original text: "Snapshots"
    snapshotsTabName: "Snapshot'lar",
 diff --git a/packages/xo-web/src/common/intl/locales/zh.js b/packages/xo-web/src/common/intl/locales/zh.js
-index b15e15733..7f19b0b62 100644
+index b15e15733..3de3435c2 100644
 --- a/packages/xo-web/src/common/intl/locales/zh.js
 +++ b/packages/xo-web/src/common/intl/locales/zh.js
-@@ -8,6 +8,52 @@ addLocaleData(reactIntlData)
+@@ -8,6 +8,53 @@ addLocaleData(reactIntlData)
  // ===================================================================
  
  export default {
@@ -796,6 +808,7 @@ index b15e15733..7f19b0b62 100644
 +  containersName: "Name",
 +  containersCpus: "CPU limit (cores)",
 +  containersMemoryLimit: "Memory limit (MiB)",
++  containersAdministratorKey: "Guest administrator SSH public key (optional; grants sudo to docker-admin)",
 +  containersDeploymentHelp: "Creates a separate VM with a full copy of the template disk. Requires DHCP and a network reachable from XOA-HL.",
 +  containersHost: "Docker VM",
 +  containersRefresh: "Refresh",
@@ -836,10 +849,10 @@ index b15e15733..7f19b0b62 100644
    xhlTheme: "Theme",
    xhlColorMode: "Color mode",
 diff --git a/packages/xo-web/src/common/intl/messages.js b/packages/xo-web/src/common/intl/messages.js
-index 4050659f9..1a8662794 100644
+index 4050659f9..1b6b3c02b 100644
 --- a/packages/xo-web/src/common/intl/messages.js
 +++ b/packages/xo-web/src/common/intl/messages.js
-@@ -4,6 +4,52 @@
+@@ -4,6 +4,53 @@
  const forEach = require('lodash/forEach')
  
  const messages = {
@@ -853,6 +866,7 @@ index 4050659f9..1a8662794 100644
 +  containersName: "Name",
 +  containersCpus: "CPU limit (cores)",
 +  containersMemoryLimit: "Memory limit (MiB)",
++  containersAdministratorKey: "Guest administrator SSH public key (optional; grants sudo to docker-admin)",
 +  containersDeploymentHelp: "Creates a separate VM with a full copy of the template disk. Requires DHCP and a network reachable from XOA-HL.",
 +  containersHost: "Docker VM",
 +  containersRefresh: "Refresh",
@@ -892,7 +906,7 @@ index 4050659f9..1a8662794 100644
    xhlAppearance: "Appearance",
    xhlTheme: "Theme",
    xhlColorMode: "Color mode",
-@@ -1363,7 +1409,6 @@ const messages = {
+@@ -1363,7 +1410,6 @@ const messages = {
    generalTabName: 'General',
    statsTabName: 'Stats',
    consoleTabName: 'Console',
@@ -913,10 +927,10 @@ index 93a8ba38e..39aa71197 100644
 +export const containerCall = (operation, params) => _call('containers.' + operation, params)
 diff --git a/packages/xo-web/src/xo-app/containers/index.js b/packages/xo-web/src/xo-app/containers/index.js
 new file mode 100644
-index 000000000..0e579d45b
+index 000000000..1c72ada4a
 --- /dev/null
 +++ b/packages/xo-web/src/xo-app/containers/index.js
-@@ -0,0 +1,420 @@
+@@ -0,0 +1,423 @@
 +import _ from 'intl'
 +import Component from 'base-component'
 +import React from 'react'
@@ -957,6 +971,7 @@ index 000000000..0e579d45b
 +    vmName: 'Docker',
 +    vmCpus: 2,
 +    vmMemory: 2048,
++    administratorKey: '',
 +    name: '',
 +    image: '',
 +    cpus: 1,
@@ -1045,6 +1060,7 @@ index 000000000..0e579d45b
 +      name: s.vmName,
 +      cpus: +s.vmCpus,
 +      memoryMiB: +s.vmMemory,
++      administratorKey: s.administratorKey,
 +    })
 +  }
 +  _create = event => {
@@ -1169,6 +1185,7 @@ index 000000000..0e579d45b
 +                min: 1024,
 +                max: 131072,
 +              })}
++              {this._input('administratorKey', _('containersAdministratorKey'), 'text', { maxLength: 8192 })}
 +              <p>{_('containersDeploymentHelp')}</p>
 +              <button className='btn btn-primary' type='submit'>
 +                {_('containersDeployVm')}

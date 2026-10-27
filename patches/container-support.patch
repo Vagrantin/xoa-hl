@@ -1,9 +1,9 @@
 diff --git a/packages/xo-server/src/api/containers.mjs b/packages/xo-server/src/api/containers.mjs
 new file mode 100644
-index 000000000..57762b204
+index 000000000..ac2c97b52
 --- /dev/null
 +++ b/packages/xo-server/src/api/containers.mjs
-@@ -0,0 +1,124 @@
+@@ -0,0 +1,125 @@
 +import { rm } from 'node:fs/promises'
 +import { create as createVm } from './vm.mjs'
 +import {
@@ -33,7 +33,7 @@ index 000000000..57762b204
 +getHosts.params = {}
 +
 +let deploying = false
-+export async function deploy({ template, sr, network, name, cpus, memoryMiB }) {
++export async function deploy({ template, sr, network, name, cpus, memoryMiB, administratorKey }) {
 +  validateDeployment({ name, cpus, memoryMiB })
 +  if (!template.tags?.includes(TEMPLATE_TAG))
 +    throw new Error('Select the Docker host v1 template built by build-xoa-hl CI')
@@ -43,7 +43,7 @@ index 000000000..57762b204
 +  deploying = true
 +  let credentials, vmId
 +  try {
-+    credentials = await prepareCredentials()
++    credentials = await prepareCredentials(undefined, administratorKey)
 +    const xapi = this.getXapi(template)
 +    const disks = {}
 +    for (const vbd of xapi.getObject(template._xapiId).$VBDs) {
@@ -84,6 +84,7 @@ index 000000000..57762b204
 +  sr: { type: 'string' },
 +  network: { type: 'string' },
 +  name: { type: 'string' },
++  administratorKey: { type: 'string', optional: true },
 +  cpus: { type: 'integer' },
 +  memoryMiB: { type: 'integer' },
 +}
@@ -130,10 +131,10 @@ index 000000000..57762b204
 +for (const fn of [pull, removeImage]) fn.params.image = { type: 'string' }
 diff --git a/packages/xo-server/src/containers.mjs b/packages/xo-server/src/containers.mjs
 new file mode 100644
-index 000000000..a1c5b63f7
+index 000000000..af2a25a04
 --- /dev/null
 +++ b/packages/xo-server/src/containers.mjs
-@@ -0,0 +1,202 @@
+@@ -0,0 +1,227 @@
 +// Dedicated Docker VM protocol v1. The appliance never executes Docker locally.
 +import { execFile, spawn } from 'node:child_process'
 +import { mkdir, mkdtemp, readFile, readdir, rm, writeFile } from 'node:fs/promises'
@@ -161,7 +162,15 @@ index 000000000..a1c5b63f7
 +  return id
 +}
 +
-+export async function prepareCredentials(root = ROOT) {
++export async function prepareCredentials(root = ROOT, administratorKey = '') {
++  if (typeof administratorKey !== 'string' || administratorKey.length > 8192 || /[\r\n]/.test(administratorKey))
++    throw new Error('Provide one SSH public key for guest maintenance')
++  administratorKey = administratorKey.trim()
++  if (
++    administratorKey !== '' &&
++    !/^(ssh-ed25519|ssh-rsa|ecdsa-sha2-nistp(?:256|384|521)) [A-Za-z0-9+/=]+(?: [^\r\n]*)?$/.test(administratorKey)
++  )
++    throw new Error('Invalid administrator SSH public key')
 +  await mkdir(root, { recursive: true, mode: 0o700 })
 +  const directory = await mkdtemp(join(root, 'host-'))
 +  try {
@@ -172,9 +181,32 @@ index 000000000..a1c5b63f7
 +        { timeout: 10000 }
 +      )
 +    }
++    if (administratorKey !== '') {
++      await writeFile(join(directory, 'administrator.pub'), administratorKey + '\n', { mode: 0o600 })
++      try {
++        await exec('/usr/bin/ssh-keygen', ['-l', '-f', join(directory, 'administrator.pub')], { timeout: 10000 })
++      } catch (_) {
++        throw new Error('Invalid administrator SSH public key')
++      }
++    }
 +    const client = (await readFile(join(directory, 'client.pub'), 'utf8')).trim()
 +    const hostPublic = (await readFile(join(directory, 'host.pub'), 'utf8')).trim()
 +    const hostPrivate = await readFile(join(directory, 'host'), 'utf8')
++    const users = [
++      {
++        name: 'root',
++        lock_passwd: true,
++        ssh_authorized_keys: ['restrict,command="/usr/local/libexec/xoa-hl-docker-command" ' + client],
++      },
++    ]
++    if (administratorKey !== '')
++      users.push({
++        name: 'docker-admin',
++        lock_passwd: true,
++        shell: '/bin/bash',
++        sudo: 'ALL=(ALL) NOPASSWD:ALL',
++        ssh_authorized_keys: [administratorKey],
++      })
 +    const cloudConfig =
 +      '#cloud-config\n' +
 +      JSON.stringify({
@@ -182,13 +214,7 @@ index 000000000..a1c5b63f7
 +        ssh_pwauth: false,
 +        ssh_deletekeys: false,
 +        ssh_keys: { ed25519_private: hostPrivate, ed25519_public: hostPublic },
-+        users: [
-+          {
-+            name: 'root',
-+            lock_passwd: true,
-+            ssh_authorized_keys: ['restrict,command="/usr/local/libexec/xoa-hl-docker-command" ' + client],
-+          },
-+        ],
++        users,
 +        write_files: [
 +          {
 +            path: '/etc/ssh/sshd_config.d/01-xoa-hl-docker.conf',
