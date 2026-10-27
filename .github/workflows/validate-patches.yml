@@ -6,6 +6,7 @@ on:
       - 'patches/**'
       - 'scripts/validate-patches.sh'
       - 'scripts/build-xo.sh'
+      - 'scripts/list-patches.sh'
       - 'tests/test-patch-order.py'
       - 'tests/test-appearance.mjs'
       - 'UPSTREAM_XO'
@@ -25,6 +26,7 @@ on:
       - 'patches/**'
       - 'scripts/validate-patches.sh'
       - 'scripts/build-xo.sh'
+      - 'scripts/list-patches.sh'
       - 'tests/test-patch-order.py'
       - 'tests/test-appearance.mjs'
       - 'UPSTREAM_XO'
@@ -63,11 +65,12 @@ jobs:
       - name: Apply patch series
         run: |
           set -euo pipefail
-          for patch in patches/*.patch; do
+          patch_list=$(bash scripts/list-patches.sh patches)
+          while IFS= read -r patch; do
             echo "checking ${patch}"
             git -C "${XO_DIR}" apply --check "${GITHUB_WORKSPACE}/${patch}"
             git -C "${XO_DIR}" apply "${GITHUB_WORKSPACE}/${patch}"
-          done
+          done <<< "$patch_list"
       - name: Test appearance preferences and pre-paint bootstrap
         run: node tests/test-appearance.mjs "${XO_DIR}"
       - name: Check server module syntax

@@ -7,7 +7,7 @@ import unittest
 VALIDATOR = Path(__file__).resolve().parents[1] / 'scripts/validate-patches.sh'
 
 class PatchOrder(unittest.TestCase):
-    def validate(self, names, dependencies=None):
+    def validate(self, names, dependencies=None, series=None):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             entries = []
@@ -24,6 +24,7 @@ maintainer = "fixture"
 status = "active"
 dependencies = {deps!r}
 ''')
+            (root / 'series').write_text(series if series is not None else ''.join(name + '.patch\n' for name in names))
             (root / 'metadata.toml').write_text('\n'.join(entries))
             return subprocess.run(['bash', str(VALIDATOR), directory], capture_output=True, text=True)
 
@@ -41,6 +42,21 @@ dependencies = {deps!r}
 
     def test_unknown_dependency_rejected(self):
         self.assertNotEqual(self.validate(['010-consumer'], {'010-consumer': ['missing']}).returncode, 0)
+
+    def test_legacy_contract_paths_remain_supported(self):
+        self.assertEqual(self.validate(['menu-hide-items', 'xcp-hl-updates', 'xoa-hl-update-api']).returncode, 0)
+
+    def test_missing_series_patch_rejected(self):
+        self.assertNotEqual(self.validate(['010-base'], series='020-missing.patch\n').returncode, 0)
+
+    def test_unlisted_patch_rejected(self):
+        self.assertNotEqual(self.validate(['010-base', '020-next'], series='010-base.patch\n').returncode, 0)
+
+    def test_duplicate_series_entry_rejected(self):
+        self.assertNotEqual(self.validate(['010-base'], series='010-base.patch\n010-base.patch\n').returncode, 0)
+
+    def test_series_path_traversal_rejected(self):
+        self.assertNotEqual(self.validate(['010-base'], series='../010-base.patch\n').returncode, 0)
 
 if __name__ == '__main__':
     unittest.main()

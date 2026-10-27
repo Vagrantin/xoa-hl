@@ -25,11 +25,11 @@ dependencies = ["230-appearance-themes"]
 # When adding a new patch:
 # 1. Add a NNN-descriptive-name.patch file (three digits, gaps of ten)
 # 2. Add its metadata entry below
-# 3. Files apply in numeric filename order; dependencies must precede consumers.
+# 3. Add the filename to patches/series; dependencies must precede consumers.
 #    Do not encode ordering with repeated letters. CI rejects invalid names/order.
 
 [[patches]]
-id = "020-xcp-hl-updates"
+id = "xcp-hl-updates"
 description = "Enable XCP-HL package repositories in XOA's Patches tab"
 target = "packages/xo-server/src/xapi/mixins/patching.mjs"
 upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
@@ -40,7 +40,7 @@ dependencies = []
 notes = "Adds XCP_HL_REPOS constant and passes it to updater.py plugin calls"
 
 [[patches]]
-id = "010-menu-hide-items"
+id = "menu-hide-items"
 description = "Hide non-relevant menu items for XOA-HL"
 target = "packages/xo-web/src/xo-app/menu/index.js"
 upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
@@ -51,7 +51,7 @@ dependencies = []
 notes = "Hides hub, xoa, proxies, xostor, and noSupport menu items"
 
 [[patches]]
-id = "030-xoa-hl-update-api"
+id = "xoa-hl-update-api"
 description = "Add XOA-HL update management API and UI"
 target = "packages/xo-server/src/api/xoaHl.mjs"
 upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
@@ -69,8 +69,8 @@ upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
 applies_to = ["5.113.2"]
 maintainer = "vagrantin"
 status = "active"
-dependencies = ["030-xoa-hl-update-api"]
-notes = "Applied after 030-xoa-hl-update-api; the translation audit requires all 49 XOA-HL strings in every shipped locale. Existing upstream XO translation gaps are reported separately."
+dependencies = ["xoa-hl-update-api"]
+notes = "Applied after xoa-hl-update-api; the translation audit requires all 49 XOA-HL strings in every shipped locale. Existing upstream XO translation gaps are reported separately."
 
 [[patches]]
 id = "050-xo-core-ui-translations"
@@ -158,7 +158,7 @@ applies_to = ["5.113.2"]
 maintainer = "vagrantin"
 status = "active"
 dependencies = ["110-xoa-hl-update-channel"]
-notes = "Reuses HIDDEN_MENU_ITEMS from 010-menu-hide-items; other host and pool alerts are kept."
+notes = "Reuses HIDDEN_MENU_ITEMS from menu-hide-items; other host and pool alerts are kept."
 
 [[patches]]
 id = "130-xoa-hl-about-page"
@@ -274,5 +274,5 @@ upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
 applies_to = ["5.113.2"]
 maintainer = "vagrantin"
 status = "active"
-dependencies = ["010-menu-hide-items"]
+dependencies = ["menu-hide-items"]
 notes = "Tracks xcp-hl#287. Aligns the expanded entry with other menu links, retains the /user route and username tooltip, and hides the label when collapsed. Profile is translated in all 13 shipped locales."

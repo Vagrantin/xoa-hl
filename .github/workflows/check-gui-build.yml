@@ -4,6 +4,7 @@ on:
     paths:
       - 'patches/**'
       - 'scripts/build-xo.sh'
+      - 'scripts/list-patches.sh'
       - 'scripts/check-gui-assets.py'
       - 'tests/test-gui-assets.py'
       - 'UPSTREAM_XO'
