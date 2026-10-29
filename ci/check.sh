@@ -22,5 +22,9 @@ python3 tests/test-update-history.py
 step "locale compaction test"
 python3 -m unittest tests/test-compact-xo-locales.py
 
+step "patch porting inventory"
+python3 scripts/patch-porting.py
+python3 tests/test-patch-porting.py
+
 rm -f "$OUT/current-step"
 echo "all checks passed"

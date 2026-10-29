@@ -8,6 +8,9 @@ on:
       - 'scripts/build-xo.sh'
       - 'scripts/list-patches.sh'
       - 'tests/test-patch-order.py'
+      - 'scripts/patch-porting.py'
+      - 'tests/test-patch-porting.py'
+      - 'docs/patch-porting.md'
       - 'tests/test-appearance.mjs'
       - 'UPSTREAM_XO'
       - 'scripts/audit-ui-translations.py'
@@ -28,6 +31,9 @@ on:
       - 'scripts/build-xo.sh'
       - 'scripts/list-patches.sh'
       - 'tests/test-patch-order.py'
+      - 'scripts/patch-porting.py'
+      - 'tests/test-patch-porting.py'
+      - 'docs/patch-porting.md'
       - 'tests/test-appearance.mjs'
       - 'UPSTREAM_XO'
       - 'scripts/audit-ui-translations.py'
@@ -52,6 +58,10 @@ jobs:
         run: bash scripts/validate-patches.sh
       - name: Test patch naming and dependency order
         run: python3 tests/test-patch-order.py
+      - name: Validate patch layers and porting inventory
+        run: |
+          python3 scripts/patch-porting.py
+          python3 tests/test-patch-porting.py
       - name: Fetch pinned Xen Orchestra source
         run: |
           set -euo pipefail
