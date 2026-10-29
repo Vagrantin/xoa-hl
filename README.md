@@ -54,6 +54,9 @@ not a package-scoped update.
 
 ## Related
 
+- [XO 5 patch layers and XO 6 porting inventory](docs/patch-porting.md):
+  complete frontend/backend classification and separate porting plans for mixed patches (#53).
+
 - [Natural-language VM creation: Phase 0 MCP probe](docs/mcp-phase0.md) —
   compatibility findings and the repeatable lab check for xcp-hl#80.
 

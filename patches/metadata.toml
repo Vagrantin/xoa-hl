@@ -1,6 +1,7 @@
 # XOA-HL Patch Metadata
 [[patches]]
 id = "240-appliance-theme-feedback"
+porting_frontend = "Reassess target charts, forms, branding and About layout; do not carry XO 5 component fixes unchanged."
 description = "Address appliance feedback for theme controls, charts, server forms, branding and About"
 target = "packages/xo-web/src"
 upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
@@ -30,6 +31,7 @@ dependencies = ["230-appearance-themes"]
 
 [[patches]]
 id = "xcp-hl-updates"
+porting_backend = "Preserve the host repository-ID contract and updater.py integration; check the target host update implementation."
 description = "Enable XCP-HL package repositories in XOA's Patches tab"
 target = "packages/xo-server/src/xapi/mixins/patching.mjs"
 upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
@@ -41,6 +43,7 @@ notes = "Adds XCP_HL_REPOS constant and passes it to updater.py plugin calls"
 
 [[patches]]
 id = "menu-hide-items"
+porting_frontend = "Reassess XO 6 navigation and product policy; do not port the XO 5 menu components."
 description = "Hide non-relevant menu items for XOA-HL"
 target = "packages/xo-web/src/xo-app/menu/index.js"
 upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
@@ -52,6 +55,8 @@ notes = "Hides hub, xoa, proxies, xostor, and noSupport menu items"
 
 [[patches]]
 id = "xoa-hl-update-api"
+porting_backend = "Port appliance update status, progress and administrator-only controls together with packaged scripts, systemd units and sudoers."
+porting_frontend = "Rewrite the appliance update view and reconnect/reload recovery for the target client; keep the backend contract separate."
 description = "Add XOA-HL update management API and UI"
 target = "packages/xo-server/src/api/xoaHl.mjs"
 upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
@@ -63,6 +68,7 @@ notes = "Adds new API endpoints: getVersion, checkForUpdate, getUpdateStatus, st
 
 [[patches]]
 id = "040-xoa-hl-translations"
+porting_frontend = "Translate the rewritten appliance update controls using the target client catalog and locale conventions."
 description = "Translate XOA-HL update settings in all shipped UI locales and localize weekday and delay controls"
 target = "packages/xo-web/src/common/intl and packages/xo-web/src/xo-app/settings/xoa-hl-updates/index.js"
 upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
@@ -74,6 +80,7 @@ notes = "Applied after xoa-hl-update-api; the translation audit requires all 49 
 
 [[patches]]
 id = "050-xo-core-ui-translations"
+porting_frontend = "Recheck missing core translations in the target catalogs before carrying any corrected wording."
 description = "Translate 46 inherited XO core UI labels in all shipped locales"
 target = "packages/xo-web/src/common/intl/locales/*.js"
 upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
@@ -85,6 +92,7 @@ notes = "Adds missing values or replaces undefined entries for common actions, s
 
 [[patches]]
 id = "060-xo-core-ui-translations-batch2"
+porting_frontend = "Recheck network, state and certificate translations against the target catalogs and controls."
 description = "Translate inherited XO network, state, licensing, and certificate labels"
 target = "packages/xo-web/src/common/intl/locales/*.js"
 upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
@@ -96,6 +104,7 @@ notes = "Adds 20 high-frequency inherited keys in all 13 shipped locales; the au
 
 [[patches]]
 id = "070-xo-core-ui-translations-batch3"
+porting_frontend = "Recheck tag, custom-field, certificate and licensing translations against the target catalogs."
 description = "Translate inherited XO certificate, tag, custom-field, and licensing labels"
 target = "packages/xo-web/src/common/intl/locales/*.js"
 upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
@@ -107,6 +116,7 @@ notes = "Adds 17 high-frequency inherited keys in all 13 shipped locales; the au
 
 [[patches]]
 id = "080-xoa-hl-links-and-labels"
+porting_frontend = "Preserve project and upstream documentation destinations; adapt home controls and labels to the target UI."
 description = "Correct XOA-HL home help labels and documentation links"
 target = "packages/xo-web/src/xo-app/home/index.js and packages/xo-web/src/common/intl"
 upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
@@ -118,6 +128,7 @@ notes = "Uses Xen Orchestra documentation at https://docs.xen-orchestra.com/ and
 
 [[patches]]
 id = "090-xoa-hl-source-banner"
+porting_frontend = "Decide the target HomeLab banner and wording; rewrite the XO 5 component only if still needed."
 description = "Restore and localize the XOA-HL source banner"
 target = "packages/xo-web/src/xo-app/index.js and packages/xo-web/src/common/intl"
 upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
@@ -129,6 +140,7 @@ notes = "Uses dedicated source-banner messages in all 13 locales, links the bann
 
 [[patches]]
 id = "100-xoa-hl-remove-source-modal"
+porting_frontend = "Reassess whether the target client shows this disclaimer; do not carry obsolete XO 5 mount behavior."
 description = "Remove the 'Xen Orchestra from the sources' welcome modal"
 target = "packages/xo-web/src/xo-app/index.js"
 upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
@@ -140,6 +152,8 @@ notes = "Stops calling displayOpenSourceDisclaimer on mount, so no modal implyin
 
 [[patches]]
 id = "110-xoa-hl-update-channel"
+porting_backend = "Preserve administrator-controlled stable/testing channel selection with the packaged repository/configuration helper."
+porting_frontend = "Rewrite channel selection and state refresh in the target updater; do not port the React view unchanged."
 description = "Add a stable or testing update channel choice to the XOA-HL Updates page"
 target = "packages/xo-server/src/api/xoaHl.mjs, packages/xo-web/src/xo-app/settings/xoa-hl-updates and packages/xo-web/src/common/intl"
 upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
@@ -151,6 +165,7 @@ notes = "Adds xoaHl.setUpdateChannel and a select in the Appliance card; four me
 
 [[patches]]
 id = "120-xoa-hl-hide-vmware-and-support-alert"
+porting_frontend = "Review target import/navigation and support policy; reimplement only applicable HomeLab presentation rules."
 description = "Hide the Import > From VMware menu entry and the Vates pro support alert on hosts and pools"
 target = "packages/xo-web/src/xo-app/menu/index.js, home/host-item.js and home/pool-item.js"
 upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
@@ -162,6 +177,8 @@ notes = "Reuses HIDDEN_MENU_ITEMS from menu-hide-items; other host and pool aler
 
 [[patches]]
 id = "130-xoa-hl-about-page"
+porting_backend = "Preserve installed application/image identity queries; do not substitute latest published release identity."
+porting_frontend = "Rewrite the About presentation, project links and version fields against the target API."
 description = "Rework the About page for XOA-HL: bug tracker, XOA-HL versions, upstream section"
 target = "packages/xo-web/src/xo-app/about/index.js, xo-server/src/api/xoaHl.mjs and packages/xo-web/src/common/intl"
 upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
@@ -173,6 +190,7 @@ notes = "Adds xoaHl.getVmVersion, which reads /etc/xoa-hl-vm-release; the image 
 
 [[patches]]
 id = "140-xoa-hl-update-page-layout"
+porting_frontend = "Discard XO 5 grid/layout code; design the target updater layout around the retained capabilities."
 description = "Put Appliance and its update log on the left, Automatic updates on the right"
 target = "packages/xo-web/src/xo-app/settings/xoa-hl-updates/index.js"
 upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
@@ -184,6 +202,7 @@ notes = "Two columns so the update log no longer pushes the Automatic updates ca
 
 [[patches]]
 id = "150-xoa-hl-update-check-status-on-load"
+porting_frontend = "Preserve displaying stored check results on view load; implement with the target client state model."
 description = "Show the stored update check result when the XOA-HL Updates page opens"
 target = "packages/xo-web/src/xo-app/settings/xoa-hl-updates/index.js"
 upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
@@ -195,6 +214,8 @@ notes = "Calls xoaHl.getUpdateStatus on mount so a timer-driven check shows as U
 
 [[patches]]
 id = "160-xoa-hl-auto-update-ui-fixes"
+porting_backend = "Review stored update history/configuration responses and coordinate with the packaged scheduler."
+porting_frontend = "Carry the failed-run and schedule semantics into the new updater; rebuild its presentation."
 description = "Remove the random delay setting and show a failed automatic run as a red banner"
 target = "packages/xo-web/src/xo-app/settings/xoa-hl-updates/index.js and packages/xo-server/src/api/xoaHl.mjs"
 upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
@@ -206,6 +227,7 @@ notes = "setUpdateConfiguration no longer takes randomDelayMinutes; it moves tog
 
 [[patches]]
 id = "210-xo-docs-pages-translations"
+porting_frontend = "Review the target beginner-page terminology and missing translations; keep locale approval separate from code checks."
 description = "Translate the inherited XO strings on the documented beginner pages in French and Japanese"
 target = "packages/xo-web/src/common/intl/locales/fr.js and packages/xo-web/src/common/intl/locales/ja.js"
 upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
@@ -217,6 +239,8 @@ notes = "Covers user, settings/servers, about, SR disks, new VM, VM console and 
 
 [[patches]]
 id = "190-host-component-versions"
+porting_backend = "Preserve read-only host inventory plugin calls and unknown/error handling."
+porting_frontend = "Rewrite managed-host component version display against the retained inventory contract."
 description = "host-component-versions"
 target = "packages/xo-server/src/api/xoaHl.mjs"
 upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
@@ -227,6 +251,7 @@ dependencies = []
 
 [[patches]]
 id = "200-visible-unresolved-acls"
+porting_frontend = "Check target ACL visibility/removal for unresolved objects; reimplement only if the defect persists."
 description = "visible-unresolved-acls"
 target = "packages/xo-web/src/xo-app/settings/acls/index.js"
 upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
@@ -237,6 +262,7 @@ dependencies = []
 
 [[patches]]
 id = "180-explicit-host-reboot-status"
+porting_frontend = "Preserve the explicit host reboot-required indication; verify the target host-state selector first."
 description = "explicit-host-reboot-status"
 target = "packages/xo-web/src/xo-app/host/tab-patches.js"
 upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
@@ -247,6 +273,8 @@ dependencies = []
 
 [[patches]]
 id = "170-automatic-update-history"
+porting_backend = "Preserve bounded automatic-update history and administrator-only retrieval with the history helper."
+porting_frontend = "Rewrite history rows, expansion and package detail in the target updater."
 description = "automatic-update-history"
 target = "packages/xo-server/src/api/xoaHl.mjs"
 upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
@@ -257,6 +285,7 @@ dependencies = []
 
 [[patches]]
 id = "230-appearance-themes"
+porting_frontend = "Review target styling and preference storage; preserve intended palettes/appearance behavior through a target-specific implementation."
 description = "Four XO 5 themes with per-user appearance and Arctic/System defaults (xcp-hl#288)"
 target = "packages/xo-web/src/index.js and shared XO 5 UI components"
 upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
@@ -268,6 +297,7 @@ notes = "Adds Arctic, Graphite, Alpine and Horizon with Light/Dark/System modes 
 
 [[patches]]
 id = "220-user-profile-menu"
+porting_frontend = "Keep user settings discoverable in the target navigation; do not port the XO 5 sidebar renderer."
 description = "Show a localized Profile label beside the sidebar user settings icon"
 target = "packages/xo-web/src/xo-app/menu/index.js and packages/xo-web/src/common/intl"
 upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
