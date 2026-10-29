@@ -17,7 +17,7 @@ LAYERS = {"packages/xo-server/": "backend", "packages/xo-web/": "frontend"}
 def patch_paths(text):
     result = subprocess.run(
         ["git", "apply", "--numstat", "-z", "--"], input=text,
-        text=True, capture_output=True, check=False,
+        text=True, capture_output=True, check=False, cwd=ROOT,
     )
     if result.returncode:
         raise ValueError("invalid patch diff")
