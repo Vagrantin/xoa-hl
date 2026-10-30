@@ -4,6 +4,10 @@ on:
   pull_request:
     paths:
       - 'patches/**'
+      - 'scripts/validate-patches.sh'
+      - 'scripts/build-xo.sh'
+      - 'scripts/list-patches.sh'
+      - 'tests/test-patch-order.py'
       - 'tests/test-appearance.mjs'
       - 'UPSTREAM_XO'
       - 'scripts/audit-ui-translations.py'
@@ -20,6 +24,10 @@ on:
       - main
     paths:
       - 'patches/**'
+      - 'scripts/validate-patches.sh'
+      - 'scripts/build-xo.sh'
+      - 'scripts/list-patches.sh'
+      - 'tests/test-patch-order.py'
       - 'tests/test-appearance.mjs'
       - 'UPSTREAM_XO'
       - 'scripts/audit-ui-translations.py'
@@ -42,6 +50,8 @@ jobs:
       - uses: actions/checkout@v4
       - name: Validate patch metadata
         run: bash scripts/validate-patches.sh
+      - name: Test patch naming and dependency order
+        run: python3 tests/test-patch-order.py
       - name: Fetch pinned Xen Orchestra source
         run: |
           set -euo pipefail
@@ -55,11 +65,12 @@ jobs:
       - name: Apply patch series
         run: |
           set -euo pipefail
-          for patch in patches/*.patch; do
+          patch_list=$(bash scripts/list-patches.sh patches)
+          while IFS= read -r patch; do
             echo "checking ${patch}"
             git -C "${XO_DIR}" apply --check "${GITHUB_WORKSPACE}/${patch}"
             git -C "${XO_DIR}" apply "${GITHUB_WORKSPACE}/${patch}"
-          done
+          done <<< "$patch_list"
       - name: Test appearance preferences and pre-paint bootstrap
         run: node tests/test-appearance.mjs "${XO_DIR}"
       - name: Check server module syntax
