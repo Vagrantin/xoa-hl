@@ -73,7 +73,7 @@ notes = "Hides hub, xoa, proxies, xostor, and noSupport menu items"
 [[patches]]
 id = "xoa-hl-update-api"
 description = "Add XOA-HL update management API and UI"
-target = "packages/xo-server/src/api/xoaHl.mjs"
+target = "packages/xo-server/src/api/xoaHl.mjs; packages/xo-web/src/common/intl/messages.js; packages/xo-web/src/common/xo/index.js; packages/xo-web/src/xo-app/menu/index.js; packages/xo-web/src/xo-app/settings/index.js; packages/xo-web/src/xo-app/settings/xoa-hl-updates/index.js"
 upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
 applies_to = ["5.113.2"]
 maintainer = "vagrantin"
