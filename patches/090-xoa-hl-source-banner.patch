@@ -211,7 +211,8 @@ index a2b0cca..366b896 100644
 @@ -475,19 +475,9 @@ export default class XoApp extends Component {
                )}
                {plan === 'Community' && !this.state.dismissedSourceBanner && (
-                 <div className='alert alert-danger mb-0'>
+-                <div className='alert alert-danger mb-0'>
++                <div className='alert alert-info mb-0'>
 -                  <a
 -                    href='https://docs.xen-orchestra.com/'
 -                    rel='noopener noreferrer'

@@ -1,6 +1,8 @@
 menu-hide-items.patch
 xcp-hl-updates.patch
+010-xoa-hl-appliance-runtime.patch
 xoa-hl-update-api.patch
+030-xoa-hl-update-status.patch
 040-xoa-hl-translations.patch
 050-xo-core-ui-translations.patch
 060-xo-core-ui-translations-batch2.patch

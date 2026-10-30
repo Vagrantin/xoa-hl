@@ -109,6 +109,9 @@ if [ ! -f /root/.config/xo-server/config.toml ]; then
        /root/.config/xo-server/config.toml
 fi
 
+# Restrict existing operator configurations too, without replacing their contents.
+chmod 600 /root/.config/xo-server/config.toml
+
 # Make the TLS pair once. Marker forces one replacement of the pair older RPMs shipped.
 if [ ! -f /opt/xo/xoahl.key ] || [ ! -f /opt/xo/xoahl.crt ] || [ ! -f /var/lib/xoa-hl/tls-generated ]; then
     umask 077
