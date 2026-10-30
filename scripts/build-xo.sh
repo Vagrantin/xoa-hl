@@ -73,12 +73,12 @@ else
     echo "  Consider adding metadata.toml to document patches"
 fi
 
-echo "==> Applying patches"
-for p in "$PATCH_DIR"/*.patch; do
-    [ -f "$p" ] || continue
+echo "==> Applying patches in declared series order"
+patch_list=$(bash /build/scripts/list-patches.sh "$PATCH_DIR")
+while IFS= read -r p; do
     echo "  - $(basename "$p")"
     git apply --verbose "$p"
-done
+done <<< "$patch_list"
 
 echo "==> Compacting untranslated locale entries for the initial UI bundle"
 python3 /build/scripts/compact-xo-locales.py --minimum-entries 1000 "$XO_SRC"
