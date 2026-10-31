@@ -19,6 +19,7 @@ URL:            https://github.com/Vagrantin/xoa-hl
 AutoReqProv:    no
 # NodeSource's nodejs carries epoch 2; without it, "< 25" means 0:25 and 2:24.x never matches.
 Requires:       (nodejs >= 2:24 with nodejs < 2:25)
+Requires:       openssh-clients
 Requires:       python3, openssl, redis, ntfs-3g, nfs-utils, cifs-utils, lvm2, dnf-plugins-core
 
 Source0:        xoa-hl-%{version}.tar.gz
@@ -70,6 +71,7 @@ install -m 440 %{_sourcedir}/xoa-hl.sudoers %{buildroot}/etc/sudoers.d/xoa-hl
 visudo -cf %{buildroot}/etc/sudoers.d/xoa-hl
 
 mkdir -p %{buildroot}/var/lib/xoa-hl
+install -d -m 700 %{buildroot}/var/lib/xoa-hl/docker-hosts
 # Runtime files are touched only so RPM can own their %%ghost paths. Their
 # contents are created by the scripts on the appliance, not packaged.
 touch %{buildroot}/var/lib/xoa-hl/update.log
@@ -97,6 +99,7 @@ touch %{buildroot}/var/lib/xoa-hl/auto-update.status
 %dir /etc/xoa-hl
 %config(noreplace) /etc/xoa-hl/update.conf
 %dir /var/lib/xoa-hl
+%dir %attr(700,root,root) /var/lib/xoa-hl/docker-hosts
 %ghost /var/lib/xoa-hl/update.log
 %ghost /var/lib/xoa-hl/auto-update.status
 

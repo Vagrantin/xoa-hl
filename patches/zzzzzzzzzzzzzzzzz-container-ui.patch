@@ -1,0 +1,1388 @@
+diff --git a/packages/xo-web/src/common/intl/locales/es.js b/packages/xo-web/src/common/intl/locales/es.js
+index 6d7dea7c6..66873f15b 100644
+--- a/packages/xo-web/src/common/intl/locales/es.js
++++ b/packages/xo-web/src/common/intl/locales/es.js
+@@ -8,6 +8,53 @@ addLocaleData(reactIntlData)
+ // ===================================================================
+ 
+ export default {
++  containersPage: "Containers",
++  containersIntroduction: "Manage Docker applications in a dedicated VM. The management appliance stays separate.",
++  containersDeployVm: "Deploy Docker VM",
++  containersTemplateHelp: "Import the Docker host XVA built by CI, convert it to a template, and add the tag xcp-hl-docker-template-v1. See the container guide.",
++  containersTemplate: "Template",
++  containersStorage: "Storage repository",
++  containersNetwork: "Network",
++  containersName: "Name",
++  containersCpus: "CPU limit (cores)",
++  containersMemoryLimit: "Memory limit (MiB)",
++  containersAdministratorKey: "Guest administrator SSH public key (optional; grants sudo to docker-admin)",
++  containersDeploymentHelp: "Creates a separate VM with a full copy of the template disk. Requires DHCP and a network reachable from XOA-HL.",
++  containersHost: "Docker VM",
++  containersRefresh: "Refresh",
++  containersVmDetails: "VM details and console",
++  containersResources: "VM resource usage",
++  containersCpu: "CPU",
++  containersMemory: "Memory",
++  containersDisk: "Disk",
++  containersCreate: "Create container",
++  containersImage: "Image",
++  containersAdvanced: "Advanced options",
++  containersPorts: "Published ports",
++  containersPortsHelp: "Ports: one HOST:CONTAINER/tcp or /udp per line. Published ports are reachable on the VM network.",
++  containersVolumesHelp: "Persistent volumes: one NAME:/container/path per line. Names are shared within this VM.",
++  containersEnvironmentHelp: "Environment: one KEY=value per line. Avoid secrets; administrators and API logs may expose these values.",
++  containersRestartPolicy: "Restart policy",
++  containersPullFirst: "Pull the image below before creating a container. Limits are enforced per container; allow RAM for the guest OS.",
++  containersList: "Containers",
++  containersStatus: "Status",
++  containersActions: "Actions",
++  containersStart: "Start",
++  containersStop: "Stop",
++  containersRestart: "Restart",
++  containersLogs: "Logs",
++  containersRemove: "Remove",
++  containersRemoveWarning: "Remove this stopped container or unused image? Named volumes are preserved.",
++  containersEmpty: "No managed containers on this VM.",
++  containersImages: "Images",
++  containersPull: "Pull image",
++  containersLogHelp: "Snapshot of the last 200 lines within 24 hours, truncated to 64 KiB.",
++  containersClose: "Close",
++  containersChoose: "Choose…",
++  containersAdminOnly: "Administrator access required.",
++  containersWorking: "Operation in progress…",
++  containersBooting: "VM created. Wait for guest tools, DHCP and cloud-init. Retry Refresh when the VM is ready; do not deploy a second VM.",
++  containersDone: "Operation completed. The next refresh updates the view.",
+   xhlAppearance: "Appearance",
+   xhlTheme: "Theme",
+   xhlColorMode: "Color mode",
+@@ -1681,7 +1728,6 @@ export default {
+   consoleTabName: 'Consola',
+ 
+   // Original text: 'Container'
+-  containersTabName: undefined,
+ 
+   // Original text: "Snapshots"
+   snapshotsTabName: 'Snapshots',
+diff --git a/packages/xo-web/src/common/intl/locales/fa.js b/packages/xo-web/src/common/intl/locales/fa.js
+index 964b48717..3c54979c6 100644
+--- a/packages/xo-web/src/common/intl/locales/fa.js
++++ b/packages/xo-web/src/common/intl/locales/fa.js
+@@ -7,6 +7,53 @@ addLocaleData(reactIntlData)
+ // ===================================================================
+ 
+ export default {
++  containersPage: "Containers",
++  containersIntroduction: "Manage Docker applications in a dedicated VM. The management appliance stays separate.",
++  containersDeployVm: "Deploy Docker VM",
++  containersTemplateHelp: "Import the Docker host XVA built by CI, convert it to a template, and add the tag xcp-hl-docker-template-v1. See the container guide.",
++  containersTemplate: "Template",
++  containersStorage: "Storage repository",
++  containersNetwork: "Network",
++  containersName: "Name",
++  containersCpus: "CPU limit (cores)",
++  containersMemoryLimit: "Memory limit (MiB)",
++  containersAdministratorKey: "Guest administrator SSH public key (optional; grants sudo to docker-admin)",
++  containersDeploymentHelp: "Creates a separate VM with a full copy of the template disk. Requires DHCP and a network reachable from XOA-HL.",
++  containersHost: "Docker VM",
++  containersRefresh: "Refresh",
++  containersVmDetails: "VM details and console",
++  containersResources: "VM resource usage",
++  containersCpu: "CPU",
++  containersMemory: "Memory",
++  containersDisk: "Disk",
++  containersCreate: "Create container",
++  containersImage: "Image",
++  containersAdvanced: "Advanced options",
++  containersPorts: "Published ports",
++  containersPortsHelp: "Ports: one HOST:CONTAINER/tcp or /udp per line. Published ports are reachable on the VM network.",
++  containersVolumesHelp: "Persistent volumes: one NAME:/container/path per line. Names are shared within this VM.",
++  containersEnvironmentHelp: "Environment: one KEY=value per line. Avoid secrets; administrators and API logs may expose these values.",
++  containersRestartPolicy: "Restart policy",
++  containersPullFirst: "Pull the image below before creating a container. Limits are enforced per container; allow RAM for the guest OS.",
++  containersList: "Containers",
++  containersStatus: "Status",
++  containersActions: "Actions",
++  containersStart: "Start",
++  containersStop: "Stop",
++  containersRestart: "Restart",
++  containersLogs: "Logs",
++  containersRemove: "Remove",
++  containersRemoveWarning: "Remove this stopped container or unused image? Named volumes are preserved.",
++  containersEmpty: "No managed containers on this VM.",
++  containersImages: "Images",
++  containersPull: "Pull image",
++  containersLogHelp: "Snapshot of the last 200 lines within 24 hours, truncated to 64 KiB.",
++  containersClose: "Close",
++  containersChoose: "Choose…",
++  containersAdminOnly: "Administrator access required.",
++  containersWorking: "Operation in progress…",
++  containersBooting: "VM created. Wait for guest tools, DHCP and cloud-init. Retry Refresh when the VM is ready; do not deploy a second VM.",
++  containersDone: "Operation completed. The next refresh updates the view.",
+   xhlAppearance: "Appearance",
+   xhlTheme: "Theme",
+   xhlColorMode: "Color mode",
+@@ -2171,7 +2218,6 @@ export default {
+   consoleTabName: 'کنسول',
+ 
+   // Original text: 'Container'
+-  containersTabName: 'کانتینر',
+ 
+   // Original text: 'Snapshots'
+   snapshotsTabName: 'اسنپ شات ها',
+diff --git a/packages/xo-web/src/common/intl/locales/fr.js b/packages/xo-web/src/common/intl/locales/fr.js
+index 7dc7289df..20c4b73f8 100644
+--- a/packages/xo-web/src/common/intl/locales/fr.js
++++ b/packages/xo-web/src/common/intl/locales/fr.js
+@@ -8,6 +8,53 @@ addLocaleData(reactIntlData)
+ // ===================================================================
+ 
+ export default {
++  containersPage: "Conteneurs",
++  containersIntroduction: "Gérez les applications Docker dans une VM dédiée. L’appliance de gestion reste séparée.",
++  containersDeployVm: "Déployer une VM Docker",
++  containersTemplateHelp: "Importez le XVA Docker produit par CI, convertissez-le en modèle et ajoutez le tag xcp-hl-docker-template-v1. Consultez le guide.",
++  containersTemplate: "Modèle",
++  containersStorage: "Dépôt de stockage",
++  containersNetwork: "Réseau",
++  containersName: "Nom",
++  containersCpus: "Limite CPU (cœurs)",
++  containersMemoryLimit: "Limite mémoire (Mio)",
++  containersAdministratorKey: "Clé publique SSH administrateur invité (facultatif ; accès sudo pour docker-admin)",
++  containersDeploymentHelp: "Crée une VM distincte avec une copie complète du disque du modèle. DHCP et un réseau accessible depuis XOA-HL sont requis.",
++  containersHost: "VM Docker",
++  containersRefresh: "Actualiser",
++  containersVmDetails: "Détails et console de la VM",
++  containersResources: "Utilisation des ressources de la VM",
++  containersCpu: "CPU",
++  containersMemory: "Mémoire",
++  containersDisk: "Disque",
++  containersCreate: "Créer un conteneur",
++  containersImage: "Image",
++  containersAdvanced: "Options avancées",
++  containersPorts: "Ports publiés",
++  containersPortsHelp: "Ports : HÔTE:CONTENEUR/tcp ou /udp, une ligne par port. Ils sont accessibles sur le réseau de la VM.",
++  containersVolumesHelp: "Volumes persistants : NOM:/chemin/conteneur par ligne. Les noms sont partagés dans cette VM.",
++  containersEnvironmentHelp: "Environnement : CLÉ=valeur par ligne. Évitez les secrets : administrateurs et journaux API peuvent exposer ces valeurs.",
++  containersRestartPolicy: "Politique de redémarrage",
++  containersPullFirst: "Téléchargez l’image ci-dessous avant de créer le conteneur. Les limites sont appliquées par conteneur ; réservez de la mémoire pour le système.",
++  containersList: "Conteneurs",
++  containersStatus: "État",
++  containersActions: "Actions",
++  containersStart: "Démarrer",
++  containersStop: "Arrêter",
++  containersRestart: "Redémarrer",
++  containersLogs: "Journaux",
++  containersRemove: "Supprimer",
++  containersRemoveWarning: "Supprimer ce conteneur arrêté ou cette image inutilisée ? Les volumes nommés sont conservés.",
++  containersEmpty: "Aucun conteneur géré dans cette VM.",
++  containersImages: "Images",
++  containersPull: "Télécharger l’image",
++  containersLogHelp: "Instantané des 200 dernières lignes sur 24 h, limité à 64 Kio.",
++  containersClose: "Fermer",
++  containersChoose: "Choisir…",
++  containersAdminOnly: "Accès administrateur requis.",
++  containersWorking: "Opération en cours…",
++  containersBooting: "VM créée. Attendez les outils invités, DHCP et cloud-init. Actualisez quand la VM est prête ; ne créez pas de doublon.",
++  containersDone: "Opération terminée. La prochaine actualisation mettra la vue à jour.",
+   xhlAppearance: "Apparence",
+   xhlTheme: "Thème",
+   xhlColorMode: "Mode de couleur",
+@@ -1737,7 +1784,6 @@ export default {
+   consoleTabName: 'Console',
+ 
+   // Original text: "Container"
+-  containersTabName: 'Conteneur',
+ 
+   // Original text: "Snapshots"
+   snapshotsTabName: 'Instantanés',
+diff --git a/packages/xo-web/src/common/intl/locales/he.js b/packages/xo-web/src/common/intl/locales/he.js
+index 0428bce3b..91e5e30f8 100644
+--- a/packages/xo-web/src/common/intl/locales/he.js
++++ b/packages/xo-web/src/common/intl/locales/he.js
+@@ -8,6 +8,53 @@ addLocaleData(reactIntlData)
+ // ===================================================================
+ 
+ export default {
++  containersPage: "Containers",
++  containersIntroduction: "Manage Docker applications in a dedicated VM. The management appliance stays separate.",
++  containersDeployVm: "Deploy Docker VM",
++  containersTemplateHelp: "Import the Docker host XVA built by CI, convert it to a template, and add the tag xcp-hl-docker-template-v1. See the container guide.",
++  containersTemplate: "Template",
++  containersStorage: "Storage repository",
++  containersNetwork: "Network",
++  containersName: "Name",
++  containersCpus: "CPU limit (cores)",
++  containersMemoryLimit: "Memory limit (MiB)",
++  containersAdministratorKey: "Guest administrator SSH public key (optional; grants sudo to docker-admin)",
++  containersDeploymentHelp: "Creates a separate VM with a full copy of the template disk. Requires DHCP and a network reachable from XOA-HL.",
++  containersHost: "Docker VM",
++  containersRefresh: "Refresh",
++  containersVmDetails: "VM details and console",
++  containersResources: "VM resource usage",
++  containersCpu: "CPU",
++  containersMemory: "Memory",
++  containersDisk: "Disk",
++  containersCreate: "Create container",
++  containersImage: "Image",
++  containersAdvanced: "Advanced options",
++  containersPorts: "Published ports",
++  containersPortsHelp: "Ports: one HOST:CONTAINER/tcp or /udp per line. Published ports are reachable on the VM network.",
++  containersVolumesHelp: "Persistent volumes: one NAME:/container/path per line. Names are shared within this VM.",
++  containersEnvironmentHelp: "Environment: one KEY=value per line. Avoid secrets; administrators and API logs may expose these values.",
++  containersRestartPolicy: "Restart policy",
++  containersPullFirst: "Pull the image below before creating a container. Limits are enforced per container; allow RAM for the guest OS.",
++  containersList: "Containers",
++  containersStatus: "Status",
++  containersActions: "Actions",
++  containersStart: "Start",
++  containersStop: "Stop",
++  containersRestart: "Restart",
++  containersLogs: "Logs",
++  containersRemove: "Remove",
++  containersRemoveWarning: "Remove this stopped container or unused image? Named volumes are preserved.",
++  containersEmpty: "No managed containers on this VM.",
++  containersImages: "Images",
++  containersPull: "Pull image",
++  containersLogHelp: "Snapshot of the last 200 lines within 24 hours, truncated to 64 KiB.",
++  containersClose: "Close",
++  containersChoose: "Choose…",
++  containersAdminOnly: "Administrator access required.",
++  containersWorking: "Operation in progress…",
++  containersBooting: "VM created. Wait for guest tools, DHCP and cloud-init. Retry Refresh when the VM is ready; do not deploy a second VM.",
++  containersDone: "Operation completed. The next refresh updates the view.",
+   xhlAppearance: "Appearance",
+   xhlTheme: "Theme",
+   xhlColorMode: "Color mode",
+@@ -1420,7 +1467,6 @@ export default {
+   consoleTabName: undefined,
+ 
+   // Original text: 'Container'
+-  containersTabName: undefined,
+ 
+   // Original text: 'Snapshots'
+   snapshotsTabName: undefined,
+diff --git a/packages/xo-web/src/common/intl/locales/hu.js b/packages/xo-web/src/common/intl/locales/hu.js
+index 39cfb6e40..e2ab37b2f 100644
+--- a/packages/xo-web/src/common/intl/locales/hu.js
++++ b/packages/xo-web/src/common/intl/locales/hu.js
+@@ -8,6 +8,53 @@ addLocaleData(reactIntlData)
+ // ===================================================================
+ 
+ export default {
++  containersPage: "Containers",
++  containersIntroduction: "Manage Docker applications in a dedicated VM. The management appliance stays separate.",
++  containersDeployVm: "Deploy Docker VM",
++  containersTemplateHelp: "Import the Docker host XVA built by CI, convert it to a template, and add the tag xcp-hl-docker-template-v1. See the container guide.",
++  containersTemplate: "Template",
++  containersStorage: "Storage repository",
++  containersNetwork: "Network",
++  containersName: "Name",
++  containersCpus: "CPU limit (cores)",
++  containersMemoryLimit: "Memory limit (MiB)",
++  containersAdministratorKey: "Guest administrator SSH public key (optional; grants sudo to docker-admin)",
++  containersDeploymentHelp: "Creates a separate VM with a full copy of the template disk. Requires DHCP and a network reachable from XOA-HL.",
++  containersHost: "Docker VM",
++  containersRefresh: "Refresh",
++  containersVmDetails: "VM details and console",
++  containersResources: "VM resource usage",
++  containersCpu: "CPU",
++  containersMemory: "Memory",
++  containersDisk: "Disk",
++  containersCreate: "Create container",
++  containersImage: "Image",
++  containersAdvanced: "Advanced options",
++  containersPorts: "Published ports",
++  containersPortsHelp: "Ports: one HOST:CONTAINER/tcp or /udp per line. Published ports are reachable on the VM network.",
++  containersVolumesHelp: "Persistent volumes: one NAME:/container/path per line. Names are shared within this VM.",
++  containersEnvironmentHelp: "Environment: one KEY=value per line. Avoid secrets; administrators and API logs may expose these values.",
++  containersRestartPolicy: "Restart policy",
++  containersPullFirst: "Pull the image below before creating a container. Limits are enforced per container; allow RAM for the guest OS.",
++  containersList: "Containers",
++  containersStatus: "Status",
++  containersActions: "Actions",
++  containersStart: "Start",
++  containersStop: "Stop",
++  containersRestart: "Restart",
++  containersLogs: "Logs",
++  containersRemove: "Remove",
++  containersRemoveWarning: "Remove this stopped container or unused image? Named volumes are preserved.",
++  containersEmpty: "No managed containers on this VM.",
++  containersImages: "Images",
++  containersPull: "Pull image",
++  containersLogHelp: "Snapshot of the last 200 lines within 24 hours, truncated to 64 KiB.",
++  containersClose: "Close",
++  containersChoose: "Choose…",
++  containersAdminOnly: "Administrator access required.",
++  containersWorking: "Operation in progress…",
++  containersBooting: "VM created. Wait for guest tools, DHCP and cloud-init. Retry Refresh when the VM is ready; do not deploy a second VM.",
++  containersDone: "Operation completed. The next refresh updates the view.",
+   xhlAppearance: "Appearance",
+   xhlTheme: "Theme",
+   xhlColorMode: "Color mode",
+@@ -1619,7 +1666,6 @@ export default {
+   consoleTabName: 'Konzol',
+ 
+   // Original text: "Container"
+-  containersTabName: 'Container',
+ 
+   // Original text: "Snapshots"
+   snapshotsTabName: 'Pillanatképek',
+diff --git a/packages/xo-web/src/common/intl/locales/it.js b/packages/xo-web/src/common/intl/locales/it.js
+index f14749a10..87185158e 100644
+--- a/packages/xo-web/src/common/intl/locales/it.js
++++ b/packages/xo-web/src/common/intl/locales/it.js
+@@ -8,6 +8,53 @@ addLocaleData(reactIntlData)
+ // ===================================================================
+ 
+ export default {
++  containersPage: "Containers",
++  containersIntroduction: "Manage Docker applications in a dedicated VM. The management appliance stays separate.",
++  containersDeployVm: "Deploy Docker VM",
++  containersTemplateHelp: "Import the Docker host XVA built by CI, convert it to a template, and add the tag xcp-hl-docker-template-v1. See the container guide.",
++  containersTemplate: "Template",
++  containersStorage: "Storage repository",
++  containersNetwork: "Network",
++  containersName: "Name",
++  containersCpus: "CPU limit (cores)",
++  containersMemoryLimit: "Memory limit (MiB)",
++  containersAdministratorKey: "Guest administrator SSH public key (optional; grants sudo to docker-admin)",
++  containersDeploymentHelp: "Creates a separate VM with a full copy of the template disk. Requires DHCP and a network reachable from XOA-HL.",
++  containersHost: "Docker VM",
++  containersRefresh: "Refresh",
++  containersVmDetails: "VM details and console",
++  containersResources: "VM resource usage",
++  containersCpu: "CPU",
++  containersMemory: "Memory",
++  containersDisk: "Disk",
++  containersCreate: "Create container",
++  containersImage: "Image",
++  containersAdvanced: "Advanced options",
++  containersPorts: "Published ports",
++  containersPortsHelp: "Ports: one HOST:CONTAINER/tcp or /udp per line. Published ports are reachable on the VM network.",
++  containersVolumesHelp: "Persistent volumes: one NAME:/container/path per line. Names are shared within this VM.",
++  containersEnvironmentHelp: "Environment: one KEY=value per line. Avoid secrets; administrators and API logs may expose these values.",
++  containersRestartPolicy: "Restart policy",
++  containersPullFirst: "Pull the image below before creating a container. Limits are enforced per container; allow RAM for the guest OS.",
++  containersList: "Containers",
++  containersStatus: "Status",
++  containersActions: "Actions",
++  containersStart: "Start",
++  containersStop: "Stop",
++  containersRestart: "Restart",
++  containersLogs: "Logs",
++  containersRemove: "Remove",
++  containersRemoveWarning: "Remove this stopped container or unused image? Named volumes are preserved.",
++  containersEmpty: "No managed containers on this VM.",
++  containersImages: "Images",
++  containersPull: "Pull image",
++  containersLogHelp: "Snapshot of the last 200 lines within 24 hours, truncated to 64 KiB.",
++  containersClose: "Close",
++  containersChoose: "Choose…",
++  containersAdminOnly: "Administrator access required.",
++  containersWorking: "Operation in progress…",
++  containersBooting: "VM created. Wait for guest tools, DHCP and cloud-init. Retry Refresh when the VM is ready; do not deploy a second VM.",
++  containersDone: "Operation completed. The next refresh updates the view.",
+   xhlAppearance: "Appearance",
+   xhlTheme: "Theme",
+   xhlColorMode: "Color mode",
+@@ -2559,7 +2606,6 @@ export default {
+   consoleTabName: 'Consolle',
+ 
+   // Original text: 'Container'
+-  containersTabName: 'Contenitore',
+ 
+   // Original text: 'Snapshots'
+   snapshotsTabName: 'Istantanei',
+diff --git a/packages/xo-web/src/common/intl/locales/ja.js b/packages/xo-web/src/common/intl/locales/ja.js
+index 243145bd6..6c4d23631 100644
+--- a/packages/xo-web/src/common/intl/locales/ja.js
++++ b/packages/xo-web/src/common/intl/locales/ja.js
+@@ -8,6 +8,53 @@ addLocaleData(reactIntlData)
+ // ===================================================================
+ 
+ export default {
++  containersPage: "コンテナー",
++  containersIntroduction: "専用VMでDockerアプリを管理します。管理アプライアンスとは分離されています。",
++  containersDeployVm: "Docker VMをデプロイ",
++  containersTemplateHelp: "CIで作成したDockerホストXVAをインポートし、テンプレートに変換してタグ xcp-hl-docker-template-v1 を追加します。ガイドを参照してください。",
++  containersTemplate: "テンプレート",
++  containersStorage: "ストレージリポジトリ",
++  containersNetwork: "ネットワーク",
++  containersName: "名前",
++  containersCpus: "CPU上限（コア数）",
++  containersMemoryLimit: "メモリ上限（MiB）",
++  containersAdministratorKey: "ゲスト管理者のSSH公開鍵（任意・docker-adminにsudo権限を付与）",
++  containersDeploymentHelp: "テンプレートディスクを完全コピーして専用VMを作成します。DHCPとXOA-HLから到達できるネットワークが必要です。",
++  containersHost: "Docker VM",
++  containersRefresh: "更新",
++  containersVmDetails: "VMの詳細とコンソール",
++  containersResources: "VMリソース使用量",
++  containersCpu: "CPU",
++  containersMemory: "メモリ",
++  containersDisk: "ディスク",
++  containersCreate: "コンテナーを作成",
++  containersImage: "イメージ",
++  containersAdvanced: "詳細設定",
++  containersPorts: "公開ポート",
++  containersPortsHelp: "ポート：1行に ホスト:コンテナー/tcp または /udp。公開ポートはVMネットワークから到達可能です。",
++  containersVolumesHelp: "永続ボリューム：1行に 名前:/コンテナー内パス。名前はVM内で共有されます。",
++  containersEnvironmentHelp: "環境変数：1行に KEY=value。管理者やAPIログに表示される可能性があるため秘密情報を入力しないでください。",
++  containersRestartPolicy: "再起動ポリシー",
++  containersPullFirst: "作成前に下のフォームでイメージを取得してください。上限はコンテナーごとに適用されます。ゲストOS用メモリを確保してください。",
++  containersList: "コンテナー一覧",
++  containersStatus: "状態",
++  containersActions: "操作",
++  containersStart: "起動",
++  containersStop: "停止",
++  containersRestart: "再起動",
++  containersLogs: "ログ",
++  containersRemove: "削除",
++  containersRemoveWarning: "停止中のコンテナーまたは未使用イメージを削除しますか？名前付きボリュームは保持されます。",
++  containersEmpty: "このVMに管理対象コンテナーはありません。",
++  containersImages: "イメージ一覧",
++  containersPull: "イメージを取得",
++  containersLogHelp: "過去24時間の最新200行を最大64KiBまで表示します。",
++  containersClose: "閉じる",
++  containersChoose: "選択…",
++  containersAdminOnly: "管理者権限が必要です。",
++  containersWorking: "処理中…",
++  containersBooting: "VMを作成しました。ゲストツール、DHCP、cloud-initの完了を待って更新してください。重複してデプロイしないでください。",
++  containersDone: "処理が完了しました。次の更新で表示が反映されます。",
+   xhlAppearance: "外観",
+   xhlTheme: "テーマ",
+   xhlColorMode: "カラーモード",
+@@ -3237,7 +3284,6 @@ export default {
+   consoleTabName: 'コンソール',
+ 
+   // Original text: "Container"
+-  containersTabName: 'コンテナ',
+ 
+   // Original text: "Snapshots"
+   snapshotsTabName: 'スナップショット',
+diff --git a/packages/xo-web/src/common/intl/locales/pl.js b/packages/xo-web/src/common/intl/locales/pl.js
+index 22c20631b..b4a2e92a2 100644
+--- a/packages/xo-web/src/common/intl/locales/pl.js
++++ b/packages/xo-web/src/common/intl/locales/pl.js
+@@ -8,6 +8,53 @@ addLocaleData(reactIntlData)
+ // ===================================================================
+ 
+ export default {
++  containersPage: "Containers",
++  containersIntroduction: "Manage Docker applications in a dedicated VM. The management appliance stays separate.",
++  containersDeployVm: "Deploy Docker VM",
++  containersTemplateHelp: "Import the Docker host XVA built by CI, convert it to a template, and add the tag xcp-hl-docker-template-v1. See the container guide.",
++  containersTemplate: "Template",
++  containersStorage: "Storage repository",
++  containersNetwork: "Network",
++  containersName: "Name",
++  containersCpus: "CPU limit (cores)",
++  containersMemoryLimit: "Memory limit (MiB)",
++  containersAdministratorKey: "Guest administrator SSH public key (optional; grants sudo to docker-admin)",
++  containersDeploymentHelp: "Creates a separate VM with a full copy of the template disk. Requires DHCP and a network reachable from XOA-HL.",
++  containersHost: "Docker VM",
++  containersRefresh: "Refresh",
++  containersVmDetails: "VM details and console",
++  containersResources: "VM resource usage",
++  containersCpu: "CPU",
++  containersMemory: "Memory",
++  containersDisk: "Disk",
++  containersCreate: "Create container",
++  containersImage: "Image",
++  containersAdvanced: "Advanced options",
++  containersPorts: "Published ports",
++  containersPortsHelp: "Ports: one HOST:CONTAINER/tcp or /udp per line. Published ports are reachable on the VM network.",
++  containersVolumesHelp: "Persistent volumes: one NAME:/container/path per line. Names are shared within this VM.",
++  containersEnvironmentHelp: "Environment: one KEY=value per line. Avoid secrets; administrators and API logs may expose these values.",
++  containersRestartPolicy: "Restart policy",
++  containersPullFirst: "Pull the image below before creating a container. Limits are enforced per container; allow RAM for the guest OS.",
++  containersList: "Containers",
++  containersStatus: "Status",
++  containersActions: "Actions",
++  containersStart: "Start",
++  containersStop: "Stop",
++  containersRestart: "Restart",
++  containersLogs: "Logs",
++  containersRemove: "Remove",
++  containersRemoveWarning: "Remove this stopped container or unused image? Named volumes are preserved.",
++  containersEmpty: "No managed containers on this VM.",
++  containersImages: "Images",
++  containersPull: "Pull image",
++  containersLogHelp: "Snapshot of the last 200 lines within 24 hours, truncated to 64 KiB.",
++  containersClose: "Close",
++  containersChoose: "Choose…",
++  containersAdminOnly: "Administrator access required.",
++  containersWorking: "Operation in progress…",
++  containersBooting: "VM created. Wait for guest tools, DHCP and cloud-init. Retry Refresh when the VM is ready; do not deploy a second VM.",
++  containersDone: "Operation completed. The next refresh updates the view.",
+   xhlAppearance: "Appearance",
+   xhlTheme: "Theme",
+   xhlColorMode: "Color mode",
+@@ -1423,7 +1470,6 @@ export default {
+   consoleTabName: 'Konsola',
+ 
+   // Original text: "Container"
+-  containersTabName: 'Kontener',
+ 
+   // Original text: "Snapshots"
+   snapshotsTabName: 'Snapshoty',
+diff --git a/packages/xo-web/src/common/intl/locales/pt.js b/packages/xo-web/src/common/intl/locales/pt.js
+index cf1347248..a87affafd 100644
+--- a/packages/xo-web/src/common/intl/locales/pt.js
++++ b/packages/xo-web/src/common/intl/locales/pt.js
+@@ -8,6 +8,53 @@ addLocaleData(reactIntlData)
+ // ===================================================================
+ 
+ export default {
++  containersPage: "Containers",
++  containersIntroduction: "Manage Docker applications in a dedicated VM. The management appliance stays separate.",
++  containersDeployVm: "Deploy Docker VM",
++  containersTemplateHelp: "Import the Docker host XVA built by CI, convert it to a template, and add the tag xcp-hl-docker-template-v1. See the container guide.",
++  containersTemplate: "Template",
++  containersStorage: "Storage repository",
++  containersNetwork: "Network",
++  containersName: "Name",
++  containersCpus: "CPU limit (cores)",
++  containersMemoryLimit: "Memory limit (MiB)",
++  containersAdministratorKey: "Guest administrator SSH public key (optional; grants sudo to docker-admin)",
++  containersDeploymentHelp: "Creates a separate VM with a full copy of the template disk. Requires DHCP and a network reachable from XOA-HL.",
++  containersHost: "Docker VM",
++  containersRefresh: "Refresh",
++  containersVmDetails: "VM details and console",
++  containersResources: "VM resource usage",
++  containersCpu: "CPU",
++  containersMemory: "Memory",
++  containersDisk: "Disk",
++  containersCreate: "Create container",
++  containersImage: "Image",
++  containersAdvanced: "Advanced options",
++  containersPorts: "Published ports",
++  containersPortsHelp: "Ports: one HOST:CONTAINER/tcp or /udp per line. Published ports are reachable on the VM network.",
++  containersVolumesHelp: "Persistent volumes: one NAME:/container/path per line. Names are shared within this VM.",
++  containersEnvironmentHelp: "Environment: one KEY=value per line. Avoid secrets; administrators and API logs may expose these values.",
++  containersRestartPolicy: "Restart policy",
++  containersPullFirst: "Pull the image below before creating a container. Limits are enforced per container; allow RAM for the guest OS.",
++  containersList: "Containers",
++  containersStatus: "Status",
++  containersActions: "Actions",
++  containersStart: "Start",
++  containersStop: "Stop",
++  containersRestart: "Restart",
++  containersLogs: "Logs",
++  containersRemove: "Remove",
++  containersRemoveWarning: "Remove this stopped container or unused image? Named volumes are preserved.",
++  containersEmpty: "No managed containers on this VM.",
++  containersImages: "Images",
++  containersPull: "Pull image",
++  containersLogHelp: "Snapshot of the last 200 lines within 24 hours, truncated to 64 KiB.",
++  containersClose: "Close",
++  containersChoose: "Choose…",
++  containersAdminOnly: "Administrator access required.",
++  containersWorking: "Operation in progress…",
++  containersBooting: "VM created. Wait for guest tools, DHCP and cloud-init. Retry Refresh when the VM is ready; do not deploy a second VM.",
++  containersDone: "Operation completed. The next refresh updates the view.",
+   xhlAppearance: "Appearance",
+   xhlTheme: "Theme",
+   xhlColorMode: "Color mode",
+@@ -1421,7 +1468,6 @@ export default {
+   consoleTabName: 'Console',
+ 
+   // Original text: 'Container'
+-  containersTabName: undefined,
+ 
+   // Original text: "Snapshots"
+   snapshotsTabName: 'Snapshots',
+diff --git a/packages/xo-web/src/common/intl/locales/ru.js b/packages/xo-web/src/common/intl/locales/ru.js
+index ce9ddb6ce..e4ff60850 100644
+--- a/packages/xo-web/src/common/intl/locales/ru.js
++++ b/packages/xo-web/src/common/intl/locales/ru.js
+@@ -8,6 +8,53 @@ addLocaleData(reactIntlData)
+ // ===================================================================
+ 
+ export default {
++  containersPage: "Containers",
++  containersIntroduction: "Manage Docker applications in a dedicated VM. The management appliance stays separate.",
++  containersDeployVm: "Deploy Docker VM",
++  containersTemplateHelp: "Import the Docker host XVA built by CI, convert it to a template, and add the tag xcp-hl-docker-template-v1. See the container guide.",
++  containersTemplate: "Template",
++  containersStorage: "Storage repository",
++  containersNetwork: "Network",
++  containersName: "Name",
++  containersCpus: "CPU limit (cores)",
++  containersMemoryLimit: "Memory limit (MiB)",
++  containersAdministratorKey: "Guest administrator SSH public key (optional; grants sudo to docker-admin)",
++  containersDeploymentHelp: "Creates a separate VM with a full copy of the template disk. Requires DHCP and a network reachable from XOA-HL.",
++  containersHost: "Docker VM",
++  containersRefresh: "Refresh",
++  containersVmDetails: "VM details and console",
++  containersResources: "VM resource usage",
++  containersCpu: "CPU",
++  containersMemory: "Memory",
++  containersDisk: "Disk",
++  containersCreate: "Create container",
++  containersImage: "Image",
++  containersAdvanced: "Advanced options",
++  containersPorts: "Published ports",
++  containersPortsHelp: "Ports: one HOST:CONTAINER/tcp or /udp per line. Published ports are reachable on the VM network.",
++  containersVolumesHelp: "Persistent volumes: one NAME:/container/path per line. Names are shared within this VM.",
++  containersEnvironmentHelp: "Environment: one KEY=value per line. Avoid secrets; administrators and API logs may expose these values.",
++  containersRestartPolicy: "Restart policy",
++  containersPullFirst: "Pull the image below before creating a container. Limits are enforced per container; allow RAM for the guest OS.",
++  containersList: "Containers",
++  containersStatus: "Status",
++  containersActions: "Actions",
++  containersStart: "Start",
++  containersStop: "Stop",
++  containersRestart: "Restart",
++  containersLogs: "Logs",
++  containersRemove: "Remove",
++  containersRemoveWarning: "Remove this stopped container or unused image? Named volumes are preserved.",
++  containersEmpty: "No managed containers on this VM.",
++  containersImages: "Images",
++  containersPull: "Pull image",
++  containersLogHelp: "Snapshot of the last 200 lines within 24 hours, truncated to 64 KiB.",
++  containersClose: "Close",
++  containersChoose: "Choose…",
++  containersAdminOnly: "Administrator access required.",
++  containersWorking: "Operation in progress…",
++  containersBooting: "VM created. Wait for guest tools, DHCP and cloud-init. Retry Refresh when the VM is ready; do not deploy a second VM.",
++  containersDone: "Operation completed. The next refresh updates the view.",
+   xhlAppearance: "Appearance",
+   xhlTheme: "Theme",
+   xhlColorMode: "Color mode",
+@@ -3206,7 +3253,6 @@ export default {
+   consoleTabName: 'Консоль',
+ 
+   // Original text: "Container"
+-  containersTabName: 'Контейнер',
+ 
+   // Original text: "Snapshots"
+   snapshotsTabName: 'Снимки',
+diff --git a/packages/xo-web/src/common/intl/locales/sv.js b/packages/xo-web/src/common/intl/locales/sv.js
+index 1006f4435..d0639bff7 100644
+--- a/packages/xo-web/src/common/intl/locales/sv.js
++++ b/packages/xo-web/src/common/intl/locales/sv.js
+@@ -8,6 +8,53 @@ addLocaleData(reactIntlData)
+ // ===================================================================
+ 
+ export default {
++  containersPage: "Containers",
++  containersIntroduction: "Manage Docker applications in a dedicated VM. The management appliance stays separate.",
++  containersDeployVm: "Deploy Docker VM",
++  containersTemplateHelp: "Import the Docker host XVA built by CI, convert it to a template, and add the tag xcp-hl-docker-template-v1. See the container guide.",
++  containersTemplate: "Template",
++  containersStorage: "Storage repository",
++  containersNetwork: "Network",
++  containersName: "Name",
++  containersCpus: "CPU limit (cores)",
++  containersMemoryLimit: "Memory limit (MiB)",
++  containersAdministratorKey: "Guest administrator SSH public key (optional; grants sudo to docker-admin)",
++  containersDeploymentHelp: "Creates a separate VM with a full copy of the template disk. Requires DHCP and a network reachable from XOA-HL.",
++  containersHost: "Docker VM",
++  containersRefresh: "Refresh",
++  containersVmDetails: "VM details and console",
++  containersResources: "VM resource usage",
++  containersCpu: "CPU",
++  containersMemory: "Memory",
++  containersDisk: "Disk",
++  containersCreate: "Create container",
++  containersImage: "Image",
++  containersAdvanced: "Advanced options",
++  containersPorts: "Published ports",
++  containersPortsHelp: "Ports: one HOST:CONTAINER/tcp or /udp per line. Published ports are reachable on the VM network.",
++  containersVolumesHelp: "Persistent volumes: one NAME:/container/path per line. Names are shared within this VM.",
++  containersEnvironmentHelp: "Environment: one KEY=value per line. Avoid secrets; administrators and API logs may expose these values.",
++  containersRestartPolicy: "Restart policy",
++  containersPullFirst: "Pull the image below before creating a container. Limits are enforced per container; allow RAM for the guest OS.",
++  containersList: "Containers",
++  containersStatus: "Status",
++  containersActions: "Actions",
++  containersStart: "Start",
++  containersStop: "Stop",
++  containersRestart: "Restart",
++  containersLogs: "Logs",
++  containersRemove: "Remove",
++  containersRemoveWarning: "Remove this stopped container or unused image? Named volumes are preserved.",
++  containersEmpty: "No managed containers on this VM.",
++  containersImages: "Images",
++  containersPull: "Pull image",
++  containersLogHelp: "Snapshot of the last 200 lines within 24 hours, truncated to 64 KiB.",
++  containersClose: "Close",
++  containersChoose: "Choose…",
++  containersAdminOnly: "Administrator access required.",
++  containersWorking: "Operation in progress…",
++  containersBooting: "VM created. Wait for guest tools, DHCP and cloud-init. Retry Refresh when the VM is ready; do not deploy a second VM.",
++  containersDone: "Operation completed. The next refresh updates the view.",
+   xhlAppearance: "Appearance",
+   xhlTheme: "Theme",
+   xhlColorMode: "Color mode",
+@@ -1681,7 +1728,6 @@ export default {
+   consoleTabName: 'Konsol',
+ 
+   // Original text: 'Container'
+-  containersTabName: undefined,
+ 
+   // Original text: "Snapshots"
+   snapshotsTabName: 'Snapshots',
+diff --git a/packages/xo-web/src/common/intl/locales/tr.js b/packages/xo-web/src/common/intl/locales/tr.js
+index 99d6d1b1d..974b8b4f4 100644
+--- a/packages/xo-web/src/common/intl/locales/tr.js
++++ b/packages/xo-web/src/common/intl/locales/tr.js
+@@ -8,6 +8,53 @@ addLocaleData(reactIntlData)
+ // ===================================================================
+ 
+ export default {
++  containersPage: "Containers",
++  containersIntroduction: "Manage Docker applications in a dedicated VM. The management appliance stays separate.",
++  containersDeployVm: "Deploy Docker VM",
++  containersTemplateHelp: "Import the Docker host XVA built by CI, convert it to a template, and add the tag xcp-hl-docker-template-v1. See the container guide.",
++  containersTemplate: "Template",
++  containersStorage: "Storage repository",
++  containersNetwork: "Network",
++  containersName: "Name",
++  containersCpus: "CPU limit (cores)",
++  containersMemoryLimit: "Memory limit (MiB)",
++  containersAdministratorKey: "Guest administrator SSH public key (optional; grants sudo to docker-admin)",
++  containersDeploymentHelp: "Creates a separate VM with a full copy of the template disk. Requires DHCP and a network reachable from XOA-HL.",
++  containersHost: "Docker VM",
++  containersRefresh: "Refresh",
++  containersVmDetails: "VM details and console",
++  containersResources: "VM resource usage",
++  containersCpu: "CPU",
++  containersMemory: "Memory",
++  containersDisk: "Disk",
++  containersCreate: "Create container",
++  containersImage: "Image",
++  containersAdvanced: "Advanced options",
++  containersPorts: "Published ports",
++  containersPortsHelp: "Ports: one HOST:CONTAINER/tcp or /udp per line. Published ports are reachable on the VM network.",
++  containersVolumesHelp: "Persistent volumes: one NAME:/container/path per line. Names are shared within this VM.",
++  containersEnvironmentHelp: "Environment: one KEY=value per line. Avoid secrets; administrators and API logs may expose these values.",
++  containersRestartPolicy: "Restart policy",
++  containersPullFirst: "Pull the image below before creating a container. Limits are enforced per container; allow RAM for the guest OS.",
++  containersList: "Containers",
++  containersStatus: "Status",
++  containersActions: "Actions",
++  containersStart: "Start",
++  containersStop: "Stop",
++  containersRestart: "Restart",
++  containersLogs: "Logs",
++  containersRemove: "Remove",
++  containersRemoveWarning: "Remove this stopped container or unused image? Named volumes are preserved.",
++  containersEmpty: "No managed containers on this VM.",
++  containersImages: "Images",
++  containersPull: "Pull image",
++  containersLogHelp: "Snapshot of the last 200 lines within 24 hours, truncated to 64 KiB.",
++  containersClose: "Close",
++  containersChoose: "Choose…",
++  containersAdminOnly: "Administrator access required.",
++  containersWorking: "Operation in progress…",
++  containersBooting: "VM created. Wait for guest tools, DHCP and cloud-init. Retry Refresh when the VM is ready; do not deploy a second VM.",
++  containersDone: "Operation completed. The next refresh updates the view.",
+   xhlAppearance: "Appearance",
+   xhlTheme: "Theme",
+   xhlColorMode: "Color mode",
+@@ -2158,7 +2205,6 @@ export default {
+   consoleTabName: 'Konsol',
+ 
+   // Original text: "Container"
+-  containersTabName: 'Konteyner',
+ 
+   // Original text: "Snapshots"
+   snapshotsTabName: "Snapshot'lar",
+diff --git a/packages/xo-web/src/common/intl/locales/zh.js b/packages/xo-web/src/common/intl/locales/zh.js
+index b15e15733..3de3435c2 100644
+--- a/packages/xo-web/src/common/intl/locales/zh.js
++++ b/packages/xo-web/src/common/intl/locales/zh.js
+@@ -8,6 +8,53 @@ addLocaleData(reactIntlData)
+ // ===================================================================
+ 
+ export default {
++  containersPage: "Containers",
++  containersIntroduction: "Manage Docker applications in a dedicated VM. The management appliance stays separate.",
++  containersDeployVm: "Deploy Docker VM",
++  containersTemplateHelp: "Import the Docker host XVA built by CI, convert it to a template, and add the tag xcp-hl-docker-template-v1. See the container guide.",
++  containersTemplate: "Template",
++  containersStorage: "Storage repository",
++  containersNetwork: "Network",
++  containersName: "Name",
++  containersCpus: "CPU limit (cores)",
++  containersMemoryLimit: "Memory limit (MiB)",
++  containersAdministratorKey: "Guest administrator SSH public key (optional; grants sudo to docker-admin)",
++  containersDeploymentHelp: "Creates a separate VM with a full copy of the template disk. Requires DHCP and a network reachable from XOA-HL.",
++  containersHost: "Docker VM",
++  containersRefresh: "Refresh",
++  containersVmDetails: "VM details and console",
++  containersResources: "VM resource usage",
++  containersCpu: "CPU",
++  containersMemory: "Memory",
++  containersDisk: "Disk",
++  containersCreate: "Create container",
++  containersImage: "Image",
++  containersAdvanced: "Advanced options",
++  containersPorts: "Published ports",
++  containersPortsHelp: "Ports: one HOST:CONTAINER/tcp or /udp per line. Published ports are reachable on the VM network.",
++  containersVolumesHelp: "Persistent volumes: one NAME:/container/path per line. Names are shared within this VM.",
++  containersEnvironmentHelp: "Environment: one KEY=value per line. Avoid secrets; administrators and API logs may expose these values.",
++  containersRestartPolicy: "Restart policy",
++  containersPullFirst: "Pull the image below before creating a container. Limits are enforced per container; allow RAM for the guest OS.",
++  containersList: "Containers",
++  containersStatus: "Status",
++  containersActions: "Actions",
++  containersStart: "Start",
++  containersStop: "Stop",
++  containersRestart: "Restart",
++  containersLogs: "Logs",
++  containersRemove: "Remove",
++  containersRemoveWarning: "Remove this stopped container or unused image? Named volumes are preserved.",
++  containersEmpty: "No managed containers on this VM.",
++  containersImages: "Images",
++  containersPull: "Pull image",
++  containersLogHelp: "Snapshot of the last 200 lines within 24 hours, truncated to 64 KiB.",
++  containersClose: "Close",
++  containersChoose: "Choose…",
++  containersAdminOnly: "Administrator access required.",
++  containersWorking: "Operation in progress…",
++  containersBooting: "VM created. Wait for guest tools, DHCP and cloud-init. Retry Refresh when the VM is ready; do not deploy a second VM.",
++  containersDone: "Operation completed. The next refresh updates the view.",
+   xhlAppearance: "Appearance",
+   xhlTheme: "Theme",
+   xhlColorMode: "Color mode",
+diff --git a/packages/xo-web/src/common/intl/messages.js b/packages/xo-web/src/common/intl/messages.js
+index 4050659f9..1b6b3c02b 100644
+--- a/packages/xo-web/src/common/intl/messages.js
++++ b/packages/xo-web/src/common/intl/messages.js
+@@ -4,6 +4,53 @@
+ const forEach = require('lodash/forEach')
+ 
+ const messages = {
++  containersPage: "Containers",
++  containersIntroduction: "Manage Docker applications in a dedicated VM. The management appliance stays separate.",
++  containersDeployVm: "Deploy Docker VM",
++  containersTemplateHelp: "Import the Docker host XVA built by CI, convert it to a template, and add the tag xcp-hl-docker-template-v1. See the container guide.",
++  containersTemplate: "Template",
++  containersStorage: "Storage repository",
++  containersNetwork: "Network",
++  containersName: "Name",
++  containersCpus: "CPU limit (cores)",
++  containersMemoryLimit: "Memory limit (MiB)",
++  containersAdministratorKey: "Guest administrator SSH public key (optional; grants sudo to docker-admin)",
++  containersDeploymentHelp: "Creates a separate VM with a full copy of the template disk. Requires DHCP and a network reachable from XOA-HL.",
++  containersHost: "Docker VM",
++  containersRefresh: "Refresh",
++  containersVmDetails: "VM details and console",
++  containersResources: "VM resource usage",
++  containersCpu: "CPU",
++  containersMemory: "Memory",
++  containersDisk: "Disk",
++  containersCreate: "Create container",
++  containersImage: "Image",
++  containersAdvanced: "Advanced options",
++  containersPorts: "Published ports",
++  containersPortsHelp: "Ports: one HOST:CONTAINER/tcp or /udp per line. Published ports are reachable on the VM network.",
++  containersVolumesHelp: "Persistent volumes: one NAME:/container/path per line. Names are shared within this VM.",
++  containersEnvironmentHelp: "Environment: one KEY=value per line. Avoid secrets; administrators and API logs may expose these values.",
++  containersRestartPolicy: "Restart policy",
++  containersPullFirst: "Pull the image below before creating a container. Limits are enforced per container; allow RAM for the guest OS.",
++  containersList: "Containers",
++  containersStatus: "Status",
++  containersActions: "Actions",
++  containersStart: "Start",
++  containersStop: "Stop",
++  containersRestart: "Restart",
++  containersLogs: "Logs",
++  containersRemove: "Remove",
++  containersRemoveWarning: "Remove this stopped container or unused image? Named volumes are preserved.",
++  containersEmpty: "No managed containers on this VM.",
++  containersImages: "Images",
++  containersPull: "Pull image",
++  containersLogHelp: "Snapshot of the last 200 lines within 24 hours, truncated to 64 KiB.",
++  containersClose: "Close",
++  containersChoose: "Choose…",
++  containersAdminOnly: "Administrator access required.",
++  containersWorking: "Operation in progress…",
++  containersBooting: "VM created. Wait for guest tools, DHCP and cloud-init. Retry Refresh when the VM is ready; do not deploy a second VM.",
++  containersDone: "Operation completed. The next refresh updates the view.",
+   xhlAppearance: "Appearance",
+   xhlTheme: "Theme",
+   xhlColorMode: "Color mode",
+@@ -1363,7 +1410,6 @@ const messages = {
+   generalTabName: 'General',
+   statsTabName: 'Stats',
+   consoleTabName: 'Console',
+-  containersTabName: 'Container',
+   snapshotsTabName: 'Snapshots',
+   logsTabName: 'Logs',
+   advancedTabName: 'Advanced',
+diff --git a/packages/xo-web/src/common/xo/index.js b/packages/xo-web/src/common/xo/index.js
+index 93a8ba38e..39aa71197 100644
+--- a/packages/xo-web/src/common/xo/index.js
++++ b/packages/xo-web/src/common/xo/index.js
+@@ -4410,3 +4410,6 @@ const _callGithubApi = async (endpoint = '') => {
+ export const getMasterCommit = () => _callGithubApi('/commits/master')
+ 
+ export const compareCommits = (base, head) => _callGithubApi(`/compare/${base}...${head}`)
++
++// Dedicated Docker guests; the server validates every operation.
++export const containerCall = (operation, params) => _call('containers.' + operation, params)
+diff --git a/packages/xo-web/src/xo-app/containers/index.js b/packages/xo-web/src/xo-app/containers/index.js
+new file mode 100644
+index 000000000..1c72ada4a
+--- /dev/null
++++ b/packages/xo-web/src/xo-app/containers/index.js
+@@ -0,0 +1,423 @@
++import _ from 'intl'
++import Component from 'base-component'
++import React from 'react'
++import Link from 'link'
++import { confirm } from 'modal'
++import { connectStore } from 'utils'
++import { createGetObjectsOfType, isAdmin } from 'selectors'
++import { containerCall } from 'xo'
++
++const mib = value => Math.round(value / 1048576)
++const percent = (used, total) => (total > 0 ? Math.round((100 * used) / total) + '%' : '—')
++const options = values =>
++  values.map(value => (
++    <option key={value.id} value={value.id}>
++      {value.name_label}
++    </option>
++  ))
++
++@connectStore(() => {
++  const templates = createGetObjectsOfType('VM-template')
++  const vms = createGetObjectsOfType('VM')
++  const srs = createGetObjectsOfType('SR')
++  const networks = createGetObjectsOfType('network')
++  return state => ({
++    admin: isAdmin(state),
++    templates: Object.values(templates(state)).filter(vm => (vm.tags || []).includes('xcp-hl-docker-template-v1')),
++    hosts: Object.values(vms(state)).filter(vm => (vm.tags || []).includes('xcp-hl-docker-v1')),
++    srs: Object.values(srs(state)).filter(sr => sr.content_type !== 'iso'),
++    networks: Object.values(networks(state)),
++  })
++})
++export default class Containers extends Component {
++  state = {
++    vm: '',
++    template: '',
++    sr: '',
++    network: '',
++    vmName: 'Docker',
++    vmCpus: 2,
++    vmMemory: 2048,
++    administratorKey: '',
++    name: '',
++    image: '',
++    cpus: 1,
++    memoryMiB: 256,
++    ports: '',
++    volumes: '',
++    environment: '',
++    restart: 'unless-stopped',
++    pullImage: '',
++    error: '',
++    notice: '',
++    logs: undefined,
++    busy: false,
++    overview: undefined,
++  }
++
++  componentDidMount() {
++    this._active = true
++    this._schedule()
++  }
++  componentWillUnmount() {
++    this._active = false
++    clearTimeout(this._timer)
++  }
++  _schedule = () => {
++    if (this._active) this._timer = setTimeout(this._poll, 5000)
++  }
++  _poll = async () => {
++    await this._refresh()
++    this._schedule()
++  }
++  _refresh = async () => {
++    const { vm, busy } = this.state
++    if (!this.props.admin || !vm || busy || this._pending) return
++    this._pending = true
++    this.setState({ busy: true })
++    try {
++      const overview = await containerCall('overview', { vm })
++      if (this._active && this.state.vm === vm) {
++        const before = this.state.overview?.host.cpuTicks
++        const ticks = overview.host.cpuTicks
++        let cpu = '—'
++        if (before) {
++          const total = ticks.reduce((a, n, i) => a + n - before[i], 0)
++          cpu = percent(total - (ticks[3] - before[3]) - (ticks[4] - before[4]), total)
++        }
++        this.setState({ overview, cpu, error: '' })
++      }
++    } catch (error) {
++      if (this._active && this.state.vm === vm) this.setState({ error: error.message })
++    } finally {
++      this._pending = false
++      if (this._active) this.setState({ busy: false })
++    }
++  }
++  _set = key => event => this.setState({ [key]: event.target.value })
++  _selectHost = event =>
++    this.setState({ vm: event.target.value, overview: undefined, logs: undefined, error: '', cpu: '—' }, this._refresh)
++  _perform = async (operation, params) => {
++    if (this.state.busy || this._pending) return
++    this._pending = true
++    this.setState({ busy: true, error: '', notice: '' })
++    try {
++      const result = await containerCall(operation, params)
++      if (this._active) {
++        if (operation === 'logs') this.setState({ logs: result.logs })
++        if (operation === 'deploy')
++          this.setState({ vm: result.id, overview: undefined, notice: result.warning || _('containersBooting') })
++        else if (operation !== 'logs') this.setState({ notice: _('containersDone') })
++      }
++    } catch (error) {
++      if (this._active) this.setState({ error: error.message })
++    } finally {
++      this._pending = false
++      if (this._active) this.setState({ busy: false })
++    }
++    // Poll will reconcile state after every successful or failed mutation.
++  }
++  _deploy = event => {
++    event.preventDefault()
++    const s = this.state
++    this._perform('deploy', {
++      template: s.template,
++      sr: s.sr,
++      network: s.network,
++      name: s.vmName,
++      cpus: +s.vmCpus,
++      memoryMiB: +s.vmMemory,
++      administratorKey: s.administratorKey,
++    })
++  }
++  _create = event => {
++    event.preventDefault()
++    try {
++      const s = this.state
++      const ports = s.ports
++        .split('\n')
++        .filter(Boolean)
++        .map(line => {
++          const match = /^(\d+):(\d+)(?:\/(tcp|udp))?$/.exec(line.trim())
++          if (!match) throw new Error(_('containersPortsHelp'))
++          return { host: +match[1], container: +match[2], protocol: match[3] || 'tcp' }
++        })
++      const volumes = s.volumes
++        .split('\n')
++        .filter(Boolean)
++        .map(line => {
++          const colon = line.indexOf(':')
++          if (colon < 1) throw new Error(_('containersVolumesHelp'))
++          return { name: line.slice(0, colon).trim(), path: line.slice(colon + 1).trim() }
++        })
++      const environment = {}
++      for (const line of s.environment.split('\n').filter(Boolean)) {
++        const equal = line.indexOf('=')
++        if (equal < 1) throw new Error(_('containersEnvironmentHelp'))
++        environment[line.slice(0, equal).trim()] = line.slice(equal + 1)
++      }
++      this._perform('create', {
++        vm: s.vm,
++        config: {
++          name: s.name,
++          image: s.image,
++          cpus: +s.cpus,
++          memoryMiB: +s.memoryMiB,
++          ports,
++          volumes,
++          environment,
++          restart: s.restart,
++        },
++      })
++    } catch (error) {
++      this.setState({ error: error.message })
++    }
++  }
++  _remove = async (operation, params) => {
++    try {
++      await confirm({ title: _('containersRemove'), body: _('containersRemoveWarning') })
++    } catch (_) {
++      return
++    }
++    this._perform(operation, params)
++  }
++  _input(key, title, type = 'text', attrs = {}) {
++    return (
++      <label className='m-r-1'>
++        {title}
++        <input className='form-control' type={type} value={this.state[key]} onChange={this._set(key)} {...attrs} />
++      </label>
++    )
++  }
++  _select(key, title, values, onChange = this._set(key)) {
++    return (
++      <label className='m-r-1'>
++        {title}
++        <select
++          className='form-control'
++          required
++          disabled={this.state.busy}
++          value={this.state[key]}
++          onChange={onChange}
++        >
++          <option value=''>{_('containersChoose')}</option>
++          {options(values)}
++        </select>
++      </label>
++    )
++  }
++  render() {
++    if (!this.props.admin) return <p className='alert alert-danger'>{_('containersAdminOnly')}</p>
++    const s = this.state
++    const data = s.overview
++    const template = this.props.templates.find(t => t.id === s.template)
++    const pool = template?.$pool
++    return (
++      <main className='container-fluid p-a-1'>
++        <h2>{_('containersPage')}</h2>
++        <p>{_('containersIntroduction')}</p>
++        {s.error && (
++          <p role='alert' className='alert alert-danger'>
++            {s.error}
++          </p>
++        )}
++        {s.notice && (
++          <p role='status' className='alert alert-info'>
++            {s.notice}
++          </p>
++        )}
++        {s.busy && <p role='status'>{_('containersWorking')}</p>}
++        <details>
++          <summary>{_('containersDeployVm')}</summary>
++          {this.props.templates.length === 0 && <p className='alert alert-warning'>{_('containersTemplateHelp')}</p>}
++          <form onSubmit={this._deploy}>
++            <fieldset disabled={s.busy}>
++              {this._select('template', _('containersTemplate'), this.props.templates, e =>
++                this.setState({ template: e.target.value, sr: '', network: '' })
++              )}
++              {this._select(
++                'sr',
++                _('containersStorage'),
++                this.props.srs.filter(sr => sr.$pool === pool)
++              )}
++              {this._select(
++                'network',
++                _('containersNetwork'),
++                this.props.networks.filter(n => n.$pool === pool)
++              )}
++              {this._input('vmName', _('containersName'), 'text', { required: true, maxLength: 63 })}
++              {this._input('vmCpus', _('containersCpus'), 'number', { required: true, min: 1, max: 32 })}
++              {this._input('vmMemory', _('containersMemoryLimit'), 'number', {
++                required: true,
++                min: 1024,
++                max: 131072,
++              })}
++              {this._input('administratorKey', _('containersAdministratorKey'), 'text', { maxLength: 8192 })}
++              <p>{_('containersDeploymentHelp')}</p>
++              <button className='btn btn-primary' type='submit'>
++                {_('containersDeployVm')}
++              </button>
++            </fieldset>
++          </form>
++        </details>
++        <hr />
++        {this._select('vm', _('containersHost'), this.props.hosts, this._selectHost)}
++        <button disabled={s.busy || !s.vm} className='btn btn-secondary' onClick={this._refresh}>
++          {_('containersRefresh')}
++        </button>
++        {s.vm && (
++          <Link className='m-l-1' to={'/vms/' + s.vm}>
++            {_('containersVmDetails')}
++          </Link>
++        )}
++        {data && (
++          <section aria-label={_('containersResources')}>
++            <h3>{_('containersResources')}</h3>
++            <p>
++              {_('containersHost')}: {data.address}
++            </p>
++            <p>
++              {_('containersCpu')}: {s.cpu} / {data.host.cpus} vCPU · {_('containersMemory')}:{' '}
++              {mib(data.host.memoryUsed)} / {mib(data.host.memoryTotal)} MiB (
++              {percent(data.host.memoryUsed, data.host.memoryTotal)}) · {_('containersDisk')}: {mib(data.host.diskUsed)}{' '}
++              / {mib(data.host.diskTotal)} MiB · Docker {data.host.dockerVersion}
++            </p>
++            <fieldset disabled={s.busy || !!s.error}>
++              <h3>{_('containersCreate')}</h3>
++              <form onSubmit={this._create}>
++                {this._input('name', _('containersName'), 'text', {
++                  required: true,
++                  pattern: '[a-zA-Z0-9][a-zA-Z0-9_.-]{0,62}',
++                })}
++                {this._input('image', _('containersImage'), 'text', { required: true })}
++                {this._input('cpus', _('containersCpus'), 'number', {
++                  required: true,
++                  min: 0.1,
++                  step: 0.1,
++                  max: data.host.cpus,
++                })}
++                {this._input('memoryMiB', _('containersMemoryLimit'), 'number', {
++                  required: true,
++                  min: 16,
++                  max: Math.max(16, mib(data.host.memoryTotal) - 256),
++                })}
++                <details>
++                  <summary>{_('containersAdvanced')}</summary>
++                  {['ports', 'volumes', 'environment'].map(key => (
++                    <label className='d-block' key={key}>
++                      {_('containers' + key[0].toUpperCase() + key.slice(1) + 'Help')}
++                      <textarea className='form-control' rows='3' value={s[key]} onChange={this._set(key)} />
++                    </label>
++                  ))}
++                  <label>
++                    {_('containersRestartPolicy')}
++                    <select className='form-control' value={s.restart} onChange={this._set('restart')}>
++                      {['no', 'on-failure', 'always', 'unless-stopped'].map(v => (
++                        <option key={v}>{v}</option>
++                      ))}
++                    </select>
++                  </label>
++                </details>
++                <p>{_('containersPullFirst')}</p>
++                <button className='btn btn-primary' type='submit'>
++                  {_('containersCreate')}
++                </button>
++              </form>
++              <h3>{_('containersList')}</h3>
++              <table className='table'>
++                <thead>
++                  <tr>
++                    {['Name', 'Image', 'Status', 'Ports', 'Cpu', 'Memory', 'Actions'].map(k => (
++                      <th key={k}>{_('containers' + k)}</th>
++                    ))}
++                  </tr>
++                </thead>
++                <tbody>
++                  {data.containers.map(c => {
++                    const stat = data.stats.find(v => v.ID === c.ID || v.Container === c.ID) || {}
++                    return (
++                      <tr key={c.ID}>
++                        <td>{c.Names}</td>
++                        <td>{c.Image}</td>
++                        <td>{c.Status}</td>
++                        <td>{c.Ports}</td>
++                        <td>{stat.CPUPerc || '—'}</td>
++                        <td>{stat.MemUsage || '—'}</td>
++                        <td>
++                          {['start', 'stop', 'restart', 'logs', 'remove'].map(op => (
++                            <button
++                              type='button'
++                              className='btn btn-sm btn-secondary m-r-1'
++                              key={op}
++                              onClick={() =>
++                                op === 'remove'
++                                  ? this._remove(op, { vm: s.vm, id: c.ID })
++                                  : this._perform(op, { vm: s.vm, id: c.ID })
++                              }
++                            >
++                              {_('containers' + op[0].toUpperCase() + op.slice(1))}
++                            </button>
++                          ))}
++                        </td>
++                      </tr>
++                    )
++                  })}
++                </tbody>
++              </table>
++              {data.containers.length === 0 && <p>{_('containersEmpty')}</p>}
++              <h3>{_('containersImages')}</h3>
++              <form
++                onSubmit={e => {
++                  e.preventDefault()
++                  this._perform('pull', { vm: s.vm, image: s.pullImage })
++                }}
++              >
++                {this._input('pullImage', _('containersImage'), 'text', { required: true })}
++                <button className='btn btn-primary' type='submit'>
++                  {_('containersPull')}
++                </button>
++              </form>
++              <table className='table'>
++                <thead>
++                  <tr>
++                    <th>{_('containersImage')}</th>
++                    <th>{_('containersDisk')}</th>
++                    <th>{_('containersActions')}</th>
++                  </tr>
++                </thead>
++                <tbody>
++                  {data.images.map((image, i) => (
++                    <tr key={i}>
++                      <td>
++                        {image.Repository}:{image.Tag}
++                      </td>
++                      <td>{image.Size}</td>
++                      <td>
++                        <button
++                          className='btn btn-secondary'
++                          onClick={() => this._remove('removeImage', { vm: s.vm, image: image.ID })}
++                        >
++                          {_('containersRemove')}
++                        </button>
++                      </td>
++                    </tr>
++                  ))}
++                </tbody>
++              </table>
++            </fieldset>
++          </section>
++        )}
++        {s.logs !== undefined && (
++          <section>
++            <h3>{_('containersLogs')}</h3>
++            <p>{_('containersLogHelp')}</p>
++            <pre style={{ maxHeight: '24rem', overflow: 'auto' }}>{s.logs}</pre>
++            <button className='btn btn-secondary' onClick={() => this.setState({ logs: undefined })}>
++              {_('containersClose')}
++            </button>
++          </section>
++        )}
++      </main>
++    )
++  }
++}
+diff --git a/packages/xo-web/src/xo-app/index.js b/packages/xo-web/src/xo-app/index.js
+index ded4ab292..94bfb7884 100644
+--- a/packages/xo-web/src/xo-app/index.js
++++ b/packages/xo-web/src/xo-app/index.js
+@@ -31,6 +31,7 @@ import { Container, Row, Col } from 'grid'
+ import About from './about'
+ import Backup from './backup'
+ import Dashboard from './dashboard'
++import Containers from './containers'
+ import Home from './home'
+ import Host from './host'
+ import Hub from './hub'
+@@ -125,6 +126,7 @@ export const ICON_POOL_LICENSE = {
+     onEnter: ({ location }, replace) => replace(location.pathname.replace('/backup-ng', '/backup')),
+   },
+   dashboard: Dashboard,
++  containers: Containers,
+   home: Home,
+   'hosts/:id': Host,
+   jobs: Jobs,
+diff --git a/packages/xo-web/src/xo-app/menu/index.js b/packages/xo-web/src/xo-app/menu/index.js
+index 6c3dad26b..61d8fb132 100644
+--- a/packages/xo-web/src/xo-app/menu/index.js
++++ b/packages/xo-web/src/xo-app/menu/index.js
+@@ -257,6 +257,7 @@ export default class Menu extends Component {
+ 
+     /* eslint-disable object-property-newline */
+     const items = [
++      isAdmin && { to: '/containers', icon: 'vm', label: 'containersPage' },
+       {
+         to: '/home',
+         icon: 'menu-home',
