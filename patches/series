@@ -24,3 +24,5 @@ xoa-hl-update-api.patch
 220-user-profile-menu.patch
 230-appearance-themes.patch
 240-appliance-theme-feedback.patch
+250-reported-ui-layout.patch
+260-dashboard-backup-jobs-translations.patch

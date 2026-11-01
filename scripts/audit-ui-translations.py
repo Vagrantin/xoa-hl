@@ -99,8 +99,8 @@ def main():
     locale_paths = sorted((catalog / "locales").glob("*.js"))
     if len(locale_paths) != 13 or len(custom) != 70:
         failures.append(f"expected 13 locales and 70 XOA-HL keys; found {len(locale_paths)} and {len(custom)}")
-    if len(core) != 83 or core - english.keys() or core & custom:
-        failures.append("core UI key list must contain 83 distinct inherited English catalog keys")
+    if len(core) != 96 or core - english.keys() or core & custom:
+        failures.append("core UI key list must contain 96 distinct inherited English catalog keys")
     for path in locale_paths:
         source = path.read_text(encoding="utf-8")
         translated = entries(path)
