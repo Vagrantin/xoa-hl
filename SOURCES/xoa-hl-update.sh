@@ -42,12 +42,20 @@ rm -f "$CHECK_STATUS_FILE"
     rc=0
     # A successful DNF exit alone does not prove that a previous interrupted
     # transaction left a usable RPM database or complete kernel payloads.
+    # The image installs with nodocs, so rpm -V reports excluded %doc and %license files as missing.
+    verify_payload() {
+        report=$("$RPM_COMMAND" -V "$1" 2>&1) && return 0
+        damage=$(printf '%s\n' "$report" | grep -Ev '^missing +([cdglr] +)?/usr/share/(licenses|doc)(/|$)' | grep -v '^$') || damage=''
+        [ -n "$report" ] && [ -z "$damage" ] && return 0
+        printf '%s\n' "$report"
+        return 1
+    }
     verify_packages() {
         "$DNF_COMMAND" --color=never "$@" check || return $?
         kernels=$("$RPM_COMMAND" -qa --qf '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' \
             'kernel-core' 'kernel-modules' 'kernel-modules-core') || return $?
         for kernel in $kernels; do
-            "$RPM_COMMAND" -V "$kernel" || return $?
+            verify_payload "$kernel" || return $?
         done
     }
     if ! verify_packages "$@"; then
