@@ -3,6 +3,7 @@
 from contextlib import contextmanager
 import hashlib
 import json
+import math
 import os
 from pathlib import Path
 import re
@@ -24,8 +25,12 @@ def canonical(value):
 
 
 def validate(spec, snapshot, now, max_age=30):
-    if not isinstance(snapshot, dict) or type(snapshot.get('observed_at')) not in (int, float) or not 0 <= now - snapshot['observed_at'] <= max_age:
+    if not isinstance(snapshot, dict) or type(snapshot.get('observed_at')) not in (int, float) or not math.isfinite(snapshot['observed_at']) or not 0 <= now - snapshot['observed_at'] <= max_age:
         raise Rejected('stale_snapshot')
+    # History is useful to the model but is not a collision/placement inventory.
+    # Only the trusted adapter may assert completeness, after all reads succeed.
+    if snapshot.get('version') != 2 or snapshot.get('complete') is not True:
+        raise Rejected('incomplete_snapshot')
     if not isinstance(spec, dict) or set(spec) - set(SCHEMA['properties']) or not set(SCHEMA['required']) <= set(spec):
         raise Rejected('invalid_schema')
     try:
@@ -44,20 +49,42 @@ def validate(spec, snapshot, now, max_age=30):
             if not isinstance(value, str) or len(value) < rule.get('minLength', 0) or len(value) > rule.get('maxLength', len(value)) or ('pattern' in rule and re.fullmatch(rule['pattern'], value) is None):
                 raise Rejected('invalid_schema')
         elif kind == 'array':
-            if not isinstance(value, list) or not all(isinstance(item, str) for item in value):
+            if not isinstance(value, list) or len(value) > rule['maxItems'] or not all(isinstance(item, str) and 1 <= len(item) <= rule['items']['maxLength'] for item in value) or len(set(value)) != len(value):
                 raise Rejected('invalid_schema')
         else:
             raise Rejected('unsupported_schema')
     data = snapshot.get('data', {})
     try:
+        if not isinstance(data, dict):
+            raise Rejected('invalid_snapshot')
         for collection in ('hosts', 'srs', 'networks', 'templates'):
+            if not isinstance(data[collection], list):
+                raise Rejected('invalid_snapshot')
             names = [item['name'] for item in data[collection]]
+            ids = [item['id'] for item in data[collection]]
+            if not all(isinstance(value, str) and value for value in names + ids) or len(set(ids)) != len(ids):
+                raise Rejected('invalid_snapshot')
             if len(set(names)) != len(names):
                 raise Rejected('ambiguous_snapshot')
+        if not isinstance(data['vms'], list) or not all(isinstance(vm, dict) and isinstance(vm.get('name'), str) for vm in data['vms']):
+            raise Rejected('invalid_snapshot')
+        host_ids = {host['id'] for host in data['hosts']}
+        for collection in ('srs', 'networks', 'templates'):
+            for item in data[collection]:
+                eligible = item['eligible_hosts']
+                if not isinstance(eligible, list) or not all(isinstance(value, str) and value in host_ids for value in eligible) or len(set(eligible)) != len(eligible):
+                    raise Rejected('invalid_snapshot')
+        for host in data['hosts']:
+            if type(host['cpus']) is not int or host['cpus'] < 1 or type(host['enabled']) is not bool or type(host['running']) is not bool:
+                raise Rejected('invalid_snapshot')
+            if not finite_capacity(host['memory_free_mb']):
+                raise Rejected('invalid_snapshot')
+        if any(not finite_capacity(sr['free_gb']) for sr in data['srs']):
+            raise Rejected('invalid_snapshot')
         for field, collection in [('template', 'templates'), ('network', 'networks'), ('sr', 'srs')]:
             if spec[field] not in {r['name'] for r in data[collection]}:
                 raise Rejected('unknown_' + field)
-        if spec['name'] in {v['name'] for v in data['recent_vms']}:
+        if spec['name'] in {v['name'] for v in data['vms']}:
             raise Rejected('name_collision')
         hosts = data['hosts']
         if 'host' in spec:
@@ -65,15 +92,26 @@ def validate(spec, snapshot, now, max_age=30):
             if not hosts:
                 raise Rejected('unknown_host')
         sr = next(r for r in data['srs'] if r['name'] == spec['sr'])
+        network = next(r for r in data['networks'] if r['name'] == spec['network'])
+        template = next(r for r in data['templates'] if r['name'] == spec['template'])
         if sr['free_gb'] < spec['disk_gb']:
             raise Rejected('insufficient_storage')
-        possible = [h for h in hosts if h['cpus'] >= spec['vcpus'] and h['memory_free_mb'] >= spec['memory_mb'] and (sr['shared'] or sr['host'] == h['name'])]
+        possible = [h for h in hosts if h['enabled'] and h['running'] and h['cpus'] >= spec['vcpus'] and h['memory_free_mb'] >= spec['memory_mb'] and all(h['id'] in item['eligible_hosts'] for item in (sr, network, template))]
         if not possible:
             raise Rejected('no_feasible_host')
-    except (KeyError, TypeError, StopIteration):
+    except (KeyError, TypeError, StopIteration, AttributeError):
         raise Rejected('invalid_snapshot')
     # Fully resolve an omitted host before presenting the immutable proposal.
     return {**spec, 'host': sorted(h['name'] for h in possible)[0] if 'host' not in spec else spec['host']}
+
+
+def finite_capacity(value):
+    return type(value) in (int, float) and math.isfinite(value) and value >= 0
+
+
+def resource_ids(spec, snapshot):
+    return {field: next(item['id'] for item in snapshot['data'][collection] if item['name'] == spec[field])
+            for field, collection in [('host', 'hosts'), ('template', 'templates'), ('sr', 'srs'), ('network', 'networks')]}
 
 
 class Proposals:
@@ -101,6 +139,8 @@ class Proposals:
             seq INTEGER PRIMARY KEY, at REAL NOT NULL, owner TEXT NOT NULL,
             session TEXT NOT NULL, proposal_id TEXT, event TEXT NOT NULL, detail TEXT NOT NULL);
         ''')
+        if 'resource_ids' not in {row['name'] for row in self.db.execute('PRAGMA table_info(proposals)')}:
+            self.db.execute('ALTER TABLE proposals ADD COLUMN resource_ids TEXT')
         self.quota, self.ttl, self.clock = daily_quota, ttl, clock
 
     def close(self):
@@ -169,9 +209,10 @@ class Proposals:
             if failure:
                 self.event(owner, session, None, 'preflight_rejected', {'reason': failure, 'request': request})
             else:
-                self.db.execute('INSERT INTO proposals VALUES(?,?,?,?,?,?,?,?,?,?)',
-                                (ident, owner, session, request, encoded, digest, snapshot_digest, now, now + self.ttl, 'pending'))
-                self.event(owner, session, ident, 'proposed', {'request': request, 'spec': resolved, 'digest': digest, 'snapshot_digest': snapshot_digest})
+                bindings = resource_ids(resolved, snapshot)
+                self.db.execute('INSERT INTO proposals VALUES(?,?,?,?,?,?,?,?,?,?,?)',
+                                (ident, owner, session, request, encoded, digest, snapshot_digest, now, now + self.ttl, 'pending', canonical(bindings)))
+                self.event(owner, session, ident, 'proposed', {'request': request, 'spec': resolved, 'digest': digest, 'snapshot_digest': snapshot_digest, 'resource_ids': bindings})
         if failure:
             raise Rejected(failure)
         return self.get(owner, session, ident)
@@ -206,6 +247,8 @@ class Proposals:
                         current = validate(json.loads(row['spec']), snapshot, now)
                         if canonical(current) != row['spec']:
                             raise Rejected('spec_changed')
+                        if canonical(resource_ids(current, snapshot)) != row['resource_ids']:
+                            raise Rejected('resource_replaced')
                     except Rejected as error:
                         failure = str(error)
                 if failure:
@@ -222,3 +265,15 @@ class Proposals:
         if failure:
             raise Rejected(failure)
         return result
+
+    def invalidate_pending(self, owner, session, reason='new_request'):
+        """Called by the trusted bridge before a correction/cancellation starts."""
+        self.actor(owner, session)
+        if reason not in ('new_request', 'cancelled', 'disconnected', 'disabled'):
+            raise Rejected('invalid_invalidation')
+        with self.transaction():
+            pending = self.db.execute("SELECT id FROM proposals WHERE owner=? AND session=? AND status='pending'", (owner, session)).fetchall()
+            for row in pending:
+                self.db.execute("UPDATE proposals SET status='invalidated' WHERE id=?", (row['id'],))
+                self.event(owner, session, row['id'], 'invalidated', {'reason': reason})
+        return len(pending)

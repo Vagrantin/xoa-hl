@@ -3,17 +3,67 @@
   "title": "create_vm",
   "description": "The single write tool. Every field is resolved; the tool validates against the live platform before anything happens.",
   "type": "object",
-  "required": ["name", "template", "vcpus", "memory_mb", "disk_gb", "sr", "network"],
+  "required": [
+    "name",
+    "template",
+    "vcpus",
+    "memory_mb",
+    "disk_gb",
+    "sr",
+    "network"
+  ],
   "additionalProperties": false,
   "properties": {
-    "name":      {"type": "string", "minLength": 1, "maxLength": 64, "pattern": "^[a-z0-9][a-z0-9-]*$"},
-    "template":  {"type": "string"},
-    "vcpus":     {"type": "integer", "minimum": 1, "maximum": 64},
-    "memory_mb": {"type": "integer", "minimum": 512, "maximum": 262144},
-    "disk_gb":   {"type": "integer", "minimum": 1, "maximum": 4096},
-    "sr":        {"type": "string"},
-    "network":   {"type": "string"},
-    "host":      {"type": "string"},
-    "tags":      {"type": "array", "items": {"type": "string"}}
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64,
+      "pattern": "^[a-z0-9][a-z0-9-]*$"
+    },
+    "template": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "vcpus": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 64
+    },
+    "memory_mb": {
+      "type": "integer",
+      "minimum": 512,
+      "maximum": 262144
+    },
+    "disk_gb": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 4096
+    },
+    "sr": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "network": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "host": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 128
+      },
+      "maxItems": 32,
+      "uniqueItems": true
+    }
   }
 }
