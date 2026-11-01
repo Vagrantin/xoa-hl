@@ -22,7 +22,14 @@ EOF
 chmod +x "$fake_dnf"
 
 fake_rpm="$tmp_dir/rpm"
-printf '#!/bin/sh\nexit 0\n' > "$fake_rpm"
+cat > "$fake_rpm" <<'RPM'
+#!/bin/sh
+case "$1" in
+    -qa) printf 'kernel-core-1-1.x86_64\n' ;;
+    -V) [ -z "${FAKE_RPM_V_OUT:-}" ] || printf '%s\n' "$FAKE_RPM_V_OUT"; exit "${FAKE_RPM_V_RC:-0}" ;;
+esac
+exit 0
+RPM
 chmod +x "$fake_rpm"
 export RPM_COMMAND="$fake_rpm"
 
@@ -56,6 +63,20 @@ FAKE_DNF_RC=0 FAKE_DNF_OUTPUT='updated' sh "$repo_dir/SOURCES/xoa-hl-update.sh"
 [ "$(sed -n '1p' "$status_file")" = UP_TO_DATE ]
 grep -F -- 'check-update' "$FAKE_DNF_ARGS" >/dev/null
 grep -F 'finished successfully' "$state_dir/update.log" >/dev/null
+
+# Excluded %doc and %license files are not corruption; real damage and rpm errors still stop the update.
+lic='missing     /usr/share/licenses/kernel-core
+missing   l /usr/share/licenses/kernel-core/COPYING-1'
+FAKE_RPM_V_RC=1 FAKE_RPM_V_OUT="$lic" FAKE_DNF_RC=0 FAKE_DNF_OUTPUT='updated' sh "$repo_dir/SOURCES/xoa-hl-update.sh" >/dev/null \
+    || fail 'excluded license files blocked the update'
+if FAKE_RPM_V_RC=1 FAKE_RPM_V_OUT="$lic
+S.5....T.    /lib/modules/1/vmlinuz" FAKE_DNF_RC=0 FAKE_DNF_OUTPUT='updated' sh "$repo_dir/SOURCES/xoa-hl-update.sh" >/dev/null; then
+    fail 'a damaged kernel payload did not stop the update'
+fi
+if FAKE_RPM_V_RC=1 FAKE_RPM_V_OUT='' FAKE_DNF_RC=0 FAKE_DNF_OUTPUT='updated' sh "$repo_dir/SOURCES/xoa-hl-update.sh" >/dev/null; then
+    fail 'a silent rpm failure did not stop the update'
+fi
+grep -F 'Package integrity preflight failed' "$state_dir/update.log" >/dev/null
 
 # A failed transaction is returned and retained in the log.
 if FAKE_DNF_RC=23 FAKE_DNF_OUTPUT='transaction failed' sh "$repo_dir/SOURCES/xoa-hl-update.sh"; then
