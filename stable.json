@@ -1,8 +1,34 @@
 {
-  "generation": 17,
-  "latest": "v5.113.2_e281c536-ce49",
-  "updated_at": "2026-11-01T12:41:40Z",
+  "generation": 18,
+  "latest": "v5.113.2_e281c536-ce50",
+  "updated_at": "2026-11-01T13:10:00Z",
   "entries": [
+    {
+      "tag": "v5.113.2_e281c536-ce50",
+      "release_id": 430563544,
+      "commit": "234e6df4f308291596e9118a1175afa76c869547",
+      "assets": [
+        {
+          "name": "xoa-hl-5.113.2_e281c536-50.g234e6df.xcpng8.3.el9.x86_64.rpm",
+          "sha256": "dcb028392ef4ce84fb082bf5a9fd19686566b3db3224caa4993426f3fa4a073d",
+          "nevra": "xoa-hl-5.113.2_e281c536-50.g234e6df.xcpng8.3.el9.x86_64"
+        }
+      ],
+      "basis": "promoted",
+      "status": "stable",
+      "qa": {
+        "record_sha256": "a06dafdb1286a04b942af939f1b4674ada01f6b05ec587bd7d33f56ee25966c4",
+        "attempt": 1,
+        "passed_at": "2026-11-01T12:35:32Z",
+        "policy_sha256": "2c0989e29fd648802d5fe7bb6e692fad069830c1ce282fc7db124cc36b67b2e3",
+        "coverage": null
+      },
+      "approval": {
+        "by": "admin",
+        "at": "2026-11-01T13:10:00Z",
+        "proposal_sha256": "b1649e5bbe516127cd3e70a860be8973f0a3b26dbf6439ff30c92c2cb8ee057e"
+      }
+    },
     {
       "tag": "v5.113.2_e281c536-ce49",
       "release_id": 430339708,
