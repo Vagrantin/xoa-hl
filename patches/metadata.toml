@@ -296,3 +296,23 @@ maintainer = "vagrantin"
 status = "active"
 dependencies = ["menu-hide-items"]
 notes = "Tracks xcp-hl#287. Aligns the expanded entry with other menu links, retains the /user route and username tooltip, and hides the label when collapsed. Profile is translated in all 13 shipped locales."
+
+[[patches]]
+id = "250-reported-ui-layout"
+description = "Fix sidebar collapse, server form alignment and About presentation (xcp-hl#343, #344, #345)"
+target = "packages/xo-web/src"
+upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
+applies_to = ["5.113.2"]
+maintainer = "vagrantin"
+status = "active"
+dependencies = ['240-appliance-theme-feedback']
+
+[[patches]]
+id = "260-dashboard-backup-jobs-translations"
+description = "Fill Dashboard, Backup and Jobs translation gaps in all 13 locales (xcp-hl#346)"
+target = "packages/xo-web/src"
+upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
+applies_to = ["5.113.2"]
+maintainer = "vagrantin"
+status = "active"
+dependencies = ['240-appliance-theme-feedback']
