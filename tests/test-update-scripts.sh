@@ -42,6 +42,8 @@ FAKE_DNF_RC=100 FAKE_DNF_OUTPUT='xoa-hl.x86_64 1:5.113.2 repo' \
     sh "$repo_dir/SOURCES/xoa-hl-check-update.sh"
 [ "$(sed -n '1p' "$status_file")" = AVAILABLE ]
 grep -F 'xoa-hl' "$status_file" >/dev/null
+# The check must hold nodejs back like the update, or it stays listed after updating.
+grep -F -- '--exclude=nodejs' "$FAKE_DNF_ARGS" >/dev/null
 
 FAKE_DNF_RC=0 FAKE_DNF_OUTPUT='' sh "$repo_dir/SOURCES/xoa-hl-check-update.sh"
 [ "$(sed -n '1p' "$status_file")" = UP_TO_DATE ]
