@@ -296,3 +296,25 @@ maintainer = "vagrantin"
 status = "active"
 dependencies = ["menu-hide-items"]
 notes = "Tracks xcp-hl#287. Aligns the expanded entry with other menu links, retains the /user route and username tooltip, and hides the label when collapsed. Profile is translated in all 13 shipped locales."
+
+[[patches]]
+id = "container-support"
+description = "Admin-only dedicated Docker VM deployment and host-key-pinned SSH management; no local Docker"
+target = "packages/xo-server/src/api/containers.mjs and packages/xo-server/src/containers.mjs"
+upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
+applies_to = ["5.113.2"]
+maintainer = "vagrantin"
+status = "active"
+dependencies = []
+notes = "Protocol v1 pairs with build-xoa-hl/docker-host/command.py and its CI-built template. Requires openssh-clients; private keys persist outside /opt/xo."
+
+[[patches]]
+id = "zzzzzzzzzzzzzzzzz-container-ui"
+description = "Containers page: dedicated VM deployment, limits, images, logs, lifecycle and VM resource usage"
+target = "packages/xo-web/src"
+upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
+applies_to = ["5.113.2"]
+maintainer = "vagrantin"
+status = "active"
+dependencies = ["container-support", "zzzzzzzzzzzzzzzz-appliance-theme-feedback"]
+notes = "English, French and Japanese strings; other locales fall back to English. Must apply after existing menu/profile and translation patches."
