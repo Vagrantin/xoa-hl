@@ -26,7 +26,7 @@ The inherited Xen Orchestra catalog remains incomplete. The following counts com
 
 This is **not yet a complete translation of the whole XO interface**. Missing upstream terms need domain review by language. Do not fill gaps with English copies to satisfy a key count: common terms such as VM, host, SR, pool, snapshot, backup, and appliance should be chosen in context for each locale. Review ICU plurals and placeholders, then test actual UI screens at the supported locale, including right-to-left rendering for Persian and Hebrew. The audit script gates XOA-HL messages and the core UI batch while reporting the remaining inherited gaps.
 
-The documentation patch names the home-page links explicitly: “Xen Orchestra doc” points to `https://docs.xen-orchestra.com/`, and “XCP-hl doc” points to `https://xcp-hl.net` in every shipped locale. Japanese uses the clearer `マニュアル` label for these links. The source banner has dedicated localized messages and links to `https://xcp-hl.net`, preventing upstream disclaimer translations from replacing the XOA-HL banner.
+The documentation patch names the home-page links explicitly: “Xen Orchestra doc” points to `https://docs.xen-orchestra.com/`, and “XCP-hl doc” points to `https://www.xcp-hl.org` in every shipped locale. Japanese uses the clearer `マニュアル` label for these links. The source banner has dedicated localized messages and links to `https://www.xcp-hl.org`, preventing upstream disclaimer translations from replacing the XOA-HL banner.
 
 To reproduce locally: check out the pinned XO commit, apply the patches in `patches/series` order, then run `python3 scripts/audit-ui-translations.py <checkout>`. The `Validate XO patches` workflow performs the same checks on pull requests.
 
