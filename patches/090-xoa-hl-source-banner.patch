@@ -227,7 +227,7 @@ index a2b0cca..366b896 100644
 -                  >
 -                    {_('disclaimerText4')}
 +                  {_('xoaHlSourceBannerThanks')}{' '}
-+                  <a href='https://xcp-hl.net' rel='noopener noreferrer' target='_blank'>
++                  <a href='https://www.xcp-hl.org' rel='noopener noreferrer' target='_blank'>
 +                    {_('xoaHlSourceBannerDocumentation')}
                    </a>
                    <button className='close' onClick={this.dismissSourceBanner}>
