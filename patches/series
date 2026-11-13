@@ -26,3 +26,5 @@ xoa-hl-update-api.patch
 240-appliance-theme-feedback.patch
 250-reported-ui-layout.patch
 260-dashboard-backup-jobs-translations.patch
+270-container-support.patch
+280-container-ui.patch
