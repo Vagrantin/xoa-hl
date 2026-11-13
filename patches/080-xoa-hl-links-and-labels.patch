@@ -243,7 +243,7 @@ index bb68d59..2fccd5f 100644
                  <Col mediumSize={6}>
                    <a
 -                    href='https://xen-orchestra.com/#!/member/support'
-+                    href='https://xcp-hl.net'
++                    href='https://www.xcp-hl.org'
                      rel='noopener noreferrer'
                      target='_blank'
                      className='btn btn-link'

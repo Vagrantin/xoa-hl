@@ -150,7 +150,7 @@ test('disconnect during asynchronous acquisition never creates a conversation', 
   assert.equal(f.commands.length, 0)
 })
 test('published API patch exposes only authenticated propose-only lifecycle methods', async () => {
-  const patch = await readFile(new URL('../patches/xoa-hl-assistant-api.patch', import.meta.url), 'utf8')
+  const patch = await readFile(new URL('../patches/270-xoa-hl-assistant-api.patch', import.meta.url), 'utf8')
   const source = patch.split('\n').filter(line => line.startsWith('+') && !line.startsWith('+++')).map(line => line.slice(1)).join('\n')
   const api = await import('data:text/javascript;base64,' + Buffer.from(source).toString('base64'))
   assert.deepEqual(Object.keys(api).sort(), ['cancel', 'decideProposal', 'getProposal', 'getState'])

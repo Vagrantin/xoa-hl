@@ -1,0 +1,464 @@
+diff --git a/packages/xo-web/src/common/intl/locales/es.js b/packages/xo-web/src/common/intl/locales/es.js
+index 6d7dea7..d7a520e 100644
+--- a/packages/xo-web/src/common/intl/locales/es.js
++++ b/packages/xo-web/src/common/intl/locales/es.js
+@@ -2660,7 +2660,7 @@ export default {
+   xsTasks: 'Ahora mismo no hay tareas de XenServer pendientes',
+ 
+   // Original text: 'Schedules'
+-  backupSchedules: undefined,
++  backupSchedules: "Programaciones",
+ 
+   // Original text: 'Get remote'
+   getRemote: undefined,
+@@ -4023,4 +4023,13 @@ export default {
+   xoaHlAboutVmVersion: 'Versión de la VM XOA-HL',
+   xoaHlAboutUpstreamTitle: 'Origen de Vates',
+   xoaHlAboutVersionUnknown: 'Desconocida',
++  dashboardReport: "Informe",
++  dashboardSendReport: "Enviar informe",
++  dashboardSendReportMessage: "Se enviará un informe de uso a sus direcciones de correo configuradas.",
++  dashboardSendReportInfo: "¡Los complementos de informe de uso y transporte de correo deben estar cargados!",
++  sequences: "Secuencias",
++  jobModes: "Modos",
++  formNotes: "Notas",
++  logTitle: "Registros",
++  state: "Estado",
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/fa.js b/packages/xo-web/src/common/intl/locales/fa.js
+index 964b487..9eef7e1 100644
+--- a/packages/xo-web/src/common/intl/locales/fa.js
++++ b/packages/xo-web/src/common/intl/locales/fa.js
+@@ -5348,4 +5348,6 @@ export default {
+   xoaHlAboutVmVersion: 'نسخه ماشین مجازی XOA-HL',
+   xoaHlAboutUpstreamTitle: 'بالادست از Vates',
+   xoaHlAboutVersionUnknown: 'نامشخص',
++  sequences: "دنباله‌ها",
++  jobModes: "حالت‌ها",
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/fr.js b/packages/xo-web/src/common/intl/locales/fr.js
+index 7dc7289..f18bdb5 100644
+--- a/packages/xo-web/src/common/intl/locales/fr.js
++++ b/packages/xo-web/src/common/intl/locales/fr.js
+@@ -4210,4 +4210,13 @@ export default {
+   restApiDoc: 'Doc de l\'API REST',
+   someProxiesHaveErrors: '{n, number} proxy{n, plural, one {} other {s}} en erreur',
+   tryXo6: 'Essayer XO 6',
++  dashboardReport: "Rapport",
++  dashboardSendReport: "Envoyer le rapport",
++  dashboardSendReportMessage: "Un rapport d’utilisation sera envoyé aux adresses e-mail configurées.",
++  dashboardSendReportInfo: "Les plugins de rapport d’utilisation et de transport par e-mail doivent être chargés !",
++  sequences: "Séquences",
++  jobModes: "Modes",
++  formNotes: "Notes",
++  logTitle: "Journaux",
++  state: "État",
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/he.js b/packages/xo-web/src/common/intl/locales/he.js
+index 0428bce..d1849df 100644
+--- a/packages/xo-web/src/common/intl/locales/he.js
++++ b/packages/xo-web/src/common/intl/locales/he.js
+@@ -1378,7 +1378,7 @@ export default {
+   patchStatusNotApplied: undefined,
+ 
+   // Original text: 'No patch detected'
+-  patchNothing: undefined,
++  patchNothing: "לא זוהו תיקונים",
+ 
+   // Original text: 'Release date'
+   patchReleaseDate: undefined,
+@@ -1747,7 +1747,7 @@ export default {
+   logRemoveAll: undefined,
+ 
+   // Original text: 'No logs so far'
+-  noLogs: undefined,
++  noLogs: "אין יומנים עדיין",
+ 
+   // Original text: 'Creation date'
+   logDate: undefined,
+@@ -2341,7 +2341,7 @@ export default {
+   xsTasks: undefined,
+ 
+   // Original text: 'Schedules'
+-  backupSchedules: undefined,
++  backupSchedules: "תזמונים",
+ 
+   // Original text: 'Get remote'
+   getRemote: undefined,
+@@ -2830,7 +2830,7 @@ export default {
+   updateRegistrationPasswordPlaceHolder: undefined,
+ 
+   // Original text: 'Update'
+-  update: undefined,
++  update: "עדכון",
+ 
+   // Original text: 'Refresh'
+   refresh: undefined,
+@@ -3354,4 +3354,13 @@ export default {
+   xoaHlAboutVmVersion: 'גרסת המכונה הווירטואלית של XOA-HL',
+   xoaHlAboutUpstreamTitle: 'מקור במעלה הזרם מ-Vates',
+   xoaHlAboutVersionUnknown: 'לא ידוע',
++  dashboardReport: "דוח",
++  dashboardSendReport: "שליחת דוח",
++  dashboardSendReportMessage: "דוח שימוש יישלח לכתובות הדוא״ל שהוגדרו.",
++  dashboardSendReportInfo: "יש לטעון את תוספי דוח השימוש ושליחת הדוא״ל!",
++  sequences: "רצפים",
++  jobModes: "מצבים",
++  formNotes: "הערות",
++  logTitle: "יומנים",
++  state: "מצב",
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/hu.js b/packages/xo-web/src/common/intl/locales/hu.js
+index 39cfb6e..51db6bf 100644
+--- a/packages/xo-web/src/common/intl/locales/hu.js
++++ b/packages/xo-web/src/common/intl/locales/hu.js
+@@ -1577,7 +1577,7 @@ export default {
+   patchStatusNotApplied: 'Missing patches',
+ 
+   // Original text: "No patch detected"
+-  patchNothing: 'No patch detected',
++  patchNothing: "Nem található javítás",
+ 
+   // Original text: "Release date"
+   patchReleaseDate: 'Release Dátum',
+@@ -3816,4 +3816,13 @@ export default {
+   xoaHlAboutVmVersion: 'XOA-HL VM verzió',
+   xoaHlAboutUpstreamTitle: 'Upstream a Vatestől',
+   xoaHlAboutVersionUnknown: 'Ismeretlen',
++  dashboardReport: "Jelentés",
++  dashboardSendReport: "Jelentés küldése",
++  dashboardSendReportMessage: "Használati jelentést küld a beállított e-mail-címekre.",
++  dashboardSendReportInfo: "A használati jelentés és az e-mail-küldés bővítményeit be kell tölteni!",
++  sequences: "Sorozatok",
++  jobModes: "Módok",
++  formNotes: "Megjegyzések",
++  logTitle: "Naplók",
++  state: "Állapot",
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/it.js b/packages/xo-web/src/common/intl/locales/it.js
+index f14749a..f6e3c2f 100644
+--- a/packages/xo-web/src/common/intl/locales/it.js
++++ b/packages/xo-web/src/common/intl/locales/it.js
+@@ -5078,7 +5078,7 @@ export default {
+   logError: 'Errore',
+ 
+   // Original text: 'Logs'
+-  logTitle: 'Logs',
++  logTitle: "Registri",
+ 
+   // Original text: 'Display details'
+   logDisplayDetails: 'Visualizza i dettagli',
+@@ -6091,4 +6091,5 @@ export default {
+   xoaHlAboutVmVersion: 'Versione della VM XOA-HL',
+   xoaHlAboutUpstreamTitle: 'Upstream da Vates',
+   xoaHlAboutVersionUnknown: 'Sconosciuta',
++  sequences: "Sequenze",
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/ja.js b/packages/xo-web/src/common/intl/locales/ja.js
+index 243145b..b4e3074 100644
+--- a/packages/xo-web/src/common/intl/locales/ja.js
++++ b/packages/xo-web/src/common/intl/locales/ja.js
+@@ -1012,7 +1012,7 @@ export default {
+   chooseCompressionZstdOption: undefined,
+ 
+   // Original text: 'State'
+-  state: undefined,
++  state: "状態",
+ 
+   // Original text: 'Disabled'
+   stateDisabled: undefined,
+@@ -1066,7 +1066,7 @@ export default {
+   formSave: undefined,
+ 
+   // Original text: 'Notes'
+-  formNotes: undefined,
++  formNotes: "メモ",
+ 
+   // Original text: "Add"
+   add: '追加',
+@@ -1279,7 +1279,7 @@ export default {
+   jobName: '名前',
+ 
+   // Original text: 'Modes'
+-  jobModes: undefined,
++  jobModes: "モード",
+ 
+   // Original text: "Name of your job (forbidden: \"_\")"
+   jobNamePlaceholder: 'ジョブ名 ("_"は利用不可)',
+@@ -3120,7 +3120,7 @@ export default {
+   patchSize: 'Size',
+ 
+   // Original text: "No patches detected"
+-  patchNothing: 'No patch detected',
++  patchNothing: "パッチは検出されませんでした",
+ 
+   // Original text: "Release date"
+   patchReleaseDate: 'Release date',
+@@ -3861,7 +3861,7 @@ export default {
+   logRemoveAll: 'Remove all logs',
+ 
+   // Original text: "No logs so far"
+-  noLogs: 'No logs so far',
++  noLogs: "ログはまだありません",
+ 
+   // Original text: "Creation date"
+   logDate: 'Creation date',
+@@ -4334,16 +4334,16 @@ export default {
+   dashboardStatsButtonAddAllVM: 'Add all VMs',
+ 
+   // Original text: 'Send report'
+-  dashboardSendReport: undefined,
++  dashboardSendReport: "レポートを送信",
+ 
+   // Original text: 'Report'
+-  dashboardReport: undefined,
++  dashboardReport: "レポート",
+ 
+   // Original text: 'This will send a usage report to your configured emails.'
+-  dashboardSendReportMessage: undefined,
++  dashboardSendReportMessage: "設定済みのメールアドレスに使用状況レポートを送信します。",
+ 
+   // Original text: 'The usage report and transport email plugins need to be loaded!'
+-  dashboardSendReportInfo: undefined,
++  dashboardSendReportInfo: "使用状況レポートとメール送信のプラグインを読み込む必要があります。",
+ 
+   // Original text: "{value} {date, date, medium}"
+   weekHeatmapData: '{value} {date, date, medium}',
+@@ -5027,7 +5027,7 @@ export default {
+   taskLastSeen: undefined,
+ 
+   // Original text: "Schedules"
+-  backupSchedules: 'Schedules',
++  backupSchedules: "スケジュール",
+ 
+   // Original text: '{nLoneSnapshots} lone snapshot{nLoneSnapshots, plural, one {} other {s}} to delete!'
+   loneSnapshotsMessages: undefined,
+@@ -6047,7 +6047,7 @@ export default {
+   updaterTroubleshootingLink: undefined,
+ 
+   // Original text: "Update"
+-  update: 'Update',
++  update: "更新",
+ 
+   // Original text: "Refresh"
+   refresh: 'Refresh',
+@@ -6359,7 +6359,7 @@ export default {
+   logError: 'Error',
+ 
+   // Original text: 'Logs'
+-  logTitle: undefined,
++  logTitle: "ログ",
+ 
+   // Original text: "Display details"
+   logDisplayDetails: 'Display details',
+@@ -7685,4 +7685,5 @@ export default {
+   vdiImageFormat: 'イメージ形式',
+   restApiDoc: 'REST API ドキュメント',
+   tryXo6: 'XO 6 を試す',
++  sequences: "シーケンス",
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/pl.js b/packages/xo-web/src/common/intl/locales/pl.js
+index 22c2063..ed17a4f 100644
+--- a/packages/xo-web/src/common/intl/locales/pl.js
++++ b/packages/xo-web/src/common/intl/locales/pl.js
+@@ -1750,7 +1750,7 @@ export default {
+   logRemoveAll: 'Usuń wszystkie logi',
+ 
+   // Original text: "No logs so far"
+-  noLogs: 'No logs so far',
++  noLogs: "Brak dzienników",
+ 
+   // Original text: "Creation date"
+   logDate: 'Data utworzenia',
+@@ -3370,4 +3370,13 @@ export default {
+   xoaHlAboutVmVersion: 'Wersja maszyny wirtualnej XOA-HL',
+   xoaHlAboutUpstreamTitle: 'Źródło nadrzędne od Vates',
+   xoaHlAboutVersionUnknown: 'Nieznana',
++  dashboardReport: "Raport",
++  dashboardSendReport: "Wyślij raport",
++  dashboardSendReportMessage: "Raport użycia zostanie wysłany na skonfigurowane adresy e-mail.",
++  dashboardSendReportInfo: "Wtyczki raportu użycia i transportu poczty muszą być załadowane!",
++  sequences: "Sekwencje",
++  jobModes: "Tryby",
++  formNotes: "Notatki",
++  logTitle: "Dzienniki",
++  state: "Stan",
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/pt.js b/packages/xo-web/src/common/intl/locales/pt.js
+index cf13472..b9c8534 100644
+--- a/packages/xo-web/src/common/intl/locales/pt.js
++++ b/packages/xo-web/src/common/intl/locales/pt.js
+@@ -2344,7 +2344,7 @@ export default {
+   xsTasks: 'Atualmente nenhuma tarefa esta pendente no XenServer',
+ 
+   // Original text: 'Schedules'
+-  backupSchedules: undefined,
++  backupSchedules: "Agendamentos",
+ 
+   // Original text: 'Get remote'
+   getRemote: undefined,
+@@ -3367,4 +3367,13 @@ export default {
+   xoaHlAboutVmVersion: 'Versão da VM XOA-HL',
+   xoaHlAboutUpstreamTitle: 'Upstream da Vates',
+   xoaHlAboutVersionUnknown: 'Desconhecida',
++  dashboardReport: "Relatório",
++  dashboardSendReport: "Enviar relatório",
++  dashboardSendReportMessage: "Será enviado um relatório de utilização para os endereços de e-mail configurados.",
++  dashboardSendReportInfo: "Os plugins de relatório de utilização e transporte de e-mail devem estar carregados!",
++  sequences: "Sequências",
++  jobModes: "Modos",
++  formNotes: "Notas",
++  logTitle: "Registos",
++  state: "Estado",
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/ru.js b/packages/xo-web/src/common/intl/locales/ru.js
+index ce9ddb6..0ed0099 100644
+--- a/packages/xo-web/src/common/intl/locales/ru.js
++++ b/packages/xo-web/src/common/intl/locales/ru.js
+@@ -1000,7 +1000,7 @@ export default {
+   chooseCompressionZstdOption: undefined,
+ 
+   // Original text: 'State'
+-  state: undefined,
++  state: "Состояние",
+ 
+   // Original text: 'Disabled'
+   stateDisabled: undefined,
+@@ -1054,7 +1054,7 @@ export default {
+   formSave: undefined,
+ 
+   // Original text: 'Notes'
+-  formNotes: undefined,
++  formNotes: "Примечания",
+ 
+   // Original text: "Add"
+   add: 'Добавить',
+@@ -1267,7 +1267,7 @@ export default {
+   jobName: 'Имя',
+ 
+   // Original text: 'Modes'
+-  jobModes: undefined,
++  jobModes: "Режимы",
+ 
+   // Original text: "Name of your job (forbidden: \"_\")"
+   jobNamePlaceholder: 'Имя для вашей задачи (запрещено: "_")',
+@@ -4254,16 +4254,16 @@ export default {
+   dashboardStatsButtonAddAllVM: 'Добавить все ВМ',
+ 
+   // Original text: 'Send report'
+-  dashboardSendReport: undefined,
++  dashboardSendReport: "Отправить отчёт",
+ 
+   // Original text: 'Report'
+-  dashboardReport: undefined,
++  dashboardReport: "Отчёт",
+ 
+   // Original text: 'This will send a usage report to your configured emails.'
+-  dashboardSendReportMessage: undefined,
++  dashboardSendReportMessage: "Отчёт об использовании будет отправлен на настроенные адреса электронной почты.",
+ 
+   // Original text: 'The usage report and transport email plugins need to be loaded!'
+-  dashboardSendReportInfo: undefined,
++  dashboardSendReportInfo: "Необходимо загрузить плагины отчёта об использовании и отправки электронной почты!",
+ 
+   // Original text: '{value} {date, date, medium}'
+   weekHeatmapData: undefined,
+@@ -4946,7 +4946,7 @@ export default {
+   taskLastSeen: undefined,
+ 
+   // Original text: 'Schedules'
+-  backupSchedules: undefined,
++  backupSchedules: "Расписания",
+ 
+   // Original text: '{nLoneSnapshots} lone snapshot{nLoneSnapshots, plural, one {} other {s}} to delete!'
+   loneSnapshotsMessages: undefined,
+@@ -6270,7 +6270,7 @@ export default {
+   logError: 'Ошибка',
+ 
+   // Original text: 'Logs'
+-  logTitle: undefined,
++  logTitle: "Журналы",
+ 
+   // Original text: "Display details"
+   logDisplayDetails: 'Показать детали',
+@@ -7566,4 +7566,5 @@ export default {
+   xoaHlAboutVmVersion: 'Версия виртуальной машины XOA-HL',
+   xoaHlAboutUpstreamTitle: 'Исходный код от Vates',
+   xoaHlAboutVersionUnknown: 'Неизвестно',
++  sequences: "Последовательности",
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/sv.js b/packages/xo-web/src/common/intl/locales/sv.js
+index 1006f44..c941107 100644
+--- a/packages/xo-web/src/common/intl/locales/sv.js
++++ b/packages/xo-web/src/common/intl/locales/sv.js
+@@ -4034,4 +4034,13 @@ export default {
+   xoaHlAboutVmVersion: 'XOA-HL VM-version',
+   xoaHlAboutUpstreamTitle: 'Uppströms från Vates',
+   xoaHlAboutVersionUnknown: 'Okänd',
++  dashboardReport: "Rapport",
++  dashboardSendReport: "Skicka rapport",
++  dashboardSendReportMessage: "En användningsrapport skickas till dina konfigurerade e-postadresser.",
++  dashboardSendReportInfo: "Insticksprogrammen för användningsrapport och e-posttransport måste vara inlästa!",
++  sequences: "Sekvenser",
++  jobModes: "Lägen",
++  formNotes: "Anteckningar",
++  logTitle: "Loggar",
++  state: "Tillstånd",
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/tr.js b/packages/xo-web/src/common/intl/locales/tr.js
+index 99d6d1b..caf4a85 100644
+--- a/packages/xo-web/src/common/intl/locales/tr.js
++++ b/packages/xo-web/src/common/intl/locales/tr.js
+@@ -496,7 +496,7 @@ export default {
+   sortedTableSelectAllItems: 'Bütün öğeleri seçmek için buraya tıklayın',
+ 
+   // Original text: 'State'
+-  state: undefined,
++  state: "Durum",
+ 
+   // Original text: 'Disabled'
+   stateDisabled: undefined,
+@@ -526,7 +526,7 @@ export default {
+   formSave: undefined,
+ 
+   // Original text: 'Notes'
+-  formNotes: undefined,
++  formNotes: "Notlar",
+ 
+   // Original text: "Add"
+   add: 'Ekle',
+@@ -4355,7 +4355,7 @@ export default {
+   logError: 'Hata',
+ 
+   // Original text: 'Logs'
+-  logTitle: undefined,
++  logTitle: "Günlükler",
+ 
+   // Original text: "Display details"
+   logDisplayDetails: 'Ayrıntıları görüntüle',
+@@ -5242,4 +5242,6 @@ export default {
+   xoaHlAboutVmVersion: 'XOA-HL VM sürümü',
+   xoaHlAboutUpstreamTitle: 'Vates kaynaklı yukarı akış',
+   xoaHlAboutVersionUnknown: 'Bilinmiyor',
++  sequences: "Diziler",
++  jobModes: "Modlar",
+ }
+diff --git a/packages/xo-web/src/common/intl/locales/zh.js b/packages/xo-web/src/common/intl/locales/zh.js
+index b15e157..7e01975 100644
+--- a/packages/xo-web/src/common/intl/locales/zh.js
++++ b/packages/xo-web/src/common/intl/locales/zh.js
+@@ -2509,4 +2509,14 @@ export default {
+   xoaHlAboutVmVersion: 'XOA-HL 虚拟机版本',
+   xoaHlAboutUpstreamTitle: '来自 Vates 的上游',
+   xoaHlAboutVersionUnknown: '未知',
++  dashboardReport: "报告",
++  dashboardSendReport: "发送报告",
++  dashboardSendReportMessage: "这会将使用情况报告发送到您配置的电子邮件地址。",
++  dashboardSendReportInfo: "需要加载使用情况报告和电子邮件传输插件！",
++  sequences: "序列",
++  jobModes: "模式",
++  formNotes: "备注",
++  logTitle: "日志",
++  backupSchedules: "计划",
++  state: "状态",
+ }

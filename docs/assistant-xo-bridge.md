@@ -1,6 +1,6 @@
 # Authenticated proposal lifecycle
 
-`patches/xoa-hl-assistant-api.patch` adds the `xoaAssistant` namespace against
+`patches/270-xoa-hl-assistant-api.patch` adds the `xoaAssistant` namespace against
 XO 5.113.2/e281c536. XO's own WebSocket and API authentication protect these
 methods. No new listener, cookie handler, token or public approval URL is added.
 This bridge is independent of #83's pending goose transport choice.

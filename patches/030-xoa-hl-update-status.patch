@@ -1,0 +1,93 @@
+diff --git a/packages/xo-server/src/api/xoaHl.mjs b/packages/xo-server/src/api/xoaHl.mjs
+index 0e81302..8cbeea4 100644
+--- a/packages/xo-server/src/api/xoaHl.mjs
++++ b/packages/xo-server/src/api/xoaHl.mjs
+@@ -74,15 +74,15 @@ function parseStatus(content) {
+   }
+ 
+   if (verdict === 'ERROR') {
+-    return { checkedAt, error: message ?? 'the update check failed', packages: [], updateAvailable: false }
++    return { checked: false, checkedAt, error: message ?? 'the update check failed', packages: [], updateAvailable: false }
+   }
+   if (verdict === 'AVAILABLE') {
+-    return { checkedAt, packages, updateAvailable: packages.length > 0 }
++    return { checked: true, checkedAt, packages, updateAvailable: packages.length > 0 }
+   }
+-  // UP_TO_DATE. Anything unrecognised lands here too: reporting "nothing
+-  // pending" is the only honest reading of a verdict we cannot interpret, and
+-  // it is what the caller would do with an unknown value anyway.
+-  return { checkedAt, packages: [], updateAvailable: false }
++  if (verdict === 'UP_TO_DATE') {
++    return { checked: true, checkedAt, packages: [], updateAvailable: false }
++  }
++  return { checked: false, error: 'unrecognized update check result', packages: [], updateAvailable: false }
+ }
+ 
+ export async function getUpdateStatus() {
+@@ -91,7 +91,8 @@ export async function getUpdateStatus() {
+     content = await readFile(STATUS_FILE, 'utf8')
+   } catch (error) {
+     // never checked on this boot
+-    return { packages: [], updateAvailable: false }
++    if (error.code !== 'ENOENT') throw error
++    return { checked: false, packages: [], updateAvailable: false }
+   }
+ 
+   return parseStatus(content)
+@@ -117,16 +118,24 @@ checkForUpdate.description = 'run a check for xoa-hl updates and return its resu
+ 
+ // -------------------------------------------------------------------
+ 
++let updateRequestPending = false
+ export async function startUpdate() {
+-  // --no-block is what makes the live log possible: the unit is Type=oneshot,
+-  // so without it systemd would not report the job done -- and this call would
+-  // not return -- until the whole transaction had finished.
+-  await execa('sudo', ['systemctl', 'start', '--no-block', UPDATE_UNIT])
+-
+-  // The caller compares this against the log's mtime to tell this run's log
+-  // from the previous run's, which is still on disk until update.sh truncates
+-  // it. Same clock on both sides, so the comparison is meaningful.
+-  return { requestedAt: Date.now(), started: true }
++  if (updateRequestPending) return { started: false, busy: true }
++  updateRequestPending = true
++  try {
++    const { stdout } = await execa('systemctl', ['show', UPDATE_UNIT, '--property=ActiveState,Job'])
++    if (stdout.split('\n').some(line =>
++      (line.startsWith('ActiveState=') && RUNNING_STATES.has(line.slice(12))) ||
++      (line.startsWith('Job=') && /^Job=[1-9]/.test(line))
++    )) return { started: false, busy: true }
++    // The oneshot stays activating while the transaction runs.
++    await execa('sudo', ['systemctl', 'start', '--no-block', UPDATE_UNIT])
++
++    // This timestamp is on the same appliance clock as the log's mtime.
++    return { requestedAt: Date.now(), started: true }
++  } finally {
++    updateRequestPending = false
++  }
+ }
+ startUpdate.permission = 'admin'
+ startUpdate.description = 'start the xoa-hl update, returns as soon as it is queued'
+diff --git a/packages/xo-web/src/xo-app/settings/xoa-hl-updates/index.js b/packages/xo-web/src/xo-app/settings/xoa-hl-updates/index.js
+index c270822..97677c2 100644
+--- a/packages/xo-web/src/xo-app/settings/xoa-hl-updates/index.js
++++ b/packages/xo-web/src/xo-app/settings/xoa-hl-updates/index.js
+@@ -321,6 +321,7 @@ export default class XoaHlUpdates extends Component {
+     let requestedAt
+     try {
+       const result = await startXoaHlUpdate()
++      if (result.busy) throw new Error(_('xoaHlUpdateRunning'))
+       requestedAt = result.requestedAt
+     } catch (error) {
+       if (this._mounted) {
+@@ -471,6 +472,10 @@ export default class XoaHlUpdates extends Component {
+       )
+     }
+ 
++    if (status.checked === false) {
++      return <Banner icon='info' level='info'>{_('xoaHlNeverChecked')}</Banner>
++    }
++
+     if (!updateAvailable) {
+       return (
+         <Banner icon='check' level='success'>

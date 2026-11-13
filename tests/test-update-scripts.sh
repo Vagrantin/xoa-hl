@@ -14,10 +14,24 @@ fake_dnf="$tmp_dir/dnf"
 cat > "$fake_dnf" <<'EOF'
 #!/bin/sh
 printf '%s\n' "$*" > "$FAKE_DNF_ARGS"
+case "$*" in 'needs-restarting -r') exit "${FAKE_REBOOT_RC:-0}" ;; esac
+case " $* " in *' check '*) exit 0 ;; esac
 printf '%s\n' "${FAKE_DNF_OUTPUT:-}"
 exit "${FAKE_DNF_RC:-0}"
 EOF
 chmod +x "$fake_dnf"
+
+fake_rpm="$tmp_dir/rpm"
+cat > "$fake_rpm" <<'RPM'
+#!/bin/sh
+case "$1" in
+    -qa) printf 'kernel-core-1-1.x86_64\n' ;;
+    -V) [ -z "${FAKE_RPM_V_OUT:-}" ] || printf '%s\n' "$FAKE_RPM_V_OUT"; exit "${FAKE_RPM_V_RC:-0}" ;;
+esac
+exit 0
+RPM
+chmod +x "$fake_rpm"
+export RPM_COMMAND="$fake_rpm"
 
 status_file="$tmp_dir/run/status"
 lock_file="$tmp_dir/run/dnf.lock"
@@ -35,6 +49,8 @@ FAKE_DNF_RC=100 FAKE_DNF_OUTPUT='xoa-hl.x86_64 1:5.113.2 repo' \
     sh "$repo_dir/SOURCES/xoa-hl-check-update.sh"
 [ "$(sed -n '1p' "$status_file")" = AVAILABLE ]
 grep -F 'xoa-hl' "$status_file" >/dev/null
+# The check must hold nodejs back like the update, or it stays listed after updating.
+grep -F -- '--exclude=nodejs' "$FAKE_DNF_ARGS" >/dev/null
 
 FAKE_DNF_RC=0 FAKE_DNF_OUTPUT='' sh "$repo_dir/SOURCES/xoa-hl-check-update.sh"
 [ "$(sed -n '1p' "$status_file")" = UP_TO_DATE ]
@@ -49,6 +65,20 @@ FAKE_DNF_RC=0 FAKE_DNF_OUTPUT='updated' sh "$repo_dir/SOURCES/xoa-hl-update.sh"
 [ "$(sed -n '1p' "$status_file")" = UP_TO_DATE ]
 grep -F -- 'check-update' "$FAKE_DNF_ARGS" >/dev/null
 grep -F 'finished successfully' "$state_dir/update.log" >/dev/null
+
+# Excluded %doc and %license files are not corruption; real damage and rpm errors still stop the update.
+lic='missing     /usr/share/licenses/kernel-core
+missing   l /usr/share/licenses/kernel-core/COPYING-1'
+FAKE_RPM_V_RC=1 FAKE_RPM_V_OUT="$lic" FAKE_DNF_RC=0 FAKE_DNF_OUTPUT='updated' sh "$repo_dir/SOURCES/xoa-hl-update.sh" >/dev/null \
+    || fail 'excluded license files blocked the update'
+if FAKE_RPM_V_RC=1 FAKE_RPM_V_OUT="$lic
+S.5....T.    /lib/modules/1/vmlinuz" FAKE_DNF_RC=0 FAKE_DNF_OUTPUT='updated' sh "$repo_dir/SOURCES/xoa-hl-update.sh" >/dev/null; then
+    fail 'a damaged kernel payload did not stop the update'
+fi
+if FAKE_RPM_V_RC=1 FAKE_RPM_V_OUT='' FAKE_DNF_RC=0 FAKE_DNF_OUTPUT='updated' sh "$repo_dir/SOURCES/xoa-hl-update.sh" >/dev/null; then
+    fail 'a silent rpm failure did not stop the update'
+fi
+grep -F 'Package integrity preflight failed' "$state_dir/update.log" >/dev/null
 
 # A failed transaction is returned and retained in the log.
 if FAKE_DNF_RC=23 FAKE_DNF_OUTPUT='transaction failed' sh "$repo_dir/SOURCES/xoa-hl-update.sh"; then
@@ -128,6 +158,18 @@ EOF
 chmod +x "$fake_bin/systemctl" "$fake_bin/systemd-analyze" "$fake_bin/needs-restarting"
 
 export PATH="$fake_bin:$PATH"
+
+# EL9 fallback when the standalone utility is absent.
+mv "$fake_bin/needs-restarting" "$tmp_dir/needs-restarting.saved"
+for pair in '0 no' '1 yes' '2 unknown'; do
+    set -- $pair
+    FAKE_REBOOT_RC=$1 FAKE_CHECK_VERDICT=AVAILABLE FAKE_UPDATE_RC=0 \
+        sh "$repo_dir/SOURCES/xoa-hl-auto-update.sh"
+    grep -Fx "rebootNeeded=$2" "$state_dir/auto-update.status" >/dev/null
+    grep -Fx 'needs-restarting -r' "$FAKE_DNF_ARGS" >/dev/null
+done
+mv "$tmp_dir/needs-restarting.saved" "$fake_bin/needs-restarting"
+
 export SYSTEMCTL_LOG="$tmp_dir/systemctl.log"
 export SYSTEMD_ANALYZE_LOG="$tmp_dir/systemd-analyze.log"
 export XOA_HL_CONFIG_DIR="$tmp_dir/etc/xoa-hl"

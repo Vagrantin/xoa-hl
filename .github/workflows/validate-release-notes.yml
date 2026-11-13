@@ -6,6 +6,8 @@ on:
       - '.github/workflows/build-xoa.yml'
       - '.github/workflows/validate-release-notes.yml'
       - 'scripts/release-notes.sh'
+      - 'scripts/list-patches.sh'
+      - 'patches/series'
       - 'tests/test-release-notes.sh'
   push:
     branches: [main]
@@ -13,6 +15,8 @@ on:
       - '.github/workflows/build-xoa.yml'
       - '.github/workflows/validate-release-notes.yml'
       - 'scripts/release-notes.sh'
+      - 'scripts/list-patches.sh'
+      - 'patches/series'
       - 'tests/test-release-notes.sh'
 
 permissions:

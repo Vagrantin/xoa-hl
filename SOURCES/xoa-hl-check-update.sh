@@ -32,7 +32,8 @@ if ! flock -n 9; then
     exit 0
 fi
 
-out=$("$DNF_COMMAND" -y --refresh --color=never "$@" check-update 2>&1) && rc=0 || rc=$?
+# Hold nodejs back exactly as xoa-hl-update.sh does, or it is listed as pending forever.
+out=$("$DNF_COMMAND" -y --refresh --color=never --exclude=nodejs "$@" check-update 2>&1) && rc=0 || rc=$?
 
 if [ "$rc" -eq 100 ]; then
     {

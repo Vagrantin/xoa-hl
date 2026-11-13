@@ -14,7 +14,7 @@ on:
       - 'SOURCES/xoa-hl-xo-inventory.mjs'
       - 'SOURCES/xoa-hl-xo-bridge.mjs'
       - 'SOURCES/xoa-hl-proposal-command.py'
-      - 'patches/xoa-hl-assistant-api.patch'
+      - 'patches/270-xoa-hl-assistant-api.patch'
       - 'SOURCES/xoa-hl-create-mcp.py'
       - 'SOURCES/xoa-hl-create-vm.schema.json'
       - 'SOURCES/assistant-ui/**'

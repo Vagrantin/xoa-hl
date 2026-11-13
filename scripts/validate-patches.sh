@@ -18,6 +18,72 @@ if [ ! -f "$PATCH_METADATA" ]; then
 fi
 
 echo "[OK] Patch metadata found"
+bash "$(dirname "$0")/list-patches.sh" "$PATCH_DIR" >/dev/null
+
+# Parse TOML and require a complete, well-formed table for every patch.
+# Grep-only checks can miss fields accidentally split into anonymous tables.
+python3 - "$PATCH_METADATA" <<'PY'
+import sys
+import re
+from pathlib import Path
+import tomllib
+
+path = sys.argv[1]
+with open(path, "rb") as stream:
+    document = tomllib.load(stream)
+
+entries = document.get("patches")
+if not isinstance(entries, list):
+    raise SystemExit("[FAIL] metadata.toml must contain [[patches]] tables")
+
+required = {
+    "id": str,
+    "description": str,
+    "target": str,
+    "upstream_commit": str,
+    "applies_to": list,
+    "maintainer": str,
+    "status": str,
+    "dependencies": list,
+}
+errors = []
+ids = []
+for index, entry in enumerate(entries, 1):
+    missing = [key for key in required if key not in entry]
+    wrong = [key for key, kind in required.items() if key in entry and not isinstance(entry[key], kind)]
+    if missing:
+        errors.append(f"entry {index}: missing {', '.join(missing)}")
+    if wrong:
+        errors.append(f"entry {index}: invalid type for {', '.join(wrong)}")
+    if isinstance(entry.get("id"), str):
+        ids.append(entry["id"])
+
+known = set(ids)
+if len(known) != len(ids):
+    errors.append("duplicate patch IDs")
+files = sorted(Path(path).parent.glob("*.patch"))
+series = Path(path).with_name("series").read_text().splitlines()
+order = {Path(name).stem: index for index, name in enumerate(series)}
+legacy = {"menu-hide-items.patch", "xcp-hl-updates.patch", "xoa-hl-update-api.patch"}
+for patch in files:
+    if patch.name not in legacy and not re.fullmatch(r"[0-9]{3}-[a-z0-9]+(?:-[a-z0-9]+)*\.patch", patch.name):
+        errors.append(f"invalid patch filename {patch.name!r}; use NNN-descriptive-name.patch")
+numbered = [patch for patch in files if patch.name not in legacy]
+if len({patch.name[:3] for patch in numbered}) != len(numbered):
+    errors.append("patch numeric prefixes must be unique")
+for index, entry in enumerate(entries, 1):
+    for dependency in entry.get("dependencies", []):
+        if dependency not in known:
+            errors.append(f"entry {index}: unknown dependency {dependency!r}")
+        elif dependency in order and entry.get("id") in order and order[dependency] >= order[entry["id"]]:
+            errors.append(f"entry {index}: dependency {dependency!r} must apply first")
+
+if errors:
+    for error in errors:
+        print(f"[FAIL] {error}")
+    raise SystemExit(1)
+print(f"[OK] Parsed {len(entries)} complete metadata entries")
+PY
 
 METADATA_PATCH_COUNT=$(grep -c '^\[\[patches\]\]' "$PATCH_METADATA" || true)
 ACTUAL_PATCH_COUNT=$(find "$PATCH_DIR" -maxdepth 1 -name '*.patch' | wc -l)

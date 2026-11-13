@@ -9,6 +9,7 @@ UPDATE_LOG=${XOA_HL_UPDATE_LOG:-$STATE_DIR/update.log}
 POLL_INTERVAL=${XOA_HL_POLL_INTERVAL:-2}
 HISTORY_HELPER=${XOA_HL_HISTORY_HELPER:-/usr/libexec/xoa-hl/update-history.py}
 RPM_COMMAND=${RPM_COMMAND:-rpm}
+DNF_COMMAND=${DNF_COMMAND:-dnf}
 
 mkdir -p "$STATE_DIR"
 started_at=$(date -u '+%Y-%m-%dT%H:%M:%SZ')
@@ -118,8 +119,14 @@ fi
 reboot_needed=unknown
 if [ -e /run/reboot-required ]; then
     reboot_needed=yes
-elif command -v needs-restarting >/dev/null 2>&1; then
-    if needs-restarting -r >/dev/null 2>&1; then
+else
+    # EL9 supplies the command as a DNF plugin rather than a standalone tool.
+    if command -v needs-restarting >/dev/null 2>&1; then
+        set -- needs-restarting -r
+    else
+        set -- "$DNF_COMMAND" needs-restarting -r
+    fi
+    if "$@" >/dev/null 2>&1; then
         reboot_needed=no
     else
         needs_rc=$?

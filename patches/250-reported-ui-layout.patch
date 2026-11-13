@@ -1,0 +1,58 @@
+diff --git a/packages/xo-web/src/xo-app/about/index.js b/packages/xo-web/src/xo-app/about/index.js
+index d88add8..059894b 100644
+--- a/packages/xo-web/src/xo-app/about/index.js
++++ b/packages/xo-web/src/xo-app/about/index.js
+@@ -12,7 +12,7 @@ import { connectStore } from 'utils'
+ const COMMIT_ID = process.env.GIT_HEAD
+ 
+ const HEADER = (
+-  <Container>
++  <Container className='text-xs-center'>
+     <Row>
+       <Col mediumSize={12}>
+         <h2>
+@@ -38,12 +38,11 @@ class HostVersions extends Component {
+       <div className='mt-1'>
+         <h4>{this.props.host.name_label}</h4>
+         <p>{this.props.host.productBrand || 'XCP-ng'} {this.props.host.version} {this.props.host.build && `(${this.props.host.build})`}</p>
+-        {versions == null ? (
+-          <p className='text-muted'>{_(versions === undefined ? 'statusLoading' : 'xoaHlAboutVersionUnknown')}</p>
+-        ) : (
++        {versions === undefined && <p className='text-muted'>{_('statusLoading')}</p>}
++        {versions != null && (
+           <ul className='list-unstyled'>
+-            {['xcp-hl-release', 'xoa-proxy', 'xo-lite-ce', 'iso'].map(name => (
+-              <li key={name}>{name}: {versions[name] || _('unknown')}</li>
++            {['xcp-hl-release', 'xoa-proxy', 'xo-lite-ce', 'iso'].filter(name => versions[name]).map(name => (
++              <li key={name}>{name}: {versions[name]}</li>
+             ))}
+           </ul>
+         )}
+diff --git a/packages/xo-web/src/xo-app/settings/servers/index.js b/packages/xo-web/src/xo-app/settings/servers/index.js
+index c77e448..c5c6088 100644
+--- a/packages/xo-web/src/xo-app/settings/servers/index.js
++++ b/packages/xo-web/src/xo-app/settings/servers/index.js
+@@ -227,7 +227,7 @@ export default class Servers extends Component {
+               value={state.password}
+             />
+           </label></div>
+-          <div className='form-group'><label>{_('serverUnauthorizedCertificates')}
++          <div className='form-group xhl-server-certificates'><label>{_('serverUnauthorizedCertificates')}
+             <Tooltip content={_('serverAllowUnauthorizedCertificates')}>
+               <Toggle onChange={this.linkState('allowUnauthorized')} value={state.allowUnauthorized} />
+             </Tooltip>
+diff --git a/packages/xo-web/src/xoa-hl-themes.scss b/packages/xo-web/src/xoa-hl-themes.scss
+index 3585efd..7183fcd 100644
+--- a/packages/xo-web/src/xoa-hl-themes.scss
++++ b/packages/xo-web/src/xoa-hl-themes.scss
+@@ -199,7 +199,9 @@
+   .xhl-server-form .form-group { margin: 0; }
+   .xhl-server-form .form-control { width: 100%; }
+   .xhl-server-form label { display: block; }
+-  .xhl-brand { display: block; white-space: normal; line-height: 1.3; }
++  .xhl-server-form .xhl-server-certificates label { display: flex; flex-direction: column; align-items: flex-start; }
++  .xhl-server-form > .btn { align-self: end; justify-self: start; margin-bottom: .5rem; }
++  .xhl-brand { font-size: 1.35em; white-space: normal; line-height: 1.3; }
+   .xhl-brand small { display: block; font-size: .6em; color: var(--xhl-side-muted); }
+   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+   a, .btn-link, .text-primary { color: var(--xhl-accent); }

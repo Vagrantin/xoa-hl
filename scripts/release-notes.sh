@@ -28,7 +28,8 @@ cd "$repo_root"
 source_sha=$(git rev-parse HEAD)
 rpm_name=$(basename "$rpm")
 rpm_sha=$(sha256sum "$rpm" | cut -d ' ' -f 1)
-mapfile -d '' patches < <(find patches -maxdepth 1 -type f -name '*.patch' -print0 | sort -z)
+patch_list=$(bash "$(dirname "$0")/list-patches.sh" patches)
+mapfile -t patches <<< "$patch_list"
 mkdir -p "$(dirname "$output")"
 cat > "$output" <<EOF
 ## XOA-HL candidate build

@@ -7,6 +7,7 @@ LOG_FILE=${XOA_HL_UPDATE_LOG:-$STATE_DIR/update.log}
 RC_FILE="$STATE_DIR/.update.rc"
 LOCK_FILE=${XOA_HL_DNF_LOCK_FILE:-/run/xoa-hl/dnf.lock}
 DNF_COMMAND=${DNF_COMMAND:-dnf}
+RPM_COMMAND=${RPM_COMMAND:-rpm}
 CHECK_STATUS_FILE=${XOA_HL_CHECK_STATUS_FILE:-/run/xoa-hl/status}
 CHECK_SCRIPT=${XOA_HL_CHECK_SCRIPT:-/usr/libexec/xoa-hl/check-update.sh}
 
@@ -39,11 +40,39 @@ rm -f "$CHECK_STATUS_FILE"
 
 {
     rc=0
+    # A successful DNF exit alone does not prove that a previous interrupted
+    # transaction left a usable RPM database or complete kernel payloads.
+    # The image installs with nodocs, so rpm -V reports excluded %doc and %license files as missing.
+    verify_payload() {
+        report=$("$RPM_COMMAND" -V "$1" 2>&1) && return 0
+        damage=$(printf '%s\n' "$report" | grep -Ev '^missing +([cdglr] +)?/usr/share/(licenses|doc)(/|$)' | grep -v '^$') || damage=''
+        [ -n "$report" ] && [ -z "$damage" ] && return 0
+        printf '%s\n' "$report"
+        return 1
+    }
+    verify_packages() {
+        "$DNF_COMMAND" --color=never "$@" check || return $?
+        kernels=$("$RPM_COMMAND" -qa --qf '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' \
+            'kernel-core' 'kernel-modules' 'kernel-modules-core') || return $?
+        for kernel in $kernels; do
+            verify_payload "$kernel" || return $?
+        done
+    }
+    if ! verify_packages "$@"; then
+        echo 'Package integrity preflight failed; repair the interrupted transaction before retrying.'
+        rc=1
+    fi
     # Node.js is supplied by NodeSource. Keep the supported major pinned until
     # a deliberately tested XOA-HL release raises the RPM dependency bound.
-    PYTHONUNBUFFERED=1 stdbuf -oL -eL "$DNF_COMMAND" -y --refresh --color=never --exclude=nodejs "$@" update 2>&1 || rc=$?
+    if [ "$rc" -eq 0 ]; then
+        PYTHONUNBUFFERED=1 stdbuf -oL -eL "$DNF_COMMAND" -y --refresh --color=never --exclude=nodejs "$@" update 2>&1 || rc=$?
+        if [ "$rc" -eq 0 ] && ! verify_packages "$@"; then
+            echo 'Package integrity verification failed; update is not considered successful.'
+            rc=1
+        fi
+    fi
     printf '%s\n' "$rc" > "$RC_FILE"
-} | tee -a "$LOG_FILE"
+} 2>&1 | tee -a "$LOG_FILE"
 
 rc=$(cat "$RC_FILE" 2>/dev/null) || rc=1
 rm -f "$RC_FILE"

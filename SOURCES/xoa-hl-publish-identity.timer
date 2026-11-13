@@ -1,0 +1,11 @@
+[Unit]
+Description=Refresh the guest-reported XOA-HL identity
+
+[Timer]
+OnBootSec=30s
+OnUnitActiveSec=5min
+AccuracySec=10s
+Unit=xoa-hl-publish-identity.service
+
+[Install]
+WantedBy=timers.target

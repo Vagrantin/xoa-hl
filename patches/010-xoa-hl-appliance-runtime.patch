@@ -1,0 +1,24 @@
+diff --git a/packages/xo-server/src/index.mjs b/packages/xo-server/src/index.mjs
+index 77176a5..34a8d76 100644
+--- a/packages/xo-server/src/index.mjs
++++ b/packages/xo-server/src/index.mjs
+@@ -795,13 +795,17 @@ export default async function main(args) {
+   }
+ 
+   try {
+-    const actual = (
++    // Release payloads deliberately omit git and the source checkout.
++    const packagedCommit = await fse.readFile(new URL('../.xoa-hl-build-commit', import.meta.url), 'utf8').catch(error => {
++      if (error.code !== 'ENOENT') throw error
++    })
++    const actual = packagedCommit === undefined ? (
+       await fromCallback(execFile, 'git', ['rev-parse', '--short', 'HEAD'], {
+         cwd: new URL('.', import.meta.url),
+       })
+     )
+       .toString()
+-      .trim()
++      .trim() : packagedCommit.trim()
+     const expected = __GIT_COMMIT__
+     if (actual !== expected) {
+       log.warn('build is outdated, source has changed since last build, please rebuild', { actual, expected })

@@ -73,12 +73,12 @@ else
     echo "  Consider adding metadata.toml to document patches"
 fi
 
-echo "==> Applying patches"
-for p in "$PATCH_DIR"/*.patch; do
-    [ -f "$p" ] || continue
+echo "==> Applying patches in declared series order"
+patch_list=$(bash /build/scripts/list-patches.sh "$PATCH_DIR")
+while IFS= read -r p; do
     echo "  - $(basename "$p")"
     git apply --verbose "$p"
-done
+done <<< "$patch_list"
 
 echo "==> Compacting untranslated locale entries for the initial UI bundle"
 python3 /build/scripts/compact-xo-locales.py --minimum-entries 1000 "$XO_SRC"
@@ -119,6 +119,8 @@ yarn --network-timeout 300000 workspace @xen-orchestra/web run build-only
 python3 /build/scripts/check-gui-assets.py "$XO_SRC"
 
 echo "==> Pruning: drop test/dev/cloud packages, keep everything else"
+# Match Babel's __GIT_COMMIT__ abbreviation exactly (git chooses its length).
+git rev-parse --short HEAD > packages/xo-server/.xoa-hl-build-commit
 rm -rf .git .github .changesets docs
 rm -rf packages/xo-server-test*
 rm -rf packages/xo-server-cloud

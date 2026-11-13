@@ -83,3 +83,18 @@ editCustomField
 deleteCustomField
 onlyAvailableXoaUsers
 removeColor
+
+# Dashboard, Backup and Jobs gaps reported in xcp-hl#346.
+backupSchedules
+dashboardReport
+dashboardSendReport
+dashboardSendReportInfo
+dashboardSendReportMessage
+formNotes
+jobModes
+logTitle
+noLogs
+patchNothing
+sequences
+state
+update
