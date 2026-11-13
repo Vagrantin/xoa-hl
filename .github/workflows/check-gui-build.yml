@@ -1,5 +1,11 @@
 name: Check packaged GUI build
 on:
+  # Integration branch has no PR (xcp-hl#7); prove its patched GUI still builds.
+  push:
+    branches: ['t3/261113-issue-7-docker-vm']
+    paths:
+      - 'patches/**'
+      - '.github/workflows/check-gui-build.yml'
   pull_request:
     paths:
       - 'patches/**'

@@ -77,35 +77,95 @@ test('all API entry points require XO administrator permission and object parame
   for (const [name, fn] of Object.entries(api)) {
     assert.equal(fn.permission, 'admin', name)
     assert.equal(typeof fn.params, 'object', name)
-    if (!['deploy', 'getHosts'].includes(name)) assert.deepEqual(fn.resolve.vm, ['vm', 'VM', 'administrate'])
+    if (!['deploy', 'summary', 'forgetCredentials'].includes(name)) assert.deepEqual(fn.resolve.vm, ['vm', 'VM', 'administrate'])
   }
   await assert.rejects(api.deploy({ template: { tags: [] }, name: 'Docker', cpus: 2, memoryMiB: 2048 }), /template/)
   await assert.rejects(api.deploy({ template: { tags: ['xcp-hl-docker-template-v1'], $pool: 'a' }, sr: { $pool: 'b' }, network: { $pool: 'a' }, name: 'Docker', cpus: 2, memoryMiB: 2048 }), /same pool/)
 })
 
-test('per-host serialization covers credential reads and releases after failure', async () => {
+test('operations on one guest queue in order, survive a failure and are bounded', async () => {
   const root = await mkdtemp(join(tmpdir(), 'containers-test-'))
   try {
     const keys = await prepareCredentials(root)
     const vm = { power_state: 'Running', tags: ['xcp-hl-docker-v1', keys.tag], addresses: { '0/ipv4/0': '192.0.2.9' } }
-    let child
-    let ready
-    const spawned = new Promise(resolve => { ready = resolve })
+    const children = []
     const spawnProcess = () => {
-      child = new EventEmitter(); child.stdout = new PassThrough(); child.stdin = new PassThrough()
-      child.stdin.on('finish', ready)
+      const child = new EventEmitter(); child.stdout = new PassThrough(); child.stdin = new PassThrough()
+      child.stdin.resume()
+      children.push(child)
       return child
     }
-    const first = remote(vm, { operation: 'pull', image: 'busybox:1.37' }, { root, spawnProcess })
-    await assert.rejects(remote(vm, { operation: 'overview' }, { root, spawnProcess }), /already running/)
-    await spawned
-    child.emit('close', 255)
-    await assert.rejects(first, /not ready/)
+    const tick = () => new Promise(resolve => setTimeout(resolve, 20))
+    const first = remote(vm, { operation: 'create' }, { root, spawnProcess })
+    const second = remote(vm, { operation: 'overview' }, { root, spawnProcess })
+    const outcomes = [first, second].map(promise => promise.then(() => 'ok', error => error.message))
+    await tick()
+    assert.equal(children.length, 1)
+    children[0].emit('close', 255)
+    assert.match(await outcomes[0], /not ready/)
+    await tick()
+    assert.equal(children.length, 2)
+    children[1].stdout.write('{"result":{"success":true}}'); children[1].emit('close', 0)
+    assert.equal(await outcomes[1], 'ok')
+    // A stuck guest cannot pile up unbounded work in XO.
+    const waiting = Array.from({ length: 8 }, () =>
+      remote(vm, { operation: 'overview' }, { root, spawnProcess }).then(() => 'ok', error => error.message))
+    await assert.rejects(remote(vm, { operation: 'overview' }, { root, spawnProcess }), /Too many/)
+    for (let index = 2; index < 10; index++) { await tick(); children[index].emit('close', 255) }
+    for (const message of await Promise.all(waiting)) assert.match(message, /not ready/)
     await rm(join(keys.directory, 'client'))
     await assert.rejects(remote(vm, { operation: 'overview' }, { root, spawnProcess }), /backup/)
-    // A missing key failure also releases the serialization lock.
     await assert.rejects(remote(vm, { operation: 'overview' }, { root, spawnProcess }), /backup/)
   } finally { await rm(root, { recursive: true, force: true }) }
+})
+
+test('only access keys that no VM, snapshot or template uses can be forgotten', async () => {
+  const root = await mkdtemp(join(tmpdir(), 'containers-test-'))
+  try {
+    const used = await prepareCredentials(root)
+    const snapshot = await prepareCredentials(root)
+    const orphan = await prepareCredentials(root)
+    await writeFile(join(root, 'stray-file'), '')
+    const objects = [{ type: 'VM', tags: ['xcp-hl-docker-v1', used.tag] }, { type: 'VM-snapshot', tags: [snapshot.tag] }, { type: 'VM' }]
+    const id = orphan.tag.split(':')[1]
+    assert.deepEqual(await core.orphanCredentialIds(objects, root), [id])
+    for (const bad of [used.tag.split(':')[1], '../' + id, 'stray-file', undefined])
+      await assert.rejects(core.forgetCredentials(bad, objects, root), /still used|do not exist/)
+    await core.forgetCredentials(id, objects, root)
+    await assert.rejects(stat(orphan.directory), { code: 'ENOENT' })
+    await stat(used.directory)
+    assert.deepEqual(await core.orphanCredentialIds(objects, root), [])
+  } finally { await rm(root, { recursive: true, force: true }) }
+})
+
+test('summary lists every Docker VM and never fails because one guest is down', async () => {
+  let code = await readFile(join(source, 'packages/xo-server/src/api/containers.mjs'), 'utf8')
+  code = code.replace("import { create as createVm } from './vm.mjs'", 'const createVm = () => {}')
+  const file = pathToFileURL(join(source, 'packages/xo-server/src/containers.mjs')).href
+  const wrapper = `export * from ${JSON.stringify(file)}; export const orphanCredentialIds = async () => ['host-abc123']; export const remote = async vm => { if (vm.id === 'broken') throw new Error('Docker VM is not ready'); return { host: { cpus: 2, cpusAllocated: 1.5 }, containers: [{ State: 'running' }, { State: 'exited' }], tasks: [{ state: 'failed' }] } }`
+  code = code.replace("'../containers.mjs'", JSON.stringify('data:text/javascript;base64,' + Buffer.from(wrapper).toString('base64')))
+  const api = await import('data:text/javascript;base64,' + Buffer.from(code + '\n// summary').toString('base64'))
+  const tags = ['xcp-hl-docker-v1']
+  const address = { addresses: { '0/ipv4/0': '192.0.2.9' } }
+  const objects = {
+    a: { type: 'VM', id: 'ok', name_label: 'Docker', power_state: 'Running', tags, ...address },
+    b: { type: 'VM', id: 'broken', name_label: 'Docker 2', power_state: 'Running', tags, ...address },
+    c: { type: 'VM', id: 'off', name_label: 'Docker 3', power_state: 'Halted', tags },
+    d: { type: 'VM', id: 'other', power_state: 'Running', tags: [] },
+    e: { type: 'VM-template', tags: ['xcp-hl-docker-template-v1'] },
+  }
+  let reads = 0
+  const context = { getObjects: () => { reads++; return objects } }
+  const result = await api.summary.call(context)
+  assert.deepEqual(result.hosts.map(host => host.id), ['ok', 'broken', 'off'])
+  assert.deepEqual([result.hosts[0].containers, result.hosts[0].running, result.hosts[0].failedDownloads, result.hosts[0].cpusAllocated], [2, 1, 1, 1.5])
+  assert.equal(result.hosts[0].address, '192.0.2.9')
+  assert.match(result.hosts[1].error, /not ready/)
+  assert.equal(result.hosts[2].powerState, 'Halted')
+  assert.deepEqual([result.templates, result.orphans], [1, ['host-abc123']])
+  // Several dashboards within the cache window share one round of guest calls.
+  await api.summary.call(context)
+  assert.equal(reads, 1)
 })
 
 test('deployment reuses XO full-copy creation, carries private seed, and cleans failed credentials', async () => {

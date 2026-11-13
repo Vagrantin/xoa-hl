@@ -1,36 +1,76 @@
 diff --git a/packages/xo-server/src/api/containers.mjs b/packages/xo-server/src/api/containers.mjs
 new file mode 100644
-index 000000000..ac2c97b52
+index 000000000..bf7e624ab
 --- /dev/null
 +++ b/packages/xo-server/src/api/containers.mjs
-@@ -0,0 +1,125 @@
+@@ -0,0 +1,169 @@
 +import { rm } from 'node:fs/promises'
 +import { create as createVm } from './vm.mjs'
 +import {
-+  availableCredentialIds,
-+  credentialId,
++  forgetCredentials as forget,
 +  guestAddress,
 +  HOST_TAG,
++  orphanCredentialIds,
 +  prepareCredentials,
 +  remote,
 +  TEMPLATE_TAG,
 +  validateDeployment,
 +} from '../containers.mjs'
 +
-+export async function getHosts() {
-+  const keys = new Set(await availableCredentialIds())
-+  return Object.values(this.getObjects())
-+    .filter(vm => vm.type === 'VM' && vm.tags?.includes(HOST_TAG))
-+    .map(vm => {
-+      let hasCredentials = false
-+      try {
-+        hasCredentials = keys.has(credentialId(vm))
-+      } catch (_) {}
-+      return { id: vm.id, name: vm.name_label, powerState: vm.power_state, hasCredentials }
++const vmLike = objects =>
++  Object.values(objects).filter(object => ['VM', 'VM-snapshot', 'VM-template'].includes(object.type))
++
++// Shared by every open dashboard; avoids one SSH round per viewer.
++let cached
++export function summary() {
++  if (cached === undefined || Date.now() - cached.time > 15000) {
++    cached = { time: Date.now(), value: summarize(this.getObjects()) }
++    cached.value.catch(() => {
++      cached = undefined
 +    })
++  }
++  return cached.value
 +}
-+getHosts.permission = 'admin'
-+getHosts.params = {}
++summary.permission = 'admin'
++summary.params = {}
++
++async function summarize(objects) {
++  const vms = vmLike(objects)
++  const hosts = await Promise.all(
++    vms
++      .filter(vm => vm.type === 'VM' && vm.tags?.includes(HOST_TAG))
++      .map(async vm => {
++        const host = { id: vm.id, name: vm.name_label, powerState: vm.power_state }
++        if (vm.power_state !== 'Running') return host
++        try {
++          const state = await remote(vm, { operation: 'summary' })
++          return {
++            ...host,
++            ...state.host,
++            address: guestAddress(vm),
++            containers: state.containers.length,
++            running: state.containers.filter(container => container.State === 'running').length,
++            downloads: state.tasks.filter(task => task.state === 'running').length,
++            failedDownloads: state.tasks.filter(task => task.state === 'failed').length,
++          }
++        } catch (error) {
++          return { ...host, error: error.message }
++        }
++      })
++  )
++  return {
++    hosts,
++    templates: vms.filter(vm => vm.type === 'VM-template' && vm.tags?.includes(TEMPLATE_TAG)).length,
++    orphans: await orphanCredentialIds(vms),
++  }
++}
++
++export async function forgetCredentials({ id }) {
++  await forget(id, vmLike(this.getObjects()))
++  cached = undefined
++}
++forgetCredentials.permission = 'admin'
++forgetCredentials.params = { id: { type: 'string' } }
 +
 +let deploying = false
 +export async function deploy({ template, sr, network, name, cpus, memoryMiB, administratorKey }) {
@@ -69,6 +109,7 @@ index 000000000..ac2c97b52
 +      destroyCloudConfigVdiAfterBoot: true,
 +      tags: [HOST_TAG, credentials.tag],
 +    })
++    cached = undefined
 +    return { id: vmId }
 +  } catch (error) {
 +    if (credentials !== undefined && vmId === undefined)
@@ -121,20 +162,23 @@ index 000000000..ac2c97b52
 +export function removeImage({ vm, image }) {
 +  return remote(vm, { operation: 'removeImage', image })
 +}
-+for (const fn of [overview, create, start, stop, restart, remove, logs, pull, removeImage]) {
++export function dismiss({ vm, id }) {
++  return remote(vm, { operation: 'dismiss', id })
++}
++for (const fn of [overview, create, start, stop, restart, remove, logs, pull, removeImage, dismiss]) {
 +  fn.permission = 'admin'
 +  fn.resolve = { vm: ['vm', 'VM', 'administrate'] }
 +  fn.params = { vm: { type: 'string' } }
 +}
 +create.params.config = { type: 'object', additionalProperties: true }
-+for (const fn of [start, stop, restart, remove, logs]) fn.params.id = { type: 'string' }
++for (const fn of [start, stop, restart, remove, logs, dismiss]) fn.params.id = { type: 'string' }
 +for (const fn of [pull, removeImage]) fn.params.image = { type: 'string' }
 diff --git a/packages/xo-server/src/containers.mjs b/packages/xo-server/src/containers.mjs
 new file mode 100644
-index 000000000..af2a25a04
+index 000000000..104a5ccea
 --- /dev/null
 +++ b/packages/xo-server/src/containers.mjs
-@@ -0,0 +1,227 @@
+@@ -0,0 +1,252 @@
 +// Dedicated Docker VM protocol v1. The appliance never executes Docker locally.
 +import { execFile, spawn } from 'node:child_process'
 +import { mkdir, mkdtemp, readFile, readdir, rm, writeFile } from 'node:fs/promises'
@@ -292,66 +336,91 @@ index 000000000..af2a25a04
 +  return address
 +}
 +
-+const busy = new Set()
-+export async function remote(vm, request, { root = ROOT, spawnProcess = spawn } = {}) {
++// One operation per guest at a time; later callers wait their turn.
++const queues = new Map()
++export async function remote(vm, request, options) {
 +  if (vm.power_state !== 'Running') throw new Error('Docker VM is not running. Start it from its VM page.')
 +  const id = credentialId(vm)
-+  if (busy.has(id)) throw new Error('A Docker operation is already running on this VM. Wait and retry.')
-+  busy.add(id)
-+  try {
-+    const directory = join(root, id)
-+    try {
-+      await readFile(join(directory, 'client'))
-+    } catch (_) {
-+      throw new Error('Docker VM access keys are missing. Restore the docker-hosts directory from the XOA-HL backup.')
-+    }
-+    const input = JSON.stringify({ ...request, version: 1 })
-+    if (Buffer.byteLength(input) > 65536) throw new Error('Request too large')
-+    const args = sshArguments(directory, guestAddress(vm))
-+    return await new Promise((resolve, reject) => {
-+      const child = spawnProcess('/usr/bin/ssh', args, { stdio: ['pipe', 'pipe', 'ignore'] })
-+      let output = Buffer.alloc(0)
-+      let failure
-+      const timer = setTimeout(() => {
-+        failure = new Error('Docker operation timed out')
-+        child.kill('SIGKILL')
-+      }, 270000)
-+      child.stdout.on('data', chunk => {
-+        if (failure !== undefined) return
-+        output = Buffer.concat([output, chunk])
-+        if (output.length > 4 * 1024 * 1024) {
-+          failure = new Error('Docker response too large')
-+          child.kill('SIGKILL')
-+        }
-+      })
-+      child.on('error', error => {
-+        clearTimeout(timer)
-+        reject(error)
-+      })
-+      child.stdin.on('error', () => {})
-+      child.on('close', code => {
-+        clearTimeout(timer)
-+        if (failure !== undefined) return reject(failure)
-+        try {
-+          const response = JSON.parse(output.toString())
-+          if (response.error !== undefined) throw new Error(response.error)
-+          if (code !== 0 || response.result === undefined) throw new Error('Invalid Docker host response')
-+          resolve(response.result)
-+        } catch (error) {
-+          reject(
-+            code === 255 || output.length === 0
-+              ? new Error(
-+                  'Docker VM is not ready or SSH identity verification failed. Check cloud-init, network and the VM console; retry when ready.'
-+                )
-+              : error
-+          )
-+        }
-+      })
-+      child.stdin.end(input)
++  const queue = queues.get(id) ?? { last: Promise.resolve(), waiting: 0 }
++  if (queue.waiting >= 8) throw new Error('Too many Docker operations are waiting on this VM. Wait and retry.')
++  queues.set(id, queue)
++  queue.waiting++
++  const run = queue.last.then(() => exchange(id, vm, request, options))
++  queue.last = run
++    .catch(() => {})
++    .then(() => {
++      if (--queue.waiting === 0) queues.delete(id)
 +    })
-+  } finally {
-+    busy.delete(id)
++  return run
++}
++
++async function exchange(id, vm, request, { root = ROOT, spawnProcess = spawn } = {}) {
++  const directory = join(root, id)
++  try {
++    await readFile(join(directory, 'client'))
++  } catch (_) {
++    throw new Error('Docker VM access keys are missing. Restore the docker-hosts directory from the XOA-HL backup.')
 +  }
++  const input = JSON.stringify({ ...request, version: 1 })
++  if (Buffer.byteLength(input) > 65536) throw new Error('Request too large')
++  const args = sshArguments(directory, guestAddress(vm))
++  return await new Promise((resolve, reject) => {
++    const child = spawnProcess('/usr/bin/ssh', args, { stdio: ['pipe', 'pipe', 'ignore'] })
++    let output = Buffer.alloc(0)
++    let failure
++    const timer = setTimeout(() => {
++      failure = new Error('Docker operation timed out')
++      child.kill('SIGKILL')
++    }, 90000)
++    child.stdout.on('data', chunk => {
++      if (failure !== undefined) return
++      output = Buffer.concat([output, chunk])
++      if (output.length > 4 * 1024 * 1024) {
++        failure = new Error('Docker response too large')
++        child.kill('SIGKILL')
++      }
++    })
++    child.on('error', error => {
++      clearTimeout(timer)
++      reject(error)
++    })
++    child.stdin.on('error', () => {})
++    child.on('close', code => {
++      clearTimeout(timer)
++      if (failure !== undefined) return reject(failure)
++      try {
++        const response = JSON.parse(output.toString())
++        if (response.error !== undefined) throw new Error(response.error)
++        if (code !== 0 || response.result === undefined) throw new Error('Invalid Docker host response')
++        resolve(response.result)
++      } catch (error) {
++        reject(
++          code === 255 || output.length === 0
++            ? new Error(
++                'Docker VM is not ready or SSH identity verification failed. Check cloud-init, network and the VM console; retry when ready.'
++              )
++            : error
++        )
++      }
++    })
++    child.stdin.end(input)
++  })
++}
++
++// Credentials no known VM, snapshot or template refers to.
++export async function orphanCredentialIds(objects, root = ROOT) {
++  const used = new Set()
++  for (const object of objects) {
++    const tag = object.tags?.find(tag => tag.startsWith(KEY_TAG))
++    if (tag !== undefined) used.add(tag.slice(KEY_TAG.length))
++  }
++  return (await availableCredentialIds(root)).filter(id => /^host-[a-zA-Z0-9]{6}$/.test(id) && !used.has(id))
++}
++
++export async function forgetCredentials(id, objects, root = ROOT) {
++  if (typeof id !== 'string' || !(await orphanCredentialIds(objects, root)).includes(id))
++    throw new Error('These access keys are still used by a VM, or do not exist')
++  await rm(join(root, id), { recursive: true })
 +}
 +
 +export async function availableCredentialIds(root = ROOT) {

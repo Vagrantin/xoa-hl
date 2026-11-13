@@ -1,8 +1,8 @@
 diff --git a/packages/xo-web/src/common/intl/locales/es.js b/packages/xo-web/src/common/intl/locales/es.js
-index d7a520ef7..57be4bd94 100644
+index d7a520ef7..f224a895a 100644
 --- a/packages/xo-web/src/common/intl/locales/es.js
 +++ b/packages/xo-web/src/common/intl/locales/es.js
-@@ -8,6 +8,53 @@ addLocaleData(reactIntlData)
+@@ -8,6 +8,74 @@ addLocaleData(reactIntlData)
  // ===================================================================
  
  export default {
@@ -33,7 +33,6 @@ index d7a520ef7..57be4bd94 100644
 +  containersVolumesHelp: "Persistent volumes: one NAME:/container/path per line. Names are shared within this VM.",
 +  containersEnvironmentHelp: "Environment: one KEY=value per line. Avoid secrets; administrators and API logs may expose these values.",
 +  containersRestartPolicy: "Restart policy",
-+  containersPullFirst: "Pull the image below before creating a container. Limits are enforced per container; allow RAM for the guest OS.",
 +  containersList: "Containers",
 +  containersStatus: "Status",
 +  containersActions: "Actions",
@@ -53,10 +52,32 @@ index d7a520ef7..57be4bd94 100644
 +  containersWorking: "Operation in progress…",
 +  containersBooting: "VM created. Wait for guest tools, DHCP and cloud-init. Retry Refresh when the VM is ready; do not deploy a second VM.",
 +  containersDone: "Operation completed. The next refresh updates the view.",
++  containersVmCpus: "vCPUs",
++  containersVmMemory: "Memory (MiB)",
++  containersReserved: "Reserved by running containers",
++  containersReservedHelp: "Reserved is the sum of the limits of the running containers",
++  containersOvercommitted: "Running containers may use more CPU or memory than this VM has. Lower a limit or give the VM more resources",
++  containersCreateHelp: "A missing image is downloaded first, then the container starts by itself. Each container is held to its CPU and memory limits.",
++  containersDownloading: "Download started. The container appears in the list when it is ready.",
++  containersDownloadRunning: "Downloading",
++  containersDownloadFailed: "Download failed",
++  containersDismiss: "Dismiss",
++  containersPullHelp: "Download an image again to update it, then recreate the container to use the new version.",
++  containersGetStarted: "Get started",
++  containersStepDeploy: "Deploy a Docker VM below. It is a normal VM that only runs containers.",
++  containersStepRun: "Run your first container: give it a name and an image, for example nginx:alpine.",
++  containersOrphans: "Unused access keys",
++  containersOrphansHelp: "These keys belonged to Docker VMs that XOA-HL no longer sees. If a pool is only disconnected, keep them: a removed key cannot be recovered.",
++  containersOrphansWarning: "Remove these access keys? If the VM still exists, XOA-HL can never manage its containers again.",
++  containersVmStopped: "Stopped or not reachable",
++  containersDashboard: "Docker containers",
++  containersDashboardRunning: "containers running",
++  containersDashboardVms: "Docker VMs reachable",
++  containersLoad: "Load",
    xhlAppearance: "Appearance",
    xhlTheme: "Theme",
    xhlColorMode: "Color mode",
-@@ -1681,7 +1728,6 @@ export default {
+@@ -1681,7 +1749,6 @@ export default {
    consoleTabName: 'Consola',
  
    // Original text: 'Container'
@@ -65,10 +86,10 @@ index d7a520ef7..57be4bd94 100644
    // Original text: "Snapshots"
    snapshotsTabName: 'Snapshots',
 diff --git a/packages/xo-web/src/common/intl/locales/fa.js b/packages/xo-web/src/common/intl/locales/fa.js
-index 9eef7e1dc..6bcda5f73 100644
+index 9eef7e1dc..1b2da3ecd 100644
 --- a/packages/xo-web/src/common/intl/locales/fa.js
 +++ b/packages/xo-web/src/common/intl/locales/fa.js
-@@ -7,6 +7,53 @@ addLocaleData(reactIntlData)
+@@ -7,6 +7,74 @@ addLocaleData(reactIntlData)
  // ===================================================================
  
  export default {
@@ -99,7 +120,6 @@ index 9eef7e1dc..6bcda5f73 100644
 +  containersVolumesHelp: "Persistent volumes: one NAME:/container/path per line. Names are shared within this VM.",
 +  containersEnvironmentHelp: "Environment: one KEY=value per line. Avoid secrets; administrators and API logs may expose these values.",
 +  containersRestartPolicy: "Restart policy",
-+  containersPullFirst: "Pull the image below before creating a container. Limits are enforced per container; allow RAM for the guest OS.",
 +  containersList: "Containers",
 +  containersStatus: "Status",
 +  containersActions: "Actions",
@@ -119,10 +139,32 @@ index 9eef7e1dc..6bcda5f73 100644
 +  containersWorking: "Operation in progress…",
 +  containersBooting: "VM created. Wait for guest tools, DHCP and cloud-init. Retry Refresh when the VM is ready; do not deploy a second VM.",
 +  containersDone: "Operation completed. The next refresh updates the view.",
++  containersVmCpus: "vCPUs",
++  containersVmMemory: "Memory (MiB)",
++  containersReserved: "Reserved by running containers",
++  containersReservedHelp: "Reserved is the sum of the limits of the running containers",
++  containersOvercommitted: "Running containers may use more CPU or memory than this VM has. Lower a limit or give the VM more resources",
++  containersCreateHelp: "A missing image is downloaded first, then the container starts by itself. Each container is held to its CPU and memory limits.",
++  containersDownloading: "Download started. The container appears in the list when it is ready.",
++  containersDownloadRunning: "Downloading",
++  containersDownloadFailed: "Download failed",
++  containersDismiss: "Dismiss",
++  containersPullHelp: "Download an image again to update it, then recreate the container to use the new version.",
++  containersGetStarted: "Get started",
++  containersStepDeploy: "Deploy a Docker VM below. It is a normal VM that only runs containers.",
++  containersStepRun: "Run your first container: give it a name and an image, for example nginx:alpine.",
++  containersOrphans: "Unused access keys",
++  containersOrphansHelp: "These keys belonged to Docker VMs that XOA-HL no longer sees. If a pool is only disconnected, keep them: a removed key cannot be recovered.",
++  containersOrphansWarning: "Remove these access keys? If the VM still exists, XOA-HL can never manage its containers again.",
++  containersVmStopped: "Stopped or not reachable",
++  containersDashboard: "Docker containers",
++  containersDashboardRunning: "containers running",
++  containersDashboardVms: "Docker VMs reachable",
++  containersLoad: "Load",
    xhlAppearance: "Appearance",
    xhlTheme: "Theme",
    xhlColorMode: "Color mode",
-@@ -2171,7 +2218,6 @@ export default {
+@@ -2171,7 +2239,6 @@ export default {
    consoleTabName: 'کنسول',
  
    // Original text: 'Container'
@@ -131,10 +173,10 @@ index 9eef7e1dc..6bcda5f73 100644
    // Original text: 'Snapshots'
    snapshotsTabName: 'اسنپ شات ها',
 diff --git a/packages/xo-web/src/common/intl/locales/fr.js b/packages/xo-web/src/common/intl/locales/fr.js
-index f18bdb560..118e13a23 100644
+index f18bdb560..aaa40ac29 100644
 --- a/packages/xo-web/src/common/intl/locales/fr.js
 +++ b/packages/xo-web/src/common/intl/locales/fr.js
-@@ -8,6 +8,53 @@ addLocaleData(reactIntlData)
+@@ -8,6 +8,74 @@ addLocaleData(reactIntlData)
  // ===================================================================
  
  export default {
@@ -165,7 +207,6 @@ index f18bdb560..118e13a23 100644
 +  containersVolumesHelp: "Volumes persistants : NOM:/chemin/conteneur par ligne. Les noms sont partagés dans cette VM.",
 +  containersEnvironmentHelp: "Environnement : CLÉ=valeur par ligne. Évitez les secrets : administrateurs et journaux API peuvent exposer ces valeurs.",
 +  containersRestartPolicy: "Politique de redémarrage",
-+  containersPullFirst: "Téléchargez l’image ci-dessous avant de créer le conteneur. Les limites sont appliquées par conteneur ; réservez de la mémoire pour le système.",
 +  containersList: "Conteneurs",
 +  containersStatus: "État",
 +  containersActions: "Actions",
@@ -185,10 +226,32 @@ index f18bdb560..118e13a23 100644
 +  containersWorking: "Opération en cours…",
 +  containersBooting: "VM créée. Attendez les outils invités, DHCP et cloud-init. Actualisez quand la VM est prête ; ne créez pas de doublon.",
 +  containersDone: "Opération terminée. La prochaine actualisation mettra la vue à jour.",
++  containersVmCpus: "vCPU",
++  containersVmMemory: "Mémoire (Mio)",
++  containersReserved: "Réservé par les conteneurs en cours d’exécution",
++  containersReservedHelp: "Le réservé est la somme des limites des conteneurs en cours d’exécution",
++  containersOvercommitted: "Les conteneurs en cours d’exécution peuvent utiliser plus de CPU ou de mémoire que cette VM n’en possède. Réduisez une limite ou donnez plus de ressources à la VM",
++  containersCreateHelp: "Une image absente est d’abord téléchargée, puis le conteneur démarre tout seul. Chaque conteneur est tenu à ses limites de CPU et de mémoire.",
++  containersDownloading: "Téléchargement lancé. Le conteneur apparaît dans la liste dès qu’il est prêt.",
++  containersDownloadRunning: "Téléchargement en cours",
++  containersDownloadFailed: "Échec du téléchargement",
++  containersDismiss: "Ignorer",
++  containersPullHelp: "Téléchargez de nouveau une image pour la mettre à jour, puis recréez le conteneur pour utiliser la nouvelle version.",
++  containersGetStarted: "Premiers pas",
++  containersStepDeploy: "Déployez une VM Docker ci-dessous. C’est une VM normale, réservée aux conteneurs.",
++  containersStepRun: "Lancez votre premier conteneur : donnez-lui un nom et une image, par exemple nginx:alpine.",
++  containersOrphans: "Clés d’accès inutilisées",
++  containersOrphansHelp: "Ces clés appartenaient à des VM Docker que XOA-HL ne voit plus. Si un pool est seulement déconnecté, conservez-les : une clé supprimée est irrécupérable.",
++  containersOrphansWarning: "Supprimer ces clés d’accès ? Si la VM existe encore, XOA-HL ne pourra plus jamais gérer ses conteneurs.",
++  containersVmStopped: "Arrêtée ou injoignable",
++  containersDashboard: "Conteneurs Docker",
++  containersDashboardRunning: "conteneurs en cours d’exécution",
++  containersDashboardVms: "VM Docker joignables",
++  containersLoad: "Charge",
    xhlAppearance: "Apparence",
    xhlTheme: "Thème",
    xhlColorMode: "Mode de couleur",
-@@ -1737,7 +1784,6 @@ export default {
+@@ -1737,7 +1805,6 @@ export default {
    consoleTabName: 'Console',
  
    // Original text: "Container"
@@ -197,10 +260,10 @@ index f18bdb560..118e13a23 100644
    // Original text: "Snapshots"
    snapshotsTabName: 'Instantanés',
 diff --git a/packages/xo-web/src/common/intl/locales/he.js b/packages/xo-web/src/common/intl/locales/he.js
-index d1849df8a..b43748c83 100644
+index d1849df8a..484519e28 100644
 --- a/packages/xo-web/src/common/intl/locales/he.js
 +++ b/packages/xo-web/src/common/intl/locales/he.js
-@@ -8,6 +8,53 @@ addLocaleData(reactIntlData)
+@@ -8,6 +8,74 @@ addLocaleData(reactIntlData)
  // ===================================================================
  
  export default {
@@ -231,7 +294,6 @@ index d1849df8a..b43748c83 100644
 +  containersVolumesHelp: "Persistent volumes: one NAME:/container/path per line. Names are shared within this VM.",
 +  containersEnvironmentHelp: "Environment: one KEY=value per line. Avoid secrets; administrators and API logs may expose these values.",
 +  containersRestartPolicy: "Restart policy",
-+  containersPullFirst: "Pull the image below before creating a container. Limits are enforced per container; allow RAM for the guest OS.",
 +  containersList: "Containers",
 +  containersStatus: "Status",
 +  containersActions: "Actions",
@@ -251,10 +313,32 @@ index d1849df8a..b43748c83 100644
 +  containersWorking: "Operation in progress…",
 +  containersBooting: "VM created. Wait for guest tools, DHCP and cloud-init. Retry Refresh when the VM is ready; do not deploy a second VM.",
 +  containersDone: "Operation completed. The next refresh updates the view.",
++  containersVmCpus: "vCPUs",
++  containersVmMemory: "Memory (MiB)",
++  containersReserved: "Reserved by running containers",
++  containersReservedHelp: "Reserved is the sum of the limits of the running containers",
++  containersOvercommitted: "Running containers may use more CPU or memory than this VM has. Lower a limit or give the VM more resources",
++  containersCreateHelp: "A missing image is downloaded first, then the container starts by itself. Each container is held to its CPU and memory limits.",
++  containersDownloading: "Download started. The container appears in the list when it is ready.",
++  containersDownloadRunning: "Downloading",
++  containersDownloadFailed: "Download failed",
++  containersDismiss: "Dismiss",
++  containersPullHelp: "Download an image again to update it, then recreate the container to use the new version.",
++  containersGetStarted: "Get started",
++  containersStepDeploy: "Deploy a Docker VM below. It is a normal VM that only runs containers.",
++  containersStepRun: "Run your first container: give it a name and an image, for example nginx:alpine.",
++  containersOrphans: "Unused access keys",
++  containersOrphansHelp: "These keys belonged to Docker VMs that XOA-HL no longer sees. If a pool is only disconnected, keep them: a removed key cannot be recovered.",
++  containersOrphansWarning: "Remove these access keys? If the VM still exists, XOA-HL can never manage its containers again.",
++  containersVmStopped: "Stopped or not reachable",
++  containersDashboard: "Docker containers",
++  containersDashboardRunning: "containers running",
++  containersDashboardVms: "Docker VMs reachable",
++  containersLoad: "Load",
    xhlAppearance: "Appearance",
    xhlTheme: "Theme",
    xhlColorMode: "Color mode",
-@@ -1420,7 +1467,6 @@ export default {
+@@ -1420,7 +1488,6 @@ export default {
    consoleTabName: undefined,
  
    // Original text: 'Container'
@@ -263,10 +347,10 @@ index d1849df8a..b43748c83 100644
    // Original text: 'Snapshots'
    snapshotsTabName: undefined,
 diff --git a/packages/xo-web/src/common/intl/locales/hu.js b/packages/xo-web/src/common/intl/locales/hu.js
-index 51db6bf79..09643a0d1 100644
+index 51db6bf79..40cac3748 100644
 --- a/packages/xo-web/src/common/intl/locales/hu.js
 +++ b/packages/xo-web/src/common/intl/locales/hu.js
-@@ -8,6 +8,53 @@ addLocaleData(reactIntlData)
+@@ -8,6 +8,74 @@ addLocaleData(reactIntlData)
  // ===================================================================
  
  export default {
@@ -297,7 +381,6 @@ index 51db6bf79..09643a0d1 100644
 +  containersVolumesHelp: "Persistent volumes: one NAME:/container/path per line. Names are shared within this VM.",
 +  containersEnvironmentHelp: "Environment: one KEY=value per line. Avoid secrets; administrators and API logs may expose these values.",
 +  containersRestartPolicy: "Restart policy",
-+  containersPullFirst: "Pull the image below before creating a container. Limits are enforced per container; allow RAM for the guest OS.",
 +  containersList: "Containers",
 +  containersStatus: "Status",
 +  containersActions: "Actions",
@@ -317,10 +400,32 @@ index 51db6bf79..09643a0d1 100644
 +  containersWorking: "Operation in progress…",
 +  containersBooting: "VM created. Wait for guest tools, DHCP and cloud-init. Retry Refresh when the VM is ready; do not deploy a second VM.",
 +  containersDone: "Operation completed. The next refresh updates the view.",
++  containersVmCpus: "vCPUs",
++  containersVmMemory: "Memory (MiB)",
++  containersReserved: "Reserved by running containers",
++  containersReservedHelp: "Reserved is the sum of the limits of the running containers",
++  containersOvercommitted: "Running containers may use more CPU or memory than this VM has. Lower a limit or give the VM more resources",
++  containersCreateHelp: "A missing image is downloaded first, then the container starts by itself. Each container is held to its CPU and memory limits.",
++  containersDownloading: "Download started. The container appears in the list when it is ready.",
++  containersDownloadRunning: "Downloading",
++  containersDownloadFailed: "Download failed",
++  containersDismiss: "Dismiss",
++  containersPullHelp: "Download an image again to update it, then recreate the container to use the new version.",
++  containersGetStarted: "Get started",
++  containersStepDeploy: "Deploy a Docker VM below. It is a normal VM that only runs containers.",
++  containersStepRun: "Run your first container: give it a name and an image, for example nginx:alpine.",
++  containersOrphans: "Unused access keys",
++  containersOrphansHelp: "These keys belonged to Docker VMs that XOA-HL no longer sees. If a pool is only disconnected, keep them: a removed key cannot be recovered.",
++  containersOrphansWarning: "Remove these access keys? If the VM still exists, XOA-HL can never manage its containers again.",
++  containersVmStopped: "Stopped or not reachable",
++  containersDashboard: "Docker containers",
++  containersDashboardRunning: "containers running",
++  containersDashboardVms: "Docker VMs reachable",
++  containersLoad: "Load",
    xhlAppearance: "Appearance",
    xhlTheme: "Theme",
    xhlColorMode: "Color mode",
-@@ -1619,7 +1666,6 @@ export default {
+@@ -1619,7 +1687,6 @@ export default {
    consoleTabName: 'Konzol',
  
    // Original text: "Container"
@@ -329,10 +434,10 @@ index 51db6bf79..09643a0d1 100644
    // Original text: "Snapshots"
    snapshotsTabName: 'Pillanatképek',
 diff --git a/packages/xo-web/src/common/intl/locales/it.js b/packages/xo-web/src/common/intl/locales/it.js
-index f6e3c2f01..1a3719f26 100644
+index f6e3c2f01..959bafae7 100644
 --- a/packages/xo-web/src/common/intl/locales/it.js
 +++ b/packages/xo-web/src/common/intl/locales/it.js
-@@ -8,6 +8,53 @@ addLocaleData(reactIntlData)
+@@ -8,6 +8,74 @@ addLocaleData(reactIntlData)
  // ===================================================================
  
  export default {
@@ -363,7 +468,6 @@ index f6e3c2f01..1a3719f26 100644
 +  containersVolumesHelp: "Persistent volumes: one NAME:/container/path per line. Names are shared within this VM.",
 +  containersEnvironmentHelp: "Environment: one KEY=value per line. Avoid secrets; administrators and API logs may expose these values.",
 +  containersRestartPolicy: "Restart policy",
-+  containersPullFirst: "Pull the image below before creating a container. Limits are enforced per container; allow RAM for the guest OS.",
 +  containersList: "Containers",
 +  containersStatus: "Status",
 +  containersActions: "Actions",
@@ -383,10 +487,32 @@ index f6e3c2f01..1a3719f26 100644
 +  containersWorking: "Operation in progress…",
 +  containersBooting: "VM created. Wait for guest tools, DHCP and cloud-init. Retry Refresh when the VM is ready; do not deploy a second VM.",
 +  containersDone: "Operation completed. The next refresh updates the view.",
++  containersVmCpus: "vCPUs",
++  containersVmMemory: "Memory (MiB)",
++  containersReserved: "Reserved by running containers",
++  containersReservedHelp: "Reserved is the sum of the limits of the running containers",
++  containersOvercommitted: "Running containers may use more CPU or memory than this VM has. Lower a limit or give the VM more resources",
++  containersCreateHelp: "A missing image is downloaded first, then the container starts by itself. Each container is held to its CPU and memory limits.",
++  containersDownloading: "Download started. The container appears in the list when it is ready.",
++  containersDownloadRunning: "Downloading",
++  containersDownloadFailed: "Download failed",
++  containersDismiss: "Dismiss",
++  containersPullHelp: "Download an image again to update it, then recreate the container to use the new version.",
++  containersGetStarted: "Get started",
++  containersStepDeploy: "Deploy a Docker VM below. It is a normal VM that only runs containers.",
++  containersStepRun: "Run your first container: give it a name and an image, for example nginx:alpine.",
++  containersOrphans: "Unused access keys",
++  containersOrphansHelp: "These keys belonged to Docker VMs that XOA-HL no longer sees. If a pool is only disconnected, keep them: a removed key cannot be recovered.",
++  containersOrphansWarning: "Remove these access keys? If the VM still exists, XOA-HL can never manage its containers again.",
++  containersVmStopped: "Stopped or not reachable",
++  containersDashboard: "Docker containers",
++  containersDashboardRunning: "containers running",
++  containersDashboardVms: "Docker VMs reachable",
++  containersLoad: "Load",
    xhlAppearance: "Appearance",
    xhlTheme: "Theme",
    xhlColorMode: "Color mode",
-@@ -2559,7 +2606,6 @@ export default {
+@@ -2559,7 +2627,6 @@ export default {
    consoleTabName: 'Consolle',
  
    // Original text: 'Container'
@@ -395,10 +521,10 @@ index f6e3c2f01..1a3719f26 100644
    // Original text: 'Snapshots'
    snapshotsTabName: 'Istantanei',
 diff --git a/packages/xo-web/src/common/intl/locales/ja.js b/packages/xo-web/src/common/intl/locales/ja.js
-index b4e3074de..f39a40752 100644
+index b4e3074de..1596d94e3 100644
 --- a/packages/xo-web/src/common/intl/locales/ja.js
 +++ b/packages/xo-web/src/common/intl/locales/ja.js
-@@ -8,6 +8,53 @@ addLocaleData(reactIntlData)
+@@ -8,6 +8,74 @@ addLocaleData(reactIntlData)
  // ===================================================================
  
  export default {
@@ -429,7 +555,6 @@ index b4e3074de..f39a40752 100644
 +  containersVolumesHelp: "永続ボリューム：1行に 名前:/コンテナー内パス。名前はVM内で共有されます。",
 +  containersEnvironmentHelp: "環境変数：1行に KEY=value。管理者やAPIログに表示される可能性があるため秘密情報を入力しないでください。",
 +  containersRestartPolicy: "再起動ポリシー",
-+  containersPullFirst: "作成前に下のフォームでイメージを取得してください。上限はコンテナーごとに適用されます。ゲストOS用メモリを確保してください。",
 +  containersList: "コンテナー一覧",
 +  containersStatus: "状態",
 +  containersActions: "操作",
@@ -449,10 +574,32 @@ index b4e3074de..f39a40752 100644
 +  containersWorking: "処理中…",
 +  containersBooting: "VMを作成しました。ゲストツール、DHCP、cloud-initの完了を待って更新してください。重複してデプロイしないでください。",
 +  containersDone: "処理が完了しました。次の更新で表示が反映されます。",
++  containersVmCpus: "vCPU 数",
++  containersVmMemory: "メモリ (MiB)",
++  containersReserved: "実行中のコンテナによる予約",
++  containersReservedHelp: "予約は、実行中のコンテナの上限の合計です",
++  containersOvercommitted: "実行中のコンテナは、この VM が持つ以上の CPU またはメモリを使用できます。上限を下げるか、VM のリソースを増やしてください",
++  containersCreateHelp: "イメージがない場合は先にダウンロードされ、その後コンテナが自動的に起動します。各コンテナは CPU とメモリの上限内に制限されます。",
++  containersDownloading: "ダウンロードを開始しました。準備ができるとコンテナが一覧に表示されます。",
++  containersDownloadRunning: "ダウンロード中",
++  containersDownloadFailed: "ダウンロードに失敗しました",
++  containersDismiss: "閉じる",
++  containersPullHelp: "イメージを更新するには再度ダウンロードし、新しいバージョンを使うにはコンテナを作り直してください。",
++  containersGetStarted: "はじめに",
++  containersStepDeploy: "下のフォームから Docker VM をデプロイします。コンテナ専用の通常の VM です。",
++  containersStepRun: "最初のコンテナを実行します。名前とイメージ (例: nginx:alpine) を指定してください。",
++  containersOrphans: "未使用のアクセスキー",
++  containersOrphansHelp: "これらのキーは、XOA-HL から見えなくなった Docker VM のものです。プールが切断されているだけの場合は残してください。削除したキーは復元できません。",
++  containersOrphansWarning: "これらのアクセスキーを削除しますか？ VM がまだ存在する場合、XOA-HL はそのコンテナを二度と管理できなくなります。",
++  containersVmStopped: "停止中または接続不可",
++  containersDashboard: "Docker コンテナ",
++  containersDashboardRunning: "個のコンテナが実行中",
++  containersDashboardVms: "台の Docker VM に接続可能",
++  containersLoad: "負荷",
    xhlAppearance: "外観",
    xhlTheme: "テーマ",
    xhlColorMode: "カラーモード",
-@@ -3237,7 +3284,6 @@ export default {
+@@ -3237,7 +3305,6 @@ export default {
    consoleTabName: 'コンソール',
  
    // Original text: "Container"
@@ -461,10 +608,10 @@ index b4e3074de..f39a40752 100644
    // Original text: "Snapshots"
    snapshotsTabName: 'スナップショット',
 diff --git a/packages/xo-web/src/common/intl/locales/pl.js b/packages/xo-web/src/common/intl/locales/pl.js
-index ed17a4f42..8bbb7725b 100644
+index ed17a4f42..f485182a6 100644
 --- a/packages/xo-web/src/common/intl/locales/pl.js
 +++ b/packages/xo-web/src/common/intl/locales/pl.js
-@@ -8,6 +8,53 @@ addLocaleData(reactIntlData)
+@@ -8,6 +8,74 @@ addLocaleData(reactIntlData)
  // ===================================================================
  
  export default {
@@ -495,7 +642,6 @@ index ed17a4f42..8bbb7725b 100644
 +  containersVolumesHelp: "Persistent volumes: one NAME:/container/path per line. Names are shared within this VM.",
 +  containersEnvironmentHelp: "Environment: one KEY=value per line. Avoid secrets; administrators and API logs may expose these values.",
 +  containersRestartPolicy: "Restart policy",
-+  containersPullFirst: "Pull the image below before creating a container. Limits are enforced per container; allow RAM for the guest OS.",
 +  containersList: "Containers",
 +  containersStatus: "Status",
 +  containersActions: "Actions",
@@ -515,10 +661,32 @@ index ed17a4f42..8bbb7725b 100644
 +  containersWorking: "Operation in progress…",
 +  containersBooting: "VM created. Wait for guest tools, DHCP and cloud-init. Retry Refresh when the VM is ready; do not deploy a second VM.",
 +  containersDone: "Operation completed. The next refresh updates the view.",
++  containersVmCpus: "vCPUs",
++  containersVmMemory: "Memory (MiB)",
++  containersReserved: "Reserved by running containers",
++  containersReservedHelp: "Reserved is the sum of the limits of the running containers",
++  containersOvercommitted: "Running containers may use more CPU or memory than this VM has. Lower a limit or give the VM more resources",
++  containersCreateHelp: "A missing image is downloaded first, then the container starts by itself. Each container is held to its CPU and memory limits.",
++  containersDownloading: "Download started. The container appears in the list when it is ready.",
++  containersDownloadRunning: "Downloading",
++  containersDownloadFailed: "Download failed",
++  containersDismiss: "Dismiss",
++  containersPullHelp: "Download an image again to update it, then recreate the container to use the new version.",
++  containersGetStarted: "Get started",
++  containersStepDeploy: "Deploy a Docker VM below. It is a normal VM that only runs containers.",
++  containersStepRun: "Run your first container: give it a name and an image, for example nginx:alpine.",
++  containersOrphans: "Unused access keys",
++  containersOrphansHelp: "These keys belonged to Docker VMs that XOA-HL no longer sees. If a pool is only disconnected, keep them: a removed key cannot be recovered.",
++  containersOrphansWarning: "Remove these access keys? If the VM still exists, XOA-HL can never manage its containers again.",
++  containersVmStopped: "Stopped or not reachable",
++  containersDashboard: "Docker containers",
++  containersDashboardRunning: "containers running",
++  containersDashboardVms: "Docker VMs reachable",
++  containersLoad: "Load",
    xhlAppearance: "Appearance",
    xhlTheme: "Theme",
    xhlColorMode: "Color mode",
-@@ -1423,7 +1470,6 @@ export default {
+@@ -1423,7 +1491,6 @@ export default {
    consoleTabName: 'Konsola',
  
    // Original text: "Container"
@@ -527,10 +695,10 @@ index ed17a4f42..8bbb7725b 100644
    // Original text: "Snapshots"
    snapshotsTabName: 'Snapshoty',
 diff --git a/packages/xo-web/src/common/intl/locales/pt.js b/packages/xo-web/src/common/intl/locales/pt.js
-index b9c85346f..910dfb94f 100644
+index b9c85346f..1868e6d1a 100644
 --- a/packages/xo-web/src/common/intl/locales/pt.js
 +++ b/packages/xo-web/src/common/intl/locales/pt.js
-@@ -8,6 +8,53 @@ addLocaleData(reactIntlData)
+@@ -8,6 +8,74 @@ addLocaleData(reactIntlData)
  // ===================================================================
  
  export default {
@@ -561,7 +729,6 @@ index b9c85346f..910dfb94f 100644
 +  containersVolumesHelp: "Persistent volumes: one NAME:/container/path per line. Names are shared within this VM.",
 +  containersEnvironmentHelp: "Environment: one KEY=value per line. Avoid secrets; administrators and API logs may expose these values.",
 +  containersRestartPolicy: "Restart policy",
-+  containersPullFirst: "Pull the image below before creating a container. Limits are enforced per container; allow RAM for the guest OS.",
 +  containersList: "Containers",
 +  containersStatus: "Status",
 +  containersActions: "Actions",
@@ -581,10 +748,32 @@ index b9c85346f..910dfb94f 100644
 +  containersWorking: "Operation in progress…",
 +  containersBooting: "VM created. Wait for guest tools, DHCP and cloud-init. Retry Refresh when the VM is ready; do not deploy a second VM.",
 +  containersDone: "Operation completed. The next refresh updates the view.",
++  containersVmCpus: "vCPUs",
++  containersVmMemory: "Memory (MiB)",
++  containersReserved: "Reserved by running containers",
++  containersReservedHelp: "Reserved is the sum of the limits of the running containers",
++  containersOvercommitted: "Running containers may use more CPU or memory than this VM has. Lower a limit or give the VM more resources",
++  containersCreateHelp: "A missing image is downloaded first, then the container starts by itself. Each container is held to its CPU and memory limits.",
++  containersDownloading: "Download started. The container appears in the list when it is ready.",
++  containersDownloadRunning: "Downloading",
++  containersDownloadFailed: "Download failed",
++  containersDismiss: "Dismiss",
++  containersPullHelp: "Download an image again to update it, then recreate the container to use the new version.",
++  containersGetStarted: "Get started",
++  containersStepDeploy: "Deploy a Docker VM below. It is a normal VM that only runs containers.",
++  containersStepRun: "Run your first container: give it a name and an image, for example nginx:alpine.",
++  containersOrphans: "Unused access keys",
++  containersOrphansHelp: "These keys belonged to Docker VMs that XOA-HL no longer sees. If a pool is only disconnected, keep them: a removed key cannot be recovered.",
++  containersOrphansWarning: "Remove these access keys? If the VM still exists, XOA-HL can never manage its containers again.",
++  containersVmStopped: "Stopped or not reachable",
++  containersDashboard: "Docker containers",
++  containersDashboardRunning: "containers running",
++  containersDashboardVms: "Docker VMs reachable",
++  containersLoad: "Load",
    xhlAppearance: "Appearance",
    xhlTheme: "Theme",
    xhlColorMode: "Color mode",
-@@ -1421,7 +1468,6 @@ export default {
+@@ -1421,7 +1489,6 @@ export default {
    consoleTabName: 'Console',
  
    // Original text: 'Container'
@@ -593,10 +782,10 @@ index b9c85346f..910dfb94f 100644
    // Original text: "Snapshots"
    snapshotsTabName: 'Snapshots',
 diff --git a/packages/xo-web/src/common/intl/locales/ru.js b/packages/xo-web/src/common/intl/locales/ru.js
-index 0ed00994f..8b045c6a5 100644
+index 0ed00994f..f784f4f64 100644
 --- a/packages/xo-web/src/common/intl/locales/ru.js
 +++ b/packages/xo-web/src/common/intl/locales/ru.js
-@@ -8,6 +8,53 @@ addLocaleData(reactIntlData)
+@@ -8,6 +8,74 @@ addLocaleData(reactIntlData)
  // ===================================================================
  
  export default {
@@ -627,7 +816,6 @@ index 0ed00994f..8b045c6a5 100644
 +  containersVolumesHelp: "Persistent volumes: one NAME:/container/path per line. Names are shared within this VM.",
 +  containersEnvironmentHelp: "Environment: one KEY=value per line. Avoid secrets; administrators and API logs may expose these values.",
 +  containersRestartPolicy: "Restart policy",
-+  containersPullFirst: "Pull the image below before creating a container. Limits are enforced per container; allow RAM for the guest OS.",
 +  containersList: "Containers",
 +  containersStatus: "Status",
 +  containersActions: "Actions",
@@ -647,10 +835,32 @@ index 0ed00994f..8b045c6a5 100644
 +  containersWorking: "Operation in progress…",
 +  containersBooting: "VM created. Wait for guest tools, DHCP and cloud-init. Retry Refresh when the VM is ready; do not deploy a second VM.",
 +  containersDone: "Operation completed. The next refresh updates the view.",
++  containersVmCpus: "vCPUs",
++  containersVmMemory: "Memory (MiB)",
++  containersReserved: "Reserved by running containers",
++  containersReservedHelp: "Reserved is the sum of the limits of the running containers",
++  containersOvercommitted: "Running containers may use more CPU or memory than this VM has. Lower a limit or give the VM more resources",
++  containersCreateHelp: "A missing image is downloaded first, then the container starts by itself. Each container is held to its CPU and memory limits.",
++  containersDownloading: "Download started. The container appears in the list when it is ready.",
++  containersDownloadRunning: "Downloading",
++  containersDownloadFailed: "Download failed",
++  containersDismiss: "Dismiss",
++  containersPullHelp: "Download an image again to update it, then recreate the container to use the new version.",
++  containersGetStarted: "Get started",
++  containersStepDeploy: "Deploy a Docker VM below. It is a normal VM that only runs containers.",
++  containersStepRun: "Run your first container: give it a name and an image, for example nginx:alpine.",
++  containersOrphans: "Unused access keys",
++  containersOrphansHelp: "These keys belonged to Docker VMs that XOA-HL no longer sees. If a pool is only disconnected, keep them: a removed key cannot be recovered.",
++  containersOrphansWarning: "Remove these access keys? If the VM still exists, XOA-HL can never manage its containers again.",
++  containersVmStopped: "Stopped or not reachable",
++  containersDashboard: "Docker containers",
++  containersDashboardRunning: "containers running",
++  containersDashboardVms: "Docker VMs reachable",
++  containersLoad: "Load",
    xhlAppearance: "Appearance",
    xhlTheme: "Theme",
    xhlColorMode: "Color mode",
-@@ -3206,7 +3253,6 @@ export default {
+@@ -3206,7 +3274,6 @@ export default {
    consoleTabName: 'Консоль',
  
    // Original text: "Container"
@@ -659,10 +869,10 @@ index 0ed00994f..8b045c6a5 100644
    // Original text: "Snapshots"
    snapshotsTabName: 'Снимки',
 diff --git a/packages/xo-web/src/common/intl/locales/sv.js b/packages/xo-web/src/common/intl/locales/sv.js
-index c94110715..fff272802 100644
+index c94110715..ff2152b1f 100644
 --- a/packages/xo-web/src/common/intl/locales/sv.js
 +++ b/packages/xo-web/src/common/intl/locales/sv.js
-@@ -8,6 +8,53 @@ addLocaleData(reactIntlData)
+@@ -8,6 +8,74 @@ addLocaleData(reactIntlData)
  // ===================================================================
  
  export default {
@@ -693,7 +903,6 @@ index c94110715..fff272802 100644
 +  containersVolumesHelp: "Persistent volumes: one NAME:/container/path per line. Names are shared within this VM.",
 +  containersEnvironmentHelp: "Environment: one KEY=value per line. Avoid secrets; administrators and API logs may expose these values.",
 +  containersRestartPolicy: "Restart policy",
-+  containersPullFirst: "Pull the image below before creating a container. Limits are enforced per container; allow RAM for the guest OS.",
 +  containersList: "Containers",
 +  containersStatus: "Status",
 +  containersActions: "Actions",
@@ -713,10 +922,32 @@ index c94110715..fff272802 100644
 +  containersWorking: "Operation in progress…",
 +  containersBooting: "VM created. Wait for guest tools, DHCP and cloud-init. Retry Refresh when the VM is ready; do not deploy a second VM.",
 +  containersDone: "Operation completed. The next refresh updates the view.",
++  containersVmCpus: "vCPUs",
++  containersVmMemory: "Memory (MiB)",
++  containersReserved: "Reserved by running containers",
++  containersReservedHelp: "Reserved is the sum of the limits of the running containers",
++  containersOvercommitted: "Running containers may use more CPU or memory than this VM has. Lower a limit or give the VM more resources",
++  containersCreateHelp: "A missing image is downloaded first, then the container starts by itself. Each container is held to its CPU and memory limits.",
++  containersDownloading: "Download started. The container appears in the list when it is ready.",
++  containersDownloadRunning: "Downloading",
++  containersDownloadFailed: "Download failed",
++  containersDismiss: "Dismiss",
++  containersPullHelp: "Download an image again to update it, then recreate the container to use the new version.",
++  containersGetStarted: "Get started",
++  containersStepDeploy: "Deploy a Docker VM below. It is a normal VM that only runs containers.",
++  containersStepRun: "Run your first container: give it a name and an image, for example nginx:alpine.",
++  containersOrphans: "Unused access keys",
++  containersOrphansHelp: "These keys belonged to Docker VMs that XOA-HL no longer sees. If a pool is only disconnected, keep them: a removed key cannot be recovered.",
++  containersOrphansWarning: "Remove these access keys? If the VM still exists, XOA-HL can never manage its containers again.",
++  containersVmStopped: "Stopped or not reachable",
++  containersDashboard: "Docker containers",
++  containersDashboardRunning: "containers running",
++  containersDashboardVms: "Docker VMs reachable",
++  containersLoad: "Load",
    xhlAppearance: "Appearance",
    xhlTheme: "Theme",
    xhlColorMode: "Color mode",
-@@ -1681,7 +1728,6 @@ export default {
+@@ -1681,7 +1749,6 @@ export default {
    consoleTabName: 'Konsol',
  
    // Original text: 'Container'
@@ -725,10 +956,10 @@ index c94110715..fff272802 100644
    // Original text: "Snapshots"
    snapshotsTabName: 'Snapshots',
 diff --git a/packages/xo-web/src/common/intl/locales/tr.js b/packages/xo-web/src/common/intl/locales/tr.js
-index caf4a85ab..fda61e4e9 100644
+index caf4a85ab..102ce721a 100644
 --- a/packages/xo-web/src/common/intl/locales/tr.js
 +++ b/packages/xo-web/src/common/intl/locales/tr.js
-@@ -8,6 +8,53 @@ addLocaleData(reactIntlData)
+@@ -8,6 +8,74 @@ addLocaleData(reactIntlData)
  // ===================================================================
  
  export default {
@@ -759,7 +990,6 @@ index caf4a85ab..fda61e4e9 100644
 +  containersVolumesHelp: "Persistent volumes: one NAME:/container/path per line. Names are shared within this VM.",
 +  containersEnvironmentHelp: "Environment: one KEY=value per line. Avoid secrets; administrators and API logs may expose these values.",
 +  containersRestartPolicy: "Restart policy",
-+  containersPullFirst: "Pull the image below before creating a container. Limits are enforced per container; allow RAM for the guest OS.",
 +  containersList: "Containers",
 +  containersStatus: "Status",
 +  containersActions: "Actions",
@@ -779,10 +1009,32 @@ index caf4a85ab..fda61e4e9 100644
 +  containersWorking: "Operation in progress…",
 +  containersBooting: "VM created. Wait for guest tools, DHCP and cloud-init. Retry Refresh when the VM is ready; do not deploy a second VM.",
 +  containersDone: "Operation completed. The next refresh updates the view.",
++  containersVmCpus: "vCPUs",
++  containersVmMemory: "Memory (MiB)",
++  containersReserved: "Reserved by running containers",
++  containersReservedHelp: "Reserved is the sum of the limits of the running containers",
++  containersOvercommitted: "Running containers may use more CPU or memory than this VM has. Lower a limit or give the VM more resources",
++  containersCreateHelp: "A missing image is downloaded first, then the container starts by itself. Each container is held to its CPU and memory limits.",
++  containersDownloading: "Download started. The container appears in the list when it is ready.",
++  containersDownloadRunning: "Downloading",
++  containersDownloadFailed: "Download failed",
++  containersDismiss: "Dismiss",
++  containersPullHelp: "Download an image again to update it, then recreate the container to use the new version.",
++  containersGetStarted: "Get started",
++  containersStepDeploy: "Deploy a Docker VM below. It is a normal VM that only runs containers.",
++  containersStepRun: "Run your first container: give it a name and an image, for example nginx:alpine.",
++  containersOrphans: "Unused access keys",
++  containersOrphansHelp: "These keys belonged to Docker VMs that XOA-HL no longer sees. If a pool is only disconnected, keep them: a removed key cannot be recovered.",
++  containersOrphansWarning: "Remove these access keys? If the VM still exists, XOA-HL can never manage its containers again.",
++  containersVmStopped: "Stopped or not reachable",
++  containersDashboard: "Docker containers",
++  containersDashboardRunning: "containers running",
++  containersDashboardVms: "Docker VMs reachable",
++  containersLoad: "Load",
    xhlAppearance: "Appearance",
    xhlTheme: "Theme",
    xhlColorMode: "Color mode",
-@@ -2158,7 +2205,6 @@ export default {
+@@ -2158,7 +2226,6 @@ export default {
    consoleTabName: 'Konsol',
  
    // Original text: "Container"
@@ -791,10 +1043,10 @@ index caf4a85ab..fda61e4e9 100644
    // Original text: "Snapshots"
    snapshotsTabName: "Snapshot'lar",
 diff --git a/packages/xo-web/src/common/intl/locales/zh.js b/packages/xo-web/src/common/intl/locales/zh.js
-index 7e01975dc..5c353f463 100644
+index 7e01975dc..d3b70caf3 100644
 --- a/packages/xo-web/src/common/intl/locales/zh.js
 +++ b/packages/xo-web/src/common/intl/locales/zh.js
-@@ -8,6 +8,53 @@ addLocaleData(reactIntlData)
+@@ -8,6 +8,74 @@ addLocaleData(reactIntlData)
  // ===================================================================
  
  export default {
@@ -825,7 +1077,6 @@ index 7e01975dc..5c353f463 100644
 +  containersVolumesHelp: "Persistent volumes: one NAME:/container/path per line. Names are shared within this VM.",
 +  containersEnvironmentHelp: "Environment: one KEY=value per line. Avoid secrets; administrators and API logs may expose these values.",
 +  containersRestartPolicy: "Restart policy",
-+  containersPullFirst: "Pull the image below before creating a container. Limits are enforced per container; allow RAM for the guest OS.",
 +  containersList: "Containers",
 +  containersStatus: "Status",
 +  containersActions: "Actions",
@@ -845,14 +1096,36 @@ index 7e01975dc..5c353f463 100644
 +  containersWorking: "Operation in progress…",
 +  containersBooting: "VM created. Wait for guest tools, DHCP and cloud-init. Retry Refresh when the VM is ready; do not deploy a second VM.",
 +  containersDone: "Operation completed. The next refresh updates the view.",
++  containersVmCpus: "vCPUs",
++  containersVmMemory: "Memory (MiB)",
++  containersReserved: "Reserved by running containers",
++  containersReservedHelp: "Reserved is the sum of the limits of the running containers",
++  containersOvercommitted: "Running containers may use more CPU or memory than this VM has. Lower a limit or give the VM more resources",
++  containersCreateHelp: "A missing image is downloaded first, then the container starts by itself. Each container is held to its CPU and memory limits.",
++  containersDownloading: "Download started. The container appears in the list when it is ready.",
++  containersDownloadRunning: "Downloading",
++  containersDownloadFailed: "Download failed",
++  containersDismiss: "Dismiss",
++  containersPullHelp: "Download an image again to update it, then recreate the container to use the new version.",
++  containersGetStarted: "Get started",
++  containersStepDeploy: "Deploy a Docker VM below. It is a normal VM that only runs containers.",
++  containersStepRun: "Run your first container: give it a name and an image, for example nginx:alpine.",
++  containersOrphans: "Unused access keys",
++  containersOrphansHelp: "These keys belonged to Docker VMs that XOA-HL no longer sees. If a pool is only disconnected, keep them: a removed key cannot be recovered.",
++  containersOrphansWarning: "Remove these access keys? If the VM still exists, XOA-HL can never manage its containers again.",
++  containersVmStopped: "Stopped or not reachable",
++  containersDashboard: "Docker containers",
++  containersDashboardRunning: "containers running",
++  containersDashboardVms: "Docker VMs reachable",
++  containersLoad: "Load",
    xhlAppearance: "Appearance",
    xhlTheme: "Theme",
    xhlColorMode: "Color mode",
 diff --git a/packages/xo-web/src/common/intl/messages.js b/packages/xo-web/src/common/intl/messages.js
-index 4050659f9..1b6b3c02b 100644
+index 4050659f9..29127d284 100644
 --- a/packages/xo-web/src/common/intl/messages.js
 +++ b/packages/xo-web/src/common/intl/messages.js
-@@ -4,6 +4,53 @@
+@@ -4,6 +4,74 @@
  const forEach = require('lodash/forEach')
  
  const messages = {
@@ -883,7 +1156,6 @@ index 4050659f9..1b6b3c02b 100644
 +  containersVolumesHelp: "Persistent volumes: one NAME:/container/path per line. Names are shared within this VM.",
 +  containersEnvironmentHelp: "Environment: one KEY=value per line. Avoid secrets; administrators and API logs may expose these values.",
 +  containersRestartPolicy: "Restart policy",
-+  containersPullFirst: "Pull the image below before creating a container. Limits are enforced per container; allow RAM for the guest OS.",
 +  containersList: "Containers",
 +  containersStatus: "Status",
 +  containersActions: "Actions",
@@ -903,10 +1175,32 @@ index 4050659f9..1b6b3c02b 100644
 +  containersWorking: "Operation in progress…",
 +  containersBooting: "VM created. Wait for guest tools, DHCP and cloud-init. Retry Refresh when the VM is ready; do not deploy a second VM.",
 +  containersDone: "Operation completed. The next refresh updates the view.",
++  containersVmCpus: "vCPUs",
++  containersVmMemory: "Memory (MiB)",
++  containersReserved: "Reserved by running containers",
++  containersReservedHelp: "Reserved is the sum of the limits of the running containers",
++  containersOvercommitted: "Running containers may use more CPU or memory than this VM has. Lower a limit or give the VM more resources",
++  containersCreateHelp: "A missing image is downloaded first, then the container starts by itself. Each container is held to its CPU and memory limits.",
++  containersDownloading: "Download started. The container appears in the list when it is ready.",
++  containersDownloadRunning: "Downloading",
++  containersDownloadFailed: "Download failed",
++  containersDismiss: "Dismiss",
++  containersPullHelp: "Download an image again to update it, then recreate the container to use the new version.",
++  containersGetStarted: "Get started",
++  containersStepDeploy: "Deploy a Docker VM below. It is a normal VM that only runs containers.",
++  containersStepRun: "Run your first container: give it a name and an image, for example nginx:alpine.",
++  containersOrphans: "Unused access keys",
++  containersOrphansHelp: "These keys belonged to Docker VMs that XOA-HL no longer sees. If a pool is only disconnected, keep them: a removed key cannot be recovered.",
++  containersOrphansWarning: "Remove these access keys? If the VM still exists, XOA-HL can never manage its containers again.",
++  containersVmStopped: "Stopped or not reachable",
++  containersDashboard: "Docker containers",
++  containersDashboardRunning: "containers running",
++  containersDashboardVms: "Docker VMs reachable",
++  containersLoad: "Load",
    xhlAppearance: "Appearance",
    xhlTheme: "Theme",
    xhlColorMode: "Color mode",
-@@ -1363,7 +1410,6 @@ const messages = {
+@@ -1363,7 +1431,6 @@ const messages = {
    generalTabName: 'General',
    statsTabName: 'Stats',
    consoleTabName: 'Console',
@@ -925,16 +1219,128 @@ index 93a8ba38e..39aa71197 100644
 +
 +// Dedicated Docker guests; the server validates every operation.
 +export const containerCall = (operation, params) => _call('containers.' + operation, params)
-diff --git a/packages/xo-web/src/xo-app/containers/index.js b/packages/xo-web/src/xo-app/containers/index.js
+diff --git a/packages/xo-web/src/xo-app/containers/dashboard-card.js b/packages/xo-web/src/xo-app/containers/dashboard-card.js
 new file mode 100644
-index 000000000..34e43be7b
+index 000000000..0519eaaed
 --- /dev/null
-+++ b/packages/xo-web/src/xo-app/containers/index.js
-@@ -0,0 +1,438 @@
++++ b/packages/xo-web/src/xo-app/containers/dashboard-card.js
+@@ -0,0 +1,103 @@
 +import _ from 'intl'
 +import Component from 'base-component'
++import Icon from 'icon'
 +import React from 'react'
 +import Link from 'link'
++import { Card, CardBlock, CardHeader } from 'card'
++import { containerCall } from 'xo'
++
++const mib = value => Math.round(value / 1048576)
++const ratio = (used, total) => (total > 0 ? used / total : 0)
++const level = value => (value >= 0.9 ? 'text-danger' : value >= 0.75 ? 'text-warning' : undefined)
++
++// Dashboard summary of every Docker VM. Renders nothing until one exists.
++export default class DockerCard extends Component {
++  state = { summary: undefined }
++
++  componentDidMount() {
++    this._active = true
++    this._load()
++  }
++  componentWillUnmount() {
++    this._active = false
++    clearTimeout(this._timer)
++  }
++  _load = async () => {
++    try {
++      const summary = await containerCall('summary')
++      if (this._active) this.setState({ summary })
++    } catch (_) {
++      // The dashboard stays usable when the summary is unavailable.
++    }
++    if (this._active) this._timer = setTimeout(this._load, 30000)
++  }
++  _renderHost = host => {
++    if (host.powerState !== 'Running' || host.error !== undefined) {
++      return (
++        <tr key={host.id}>
++          <td>
++            <Link to={'/vms/' + host.id}>{host.name}</Link>
++          </td>
++          <td colSpan={5} className='text-warning'>
++            <Icon icon='alarm' /> {host.error || _('containersVmStopped')}
++          </td>
++        </tr>
++      )
++    }
++    const total = mib(host.memoryTotal)
++    const reserved = Math.max(ratio(host.cpusAllocated, host.cpus), ratio(host.memoryAllocatedMiB, total))
++    return (
++      <tr key={host.id}>
++        <td>
++          <Link to={'/vms/' + host.id}>{host.name}</Link>
++        </td>
++        <td>
++          {host.running} / {host.containers}
++          {host.downloads > 0 && <span className='text-info'> · {_('containersDownloadRunning')}</span>}
++          {host.failedDownloads > 0 && <span className='text-danger'> · {_('containersDownloadFailed')}</span>}
++        </td>
++        <td>{Math.round((100 * host.load) / host.cpus)}%</td>
++        <td className={level(ratio(host.memoryUsed, host.memoryTotal))}>
++          {mib(host.memoryUsed)} / {total} MiB
++        </td>
++        <td className={level(ratio(host.diskUsed, host.diskTotal))}>
++          {Math.round(100 * ratio(host.diskUsed, host.diskTotal))}%
++        </td>
++        <td className={reserved > 1 ? 'text-warning' : undefined}>
++          {host.cpusAllocated} / {host.cpus} vCPU · {host.memoryAllocatedMiB} / {total} MiB
++        </td>
++      </tr>
++    )
++  }
++  render() {
++    const { summary } = this.state
++    if (summary === undefined || summary.hosts.length === 0) return null
++    const up = summary.hosts.filter(host => host.containers !== undefined)
++    const sum = key => up.reduce((total, host) => total + host[key], 0)
++    return (
++      <Card>
++        <CardHeader>
++          <Icon icon='vm' /> <Link to='/containers'>{_('containersDashboard')}</Link>
++        </CardHeader>
++        <CardBlock>
++          <p className='text-xs-center'>
++            <strong>
++              {sum('running')} / {sum('containers')}
++            </strong>{' '}
++            {_('containersDashboardRunning')} · {up.length} / {summary.hosts.length} {_('containersDashboardVms')}
++          </p>
++          <table className='table'>
++            <thead>
++              <tr>
++                {['Host', 'List', 'Load', 'Memory', 'Disk', 'Reserved'].map(key => (
++                  <th key={key}>{_('containers' + key)}</th>
++                ))}
++              </tr>
++            </thead>
++            <tbody>{summary.hosts.map(this._renderHost)}</tbody>
++          </table>
++        </CardBlock>
++      </Card>
++    )
++  }
++}
+diff --git a/packages/xo-web/src/xo-app/containers/index.js b/packages/xo-web/src/xo-app/containers/index.js
+new file mode 100644
+index 000000000..b09264444
+--- /dev/null
++++ b/packages/xo-web/src/xo-app/containers/index.js
+@@ -0,0 +1,604 @@
++import _ from 'intl'
++import Component from 'base-component'
++import Icon from 'icon'
++import React from 'react'
++import Link from 'link'
++import { Card, CardBlock, CardHeader } from 'card'
++import { Col, Container, Row } from 'grid'
 +import { confirm } from 'modal'
 +import { connectStore } from 'utils'
 +import { createGetObjectsOfType, isAdmin } from 'selectors'
@@ -948,18 +1354,21 @@ index 000000000..34e43be7b
 +      {value.name_label}
 +    </option>
 +  ))
++const only = values => (values.length === 1 ? values[0].id : '')
 +
 +@connectStore(() => {
 +  const templates = createGetObjectsOfType('VM-template')
 +  const vms = createGetObjectsOfType('VM')
 +  const srs = createGetObjectsOfType('SR')
 +  const networks = createGetObjectsOfType('network')
++  const pools = createGetObjectsOfType('pool')
 +  return state => ({
 +    admin: isAdmin(state),
 +    templates: Object.values(templates(state)).filter(vm => (vm.tags || []).includes('xcp-hl-docker-template-v1')),
 +    hosts: Object.values(vms(state)).filter(vm => (vm.tags || []).includes('xcp-hl-docker-v1')),
 +    srs: Object.values(srs(state)).filter(sr => sr.content_type !== 'iso'),
 +    networks: Object.values(networks(state)),
++    pools: Object.values(pools(state)),
 +  })
 +})
 +export default class Containers extends Component {
@@ -987,10 +1396,13 @@ index 000000000..34e43be7b
 +    logs: undefined,
 +    busy: false,
 +    overview: undefined,
++    orphans: [],
 +  }
 +
 +  componentDidMount() {
 +    this._active = true
++    this._refresh()
++    this._loadOrphans()
 +    this._schedule()
 +  }
 +  componentWillUnmount() {
@@ -1004,6 +1416,23 @@ index 000000000..34e43be7b
 +    await this._refresh()
 +    this._schedule()
 +  }
++  // A single Docker VM, template, storage or network needs no choice from the user.
++  _vm = () => this.state.vm || only(this.props.hosts)
++  _placement = () => {
++    const { props, state } = this
++    const template = state.template || only(props.templates)
++    const poolId = (props.templates.find(t => t.id === template) || {}).$pool
++    const pool = props.pools.find(p => p.id === poolId) || {}
++    const srs = props.srs.filter(sr => sr.$pool === poolId)
++    const networks = props.networks.filter(n => n.$pool === poolId)
++    return {
++      template,
++      srs,
++      networks,
++      sr: state.sr || (srs.some(sr => sr.id === pool.default_SR) ? pool.default_SR : only(srs)),
++      network: state.network || only(networks),
++    }
++  }
 +  // Background refresh never disables the forms; mutations wait for it.
 +  _refresh = () => {
 +    if (this._polling === undefined) {
@@ -1014,11 +1443,11 @@ index 000000000..34e43be7b
 +    return this._polling
 +  }
 +  _load = async () => {
-+    const { vm } = this.state
++    const vm = this._vm()
 +    if (!this.props.admin || !vm || this._acting) return
 +    try {
 +      const overview = await containerCall('overview', { vm })
-+      if (this._active && this.state.vm === vm) {
++      if (this._active && this._vm() === vm) {
 +        const before = this.state.overview?.host.cpuTicks
 +        const ticks = overview.host.cpuTicks
 +        let cpu = '—'
@@ -1029,8 +1458,15 @@ index 000000000..34e43be7b
 +        this.setState({ overview, cpu, unreachable: '' })
 +      }
 +    } catch (error) {
-+      if (this._active && this.state.vm === vm) this.setState({ unreachable: error.message })
++      if (this._active && this._vm() === vm) this.setState({ unreachable: error.message })
 +    }
++  }
++  _loadOrphans = async () => {
++    if (!this.props.admin) return
++    try {
++      const { orphans } = await containerCall('summary')
++      if (this._active) this.setState({ orphans: orphans || [] })
++    } catch (_) {}
 +  }
 +  _set = key => event => this.setState({ [key]: event.target.value })
 +  _selectHost = event =>
@@ -1048,9 +1484,11 @@ index 000000000..34e43be7b
 +      const result = await containerCall(operation, params)
 +      if (this._active) {
 +        if (operation === 'logs') this.setState({ logs: result.logs })
-+        if (operation === 'deploy')
-+          this.setState({ vm: result.id, overview: undefined, notice: result.warning || _('containersBooting') })
-+        else if (operation !== 'logs') this.setState({ notice: _('containersDone') })
++        else if (operation === 'deploy')
++          this.setState({ vm: result.id, overview: undefined, notice: _('containersBooting') })
++        else if (result.task !== undefined) this.setState({ notice: _('containersDownloading') })
++        else this.setState({ notice: _('containersDone') })
++        if (operation === 'create' && result.task === undefined) this.setState({ name: '' })
 +      }
 +    } catch (error) {
 +      if (this._active) this.setState({ error: error.message })
@@ -1058,15 +1496,17 @@ index 000000000..34e43be7b
 +      this._acting = false
 +      if (this._active) this.setState({ busy: false })
 +    }
-+    // Poll will reconcile state after every successful or failed mutation.
++    if (operation === 'forgetCredentials') this._loadOrphans()
++    else if (operation !== 'deploy') this._refresh()
 +  }
 +  _deploy = event => {
 +    event.preventDefault()
 +    const s = this.state
++    const { template, sr, network } = this._placement()
 +    this._perform('deploy', {
-+      template: s.template,
-+      sr: s.sr,
-+      network: s.network,
++      template,
++      sr,
++      network,
 +      name: s.vmName,
 +      cpus: +s.vmCpus,
 +      memoryMiB: +s.vmMemory,
@@ -1100,10 +1540,10 @@ index 000000000..34e43be7b
 +        environment[line.slice(0, equal).trim()] = line.slice(equal + 1)
 +      }
 +      this._perform('create', {
-+        vm: s.vm,
++        vm: this._vm(),
 +        config: {
 +          name: s.name,
-+          image: s.image,
++          image: s.image.trim(),
 +          cpus: +s.cpus,
 +          memoryMiB: +s.memoryMiB,
 +          ports,
@@ -1116,9 +1556,9 @@ index 000000000..34e43be7b
 +      this.setState({ error: error.message })
 +    }
 +  }
-+  _remove = async (operation, params) => {
++  _remove = async (operation, params, warning = 'containersRemoveWarning') => {
 +    try {
-+      await confirm({ title: _('containersRemove'), body: _('containersRemoveWarning') })
++      await confirm({ title: _('containersRemove'), body: _(warning) })
 +    } catch (_) {
 +      return
 +    }
@@ -1132,41 +1572,273 @@ index 000000000..34e43be7b
 +      </label>
 +    )
 +  }
-+  _select(key, title, values, onChange = this._set(key)) {
++  _select(key, title, values, value, onChange = this._set(key)) {
 +    return (
 +      <label className='m-r-1'>
 +        {title}
-+        <select
-+          className='form-control'
-+          required
-+          disabled={this.state.busy}
-+          value={this.state[key]}
-+          onChange={onChange}
-+        >
++        <select className='form-control' required value={value} onChange={onChange}>
 +          <option value=''>{_('containersChoose')}</option>
 +          {options(values)}
 +        </select>
 +      </label>
 +    )
 +  }
-+  render() {
-+    if (!this.props.admin) return <p className='alert alert-danger'>{_('containersAdminOnly')}</p>
-+    const s = this.state
-+    const data = s.overview
-+    const template = this.props.templates.find(t => t.id === s.template)
-+    const pool = template?.$pool
++  _card(icon, title, body) {
 +    return (
-+      <main className='container-fluid p-a-1'>
-+        <h2>{_('containersPage')}</h2>
++      <Row>
++        <Col>
++          <Card>
++            <CardHeader>
++              <Icon icon={icon} /> {title}
++            </CardHeader>
++            <CardBlock>{body}</CardBlock>
++          </Card>
++        </Col>
++      </Row>
++    )
++  }
++  _renderDeploy() {
++    const { props, state: s } = this
++    const placement = this._placement()
++    return (
++      <form onSubmit={this._deploy}>
++        <fieldset disabled={s.busy}>
++          {props.templates.length > 1 &&
++            this._select('template', _('containersTemplate'), props.templates, placement.template, e =>
++              this.setState({ template: e.target.value, sr: '', network: '' })
++            )}
++          {this._input('vmName', _('containersName'), 'text', { required: true, maxLength: 63 })}
++          {this._input('vmCpus', _('containersVmCpus'), 'number', { required: true, min: 1, max: 32 })}
++          {this._input('vmMemory', _('containersVmMemory'), 'number', { required: true, min: 1024, max: 131072 })}
++          {this._select('sr', _('containersStorage'), placement.srs, placement.sr)}
++          {this._select('network', _('containersNetwork'), placement.networks, placement.network)}
++          <details>
++            <summary>{_('containersAdvanced')}</summary>
++            {this._input('administratorKey', _('containersAdministratorKey'), 'text', { maxLength: 8192 })}
++          </details>
++          <p className='text-muted'>{_('containersDeploymentHelp')}</p>
++          <button className='btn btn-primary' type='submit'>
++            <Icon icon='add' /> {_('containersDeployVm')}
++          </button>
++        </fieldset>
++      </form>
++    )
++  }
++  _renderResources(data) {
++    const host = data.host
++    const total = mib(host.memoryTotal)
++    const over = host.cpusAllocated > host.cpus || host.memoryAllocatedMiB > total
++    return (
++      <div>
++        <Row>
++          <Col mediumSize={3}>
++            <strong>{_('containersCpu')}</strong>
++            <br />
++            {this.state.cpu} · {host.cpus} vCPU
++          </Col>
++          <Col mediumSize={3}>
++            <strong>{_('containersMemory')}</strong>
++            <br />
++            {mib(host.memoryUsed)} / {total} MiB ({percent(host.memoryUsed, host.memoryTotal)})
++          </Col>
++          <Col mediumSize={3}>
++            <strong>{_('containersDisk')}</strong>
++            <br />
++            {mib(host.diskUsed)} / {mib(host.diskTotal)} MiB ({percent(host.diskUsed, host.diskTotal)})
++          </Col>
++          <Col mediumSize={3}>
++            <strong>{_('containersReserved')}</strong>
++            <br />
++            <span className={over ? 'text-warning' : undefined}>
++              {host.cpusAllocated} / {host.cpus} vCPU · {host.memoryAllocatedMiB} / {total} MiB
++            </span>
++          </Col>
++        </Row>
++        <p className='text-muted m-t-1'>
++          {_(over ? 'containersOvercommitted' : 'containersReservedHelp')} · {data.address} · Docker{' '}
++          {host.dockerVersion}
++        </p>
++      </div>
++    )
++  }
++  _renderCreate(data) {
++    const s = this.state
++    return (
++      <form onSubmit={this._create}>
++        {this._input('name', _('containersName'), 'text', {
++          required: true,
++          pattern: '[a-zA-Z0-9][a-zA-Z0-9_.-]{0,62}',
++          placeholder: 'web',
++        })}
++        {this._input('image', _('containersImage'), 'text', { required: true, placeholder: 'nginx:alpine' })}
++        {this._input('cpus', _('containersCpus'), 'number', {
++          required: true,
++          min: 0.1,
++          step: 0.1,
++          max: data.host.cpus,
++        })}
++        {this._input('memoryMiB', _('containersMemoryLimit'), 'number', {
++          required: true,
++          min: 16,
++          max: Math.max(16, mib(data.host.memoryTotal) - 256),
++        })}
++        <details>
++          <summary>{_('containersAdvanced')}</summary>
++          {['ports', 'volumes', 'environment'].map(key => (
++            <label className='d-block' key={key}>
++              {_('containers' + key[0].toUpperCase() + key.slice(1) + 'Help')}
++              <textarea className='form-control' rows='3' value={s[key]} onChange={this._set(key)} />
++            </label>
++          ))}
++          <label>
++            {_('containersRestartPolicy')}
++            <select className='form-control' value={s.restart} onChange={this._set('restart')}>
++              {['no', 'on-failure', 'always', 'unless-stopped'].map(v => (
++                <option key={v}>{v}</option>
++              ))}
++            </select>
++          </label>
++        </details>
++        <p className='text-muted'>{_('containersCreateHelp')}</p>
++        <button className='btn btn-primary' type='submit'>
++          <Icon icon='add' /> {_('containersCreate')}
++        </button>
++      </form>
++    )
++  }
++  _renderTasks(data, vm) {
++    return (data.tasks || []).map(task => (
++      <p key={task.id} role='status' className={'alert alert-' + (task.state === 'failed' ? 'danger' : 'info')}>
++        {_(task.state === 'failed' ? 'containersDownloadFailed' : 'containersDownloadRunning')}: {task.image}
++        {task.name && ' → ' + task.name}
++        {task.state === 'failed' && ' · ' + task.error}{' '}
++        {task.state === 'failed' && (
++          <button
++            type='button'
++            className='btn btn-sm btn-secondary'
++            onClick={() => this._perform('dismiss', { vm, id: task.id })}
++          >
++            {_('containersDismiss')}
++          </button>
++        )}
++      </p>
++    ))
++  }
++  _renderContainers(data, vm) {
++    return (
++      <div>
++        <table className='table'>
++          <thead>
++            <tr>
++              {['Name', 'Image', 'Status', 'Ports', 'Cpu', 'Memory', 'Actions'].map(k => (
++                <th key={k}>{_('containers' + k)}</th>
++              ))}
++            </tr>
++          </thead>
++          <tbody>
++            {data.containers.map(c => {
++              const stat = data.stats.find(v => v.ID === c.ID || v.Container === c.ID) || {}
++              const limit = (data.limits || {})[c.ID] || {}
++              const running = c.State === 'running'
++              return (
++                <tr key={c.ID}>
++                  <td>{c.Names}</td>
++                  <td>{c.Image}</td>
++                  <td>
++                    <span className={running ? 'text-success' : 'text-muted'}>
++                      <Icon icon={running ? 'running' : 'halted'} />
++                    </span>{' '}
++                    {c.Status}
++                  </td>
++                  <td>{c.Ports}</td>
++                  <td>
++                    {stat.CPUPerc || '—'} / {limit.cpus} CPU
++                  </td>
++                  <td>{stat.MemUsage || '— / ' + limit.memoryMiB + 'MiB'}</td>
++                  <td>
++                    {(running ? ['stop', 'restart', 'logs'] : ['start', 'logs', 'remove']).map(op => (
++                      <button
++                        type='button'
++                        className='btn btn-sm btn-secondary m-r-1'
++                        key={op}
++                        onClick={() =>
++                          op === 'remove' ? this._remove(op, { vm, id: c.ID }) : this._perform(op, { vm, id: c.ID })
++                        }
++                      >
++                        {_('containers' + op[0].toUpperCase() + op.slice(1))}
++                      </button>
++                    ))}
++                  </td>
++                </tr>
++              )
++            })}
++          </tbody>
++        </table>
++        {data.containers.length === 0 && <p>{_('containersEmpty')}</p>}
++      </div>
++    )
++  }
++  _renderImages(data, vm) {
++    return (
++      <div>
++        <form
++          onSubmit={e => {
++            e.preventDefault()
++            this._perform('pull', { vm, image: this.state.pullImage.trim() })
++          }}
++        >
++          {this._input('pullImage', _('containersImage'), 'text', { required: true })}
++          <button className='btn btn-secondary' type='submit'>
++            {_('containersPull')}
++          </button>
++        </form>
++        <p className='text-muted'>{_('containersPullHelp')}</p>
++        <table className='table'>
++          <thead>
++            <tr>
++              <th>{_('containersImage')}</th>
++              <th>{_('containersDisk')}</th>
++              <th>{_('containersActions')}</th>
++            </tr>
++          </thead>
++          <tbody>
++            {data.images.map((image, i) => (
++              <tr key={i}>
++                <td>
++                  {image.Repository}:{image.Tag}
++                </td>
++                <td>{image.Size}</td>
++                <td>
++                  <button
++                    type='button'
++                    className='btn btn-sm btn-secondary'
++                    onClick={() => this._remove('removeImage', { vm, image: image.ID })}
++                  >
++                    {_('containersRemove')}
++                  </button>
++                </td>
++              </tr>
++            ))}
++          </tbody>
++        </table>
++      </div>
++    )
++  }
++  render() {
++    const { props, state: s } = this
++    if (!props.admin) return <p className='alert alert-danger'>{_('containersAdminOnly')}</p>
++    const data = s.overview
++    const vm = this._vm()
++    const noTemplate = props.templates.length === 0
++    return (
++      <Container>
++        <h2>
++          <Icon icon='vm' /> {_('containersPage')}
++        </h2>
 +        <p>{_('containersIntroduction')}</p>
 +        {s.error && (
 +          <p role='alert' className='alert alert-danger'>
 +            {s.error}
-+          </p>
-+        )}
-+        {s.unreachable && (
-+          <p role='alert' className='alert alert-warning'>
-+            {s.unreachable}
 +          </p>
 +        )}
 +        {s.notice && (
@@ -1174,201 +1846,124 @@ index 000000000..34e43be7b
 +            {s.notice}
 +          </p>
 +        )}
-+        {s.busy && <p role='status'>{_('containersWorking')}</p>}
-+        <details>
-+          <summary>{_('containersDeployVm')}</summary>
-+          {this.props.templates.length === 0 && <p className='alert alert-warning'>{_('containersTemplateHelp')}</p>}
-+          <form onSubmit={this._deploy}>
-+            <fieldset disabled={s.busy}>
-+              {this._select('template', _('containersTemplate'), this.props.templates, e =>
-+                this.setState({ template: e.target.value, sr: '', network: '' })
-+              )}
-+              {this._select(
-+                'sr',
-+                _('containersStorage'),
-+                this.props.srs.filter(sr => sr.$pool === pool)
-+              )}
-+              {this._select(
-+                'network',
-+                _('containersNetwork'),
-+                this.props.networks.filter(n => n.$pool === pool)
-+              )}
-+              {this._input('vmName', _('containersName'), 'text', { required: true, maxLength: 63 })}
-+              {this._input('vmCpus', _('containersCpus'), 'number', { required: true, min: 1, max: 32 })}
-+              {this._input('vmMemory', _('containersMemoryLimit'), 'number', {
-+                required: true,
-+                min: 1024,
-+                max: 131072,
-+              })}
-+              {this._input('administratorKey', _('containersAdministratorKey'), 'text', { maxLength: 8192 })}
-+              <p>{_('containersDeploymentHelp')}</p>
-+              <button className='btn btn-primary' type='submit'>
-+                {_('containersDeployVm')}
-+              </button>
-+            </fieldset>
-+          </form>
-+        </details>
-+        <hr />
-+        {this._select('vm', _('containersHost'), this.props.hosts, this._selectHost)}
-+        <button disabled={s.busy || !s.vm} className='btn btn-secondary' onClick={this._refresh}>
-+          {_('containersRefresh')}
-+        </button>
-+        {s.vm && (
-+          <Link className='m-l-1' to={'/vms/' + s.vm}>
-+            {_('containersVmDetails')}
-+          </Link>
++        {props.hosts.length === 0 &&
++          this._card(
++            'info',
++            _('containersGetStarted'),
++            <ol>
++              <li className={noTemplate ? undefined : 'text-muted'}>{_('containersTemplateHelp')}</li>
++              <li>{_('containersStepDeploy')}</li>
++              <li>{_('containersStepRun')}</li>
++            </ol>
++          )}
++        {this._card(
++          'vm',
++          _('containersHost'),
++          <div>
++            {props.hosts.length > 1 && this._select('vm', _('containersHost'), props.hosts, vm, this._selectHost)}
++            {vm && (
++              <span>
++                <button type='button' disabled={s.busy} className='btn btn-secondary' onClick={this._refresh}>
++                  <Icon icon='refresh' /> {_('containersRefresh')}
++                </button>
++                <Link className='m-l-1' to={'/vms/' + vm}>
++                  {_('containersVmDetails')}
++                </Link>
++              </span>
++            )}
++            {s.unreachable && (
++              <p role='alert' className='alert alert-warning m-t-1'>
++                {s.unreachable}
++              </p>
++            )}
++            {data && this._renderResources(data)}
++            {noTemplate ? (
++              props.hosts.length > 0 && <p className='text-muted m-t-1'>{_('containersTemplateHelp')}</p>
++            ) : (
++              <details className='m-t-1' open={props.hosts.length === 0}>
++                <summary>{_('containersDeployVm')}</summary>
++                {this._renderDeploy()}
++              </details>
++            )}
++          </div>
 +        )}
 +        {data && (
-+          <section aria-label={_('containersResources')}>
-+            <h3>{_('containersResources')}</h3>
-+            <p>
-+              {_('containersHost')}: {data.address}
-+            </p>
-+            <p>
-+              {_('containersCpu')}: {s.cpu} / {data.host.cpus} vCPU · {_('containersMemory')}:{' '}
-+              {mib(data.host.memoryUsed)} / {mib(data.host.memoryTotal)} MiB (
-+              {percent(data.host.memoryUsed, data.host.memoryTotal)}) · {_('containersDisk')}: {mib(data.host.diskUsed)}{' '}
-+              / {mib(data.host.diskTotal)} MiB · Docker {data.host.dockerVersion}
-+            </p>
-+            <fieldset disabled={s.busy || !!s.unreachable}>
-+              <h3>{_('containersCreate')}</h3>
-+              <form onSubmit={this._create}>
-+                {this._input('name', _('containersName'), 'text', {
-+                  required: true,
-+                  pattern: '[a-zA-Z0-9][a-zA-Z0-9_.-]{0,62}',
-+                })}
-+                {this._input('image', _('containersImage'), 'text', { required: true })}
-+                {this._input('cpus', _('containersCpus'), 'number', {
-+                  required: true,
-+                  min: 0.1,
-+                  step: 0.1,
-+                  max: data.host.cpus,
-+                })}
-+                {this._input('memoryMiB', _('containersMemoryLimit'), 'number', {
-+                  required: true,
-+                  min: 16,
-+                  max: Math.max(16, mib(data.host.memoryTotal) - 256),
-+                })}
-+                <details>
-+                  <summary>{_('containersAdvanced')}</summary>
-+                  {['ports', 'volumes', 'environment'].map(key => (
-+                    <label className='d-block' key={key}>
-+                      {_('containers' + key[0].toUpperCase() + key.slice(1) + 'Help')}
-+                      <textarea className='form-control' rows='3' value={s[key]} onChange={this._set(key)} />
-+                    </label>
-+                  ))}
-+                  <label>
-+                    {_('containersRestartPolicy')}
-+                    <select className='form-control' value={s.restart} onChange={this._set('restart')}>
-+                      {['no', 'on-failure', 'always', 'unless-stopped'].map(v => (
-+                        <option key={v}>{v}</option>
-+                      ))}
-+                    </select>
-+                  </label>
-+                </details>
-+                <p>{_('containersPullFirst')}</p>
-+                <button className='btn btn-primary' type='submit'>
-+                  {_('containersCreate')}
-+                </button>
-+              </form>
-+              <h3>{_('containersList')}</h3>
-+              <table className='table'>
-+                <thead>
-+                  <tr>
-+                    {['Name', 'Image', 'Status', 'Ports', 'Cpu', 'Memory', 'Actions'].map(k => (
-+                      <th key={k}>{_('containers' + k)}</th>
-+                    ))}
-+                  </tr>
-+                </thead>
-+                <tbody>
-+                  {data.containers.map(c => {
-+                    const stat = data.stats.find(v => v.ID === c.ID || v.Container === c.ID) || {}
-+                    return (
-+                      <tr key={c.ID}>
-+                        <td>{c.Names}</td>
-+                        <td>{c.Image}</td>
-+                        <td>{c.Status}</td>
-+                        <td>{c.Ports}</td>
-+                        <td>{stat.CPUPerc || '—'}</td>
-+                        <td>{stat.MemUsage || '—'}</td>
-+                        <td>
-+                          {['start', 'stop', 'restart', 'logs', 'remove'].map(op => (
-+                            <button
-+                              type='button'
-+                              className='btn btn-sm btn-secondary m-r-1'
-+                              key={op}
-+                              onClick={() =>
-+                                op === 'remove'
-+                                  ? this._remove(op, { vm: s.vm, id: c.ID })
-+                                  : this._perform(op, { vm: s.vm, id: c.ID })
-+                              }
-+                            >
-+                              {_('containers' + op[0].toUpperCase() + op.slice(1))}
-+                            </button>
-+                          ))}
-+                        </td>
-+                      </tr>
-+                    )
-+                  })}
-+                </tbody>
-+              </table>
-+              {data.containers.length === 0 && <p>{_('containersEmpty')}</p>}
-+              <h3>{_('containersImages')}</h3>
-+              <form
-+                onSubmit={e => {
-+                  e.preventDefault()
-+                  this._perform('pull', { vm: s.vm, image: s.pullImage })
-+                }}
-+              >
-+                {this._input('pullImage', _('containersImage'), 'text', { required: true })}
-+                <button className='btn btn-primary' type='submit'>
-+                  {_('containersPull')}
-+                </button>
-+              </form>
-+              <table className='table'>
-+                <thead>
-+                  <tr>
-+                    <th>{_('containersImage')}</th>
-+                    <th>{_('containersDisk')}</th>
-+                    <th>{_('containersActions')}</th>
-+                  </tr>
-+                </thead>
-+                <tbody>
-+                  {data.images.map((image, i) => (
-+                    <tr key={i}>
-+                      <td>
-+                        {image.Repository}:{image.Tag}
-+                      </td>
-+                      <td>{image.Size}</td>
-+                      <td>
-+                        <button
-+                          className='btn btn-secondary'
-+                          onClick={() => this._remove('removeImage', { vm: s.vm, image: image.ID })}
-+                        >
-+                          {_('containersRemove')}
-+                        </button>
-+                      </td>
-+                    </tr>
-+                  ))}
-+                </tbody>
-+              </table>
-+            </fieldset>
-+          </section>
++          <fieldset disabled={s.busy || !!s.unreachable}>
++            {this._card('add', _('containersCreate'), this._renderCreate(data))}
++            {this._card(
++              'vm',
++              _('containersList'),
++              <div>
++                {this._renderTasks(data, vm)}
++                {this._renderContainers(data, vm)}
++              </div>
++            )}
++            {this._card('disk', _('containersImages'), this._renderImages(data, vm))}
++          </fieldset>
 +        )}
-+        {s.logs !== undefined && (
-+          <section>
-+            <h3>{_('containersLogs')}</h3>
-+            <p>{_('containersLogHelp')}</p>
-+            <pre style={{ maxHeight: '24rem', overflow: 'auto' }}>{s.logs}</pre>
-+            <button className='btn btn-secondary' onClick={() => this.setState({ logs: undefined })}>
-+              {_('containersClose')}
-+            </button>
-+          </section>
-+        )}
-+      </main>
++        {s.logs !== undefined &&
++          this._card(
++            'logs',
++            _('containersLogs'),
++            <div>
++              <p>{_('containersLogHelp')}</p>
++              <pre style={{ maxHeight: '24rem', overflow: 'auto' }}>{s.logs}</pre>
++              <button type='button' className='btn btn-secondary' onClick={() => this.setState({ logs: undefined })}>
++                {_('containersClose')}
++              </button>
++            </div>
++          )}
++        {s.orphans.length > 0 &&
++          this._card(
++            'alarm',
++            _('containersOrphans'),
++            <div>
++              <p>{_('containersOrphansHelp')}</p>
++              {s.orphans.map(id => (
++                <p key={id}>
++                  <code>{id}</code>{' '}
++                  <button
++                    type='button'
++                    disabled={s.busy}
++                    className='btn btn-sm btn-secondary'
++                    onClick={() => this._remove('forgetCredentials', { id }, 'containersOrphansWarning')}
++                  >
++                    {_('containersRemove')}
++                  </button>
++                </p>
++              ))}
++            </div>
++          )}
++      </Container>
 +    )
 +  }
 +}
+diff --git a/packages/xo-web/src/xo-app/dashboard/overview/index.js b/packages/xo-web/src/xo-app/dashboard/overview/index.js
+index de2ea3060..1d5f41ff7 100644
+--- a/packages/xo-web/src/xo-app/dashboard/overview/index.js
++++ b/packages/xo-web/src/xo-app/dashboard/overview/index.js
+@@ -34,6 +34,7 @@ import {
+   subscribeUsers,
+ } from 'xo'
+ 
++import DockerCard from '../../containers/dashboard-card'
+ import styles from './index.css'
+ 
+ // ===================================================================
+@@ -437,6 +438,13 @@ class DefaultCard extends Component {
+             </Card>
+           </Col>
+         </Row>
++        {props.isAdmin && (
++          <Row>
++            <Col>
++              <DockerCard />
++            </Col>
++          </Row>
++        )}
+         {props.isAdmin && (
+           <Row>
+             <Col>
 diff --git a/packages/xo-web/src/xo-app/index.js b/packages/xo-web/src/xo-app/index.js
 index a930dbc14..2ddd7c831 100644
 --- a/packages/xo-web/src/xo-app/index.js

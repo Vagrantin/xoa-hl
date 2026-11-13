@@ -28,9 +28,12 @@ API method.
 
 ## Deploy and use
 
-1. Open **Containers → Deploy Docker VM**. Choose template, storage and network
-   in the same pool, then the name, vCPUs and RAM (minimum 1 GiB). Optionally supply an SSH public
-   key for the guest maintenance account `docker-admin`, with sudo access. The system disk
+1. Open **Containers**. With no Docker VM yet, the page shows a short guide and
+   the **Deploy Docker VM** form. Set the name, vCPUs and RAM (minimum 1 GiB).
+   The page chooses for you when there is nothing to choose: a single template,
+   the pool's default storage and a single network are preselected. Under
+   **Advanced options** you can supply an SSH public key for the guest
+   maintenance account `docker-admin`, with sudo access. The system disk
    is a full copy of the template, initially 32 GiB. Copying requires adequate
    free storage; provisioned memory and vCPUs must fit the pool. XO/XAPI perform
    their normal VM placement checks.
@@ -38,11 +41,16 @@ API method.
    existing `vm.create` code path. If boot fails, inspect the existing VM's Tasks
    and console and start that VM again. A deployment response is **not** proof
    that the guest has finished booting.
-3. Select the Docker VM. Wait for guest tools, DHCP and cloud-init. Refresh
-   reports connection or identity failures explicitly, and links to the VM
-   console. Do not deploy duplicates while waiting.
-4. Pull an image, for example `nginx:alpine`. Then create a container with a name,
-   image and mandatory CPU/memory limits. `8080:80/tcp` publishes nginx on port
+3. A single Docker VM is selected automatically; with several, choose one.
+   Wait for guest tools, DHCP and cloud-init. The page reports connection or
+   identity failures explicitly, and links to the VM console. Do not deploy
+   duplicates while waiting.
+4. Create a container with a name, an image such as `nginx:alpine`, and CPU and
+   memory limits (defaults: 1 CPU, 256 MiB). An image that is not on the VM yet
+   is downloaded in the background, then the container starts by itself; the
+   download is listed above the containers until it ends. A failed download
+   creates nothing, shows its reason, and can be dismissed.
+   `8080:80/tcp` publishes nginx on port
    8080 of the **Docker VM**. Firewall/segmentation rules for application ports
    belong on the surrounding network; Docker-published ports must not be assumed
    to obey ordinary guest firewall INPUT rules.
@@ -51,14 +59,20 @@ API method.
    environment `TZ=UTC`. Named volumes have an `xoa-hl-` prefix and are shared
    by name within the VM. Avoid environment secrets: XO administrators and API
    audit/debug logs can expose request values.
-6. Start, stop, restart, read logs, or remove stopped containers. Removal is
+6. Start, stop, restart, read logs, or remove stopped containers. Only the
+   actions that apply to a container's state are offered. Removal is
    confirmed, has no force flag, and preserves named volumes. Docker refuses
    removal of an image that is in use. The UI manages only containers labelled
    `net.xcp-hl.managed=1`; containers created manually are not silently adopted.
 
-The page refreshes every five seconds, without overlapping an operation. Pulls
-can take up to four minutes; during an operation other actions for that guest
-are serialized. Logs are snapshots of 200 lines within 24 hours, capped at
+To update an image, download it again under **Images**, then recreate the
+container.
+
+The page refreshes every five seconds in the background, without disabling the
+forms. Operations on one guest run one at a time, in order. Image downloads run
+in the guest, up to four at once and for at most one hour each, so they do not
+block other actions and survive closing the page; a guest reboot cancels them.
+Logs are snapshots of 200 lines within 24 hours, capped at
 64 KiB; a command producing over 4 MiB fails instead of exhausting the helper.
 Unreachable hosts are shown as errors, never as successful empty lists. Displayed
 metrics are the last snapshot; an error means they are stale.
@@ -66,12 +80,25 @@ metrics are the last snapshot; an error means they are stale.
 CPU is a hard `--cpus` limit, not a share weight. Memory and swap have matching
 limits, with a PID cap of 256 and `no-new-privileges`. The VM OS retains at least
 256 MiB outside any one container's requested limit. Limits are per container:
-several containers can still overcommit the VM. Disk consumption is monitored,
+several containers can still overcommit the VM. The page therefore shows
+**Reserved by running containers**, the sum of their limits against the VM's
+vCPUs and RAM, and warns when it exceeds them. Disk consumption is monitored,
 not individually quota-limited. Allocate and monitor the dedicated VM accordingly.
 CPU usage uses differences between `/proc/stat` snapshots; memory and disk are
 for the **whole Docker VM**, including OS and Docker overhead. Per-container
 CPU can exceed 100% when it uses multiple cores. The existing VM Stats page
 provides Xen-side history.
+
+## Dashboard
+
+For administrators, the Dashboard overview shows a **Docker containers** card
+once at least one Docker VM exists; without one, the Dashboard is unchanged.
+Per Docker VM it lists running and total containers, load relative to vCPUs,
+memory, disk use and the reserved limits, and flags a stopped or unreachable
+VM, a failed download, high memory or disk use, and reserved limits above the
+VM's size. It refreshes every 30 seconds, and the appliance shares one summary
+between viewers for 15 seconds. Load is the guest's one-minute load average,
+not the sampled CPU percentage of the Containers page.
 
 ## Access and recovery
 
@@ -114,8 +141,10 @@ outside the appliance and include it in your own credential backup policy.
 
 Deleting a Docker VM is an explicit action on its normal VM page, not a
 container-delete action. The private credential directory is retained for
-recovery and can be removed by the appliance administrator after backups and VM
-deletion are confirmed. Named-volume pruning is deliberately manual inside the
+recovery. Once no VM, snapshot or template refers to it, the Containers page
+lists it under **Unused access keys**, where it can be removed after a
+confirmation. A disconnected pool makes its Docker VMs look deleted: keep the
+keys in that case, because a removed key cannot be recovered. Named-volume pruning is deliberately manual inside the
 guest. Upgrades to Docker/AlmaLinux are a separate guest maintenance operation;
 updating XOA-HL does not patch the workload guest.
 
@@ -147,8 +176,13 @@ Docker version and the CI runs. The source tests do not replace deployed QA.
 | Logs containing HTML and large output | Text only, bounded; no script execution |
 | Guest disconnected or SSH key replaced | Visible failure; no unverified connection |
 | XO restart/RPM update | Same guest and keys; UI reconnects |
-| Two concurrent operations/pull and poll | Serialized; no duplicate container operation |
-| VM resource panel | Whole-guest CPU/RAM/disk plus per-container CPU/RAM |
+| Two concurrent operations and poll | Serialized in order; no duplicate container operation |
+| Create with an image not yet on the VM | Download listed; container starts when it ends; page can be closed meanwhile |
+| Bad image name, registry unreachable | Failed download with a reason; no container; dismissable |
+| Download longer than four minutes | Completes; other actions stay available |
+| VM resource panel | Whole-guest CPU/RAM/disk, reserved limits, per-container usage and limits |
+| Dashboard card | Absent without a Docker VM; correct counts; stopped/unreachable VM flagged |
+| Docker VM deleted, then pool disconnected | Keys listed as unused only after deletion; warning explains the disconnected case |
 | Cloud-init seed cleanup | Seed removed after boot; investigate cleanup failures |
 
 CI checks patch application, generated keys/SSH arguments, API authorization

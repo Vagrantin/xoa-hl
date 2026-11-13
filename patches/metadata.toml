@@ -319,7 +319,7 @@ dependencies = ['240-appliance-theme-feedback']
 
 [[patches]]
 id = "270-container-support"
-description = "Admin-only dedicated Docker VM deployment and host-key-pinned SSH management; no local Docker"
+description = "Admin-only dedicated Docker VM deployment, summary and host-key-pinned SSH management; no local Docker"
 target = "packages/xo-server/src/api/containers.mjs and packages/xo-server/src/containers.mjs"
 upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
 applies_to = ["5.113.2"]
@@ -330,7 +330,7 @@ notes = "Protocol v1 pairs with build-xoa-hl/docker-host/command.py and its CI-b
 
 [[patches]]
 id = "280-container-ui"
-description = "Containers page: dedicated VM deployment, limits, images, logs, lifecycle and VM resource usage"
+description = "Containers page and Dashboard card: Docker VM deployment, containers, limits, downloads, logs and resource usage"
 target = "packages/xo-web/src"
 upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
 applies_to = ["5.113.2"]
