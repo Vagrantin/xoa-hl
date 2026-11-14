@@ -19,12 +19,45 @@ API method.
 2. Import the resulting XVA through XO into the desired pool. If imported as a
    VM, convert it to a template. Add the exact tag `xcp-hl-docker-template-v1`.
    Do not boot this clean template before converting it.
-3. Install the XOA-HL RPM built from the integration branch in a QA environment.
-   It includes the Containers page and declares `openssh-clients` as a runtime
-   dependency. There is no additional Docker package on XOA-HL.
+3. Install the dev RPM on a test appliance and switch the feature on, as
+   described under [Dev build and feature switch](#dev-build-and-feature-switch).
+   The RPM declares `openssh-clients` as a runtime dependency. There is no
+   additional Docker package on XOA-HL.
 4. Ensure DHCP and IPv4 connectivity from XOA-HL to TCP 22 on the guest network.
    Internet access is needed by CI for packages, and by the guest for registry
    pulls. Local/private registries with anonymous pulls can also be used.
+
+## Dev build and feature switch
+
+The feature is switched off by default. While it is off, the Containers menu
+entry and the Dashboard card are absent, the page shows a notice, and every
+`containers.*` API method except `containers.enabled` refuses. Nothing contacts
+a guest. To switch it on, create an empty file on the appliance, then reload
+the browser page. No service restart is needed:
+
+```sh
+touch /etc/xoa-hl/containers.enabled
+```
+
+Remove the file to switch it off again. Existing Docker VMs and their access
+keys are left untouched.
+
+Every push to the integration branch that changes the package runs the
+`Dev build (Docker VM branch)` workflow. It uploads one unsigned RPM as the
+workflow artifact `xoa-hl-dev-rpm`, kept 14 days. It creates no tag, no GitHub
+release and no yum repository entry, so no appliance can receive it through
+`dnf update`. Use it on a test appliance only:
+
+```sh
+gh run download --repo Vagrantin/xoa-hl --name xoa-hl-dev-rpm <run-id>
+# copy the RPM to the test appliance, then on the appliance:
+dnf downgrade ./xoa-hl-*.rpm
+touch /etc/xoa-hl/containers.enabled
+```
+
+The dev RPM has release `0.dev<run>`, which sorts below every published
+release. That is why the command is `dnf downgrade`, and why a later
+`dnf update xoa-hl` puts the appliance back on the published build.
 
 ## Deploy and use
 

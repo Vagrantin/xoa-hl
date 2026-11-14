@@ -9,7 +9,7 @@ const React = deps('react')
 const renderer = deps('react-test-renderer')
 const source = resolve(process.argv[2])
 const calls = []
-let pending, cancelled = false, timerId = 0, confirmed
+let pending, cancelled = false, timerId = 0, confirmed, switchedOn = true
 const timers = new Set()
 const box = type => props => React.createElement(type, null, props.children)
 // Load one page module with XO's shared components replaced by plain elements.
@@ -25,7 +25,7 @@ function load(file, name) {
     Card: box('section'), CardBlock: box('div'), CardHeader: box('header'), Container: box('main'), Row: box('div'), Col: box('div'),
     Icon: props => React.createElement('i', { className: props.icon }),
     confirm: options => { confirmed = options; return cancelled ? Promise.reject(new Error('cancel')) : Promise.resolve() },
-    containerCall: (op, params) => { calls.push([op, params]); return pending || Promise.resolve({ success: true }) },
+    containerCall: (op, params) => { if (op === 'enabled') return Promise.resolve(switchedOn); calls.push([op, params]); return pending || Promise.resolve({ success: true }) },
     setTimeout: () => { const id = ++timerId; timers.add(id); return id }, clearTimeout: id => timers.delete(id),
   }
   vm.runInNewContext(code, context)
@@ -159,13 +159,25 @@ async function tests() {
   denied.unmount()
   // XSS is rendered as text in log output, even when remote applications control it.
   pending = Promise.resolve({ orphans: [] })
-  const logs = renderer.create(React.createElement(Containers, props))
+  const logs = renderer.create(React.createElement(Containers, props)); await settle()
   logs.getInstance().setState({ logs: '<script>alert(1)</script>' })
   const tree = logs.toJSON()
   function nodes(value) { return value ? [value, ...(value.children || []).flatMap(v => typeof v === 'object' ? nodes(v) : [])] : [] }
   assert.equal(nodes(tree).filter(n => n.type === 'script').length, 0)
   assert.ok(JSON.stringify(tree).includes('<script>alert(1)</script>'))
   logs.unmount()
+
+  // Feature switch off: a notice only, no card, no guest call and no polling.
+  switchedOn = false
+  calls.length = 0
+  const before0 = timers.size
+  const off = renderer.create(React.createElement(Containers, { ...props, hosts: [{ id: 'vm-1', name_label: 'Docker' }] })); await settle()
+  assert.ok(text(off).includes('containersDisabled') && !text(off).includes('containersGetStarted'))
+  const offCard = renderer.create(React.createElement(DockerCard)); await settle()
+  assert.equal(offCard.toJSON(), null)
+  assert.deepEqual([calls.length, timers.size], [0, before0])
+  off.unmount(); offCard.unmount()
+  switchedOn = true
 
   // Dashboard card: absent without Docker VMs or when the API fails, never breaks the dashboard.
   pending = Promise.resolve({ hosts: [], templates: 0, orphans: [] })
@@ -189,6 +201,6 @@ async function tests() {
   assert.equal(strong, '2 / 3')
   const before = timers.size
   card.unmount(); assert.equal(timers.size, before - 1)
-  console.log('Container UI tests passed: first run, defaults, limits, downloads, queued mutations, error separation, unused keys, admin gate, escaped logs, dashboard card')
+  console.log('Container UI tests passed: first run, defaults, limits, downloads, queued mutations, error separation, unused keys, admin gate, escaped logs, feature switch, dashboard card')
 }
 tests().catch(error => { console.error(error); process.exitCode = 1 })

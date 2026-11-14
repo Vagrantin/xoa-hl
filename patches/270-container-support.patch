@@ -1,15 +1,16 @@
 diff --git a/packages/xo-server/src/api/containers.mjs b/packages/xo-server/src/api/containers.mjs
 new file mode 100644
-index 000000000..bf7e624ab
+index 000000000..703a70322
 --- /dev/null
 +++ b/packages/xo-server/src/api/containers.mjs
-@@ -0,0 +1,169 @@
+@@ -0,0 +1,188 @@
 +import { rm } from 'node:fs/promises'
 +import { create as createVm } from './vm.mjs'
 +import {
 +  forgetCredentials as forget,
 +  guestAddress,
 +  HOST_TAG,
++  isEnabled,
 +  orphanCredentialIds,
 +  prepareCredentials,
 +  remote,
@@ -17,12 +18,28 @@ index 000000000..bf7e624ab
 +  validateDeployment,
 +} from '../containers.mjs'
 +
++// Every method but `enabled` refuses while the feature switch is off.
++async function assertEnabled() {
++  if (!(await isEnabled())) throw new Error('Docker VM management is not enabled on this appliance')
++}
++const guest = async (vm, request) => {
++  await assertEnabled()
++  return remote(vm, request)
++}
++
++export function enabled() {
++  return isEnabled()
++}
++enabled.permission = 'admin'
++enabled.params = {}
++
 +const vmLike = objects =>
 +  Object.values(objects).filter(object => ['VM', 'VM-snapshot', 'VM-template'].includes(object.type))
 +
 +// Shared by every open dashboard; avoids one SSH round per viewer.
 +let cached
-+export function summary() {
++export async function summary() {
++  await assertEnabled()
 +  if (cached === undefined || Date.now() - cached.time > 15000) {
 +    cached = { time: Date.now(), value: summarize(this.getObjects()) }
 +    cached.value.catch(() => {
@@ -66,6 +83,7 @@ index 000000000..bf7e624ab
 +}
 +
 +export async function forgetCredentials({ id }) {
++  await assertEnabled()
 +  await forget(id, vmLike(this.getObjects()))
 +  cached = undefined
 +}
@@ -74,6 +92,7 @@ index 000000000..bf7e624ab
 +
 +let deploying = false
 +export async function deploy({ template, sr, network, name, cpus, memoryMiB, administratorKey }) {
++  await assertEnabled()
 +  validateDeployment({ name, cpus, memoryMiB })
 +  if (!template.tags?.includes(TEMPLATE_TAG))
 +    throw new Error('Select the Docker host v1 template built by build-xoa-hl CI')
@@ -136,34 +155,34 @@ index 000000000..bf7e624ab
 +}
 +
 +export async function overview({ vm }) {
-+  return { ...(await remote(vm, { operation: 'overview' })), address: guestAddress(vm) }
++  return { ...(await guest(vm, { operation: 'overview' })), address: guestAddress(vm) }
 +}
 +export function create({ vm, config }) {
-+  return remote(vm, { operation: 'create', config })
++  return guest(vm, { operation: 'create', config })
 +}
 +export function start({ vm, id }) {
-+  return remote(vm, { operation: 'start', id })
++  return guest(vm, { operation: 'start', id })
 +}
 +export function stop({ vm, id }) {
-+  return remote(vm, { operation: 'stop', id })
++  return guest(vm, { operation: 'stop', id })
 +}
 +export function restart({ vm, id }) {
-+  return remote(vm, { operation: 'restart', id })
++  return guest(vm, { operation: 'restart', id })
 +}
 +export function remove({ vm, id }) {
-+  return remote(vm, { operation: 'remove', id })
++  return guest(vm, { operation: 'remove', id })
 +}
 +export function logs({ vm, id }) {
-+  return remote(vm, { operation: 'logs', id })
++  return guest(vm, { operation: 'logs', id })
 +}
 +export function pull({ vm, image }) {
-+  return remote(vm, { operation: 'pull', image })
++  return guest(vm, { operation: 'pull', image })
 +}
 +export function removeImage({ vm, image }) {
-+  return remote(vm, { operation: 'removeImage', image })
++  return guest(vm, { operation: 'removeImage', image })
 +}
 +export function dismiss({ vm, id }) {
-+  return remote(vm, { operation: 'dismiss', id })
++  return guest(vm, { operation: 'dismiss', id })
 +}
 +for (const fn of [overview, create, start, stop, restart, remove, logs, pull, removeImage, dismiss]) {
 +  fn.permission = 'admin'
@@ -175,13 +194,13 @@ index 000000000..bf7e624ab
 +for (const fn of [pull, removeImage]) fn.params.image = { type: 'string' }
 diff --git a/packages/xo-server/src/containers.mjs b/packages/xo-server/src/containers.mjs
 new file mode 100644
-index 000000000..104a5ccea
+index 000000000..cc99842b2
 --- /dev/null
 +++ b/packages/xo-server/src/containers.mjs
-@@ -0,0 +1,252 @@
+@@ -0,0 +1,260 @@
 +// Dedicated Docker VM protocol v1. The appliance never executes Docker locally.
 +import { execFile, spawn } from 'node:child_process'
-+import { mkdir, mkdtemp, readFile, readdir, rm, writeFile } from 'node:fs/promises'
++import { access, mkdir, mkdtemp, readFile, readdir, rm, writeFile } from 'node:fs/promises'
 +import { isIP } from 'node:net'
 +import { join } from 'node:path'
 +import { promisify } from 'node:util'
@@ -191,6 +210,14 @@ index 000000000..104a5ccea
 +export const HOST_TAG = 'xcp-hl-docker-v1'
 +export const ROOT = '/var/lib/xoa-hl/docker-hosts'
 +const KEY_TAG = 'xcp-hl-docker-key:'
++export const SWITCH = '/etc/xoa-hl/containers.enabled'
++
++// Feature switch: off unless the administrator created this file.
++export const isEnabled = (path = SWITCH) =>
++  access(path).then(
++    () => true,
++    () => false
++  )
 +
 +export function validateDeployment({ name, cpus, memoryMiB }) {
 +  if (typeof name !== 'string' || !/^[\w .-]{1,63}$/.test(name)) throw new Error('Invalid VM name')

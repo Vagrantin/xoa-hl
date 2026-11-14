@@ -72,15 +72,27 @@ test('all API entry points require XO administrator permission and object parame
   // Load the actual API module with a narrow VM creation dependency stub. Core stays real.
   let code = await readFile(join(source, 'packages/xo-server/src/api/containers.mjs'), 'utf8')
   code = code.replace("import { create as createVm } from './vm.mjs'", 'const createVm = () => { throw new Error("not called") }')
-  code = code.replace("'../containers.mjs'", JSON.stringify(pathToFileURL(join(source, 'packages/xo-server/src/containers.mjs')).href))
+  const file = pathToFileURL(join(source, 'packages/xo-server/src/containers.mjs')).href
+  const wrapper = `export * from ${JSON.stringify(file)}; export const isEnabled = async () => globalThis.__dockerSwitch === true`
+  code = code.replace("'../containers.mjs'", JSON.stringify('data:text/javascript;base64,' + Buffer.from(wrapper).toString('base64')))
   const api = await import('data:text/javascript;base64,' + Buffer.from(code).toString('base64'))
   for (const [name, fn] of Object.entries(api)) {
     assert.equal(fn.permission, 'admin', name)
     assert.equal(typeof fn.params, 'object', name)
-    if (!['deploy', 'summary', 'forgetCredentials'].includes(name)) assert.deepEqual(fn.resolve.vm, ['vm', 'VM', 'administrate'])
+    if (!['deploy', 'summary', 'forgetCredentials', 'enabled'].includes(name)) assert.deepEqual(fn.resolve.vm, ['vm', 'VM', 'administrate'])
   }
+  // Feature switch off: only `enabled` answers, and nothing reaches a guest or XAPI.
+  const context = { getObjects: () => { throw new Error('objects read while switched off') } }
+  const vm = { power_state: 'Running', tags: ['xcp-hl-docker-v1'] }
+  assert.equal(await api.enabled.call(context), false)
+  for (const [name, fn] of Object.entries(api)) {
+    if (name !== 'enabled') await assert.rejects(fn.call(context, { vm, id: 'host-abc123' }), /not enabled/, name)
+  }
+  globalThis.__dockerSwitch = true
+  assert.equal(await api.enabled.call(context), true)
   await assert.rejects(api.deploy({ template: { tags: [] }, name: 'Docker', cpus: 2, memoryMiB: 2048 }), /template/)
   await assert.rejects(api.deploy({ template: { tags: ['xcp-hl-docker-template-v1'], $pool: 'a' }, sr: { $pool: 'b' }, network: { $pool: 'a' }, name: 'Docker', cpus: 2, memoryMiB: 2048 }), /same pool/)
+  delete globalThis.__dockerSwitch
 })
 
 test('operations on one guest queue in order, survive a failure and are bounded', async () => {
@@ -142,7 +154,7 @@ test('summary lists every Docker VM and never fails because one guest is down', 
   let code = await readFile(join(source, 'packages/xo-server/src/api/containers.mjs'), 'utf8')
   code = code.replace("import { create as createVm } from './vm.mjs'", 'const createVm = () => {}')
   const file = pathToFileURL(join(source, 'packages/xo-server/src/containers.mjs')).href
-  const wrapper = `export * from ${JSON.stringify(file)}; export const orphanCredentialIds = async () => ['host-abc123']; export const remote = async vm => { if (vm.id === 'broken') throw new Error('Docker VM is not ready'); return { host: { cpus: 2, cpusAllocated: 1.5 }, containers: [{ State: 'running' }, { State: 'exited' }], tasks: [{ state: 'failed' }] } }`
+  const wrapper = `export * from ${JSON.stringify(file)}; export const isEnabled = async () => true; export const orphanCredentialIds = async () => ['host-abc123']; export const remote = async vm => { if (vm.id === 'broken') throw new Error('Docker VM is not ready'); return { host: { cpus: 2, cpusAllocated: 1.5 }, containers: [{ State: 'running' }, { State: 'exited' }], tasks: [{ state: 'failed' }] } }`
   code = code.replace("'../containers.mjs'", JSON.stringify('data:text/javascript;base64,' + Buffer.from(wrapper).toString('base64')))
   const api = await import('data:text/javascript;base64,' + Buffer.from(code + '\n// summary').toString('base64'))
   const tags = ['xcp-hl-docker-v1']
@@ -172,7 +184,7 @@ test('deployment reuses XO full-copy creation, carries private seed, and cleans 
   const root = await mkdtemp(join(tmpdir(), 'containers-deploy-test-'))
   try {
     const file = pathToFileURL(join(source, 'packages/xo-server/src/containers.mjs')).href
-    const wrapper = `export * from ${JSON.stringify(file)}; import { prepareCredentials as prepare } from ${JSON.stringify(file)}; export const prepareCredentials = () => prepare(${JSON.stringify(root)})`
+    const wrapper = `export * from ${JSON.stringify(file)}; import { prepareCredentials as prepare } from ${JSON.stringify(file)}; export const isEnabled = async () => true; export const prepareCredentials = () => prepare(${JSON.stringify(root)})`
     const wrapped = 'data:text/javascript;base64,' + Buffer.from(wrapper).toString('base64')
     let code = await readFile(join(source, 'packages/xo-server/src/api/containers.mjs'), 'utf8')
     code = code.replace("import { create as createVm } from './vm.mjs'", 'const createVm = function (params) { return globalThis.__dockerCreate(this, params) }')
@@ -222,5 +234,15 @@ test('optional guest-maintenance key is validated and isolated from the forced m
     assert.equal(admin.lock_passwd, true)
     assert.match(config.users.find(user => user.name === 'root').ssh_authorized_keys[0], /^restrict,command=/)
     assert.notEqual(admin.ssh_authorized_keys[0], config.users[0].ssh_authorized_keys[0])
+  } finally { await rm(root, { recursive: true, force: true }) }
+})
+
+test('the feature switch is a file that is absent by default', async () => {
+  const root = await mkdtemp(join(tmpdir(), 'containers-switch-test-'))
+  try {
+    assert.equal(core.SWITCH, '/etc/xoa-hl/containers.enabled')
+    assert.equal(await core.isEnabled(join(root, 'containers.enabled')), false)
+    await writeFile(join(root, 'containers.enabled'), '')
+    assert.equal(await core.isEnabled(join(root, 'containers.enabled')), true)
   } finally { await rm(root, { recursive: true, force: true }) }
 })

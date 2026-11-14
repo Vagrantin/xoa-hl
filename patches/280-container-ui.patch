@@ -1,8 +1,8 @@
 diff --git a/packages/xo-web/src/common/intl/locales/es.js b/packages/xo-web/src/common/intl/locales/es.js
-index d7a520ef7..f224a895a 100644
+index d7a520ef7..39d3a2f88 100644
 --- a/packages/xo-web/src/common/intl/locales/es.js
 +++ b/packages/xo-web/src/common/intl/locales/es.js
-@@ -8,6 +8,74 @@ addLocaleData(reactIntlData)
+@@ -8,6 +8,75 @@ addLocaleData(reactIntlData)
  // ===================================================================
  
  export default {
@@ -70,6 +70,7 @@ index d7a520ef7..f224a895a 100644
 +  containersOrphansHelp: "These keys belonged to Docker VMs that XOA-HL no longer sees. If a pool is only disconnected, keep them: a removed key cannot be recovered.",
 +  containersOrphansWarning: "Remove these access keys? If the VM still exists, XOA-HL can never manage its containers again.",
 +  containersVmStopped: "Stopped or not reachable",
++  containersDisabled: "Docker VM management is switched off on this appliance. An administrator can switch it on from the appliance console; see the Containers guide.",
 +  containersDashboard: "Docker containers",
 +  containersDashboardRunning: "containers running",
 +  containersDashboardVms: "Docker VMs reachable",
@@ -77,7 +78,7 @@ index d7a520ef7..f224a895a 100644
    xhlAppearance: "Appearance",
    xhlTheme: "Theme",
    xhlColorMode: "Color mode",
-@@ -1681,7 +1749,6 @@ export default {
+@@ -1681,7 +1750,6 @@ export default {
    consoleTabName: 'Consola',
  
    // Original text: 'Container'
@@ -86,10 +87,10 @@ index d7a520ef7..f224a895a 100644
    // Original text: "Snapshots"
    snapshotsTabName: 'Snapshots',
 diff --git a/packages/xo-web/src/common/intl/locales/fa.js b/packages/xo-web/src/common/intl/locales/fa.js
-index 9eef7e1dc..1b2da3ecd 100644
+index 9eef7e1dc..ba4050ae6 100644
 --- a/packages/xo-web/src/common/intl/locales/fa.js
 +++ b/packages/xo-web/src/common/intl/locales/fa.js
-@@ -7,6 +7,74 @@ addLocaleData(reactIntlData)
+@@ -7,6 +7,75 @@ addLocaleData(reactIntlData)
  // ===================================================================
  
  export default {
@@ -157,6 +158,7 @@ index 9eef7e1dc..1b2da3ecd 100644
 +  containersOrphansHelp: "These keys belonged to Docker VMs that XOA-HL no longer sees. If a pool is only disconnected, keep them: a removed key cannot be recovered.",
 +  containersOrphansWarning: "Remove these access keys? If the VM still exists, XOA-HL can never manage its containers again.",
 +  containersVmStopped: "Stopped or not reachable",
++  containersDisabled: "Docker VM management is switched off on this appliance. An administrator can switch it on from the appliance console; see the Containers guide.",
 +  containersDashboard: "Docker containers",
 +  containersDashboardRunning: "containers running",
 +  containersDashboardVms: "Docker VMs reachable",
@@ -164,7 +166,7 @@ index 9eef7e1dc..1b2da3ecd 100644
    xhlAppearance: "Appearance",
    xhlTheme: "Theme",
    xhlColorMode: "Color mode",
-@@ -2171,7 +2239,6 @@ export default {
+@@ -2171,7 +2240,6 @@ export default {
    consoleTabName: 'کنسول',
  
    // Original text: 'Container'
@@ -173,10 +175,10 @@ index 9eef7e1dc..1b2da3ecd 100644
    // Original text: 'Snapshots'
    snapshotsTabName: 'اسنپ شات ها',
 diff --git a/packages/xo-web/src/common/intl/locales/fr.js b/packages/xo-web/src/common/intl/locales/fr.js
-index f18bdb560..aaa40ac29 100644
+index f18bdb560..c371e0837 100644
 --- a/packages/xo-web/src/common/intl/locales/fr.js
 +++ b/packages/xo-web/src/common/intl/locales/fr.js
-@@ -8,6 +8,74 @@ addLocaleData(reactIntlData)
+@@ -8,6 +8,75 @@ addLocaleData(reactIntlData)
  // ===================================================================
  
  export default {
@@ -244,6 +246,7 @@ index f18bdb560..aaa40ac29 100644
 +  containersOrphansHelp: "Ces clés appartenaient à des VM Docker que XOA-HL ne voit plus. Si un pool est seulement déconnecté, conservez-les : une clé supprimée est irrécupérable.",
 +  containersOrphansWarning: "Supprimer ces clés d’accès ? Si la VM existe encore, XOA-HL ne pourra plus jamais gérer ses conteneurs.",
 +  containersVmStopped: "Arrêtée ou injoignable",
++  containersDisabled: "La gestion des VM Docker est désactivée sur cette appliance. Un administrateur peut l'activer depuis la console de l'appliance ; voir le guide Conteneurs.",
 +  containersDashboard: "Conteneurs Docker",
 +  containersDashboardRunning: "conteneurs en cours d’exécution",
 +  containersDashboardVms: "VM Docker joignables",
@@ -251,7 +254,7 @@ index f18bdb560..aaa40ac29 100644
    xhlAppearance: "Apparence",
    xhlTheme: "Thème",
    xhlColorMode: "Mode de couleur",
-@@ -1737,7 +1805,6 @@ export default {
+@@ -1737,7 +1806,6 @@ export default {
    consoleTabName: 'Console',
  
    // Original text: "Container"
@@ -260,10 +263,10 @@ index f18bdb560..aaa40ac29 100644
    // Original text: "Snapshots"
    snapshotsTabName: 'Instantanés',
 diff --git a/packages/xo-web/src/common/intl/locales/he.js b/packages/xo-web/src/common/intl/locales/he.js
-index d1849df8a..484519e28 100644
+index d1849df8a..aaf7462d7 100644
 --- a/packages/xo-web/src/common/intl/locales/he.js
 +++ b/packages/xo-web/src/common/intl/locales/he.js
-@@ -8,6 +8,74 @@ addLocaleData(reactIntlData)
+@@ -8,6 +8,75 @@ addLocaleData(reactIntlData)
  // ===================================================================
  
  export default {
@@ -331,6 +334,7 @@ index d1849df8a..484519e28 100644
 +  containersOrphansHelp: "These keys belonged to Docker VMs that XOA-HL no longer sees. If a pool is only disconnected, keep them: a removed key cannot be recovered.",
 +  containersOrphansWarning: "Remove these access keys? If the VM still exists, XOA-HL can never manage its containers again.",
 +  containersVmStopped: "Stopped or not reachable",
++  containersDisabled: "Docker VM management is switched off on this appliance. An administrator can switch it on from the appliance console; see the Containers guide.",
 +  containersDashboard: "Docker containers",
 +  containersDashboardRunning: "containers running",
 +  containersDashboardVms: "Docker VMs reachable",
@@ -338,7 +342,7 @@ index d1849df8a..484519e28 100644
    xhlAppearance: "Appearance",
    xhlTheme: "Theme",
    xhlColorMode: "Color mode",
-@@ -1420,7 +1488,6 @@ export default {
+@@ -1420,7 +1489,6 @@ export default {
    consoleTabName: undefined,
  
    // Original text: 'Container'
@@ -347,10 +351,10 @@ index d1849df8a..484519e28 100644
    // Original text: 'Snapshots'
    snapshotsTabName: undefined,
 diff --git a/packages/xo-web/src/common/intl/locales/hu.js b/packages/xo-web/src/common/intl/locales/hu.js
-index 51db6bf79..40cac3748 100644
+index 51db6bf79..f0c58d59f 100644
 --- a/packages/xo-web/src/common/intl/locales/hu.js
 +++ b/packages/xo-web/src/common/intl/locales/hu.js
-@@ -8,6 +8,74 @@ addLocaleData(reactIntlData)
+@@ -8,6 +8,75 @@ addLocaleData(reactIntlData)
  // ===================================================================
  
  export default {
@@ -418,6 +422,7 @@ index 51db6bf79..40cac3748 100644
 +  containersOrphansHelp: "These keys belonged to Docker VMs that XOA-HL no longer sees. If a pool is only disconnected, keep them: a removed key cannot be recovered.",
 +  containersOrphansWarning: "Remove these access keys? If the VM still exists, XOA-HL can never manage its containers again.",
 +  containersVmStopped: "Stopped or not reachable",
++  containersDisabled: "Docker VM management is switched off on this appliance. An administrator can switch it on from the appliance console; see the Containers guide.",
 +  containersDashboard: "Docker containers",
 +  containersDashboardRunning: "containers running",
 +  containersDashboardVms: "Docker VMs reachable",
@@ -425,7 +430,7 @@ index 51db6bf79..40cac3748 100644
    xhlAppearance: "Appearance",
    xhlTheme: "Theme",
    xhlColorMode: "Color mode",
-@@ -1619,7 +1687,6 @@ export default {
+@@ -1619,7 +1688,6 @@ export default {
    consoleTabName: 'Konzol',
  
    // Original text: "Container"
@@ -434,10 +439,10 @@ index 51db6bf79..40cac3748 100644
    // Original text: "Snapshots"
    snapshotsTabName: 'Pillanatképek',
 diff --git a/packages/xo-web/src/common/intl/locales/it.js b/packages/xo-web/src/common/intl/locales/it.js
-index f6e3c2f01..959bafae7 100644
+index f6e3c2f01..46e0fdc39 100644
 --- a/packages/xo-web/src/common/intl/locales/it.js
 +++ b/packages/xo-web/src/common/intl/locales/it.js
-@@ -8,6 +8,74 @@ addLocaleData(reactIntlData)
+@@ -8,6 +8,75 @@ addLocaleData(reactIntlData)
  // ===================================================================
  
  export default {
@@ -505,6 +510,7 @@ index f6e3c2f01..959bafae7 100644
 +  containersOrphansHelp: "These keys belonged to Docker VMs that XOA-HL no longer sees. If a pool is only disconnected, keep them: a removed key cannot be recovered.",
 +  containersOrphansWarning: "Remove these access keys? If the VM still exists, XOA-HL can never manage its containers again.",
 +  containersVmStopped: "Stopped or not reachable",
++  containersDisabled: "Docker VM management is switched off on this appliance. An administrator can switch it on from the appliance console; see the Containers guide.",
 +  containersDashboard: "Docker containers",
 +  containersDashboardRunning: "containers running",
 +  containersDashboardVms: "Docker VMs reachable",
@@ -512,7 +518,7 @@ index f6e3c2f01..959bafae7 100644
    xhlAppearance: "Appearance",
    xhlTheme: "Theme",
    xhlColorMode: "Color mode",
-@@ -2559,7 +2627,6 @@ export default {
+@@ -2559,7 +2628,6 @@ export default {
    consoleTabName: 'Consolle',
  
    // Original text: 'Container'
@@ -521,10 +527,10 @@ index f6e3c2f01..959bafae7 100644
    // Original text: 'Snapshots'
    snapshotsTabName: 'Istantanei',
 diff --git a/packages/xo-web/src/common/intl/locales/ja.js b/packages/xo-web/src/common/intl/locales/ja.js
-index b4e3074de..1596d94e3 100644
+index b4e3074de..03c6a2edf 100644
 --- a/packages/xo-web/src/common/intl/locales/ja.js
 +++ b/packages/xo-web/src/common/intl/locales/ja.js
-@@ -8,6 +8,74 @@ addLocaleData(reactIntlData)
+@@ -8,6 +8,75 @@ addLocaleData(reactIntlData)
  // ===================================================================
  
  export default {
@@ -592,6 +598,7 @@ index b4e3074de..1596d94e3 100644
 +  containersOrphansHelp: "これらのキーは、XOA-HL から見えなくなった Docker VM のものです。プールが切断されているだけの場合は残してください。削除したキーは復元できません。",
 +  containersOrphansWarning: "これらのアクセスキーを削除しますか？ VM がまだ存在する場合、XOA-HL はそのコンテナを二度と管理できなくなります。",
 +  containersVmStopped: "停止中または接続不可",
++  containersDisabled: "このアプライアンスでは Docker VM の管理が無効になっています。管理者がアプライアンスのコンソールから有効にできます。コンテナーガイドを参照してください。",
 +  containersDashboard: "Docker コンテナ",
 +  containersDashboardRunning: "個のコンテナが実行中",
 +  containersDashboardVms: "台の Docker VM に接続可能",
@@ -599,7 +606,7 @@ index b4e3074de..1596d94e3 100644
    xhlAppearance: "外観",
    xhlTheme: "テーマ",
    xhlColorMode: "カラーモード",
-@@ -3237,7 +3305,6 @@ export default {
+@@ -3237,7 +3306,6 @@ export default {
    consoleTabName: 'コンソール',
  
    // Original text: "Container"
@@ -608,10 +615,10 @@ index b4e3074de..1596d94e3 100644
    // Original text: "Snapshots"
    snapshotsTabName: 'スナップショット',
 diff --git a/packages/xo-web/src/common/intl/locales/pl.js b/packages/xo-web/src/common/intl/locales/pl.js
-index ed17a4f42..f485182a6 100644
+index ed17a4f42..a4caf501c 100644
 --- a/packages/xo-web/src/common/intl/locales/pl.js
 +++ b/packages/xo-web/src/common/intl/locales/pl.js
-@@ -8,6 +8,74 @@ addLocaleData(reactIntlData)
+@@ -8,6 +8,75 @@ addLocaleData(reactIntlData)
  // ===================================================================
  
  export default {
@@ -679,6 +686,7 @@ index ed17a4f42..f485182a6 100644
 +  containersOrphansHelp: "These keys belonged to Docker VMs that XOA-HL no longer sees. If a pool is only disconnected, keep them: a removed key cannot be recovered.",
 +  containersOrphansWarning: "Remove these access keys? If the VM still exists, XOA-HL can never manage its containers again.",
 +  containersVmStopped: "Stopped or not reachable",
++  containersDisabled: "Docker VM management is switched off on this appliance. An administrator can switch it on from the appliance console; see the Containers guide.",
 +  containersDashboard: "Docker containers",
 +  containersDashboardRunning: "containers running",
 +  containersDashboardVms: "Docker VMs reachable",
@@ -686,7 +694,7 @@ index ed17a4f42..f485182a6 100644
    xhlAppearance: "Appearance",
    xhlTheme: "Theme",
    xhlColorMode: "Color mode",
-@@ -1423,7 +1491,6 @@ export default {
+@@ -1423,7 +1492,6 @@ export default {
    consoleTabName: 'Konsola',
  
    // Original text: "Container"
@@ -695,10 +703,10 @@ index ed17a4f42..f485182a6 100644
    // Original text: "Snapshots"
    snapshotsTabName: 'Snapshoty',
 diff --git a/packages/xo-web/src/common/intl/locales/pt.js b/packages/xo-web/src/common/intl/locales/pt.js
-index b9c85346f..1868e6d1a 100644
+index b9c85346f..b95517457 100644
 --- a/packages/xo-web/src/common/intl/locales/pt.js
 +++ b/packages/xo-web/src/common/intl/locales/pt.js
-@@ -8,6 +8,74 @@ addLocaleData(reactIntlData)
+@@ -8,6 +8,75 @@ addLocaleData(reactIntlData)
  // ===================================================================
  
  export default {
@@ -766,6 +774,7 @@ index b9c85346f..1868e6d1a 100644
 +  containersOrphansHelp: "These keys belonged to Docker VMs that XOA-HL no longer sees. If a pool is only disconnected, keep them: a removed key cannot be recovered.",
 +  containersOrphansWarning: "Remove these access keys? If the VM still exists, XOA-HL can never manage its containers again.",
 +  containersVmStopped: "Stopped or not reachable",
++  containersDisabled: "Docker VM management is switched off on this appliance. An administrator can switch it on from the appliance console; see the Containers guide.",
 +  containersDashboard: "Docker containers",
 +  containersDashboardRunning: "containers running",
 +  containersDashboardVms: "Docker VMs reachable",
@@ -773,7 +782,7 @@ index b9c85346f..1868e6d1a 100644
    xhlAppearance: "Appearance",
    xhlTheme: "Theme",
    xhlColorMode: "Color mode",
-@@ -1421,7 +1489,6 @@ export default {
+@@ -1421,7 +1490,6 @@ export default {
    consoleTabName: 'Console',
  
    // Original text: 'Container'
@@ -782,10 +791,10 @@ index b9c85346f..1868e6d1a 100644
    // Original text: "Snapshots"
    snapshotsTabName: 'Snapshots',
 diff --git a/packages/xo-web/src/common/intl/locales/ru.js b/packages/xo-web/src/common/intl/locales/ru.js
-index 0ed00994f..f784f4f64 100644
+index 0ed00994f..4582d6e13 100644
 --- a/packages/xo-web/src/common/intl/locales/ru.js
 +++ b/packages/xo-web/src/common/intl/locales/ru.js
-@@ -8,6 +8,74 @@ addLocaleData(reactIntlData)
+@@ -8,6 +8,75 @@ addLocaleData(reactIntlData)
  // ===================================================================
  
  export default {
@@ -853,6 +862,7 @@ index 0ed00994f..f784f4f64 100644
 +  containersOrphansHelp: "These keys belonged to Docker VMs that XOA-HL no longer sees. If a pool is only disconnected, keep them: a removed key cannot be recovered.",
 +  containersOrphansWarning: "Remove these access keys? If the VM still exists, XOA-HL can never manage its containers again.",
 +  containersVmStopped: "Stopped or not reachable",
++  containersDisabled: "Docker VM management is switched off on this appliance. An administrator can switch it on from the appliance console; see the Containers guide.",
 +  containersDashboard: "Docker containers",
 +  containersDashboardRunning: "containers running",
 +  containersDashboardVms: "Docker VMs reachable",
@@ -860,7 +870,7 @@ index 0ed00994f..f784f4f64 100644
    xhlAppearance: "Appearance",
    xhlTheme: "Theme",
    xhlColorMode: "Color mode",
-@@ -3206,7 +3274,6 @@ export default {
+@@ -3206,7 +3275,6 @@ export default {
    consoleTabName: 'Консоль',
  
    // Original text: "Container"
@@ -869,10 +879,10 @@ index 0ed00994f..f784f4f64 100644
    // Original text: "Snapshots"
    snapshotsTabName: 'Снимки',
 diff --git a/packages/xo-web/src/common/intl/locales/sv.js b/packages/xo-web/src/common/intl/locales/sv.js
-index c94110715..ff2152b1f 100644
+index c94110715..5cd58882c 100644
 --- a/packages/xo-web/src/common/intl/locales/sv.js
 +++ b/packages/xo-web/src/common/intl/locales/sv.js
-@@ -8,6 +8,74 @@ addLocaleData(reactIntlData)
+@@ -8,6 +8,75 @@ addLocaleData(reactIntlData)
  // ===================================================================
  
  export default {
@@ -940,6 +950,7 @@ index c94110715..ff2152b1f 100644
 +  containersOrphansHelp: "These keys belonged to Docker VMs that XOA-HL no longer sees. If a pool is only disconnected, keep them: a removed key cannot be recovered.",
 +  containersOrphansWarning: "Remove these access keys? If the VM still exists, XOA-HL can never manage its containers again.",
 +  containersVmStopped: "Stopped or not reachable",
++  containersDisabled: "Docker VM management is switched off on this appliance. An administrator can switch it on from the appliance console; see the Containers guide.",
 +  containersDashboard: "Docker containers",
 +  containersDashboardRunning: "containers running",
 +  containersDashboardVms: "Docker VMs reachable",
@@ -947,7 +958,7 @@ index c94110715..ff2152b1f 100644
    xhlAppearance: "Appearance",
    xhlTheme: "Theme",
    xhlColorMode: "Color mode",
-@@ -1681,7 +1749,6 @@ export default {
+@@ -1681,7 +1750,6 @@ export default {
    consoleTabName: 'Konsol',
  
    // Original text: 'Container'
@@ -956,10 +967,10 @@ index c94110715..ff2152b1f 100644
    // Original text: "Snapshots"
    snapshotsTabName: 'Snapshots',
 diff --git a/packages/xo-web/src/common/intl/locales/tr.js b/packages/xo-web/src/common/intl/locales/tr.js
-index caf4a85ab..102ce721a 100644
+index caf4a85ab..67c8e46cd 100644
 --- a/packages/xo-web/src/common/intl/locales/tr.js
 +++ b/packages/xo-web/src/common/intl/locales/tr.js
-@@ -8,6 +8,74 @@ addLocaleData(reactIntlData)
+@@ -8,6 +8,75 @@ addLocaleData(reactIntlData)
  // ===================================================================
  
  export default {
@@ -1027,6 +1038,7 @@ index caf4a85ab..102ce721a 100644
 +  containersOrphansHelp: "These keys belonged to Docker VMs that XOA-HL no longer sees. If a pool is only disconnected, keep them: a removed key cannot be recovered.",
 +  containersOrphansWarning: "Remove these access keys? If the VM still exists, XOA-HL can never manage its containers again.",
 +  containersVmStopped: "Stopped or not reachable",
++  containersDisabled: "Docker VM management is switched off on this appliance. An administrator can switch it on from the appliance console; see the Containers guide.",
 +  containersDashboard: "Docker containers",
 +  containersDashboardRunning: "containers running",
 +  containersDashboardVms: "Docker VMs reachable",
@@ -1034,7 +1046,7 @@ index caf4a85ab..102ce721a 100644
    xhlAppearance: "Appearance",
    xhlTheme: "Theme",
    xhlColorMode: "Color mode",
-@@ -2158,7 +2226,6 @@ export default {
+@@ -2158,7 +2227,6 @@ export default {
    consoleTabName: 'Konsol',
  
    // Original text: "Container"
@@ -1043,10 +1055,10 @@ index caf4a85ab..102ce721a 100644
    // Original text: "Snapshots"
    snapshotsTabName: "Snapshot'lar",
 diff --git a/packages/xo-web/src/common/intl/locales/zh.js b/packages/xo-web/src/common/intl/locales/zh.js
-index 7e01975dc..d3b70caf3 100644
+index 7e01975dc..d93454324 100644
 --- a/packages/xo-web/src/common/intl/locales/zh.js
 +++ b/packages/xo-web/src/common/intl/locales/zh.js
-@@ -8,6 +8,74 @@ addLocaleData(reactIntlData)
+@@ -8,6 +8,75 @@ addLocaleData(reactIntlData)
  // ===================================================================
  
  export default {
@@ -1114,6 +1126,7 @@ index 7e01975dc..d3b70caf3 100644
 +  containersOrphansHelp: "These keys belonged to Docker VMs that XOA-HL no longer sees. If a pool is only disconnected, keep them: a removed key cannot be recovered.",
 +  containersOrphansWarning: "Remove these access keys? If the VM still exists, XOA-HL can never manage its containers again.",
 +  containersVmStopped: "Stopped or not reachable",
++  containersDisabled: "Docker VM management is switched off on this appliance. An administrator can switch it on from the appliance console; see the Containers guide.",
 +  containersDashboard: "Docker containers",
 +  containersDashboardRunning: "containers running",
 +  containersDashboardVms: "Docker VMs reachable",
@@ -1122,10 +1135,10 @@ index 7e01975dc..d3b70caf3 100644
    xhlTheme: "Theme",
    xhlColorMode: "Color mode",
 diff --git a/packages/xo-web/src/common/intl/messages.js b/packages/xo-web/src/common/intl/messages.js
-index 4050659f9..29127d284 100644
+index 4050659f9..ae84d128f 100644
 --- a/packages/xo-web/src/common/intl/messages.js
 +++ b/packages/xo-web/src/common/intl/messages.js
-@@ -4,6 +4,74 @@
+@@ -4,6 +4,75 @@
  const forEach = require('lodash/forEach')
  
  const messages = {
@@ -1193,6 +1206,7 @@ index 4050659f9..29127d284 100644
 +  containersOrphansHelp: "These keys belonged to Docker VMs that XOA-HL no longer sees. If a pool is only disconnected, keep them: a removed key cannot be recovered.",
 +  containersOrphansWarning: "Remove these access keys? If the VM still exists, XOA-HL can never manage its containers again.",
 +  containersVmStopped: "Stopped or not reachable",
++  containersDisabled: "Docker VM management is switched off on this appliance. An administrator can switch it on from the appliance console; see the Containers guide.",
 +  containersDashboard: "Docker containers",
 +  containersDashboardRunning: "containers running",
 +  containersDashboardVms: "Docker VMs reachable",
@@ -1200,7 +1214,7 @@ index 4050659f9..29127d284 100644
    xhlAppearance: "Appearance",
    xhlTheme: "Theme",
    xhlColorMode: "Color mode",
-@@ -1363,7 +1431,6 @@ const messages = {
+@@ -1363,7 +1432,6 @@ const messages = {
    generalTabName: 'General',
    statsTabName: 'Stats',
    consoleTabName: 'Console',
@@ -1221,10 +1235,10 @@ index 93a8ba38e..39aa71197 100644
 +export const containerCall = (operation, params) => _call('containers.' + operation, params)
 diff --git a/packages/xo-web/src/xo-app/containers/dashboard-card.js b/packages/xo-web/src/xo-app/containers/dashboard-card.js
 new file mode 100644
-index 000000000..0519eaaed
+index 000000000..c44caa208
 --- /dev/null
 +++ b/packages/xo-web/src/xo-app/containers/dashboard-card.js
-@@ -0,0 +1,103 @@
+@@ -0,0 +1,108 @@
 +import _ from 'intl'
 +import Component from 'base-component'
 +import Icon from 'icon'
@@ -1250,6 +1264,11 @@ index 000000000..0519eaaed
 +    clearTimeout(this._timer)
 +  }
 +  _load = async () => {
++    try {
++      // Switched off: no card and no polling.
++      if (this._enabled !== true) this._enabled = await containerCall('enabled')
++    } catch (_) {}
++    if (this._enabled !== true) return
 +    try {
 +      const summary = await containerCall('summary')
 +      if (this._active) this.setState({ summary })
@@ -1330,10 +1349,10 @@ index 000000000..0519eaaed
 +}
 diff --git a/packages/xo-web/src/xo-app/containers/index.js b/packages/xo-web/src/xo-app/containers/index.js
 new file mode 100644
-index 000000000..b09264444
+index 000000000..afd303656
 --- /dev/null
 +++ b/packages/xo-web/src/xo-app/containers/index.js
-@@ -0,0 +1,604 @@
+@@ -0,0 +1,625 @@
 +import _ from 'intl'
 +import Component from 'base-component'
 +import Icon from 'icon'
@@ -1347,7 +1366,7 @@ index 000000000..b09264444
 +import { containerCall } from 'xo'
 +
 +const mib = value => Math.round(value / 1048576)
-+const percent = (used, total) => (total > 0 ? Math.round((100 * used) / total) + '%' : '—')
++const percent = (used, total) => (total > 0 ? Math.round((100 * used) / total) + '%' : '-')
 +const options = values =>
 +  values.map(value => (
 +    <option key={value.id} value={value.id}>
@@ -1397,10 +1416,22 @@ index 000000000..b09264444
 +    busy: false,
 +    overview: undefined,
 +    orphans: [],
++    enabled: undefined,
 +  }
 +
 +  componentDidMount() {
 +    this._active = true
++    this._begin()
++  }
++  // Nothing is asked of the guests while the feature switch is off.
++  _begin = async () => {
++    let enabled = false
++    try {
++      enabled = (await containerCall('enabled')) === true
++    } catch (_) {}
++    if (!this._active) return
++    this.setState({ enabled })
++    if (!enabled) return
 +    this._refresh()
 +    this._loadOrphans()
 +    this._schedule()
@@ -1450,7 +1481,7 @@ index 000000000..b09264444
 +      if (this._active && this._vm() === vm) {
 +        const before = this.state.overview?.host.cpuTicks
 +        const ticks = overview.host.cpuTicks
-+        let cpu = '—'
++        let cpu = '-'
 +        if (before) {
 +          const total = ticks.reduce((a, n, i) => a + n - before[i], 0)
 +          cpu = percent(total - (ticks[3] - before[3]) - (ticks[4] - before[4]), total)
@@ -1471,7 +1502,7 @@ index 000000000..b09264444
 +  _set = key => event => this.setState({ [key]: event.target.value })
 +  _selectHost = event =>
 +    this.setState(
-+      { vm: event.target.value, overview: undefined, logs: undefined, error: '', unreachable: '', cpu: '—' },
++      { vm: event.target.value, overview: undefined, logs: undefined, error: '', unreachable: '', cpu: '-' },
 +      this._refresh
 +    )
 +  _perform = async (operation, params) => {
@@ -1752,9 +1783,9 @@ index 000000000..b09264444
 +                  </td>
 +                  <td>{c.Ports}</td>
 +                  <td>
-+                    {stat.CPUPerc || '—'} / {limit.cpus} CPU
++                    {stat.CPUPerc || '-'} / {limit.cpus} CPU
 +                  </td>
-+                  <td>{stat.MemUsage || '— / ' + limit.memoryMiB + 'MiB'}</td>
++                  <td>{stat.MemUsage || '- / ' + limit.memoryMiB + 'MiB'}</td>
 +                  <td>
 +                    {(running ? ['stop', 'restart', 'logs'] : ['start', 'logs', 'remove']).map(op => (
 +                      <button
@@ -1827,6 +1858,15 @@ index 000000000..b09264444
 +  render() {
 +    const { props, state: s } = this
 +    if (!props.admin) return <p className='alert alert-danger'>{_('containersAdminOnly')}</p>
++    if (s.enabled !== true)
++      return (
++        <Container>
++          <h2>
++            <Icon icon='vm' /> {_('containersPage')}
++          </h2>
++          {s.enabled === false && <p className='alert alert-info'>{_('containersDisabled')}</p>}
++        </Container>
++      )
 +    const data = s.overview
 +    const vm = this._vm()
 +    const noTemplate = props.templates.length === 0
@@ -1985,14 +2025,54 @@ index a930dbc14..2ddd7c831 100644
    'hosts/:id': Host,
    jobs: Jobs,
 diff --git a/packages/xo-web/src/xo-app/menu/index.js b/packages/xo-web/src/xo-app/menu/index.js
-index 6c3dad26b..6162fbc72 100644
+index 6c3dad26b..cbaa953c8 100644
 --- a/packages/xo-web/src/xo-app/menu/index.js
 +++ b/packages/xo-web/src/xo-app/menu/index.js
-@@ -287,6 +287,7 @@ export default class Menu extends Component {
+@@ -11,6 +11,7 @@ import { NotificationTag } from '../xoa/notifications'
+ import { addSubscriptions, connectStore, getXoaPlan, noop } from 'utils'
+ import {
+   connect,
++  containerCall,
+   signOut,
+   subscribeHostMissingPatches,
+   subscribeNotifications,
+@@ -100,6 +101,7 @@ export default class Menu extends Component {
+     this._updateMissingPatchesSubscriptions()
+     this._updateProxiesSubscriptions()
+     this._fetchGuiRoutes()
++    this._fetchContainersSwitch()
+   }
+ 
+   componentWillUnmount() {
+@@ -109,6 +111,7 @@ export default class Menu extends Component {
+   }
+ 
+   componentDidUpdate(prevProps) {
++    this._fetchContainersSwitch()
+     if (!isEqual(Object.keys(prevProps.hosts).sort(), Object.keys(this.props.hosts).sort())) {
+       this._updateMissingPatchesSubscriptions()
+     }
+@@ -222,6 +225,15 @@ export default class Menu extends Component {
+     this._unsubscribeProxiesApplianceUpdaterState = () => forEach(unsubs, unsub => unsub())
+   }
+ 
++  // The Containers entry stays hidden while the feature switch is off.
++  _fetchContainersSwitch = async () => {
++    if (!this.props.isAdmin || this._containersAsked) return
++    this._containersAsked = true
++    try {
++      this.setState({ containersEnabled: (await containerCall('enabled')) === true })
++    } catch (_) {}
++  }
++
+   _fetchGuiRoutes = async () => {
+     const res = await fetch('./rest/v0/gui-routes')
+     if (!res.ok) {
+@@ -287,6 +299,7 @@ export default class Menu extends Component {
            },
          ],
        },
-+      isAdmin && { to: '/containers', icon: 'vm', label: 'containersPage' },
++      isAdmin && this.state.containersEnabled && { to: '/containers', icon: 'vm', label: 'containersPage' },
        {
          to: '/dashboard/overview',
          icon: 'menu-dashboard',

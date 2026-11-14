@@ -1,0 +1,103 @@
+name: Dev build (Docker VM branch)
+run-name: "Dev build ${{ github.sha }}"
+
+# Test RPM for xcp-hl#7. An artifact only: no tag, no release, no signature,
+# no yum channel. Nothing here can reach an appliance by itself.
+on:
+  push:
+    branches: ['t3/261113-issue-7-docker-vm']
+    paths:
+      - 'patches/**'
+      - 'SOURCES/**'
+      - 'SPECS/**'
+      - 'scripts/build-xo.sh'
+      - 'scripts/list-patches.sh'
+      - 'scripts/check-gui-assets.py'
+      - 'container/**'
+      - 'UPSTREAM_XO'
+      - '.github/workflows/dev-build.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: dev-build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    if: github.ref == 'refs/heads/t3/261113-issue-7-docker-vm'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check shell script syntax
+        run: |
+          set -euo pipefail
+          for s in scripts/*.sh; do bash -n "$s"; done
+          for s in SOURCES/*.sh; do sh -n "$s"; done
+          python3 tests/test-gui-assets.py
+
+      - name: Build in AlmaLinux 9 container
+        run: |
+          docker build -t xoa-hl-builder -f container/Containerfile container/
+          docker run --rm \
+            -v "$GITHUB_WORKSPACE/patches:/build/patches:ro" \
+            -v "$GITHUB_WORKSPACE/out:/build/out" \
+            -v "$GITHUB_WORKSPACE/scripts:/build/scripts:ro" \
+            -v "$GITHUB_WORKSPACE/UPSTREAM_XO:/build/UPSTREAM_XO:ro" \
+            xoa-hl-builder bash /build/scripts/build-xo.sh
+
+      - name: Verify archived GUI entry pages
+        run: |
+          set -eu
+          mkdir extracted
+          tar -xzf out/xoa-hl-*.tar.gz -C extracted
+          python3 scripts/check-gui-assets.py extracted/xen-orchestra
+          sudo rm -rf extracted
+
+      - name: Build unsigned dev RPM
+        run: |
+          set -euo pipefail
+          VERSION=$(cat out/VERSION)
+          cp LICENSE SOURCES/xoa-hl-LICENSE
+          cp "out/xoa-hl-${VERSION}.tar.gz" "SOURCES/xoa-hl-${VERSION}.tar.gz"
+          # Release 0.dev<n> sorts below every published ce release.
+          RELEASE="0.dev${{ github.run_number }}"
+          SHORT_SHA=$(git rev-parse --short HEAD)
+          docker run --rm -v "$GITHUB_WORKSPACE:/build/repo" xoa-hl-builder bash -c "
+            set -euo pipefail
+            mkdir -p /root/rpmbuild/{BUILD,BUILDROOT,RPMS,SPECS,SRPMS}
+            rpmbuild --define '_version ${VERSION}' \
+                     --define '_release ${RELEASE}' \
+                     --define '_shortcommit ${SHORT_SHA}' \
+                     --define '_sourcedir /build/repo/SOURCES' \
+                     --define '_rpmdir /build/repo/out' \
+                     -bb /build/repo/SPECS/xoa-hl.spec
+            rpm=\$(find /build/repo/out -name 'xoa-hl-${VERSION}-0.dev*.rpm')
+            scripts=\$(rpm -qp --scripts \"\$rpm\")
+            if grep -qE '^[[:space:]]*%' <<<\"\$scripts\"; then
+              echo 'Unexpanded RPM macro in scriptlets'; exit 1
+            fi
+            # A dev build must stay unsigned so no channel can serve it.
+            rpm -qpi \"\$rpm\" | grep -Eq '^Signature +: \(none\)'
+            mkdir -p /build/repo/dev-rpm
+            cp \"\$rpm\" /build/repo/dev-rpm/
+          "
+          sudo chown -R "$(id -u):$(id -g)" dev-rpm
+          ( cd dev-rpm && sha256sum ./*.rpm | tee SHA256SUMS )
+          {
+            echo '### Dev RPM (not a release)'
+            echo '```'
+            cat dev-rpm/SHA256SUMS
+            echo '```'
+            echo 'Install on a test appliance only. See docs/containers.md, "Dev build".'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: xoa-hl-dev-rpm
+          path: dev-rpm/
+          retention-days: 14
+          if-no-files-found: error
