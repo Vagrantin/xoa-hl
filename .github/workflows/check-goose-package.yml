@@ -13,6 +13,7 @@ on:
       - 'SOURCES/xoa-hl-proposals.py'
       - 'SOURCES/xoa-hl-xo-inventory.mjs'
       - 'SOURCES/xoa-hl-xo-bridge.mjs'
+      - 'SOURCES/xoa-hl-vm-create-params.mjs'
       - 'SOURCES/xoa-hl-proposal-command.py'
       - 'patches/270-xoa-hl-assistant-api.patch'
       - 'SOURCES/xoa-hl-create-mcp.py'
@@ -43,6 +44,7 @@ jobs:
           python3 tests/test-assistant-proposals.py
           node --test tests/test-assistant-inventory.mjs
           node --test tests/test-assistant-bridge.mjs
+          node --test tests/test-assistant-vm-create-params.mjs
           python3 tests/test-assistant-proposal-command.py
           ASSISTANT_REQUIRE_SOCKET_TEST=1 python3 tests/test-assistant-create-mcp.py
           node --test tests/test-assistant-read.mjs
