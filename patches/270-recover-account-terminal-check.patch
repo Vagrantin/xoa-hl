@@ -1,0 +1,19 @@
+diff --git a/packages/xo-server/src/recover-account-cli.mjs b/packages/xo-server/src/recover-account-cli.mjs
+--- a/packages/xo-server/src/recover-account-cli.mjs
++++ b/packages/xo-server/src/recover-account-cli.mjs
+@@ -20,6 +20,15 @@
+   const support = args[0] === '-s'
+   const name = support ? 'xoa-support' : args[0]
+ 
++  // The masked password prompt needs raw mode, which only a terminal provides.
++  if (args.length === 1 && !support && !process.stdin.isTTY) {
++    console.error(
++      'Error: an interactive terminal is required to type the password.\n' +
++        'Run this command from the appliance console, or over SSH with a pseudo-terminal (ssh -t).'
++    )
++    process.exit(1)
++  }
++
+   let password =
+     args.length === 2
+       ? args[1]
