@@ -1,0 +1,56 @@
+diff --git a/packages/xo-server/src/recover-account-cli.mjs b/packages/xo-server/src/recover-account-cli.mjs
+index f9ce10b8b..2add77009 100755
+--- a/packages/xo-server/src/recover-account-cli.mjs
++++ b/packages/xo-server/src/recover-account-cli.mjs
+@@ -14,6 +14,10 @@ execPromise(async args => {
+ 
+     If the user does not exist, it is created; if it exists, updates
+     its password, remove any configured OTP and resets its permission to Admin.
++
++    A user that was linked to an authentication provider is additionally
++    renamed with a '-recovery' suffix so that the next sign-in through that
++    provider creates a fresh unprivileged account instead of relinking this one.
+ `
+   }
+ 
+@@ -55,6 +59,14 @@ execPromise(async args => {
+ 
+   const user = await xo.getUserByName(name, true)
+   if (user !== null) {
++    // A provider-linked account recovered here loses its provider bindings,
++    // but `authentication.mergeProvidersUsers` is on by default and lets
++    // `registerUser2` adopt an unbound account that matches the provider
++    // name by email, silently restoring this account's links and admin
++    // permission. Renaming the account keeps it local: the next provider
++    // sign-in no longer matches it and creates a fresh unprivileged account.
++    const hadAuthProviders =
++      user.authProviders !== undefined && Object.keys(user.authProviders).length > 0
+     await xo.updateUser(user.id, {
+       authProviders: null,
+       password,
+@@ -62,6 +74,25 @@ execPromise(async args => {
+       preferences: { otp: null },
+     })
+     console.log(`user ${name} has been successfully updated`)
++    if (hadAuthProviders) {
++      const rename = suffix => {
++        const at = user.email.lastIndexOf('@')
++        return at === -1
++          ? `${user.email}${suffix}`
++          : `${user.email.slice(0, at)}${suffix}${user.email.slice(at)}`
++      }
++      let newName = rename('-recovery')
++      for (let i = 2; (await xo.getUserByName(newName, true)) !== null; i++) {
++        newName = rename(`-recovery-${i}`)
++      }
++      await xo.updateUser(user.id, { email: newName })
++      console.log(
++        `user ${name} was linked to an authentication provider and has been\n` +
++          `renamed to ${newName} to prevent its silent relinking on the next\n` +
++          `provider sign-in. Keep it as your local recovery administrator or\n` +
++          `rename it back manually if you want it to relink.`
++      )
++    }
+   } else {
+     await xo.createUser({ name, password, permission: 'admin' })
+     console.log(`user ${name} has been successfully created`)
