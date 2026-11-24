@@ -326,3 +326,13 @@ applies_to = ["5.113.2"]
 maintainer = "vagrantin"
 status = "active"
 dependencies = []
+
+[[patches]]
+id = "280-recover-account-rename"
+description = "Rename a provider-linked recovered account with a '-recovery' suffix so the next provider sign-in creates a fresh unprivileged account instead of silently relinking it (xcp-hl#424, option C)"
+target = "packages/xo-server/src/recover-account-cli.mjs"
+upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
+applies_to = ["5.113.2"]
+maintainer = "vagrantin"
+status = "active"
+dependencies = ["270-recover-account-terminal-check"]

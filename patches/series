@@ -27,3 +27,4 @@ xoa-hl-update-api.patch
 250-reported-ui-layout.patch
 260-dashboard-backup-jobs-translations.patch
 270-recover-account-terminal-check.patch
+280-recover-account-rename.patch
