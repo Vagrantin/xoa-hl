@@ -316,3 +316,13 @@ applies_to = ["5.113.2"]
 maintainer = "vagrantin"
 status = "active"
 dependencies = ['240-appliance-theme-feedback']
+
+[[patches]]
+id = "270-recover-account-terminal-check"
+description = "Stop the account recovery command with a clear message when no terminal is attached (xcp-hl#369)"
+target = "packages/xo-server/src/recover-account-cli.mjs"
+upstream_commit = "e281c536d3b1e97ccfb3b0826f91b7dbb6c4478c"
+applies_to = ["5.113.2"]
+maintainer = "vagrantin"
+status = "active"
+dependencies = []
