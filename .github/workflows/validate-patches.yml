@@ -79,6 +79,8 @@ jobs:
         run: node tests/test-update-api.mjs "${XO_DIR}"
       - name: Test packaged runtime commit lookup
         run: node tests/test-runtime-stamp.mjs "${XO_DIR}"
+      - name: Test first account and default admin import rules
+        run: node --test tests/test-no-default-admin.mjs
       - name: Audit UI translations
         run: python3 scripts/audit-ui-translations.py "${XO_DIR}"
       - name: Test shared glossary consumer
