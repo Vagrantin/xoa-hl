@@ -10,6 +10,7 @@ POLL_INTERVAL=${XOA_HL_POLL_INTERVAL:-2}
 HISTORY_HELPER=${XOA_HL_HISTORY_HELPER:-/usr/libexec/xoa-hl/update-history.py}
 RPM_COMMAND=${RPM_COMMAND:-rpm}
 DNF_COMMAND=${DNF_COMMAND:-dnf}
+REBOOT_FLAG=${XOA_HL_REBOOT_FLAG:-/run/reboot-required}
 
 mkdir -p "$STATE_DIR"
 started_at=$(date -u '+%Y-%m-%dT%H:%M:%SZ')
@@ -54,6 +55,27 @@ finish() {
     exit "$exit_code"
 }
 
+# Real pending reboot state: yes, no, or unknown when it cannot be determined.
+reboot_state() {
+    if [ -e "$REBOOT_FLAG" ]; then
+        echo yes
+        return 0
+    fi
+    # EL9 supplies the command as a DNF plugin rather than a standalone tool.
+    if command -v needs-restarting >/dev/null 2>&1; then
+        set -- needs-restarting -r
+    else
+        set -- "$DNF_COMMAND" needs-restarting -r
+    fi
+    needs_rc=0
+    "$@" >/dev/null 2>&1 || needs_rc=$?
+    case "$needs_rc" in
+        0) echo no ;;
+        1) echo yes ;;
+        *) echo unknown ;;
+    esac
+}
+
 write_state running 0 unknown ''
 
 # Always check fresh inside the maintenance window. The check and update
@@ -70,7 +92,8 @@ fi
 verdict=$(sed -n '1p' "$CHECK_STATUS_FILE")
 case "$verdict" in
     UP_TO_DATE)
-        finish up_to_date 0 no
+        # An earlier transaction can still need a reboot (xcp-hl#392).
+        finish up_to_date 0 "$(reboot_state)"
         ;;
     AVAILABLE)
         ;;
@@ -116,25 +139,7 @@ else
     done
 fi
 
-reboot_needed=unknown
-if [ -e /run/reboot-required ]; then
-    reboot_needed=yes
-else
-    # EL9 supplies the command as a DNF plugin rather than a standalone tool.
-    if command -v needs-restarting >/dev/null 2>&1; then
-        set -- needs-restarting -r
-    else
-        set -- "$DNF_COMMAND" needs-restarting -r
-    fi
-    if "$@" >/dev/null 2>&1; then
-        reboot_needed=no
-    else
-        needs_rc=$?
-        if [ "$needs_rc" -eq 1 ]; then
-            reboot_needed=yes
-        fi
-    fi
-fi
+reboot_needed=$(reboot_state)
 
 if [ "$update_rc" -eq 0 ]; then
     finish succeeded 0 "$reboot_needed"

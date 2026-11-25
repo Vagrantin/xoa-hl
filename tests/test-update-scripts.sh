@@ -168,6 +168,19 @@ for pair in '0 no' '1 yes' '2 unknown'; do
     grep -Fx "rebootNeeded=$2" "$state_dir/auto-update.status" >/dev/null
     grep -Fx 'needs-restarting -r' "$FAKE_DNF_ARGS" >/dev/null
 done
+# An up-to-date run reports the real pending reboot state (xcp-hl#392).
+for outcome in '0 no' '1 yes' '2 unknown'; do
+    set -- $outcome
+    : > "$FAKE_DNF_ARGS"
+    FAKE_CHECK_VERDICT=UP_TO_DATE FAKE_REBOOT_RC=$1 XOA_HL_REBOOT_FLAG="$tmp_dir/no-flag" \
+        sh "$repo_dir/SOURCES/xoa-hl-auto-update.sh"
+    grep -Fx 'result=up_to_date' "$state_dir/auto-update.status" >/dev/null
+    grep -Fx "rebootNeeded=$2" "$state_dir/auto-update.status" >/dev/null
+done
+: > "$tmp_dir/reboot-flag"
+FAKE_CHECK_VERDICT=UP_TO_DATE FAKE_REBOOT_RC=0 XOA_HL_REBOOT_FLAG="$tmp_dir/reboot-flag" \
+    sh "$repo_dir/SOURCES/xoa-hl-auto-update.sh"
+grep -Fx 'rebootNeeded=yes' "$state_dir/auto-update.status" >/dev/null
 mv "$tmp_dir/needs-restarting.saved" "$fake_bin/needs-restarting"
 
 export SYSTEMCTL_LOG="$tmp_dir/systemctl.log"

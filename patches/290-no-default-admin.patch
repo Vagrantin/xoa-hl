@@ -1,0 +1,105 @@
+diff --git a/packages/xo-server/src/_xoaHlAccounts.mjs b/packages/xo-server/src/_xoaHlAccounts.mjs
+new file mode 100644
+index 0000000..a9b485c
+--- /dev/null
++++ b/packages/xo-server/src/_xoaHlAccounts.mjs
+@@ -0,0 +1,48 @@
++import { readFile } from 'node:fs/promises'
++
++export const DEFAULT_ADMIN = { email: 'admin@admin.net', password: 'admin' }
++
++const decode = value => Buffer.from(value, 'base64').toString('utf8')
++
++// Root-only file written by the XOA-HL first boot, before networking starts (xcp-hl#389).
++export async function readDeploymentAccount(read = readFile, path = '/etc/xoa-first-boot.env') {
++  const content = await read(path, 'utf8').catch(error => {
++    if (error.code !== 'ENOENT') throw error
++  })
++  if (content === undefined) return
++  const values = Object.fromEntries(
++    content
++      .split('\n')
++      .map(line => /^(XOA_EMAIL|XOA_PASSWORD)=([A-Za-z0-9+/=]+)$/.exec(line))
++      .filter(match => match !== null)
++      .map(([, key, value]) => [key, decode(value)])
++  )
++  if (!values.XOA_EMAIL || !values.XOA_PASSWORD) return
++  return { email: values.XOA_EMAIL, password: values.XOA_PASSWORD }
++}
++
++// XOA-HL images carry this stamp; other installations keep the upstream behaviour.
++export async function isXoaHlImage(read = readFile, path = '/etc/xoa-hl-vm-release') {
++  return read(path, 'utf8').then(
++    () => true,
++    error => {
++      if (error.code !== 'ENOENT') throw error
++      return false
++    }
++  )
++}
++
++// First account of an empty database; undefined means create none.
++export async function chooseFirstAccount({ fromXenStore, fromDeployment, onImage }) {
++  const { email, password } = (await fromXenStore()) ?? {}
++  if (email && password) return { email, password }
++  const deployment = await fromDeployment()
++  if (deployment !== undefined) return deployment
++  if (await onImage()) return
++  return { email: email ?? DEFAULT_ADMIN.email, password: password ?? DEFAULT_ADMIN.password }
++}
++
++// True when an imported user still has the well-known default credentials (xcp-hl#388).
++export async function isDefaultAdmin({ email, pw_hash: pwHash }, verify) {
++  return email === DEFAULT_ADMIN.email && pwHash !== undefined && (await verify(DEFAULT_ADMIN.password, pwHash))
++}
+diff --git a/packages/xo-server/src/xo-mixins/subjects.mjs b/packages/xo-server/src/xo-mixins/subjects.mjs
+index 3fee198..89080f6 100644
+--- a/packages/xo-server/src/xo-mixins/subjects.mjs
++++ b/packages/xo-server/src/xo-mixins/subjects.mjs
+@@ -6,6 +6,7 @@ import { hash, needsRehash, verify } from 'hashy'
+ import { invalidCredentials, noSuchObject, objectAlreadyExists } from 'xo-common/api-errors.js'
+ 
+ import * as XenStore from '../_XenStore.mjs'
++import { chooseFirstAccount, isDefaultAdmin, isXoaHlImage, readDeploymentAccount } from '../_xoaHlAccounts.mjs'
+ import { Groups } from '../models/group.mjs'
+ import { Users } from '../models/user.mjs'
+ import { forEach, isEmpty, lightSet } from '../utils.mjs'
+@@ -49,6 +50,11 @@ export default class {
+         users =>
+           Promise.all(
+             users.map(async user => {
++              // Never bring default credentials back, nor let them replace a local account.
++              if (await isDefaultAdmin(user, verify)) {
++                log.warn('default admin account not imported', { email: user.email })
++                return
++              }
+               const userId = user.id
+               const conflictUsers = await usersDb.get({ email: user.email })
+               if (!isEmpty(conflictUsers)) {
+@@ -62,12 +68,21 @@ export default class {
+     app.hooks.on('start', async () => {
+       if (!(await this._users.exists())) {
+         const key = 'vm-data/admin-account'
+-        const { email = 'admin@admin.net', password = 'admin' } = await XenStore.read(key)
+-          .then(JSON.parse)
+-          .catch(() => ({}))
++        const account = await chooseFirstAccount({
++          fromXenStore: () =>
++            XenStore.read(key)
++              .then(JSON.parse)
++              .catch(() => undefined),
++          fromDeployment: () => readDeploymentAccount(),
++          onImage: () => isXoaHlImage(),
++        })
++        if (account === undefined) {
++          log.warn('no account created: deployment credentials are not available yet')
++          return
++        }
+ 
+-        await this.createUser({ email, password, permission: 'admin' })
+-        log.info(`Default user created: ${email} with password ${password}`)
++        await this.createUser({ ...account, permission: 'admin' })
++        log.info(`First user created: ${account.email}`)
+         ignoreErrors.call(XenStore.rm(key))
+       }
+     })
